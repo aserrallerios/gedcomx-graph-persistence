@@ -1,0 +1,49 @@
+package org.gedcomx.graph.persistence.neo4j.embeded.model.contributor;
+
+import org.gedcomx.common.ResourceReference;
+import org.gedcomx.common.URI;
+import org.gedcomx.graph.persistence.neo4j.embeded.exception.MissingRequiredPropertyException;
+import org.gedcomx.graph.persistence.neo4j.embeded.model.GENgraphNode;
+import org.gedcomx.graph.persistence.neo4j.embeded.model.utils.NodeProperties;
+import org.gedcomx.graph.persistence.neo4j.embeded.model.utils.NodeTypes;
+
+public class OnlineAccount extends GENgraphNode {
+
+	protected OnlineAccount(final org.gedcomx.contributor.OnlineAccount gedcomXOnlineAccount) throws MissingRequiredPropertyException {
+		super(NodeTypes.ACCOUNT, gedcomXOnlineAccount);
+	}
+
+	@Override
+	protected void checkRequiredProperties(final Object gedcomXObject) throws MissingRequiredPropertyException {
+		final org.gedcomx.contributor.OnlineAccount gedcomXOnlineAccount = (org.gedcomx.contributor.OnlineAccount) gedcomXObject;
+		if ((gedcomXOnlineAccount.getAccountName() == null) || (gedcomXOnlineAccount.getServiceHomepage() == null)
+				|| (gedcomXOnlineAccount.getServiceHomepage().getResource() == null)) {
+			throw new MissingRequiredPropertyException();
+		}
+	}
+
+	public String getAccountName() {
+		return (String) this.getProperty(NodeProperties.Agent.ACCOUNT_NAME);
+	}
+
+	public ResourceReference getServiceHomepage() {
+		final String serviceHomepage = (String) this.getProperty(NodeProperties.Agent.SERVICE_HOMEPAGE);
+		return new ResourceReference(new URI(serviceHomepage));
+	}
+
+	public void setAccountName(final String accountName) {
+		this.setProperty(NodeProperties.Agent.ACCOUNT_NAME, accountName);
+	}
+
+	@Override
+	protected void setInitialProperties(final Object gedcomXObject) {
+		final org.gedcomx.contributor.OnlineAccount gedcomXOnlineAccount = (org.gedcomx.contributor.OnlineAccount) gedcomXObject;
+		this.setAccountName(gedcomXOnlineAccount.getAccountName());
+		this.setServiceHomepage(gedcomXOnlineAccount.getServiceHomepage());
+
+	}
+
+	public void setServiceHomepage(final ResourceReference serviceHomepage) {
+		this.setProperty(NodeProperties.Agent.SERVICE_HOMEPAGE, serviceHomepage.getResource().toString());
+	}
+}
