@@ -11,6 +11,6 @@ public interface GENgraphPersistenceService {
 	GENgraph createGedcomXGraph(final Map<String, String> metadata, final Collection<Object> gedcomxElements)
 			throws MissingRequiredPropertyException;
 
-	GENgraph loadGedcomXGraph();
+	GENgraph getGedcomXGraph();
 
 }

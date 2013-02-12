@@ -1,14 +1,15 @@
 package org.gedcomx.graph.persistence.neo4j.embeded.model.common;
 
 import org.gedcomx.graph.persistence.neo4j.embeded.exception.MissingRequiredPropertyException;
+import org.gedcomx.graph.persistence.neo4j.embeded.model.GENgraph;
 import org.gedcomx.graph.persistence.neo4j.embeded.model.GENgraphNode;
-import org.gedcomx.graph.persistence.neo4j.embeded.model.utils.NodeProperties;
-import org.gedcomx.graph.persistence.neo4j.embeded.model.utils.NodeTypes;
+import org.gedcomx.graph.persistence.neo4j.embeded.utils.NodeProperties;
+import org.gedcomx.graph.persistence.neo4j.embeded.utils.NodeTypes;
 
 public class TextValue extends GENgraphNode {
 
-	public TextValue(final org.gedcomx.common.TextValue gedcomXName) throws MissingRequiredPropertyException {
-		super(NodeTypes.TEXT_VALUE, gedcomXName);
+	public TextValue(final GENgraph graf, final org.gedcomx.common.TextValue gedcomXName) throws MissingRequiredPropertyException {
+		super(graf, NodeTypes.TEXT_VALUE, gedcomXName);
 	}
 
 	@Override

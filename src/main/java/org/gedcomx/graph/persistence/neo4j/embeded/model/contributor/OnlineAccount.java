@@ -3,14 +3,16 @@ package org.gedcomx.graph.persistence.neo4j.embeded.model.contributor;
 import org.gedcomx.common.ResourceReference;
 import org.gedcomx.common.URI;
 import org.gedcomx.graph.persistence.neo4j.embeded.exception.MissingRequiredPropertyException;
+import org.gedcomx.graph.persistence.neo4j.embeded.model.GENgraph;
 import org.gedcomx.graph.persistence.neo4j.embeded.model.GENgraphNode;
-import org.gedcomx.graph.persistence.neo4j.embeded.model.utils.NodeProperties;
-import org.gedcomx.graph.persistence.neo4j.embeded.model.utils.NodeTypes;
+import org.gedcomx.graph.persistence.neo4j.embeded.utils.NodeProperties;
+import org.gedcomx.graph.persistence.neo4j.embeded.utils.NodeTypes;
 
 public class OnlineAccount extends GENgraphNode {
 
-	protected OnlineAccount(final org.gedcomx.contributor.OnlineAccount gedcomXOnlineAccount) throws MissingRequiredPropertyException {
-		super(NodeTypes.ACCOUNT, gedcomXOnlineAccount);
+	protected OnlineAccount(final GENgraph graf, final org.gedcomx.contributor.OnlineAccount gedcomXOnlineAccount)
+			throws MissingRequiredPropertyException {
+		super(graf, NodeTypes.ACCOUNT, gedcomXOnlineAccount);
 	}
 
 	@Override

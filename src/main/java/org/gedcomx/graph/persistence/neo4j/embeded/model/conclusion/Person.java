@@ -2,12 +2,12 @@ package org.gedcomx.graph.persistence.neo4j.embeded.model.conclusion;
 
 import org.gedcomx.graph.persistence.neo4j.embeded.exception.MissingRequiredPropertyException;
 import org.gedcomx.graph.persistence.neo4j.embeded.model.GENgraphNode;
-import org.gedcomx.graph.persistence.neo4j.embeded.model.utils.NodeTypes;
+import org.gedcomx.graph.persistence.neo4j.embeded.utils.NodeTypes;
 
 public class Person extends GENgraphNode implements ConclusionSubnode {
 
 	public Person(final org.gedcomx.conclusion.Person gedcomXPerson) throws MissingRequiredPropertyException {
-		super(NodeTypes.PERSON, gedcomXPerson);
+		super(null, NodeTypes.PERSON, gedcomXPerson);
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-package org.gedcomx.graph.persistence.neo4j.embeded.model.utils;
+package org.gedcomx.graph.persistence.neo4j.embeded.utils;
 
 import org.neo4j.graphdb.RelationshipType;
 

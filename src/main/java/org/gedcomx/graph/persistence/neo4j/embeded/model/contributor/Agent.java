@@ -7,12 +7,13 @@ import java.util.List;
 import org.gedcomx.common.ResourceReference;
 import org.gedcomx.common.URI;
 import org.gedcomx.graph.persistence.neo4j.embeded.exception.MissingRequiredPropertyException;
+import org.gedcomx.graph.persistence.neo4j.embeded.model.GENgraph;
 import org.gedcomx.graph.persistence.neo4j.embeded.model.GENgraphNode;
 import org.gedcomx.graph.persistence.neo4j.embeded.model.common.Identifier;
 import org.gedcomx.graph.persistence.neo4j.embeded.model.common.TextValue;
-import org.gedcomx.graph.persistence.neo4j.embeded.model.utils.NodeProperties;
-import org.gedcomx.graph.persistence.neo4j.embeded.model.utils.NodeTypes;
-import org.gedcomx.graph.persistence.neo4j.embeded.model.utils.RelTypes;
+import org.gedcomx.graph.persistence.neo4j.embeded.utils.NodeProperties;
+import org.gedcomx.graph.persistence.neo4j.embeded.utils.NodeTypes;
+import org.gedcomx.graph.persistence.neo4j.embeded.utils.RelTypes;
 
 public class Agent extends GENgraphNode {
 
@@ -21,24 +22,24 @@ public class Agent extends GENgraphNode {
 	private final List<Identifier> identifiers;
 	private final List<TextValue> names;
 
-	public Agent(final org.gedcomx.contributor.Agent gedcomXAgent) throws MissingRequiredPropertyException {
-		super(NodeTypes.AGENT, gedcomXAgent);
+	public Agent(final GENgraph graf, final org.gedcomx.contributor.Agent gedcomXAgent) throws MissingRequiredPropertyException {
+		super(graf, NodeTypes.AGENT, gedcomXAgent);
 		this.addresses = new LinkedList<>();
 		this.onlineAccounts = new LinkedList<>();
 		this.identifiers = new LinkedList<>();
 		this.names = new LinkedList<>();
 
 		for (final org.gedcomx.contributor.Address gedcomXAddress : gedcomXAgent.getAddresses()) {
-			this.addAddress(new Address(gedcomXAddress));
+			this.addAddress(new Address(graf, gedcomXAddress));
 		}
 		for (final org.gedcomx.contributor.OnlineAccount gedcomXOnlineAccount : gedcomXAgent.getAccounts()) {
-			this.addOnlineAccount(new OnlineAccount(gedcomXOnlineAccount));
+			this.addOnlineAccount(new OnlineAccount(graf, gedcomXOnlineAccount));
 		}
 		for (final org.gedcomx.conclusion.Identifier gedcomXIdentifier : gedcomXAgent.getIdentifiers()) {
-			this.addIdentifier(new Identifier(gedcomXIdentifier));
+			this.addIdentifier(new Identifier(graf, gedcomXIdentifier));
 		}
 		for (final org.gedcomx.common.TextValue gedcomXName : gedcomXAgent.getNames()) {
-			this.addName(new TextValue(gedcomXName));
+			this.addName(new TextValue(graf, gedcomXName));
 		}
 	}
 

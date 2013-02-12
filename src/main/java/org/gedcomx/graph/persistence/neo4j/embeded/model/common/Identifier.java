@@ -2,14 +2,16 @@ package org.gedcomx.graph.persistence.neo4j.embeded.model.common;
 
 import org.gedcomx.common.URI;
 import org.gedcomx.graph.persistence.neo4j.embeded.exception.MissingRequiredPropertyException;
+import org.gedcomx.graph.persistence.neo4j.embeded.model.GENgraph;
 import org.gedcomx.graph.persistence.neo4j.embeded.model.GENgraphNode;
-import org.gedcomx.graph.persistence.neo4j.embeded.model.utils.NodeProperties;
-import org.gedcomx.graph.persistence.neo4j.embeded.model.utils.NodeTypes;
+import org.gedcomx.graph.persistence.neo4j.embeded.utils.NodeProperties;
+import org.gedcomx.graph.persistence.neo4j.embeded.utils.NodeTypes;
 
 public class Identifier extends GENgraphNode {
 
-	public Identifier(final org.gedcomx.conclusion.Identifier gedcomXIdentifier) throws MissingRequiredPropertyException {
-		super(NodeTypes.IDENTIFIER, gedcomXIdentifier);
+	public Identifier(final GENgraph graf, final org.gedcomx.conclusion.Identifier gedcomXIdentifier)
+			throws MissingRequiredPropertyException {
+		super(graf, NodeTypes.IDENTIFIER, gedcomXIdentifier);
 	}
 
 	@Override
