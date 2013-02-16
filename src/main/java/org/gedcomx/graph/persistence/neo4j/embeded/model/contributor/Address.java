@@ -1,6 +1,6 @@
 package org.gedcomx.graph.persistence.neo4j.embeded.model.contributor;
 
-import org.gedcomx.graph.persistence.neo4j.embeded.exception.MissingRequiredPropertyException;
+import org.gedcomx.graph.persistence.neo4j.embeded.exception.MissingFieldException;
 import org.gedcomx.graph.persistence.neo4j.embeded.model.GENgraph;
 import org.gedcomx.graph.persistence.neo4j.embeded.model.GENgraphNode;
 import org.gedcomx.graph.persistence.neo4j.embeded.utils.NodeProperties;
@@ -8,13 +8,8 @@ import org.gedcomx.graph.persistence.neo4j.embeded.utils.NodeTypes;
 
 public class Address extends GENgraphNode {
 
-	protected Address(final GENgraph graf, final org.gedcomx.contributor.Address gedcomXAddress) throws MissingRequiredPropertyException {
+	protected Address(final GENgraph graf, final org.gedcomx.contributor.Address gedcomXAddress) throws MissingFieldException {
 		super(graf, NodeTypes.ADDRESS, gedcomXAddress);
-	}
-
-	@Override
-	protected void checkRequiredProperties(final Object gedcomXObject) throws MissingRequiredPropertyException {
-		return;
 	}
 
 	public String getCity() {

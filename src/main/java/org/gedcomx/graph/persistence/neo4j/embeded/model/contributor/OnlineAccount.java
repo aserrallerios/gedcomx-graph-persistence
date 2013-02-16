@@ -2,6 +2,7 @@ package org.gedcomx.graph.persistence.neo4j.embeded.model.contributor;
 
 import org.gedcomx.common.ResourceReference;
 import org.gedcomx.common.URI;
+import org.gedcomx.graph.persistence.neo4j.embeded.exception.MissingFieldException;
 import org.gedcomx.graph.persistence.neo4j.embeded.exception.MissingRequiredPropertyException;
 import org.gedcomx.graph.persistence.neo4j.embeded.model.GENgraph;
 import org.gedcomx.graph.persistence.neo4j.embeded.model.GENgraphNode;
@@ -11,16 +12,18 @@ import org.gedcomx.graph.persistence.neo4j.embeded.utils.NodeTypes;
 public class OnlineAccount extends GENgraphNode {
 
 	protected OnlineAccount(final GENgraph graf, final org.gedcomx.contributor.OnlineAccount gedcomXOnlineAccount)
-			throws MissingRequiredPropertyException {
+			throws MissingFieldException {
 		super(graf, NodeTypes.ACCOUNT, gedcomXOnlineAccount);
 	}
 
 	@Override
-	protected void checkRequiredProperties(final Object gedcomXObject) throws MissingRequiredPropertyException {
+	protected void checkRequiredProperties(final Object gedcomXObject) throws MissingFieldException {
 		final org.gedcomx.contributor.OnlineAccount gedcomXOnlineAccount = (org.gedcomx.contributor.OnlineAccount) gedcomXObject;
-		if ((gedcomXOnlineAccount.getAccountName() == null) || (gedcomXOnlineAccount.getServiceHomepage() == null)
-				|| (gedcomXOnlineAccount.getServiceHomepage().getResource() == null)) {
-			throw new MissingRequiredPropertyException();
+		if ((gedcomXOnlineAccount.getAccountName() == null) || gedcomXOnlineAccount.getAccountName().isEmpty()) {
+			throw new MissingRequiredPropertyException(OnlineAccount.class, NodeProperties.Agent.ACCOUNT_NAME);
+		}
+		if ((gedcomXOnlineAccount.getServiceHomepage() == null) || (gedcomXOnlineAccount.getServiceHomepage().getResource() == null)) {
+			throw new MissingRequiredPropertyException(OnlineAccount.class, NodeProperties.Agent.SERVICE_HOMEPAGE);
 		}
 	}
 

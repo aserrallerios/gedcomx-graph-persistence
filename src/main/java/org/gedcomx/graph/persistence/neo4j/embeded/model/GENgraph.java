@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Map;
 
 import org.gedcomx.graph.persistence.neo4j.embeded.dao.GENgraphDAO;
-import org.gedcomx.graph.persistence.neo4j.embeded.exception.MissingRequiredPropertyException;
+import org.gedcomx.graph.persistence.neo4j.embeded.exception.MissingFieldException;
 import org.gedcomx.graph.persistence.neo4j.embeded.model.conclusion.Conclusion;
 import org.gedcomx.graph.persistence.neo4j.embeded.model.contributor.Agent;
 import org.gedcomx.graph.persistence.neo4j.embeded.model.source.SourceDescription;
@@ -25,7 +25,7 @@ public class GENgraph {
 	private final GENgraphDAO dao;
 
 	public GENgraph(final GENgraphDAO dao, final Map<String, String> metadata, final Collection<Object> gedcomxElements)
-			throws MissingRequiredPropertyException {
+			throws MissingFieldException {
 		this.dao = dao;
 		this.rootNode = dao.getReferenceNode();
 		this.agents = new HashSet<>();

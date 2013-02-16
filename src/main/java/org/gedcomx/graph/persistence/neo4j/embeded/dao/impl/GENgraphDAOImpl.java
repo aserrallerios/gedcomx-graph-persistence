@@ -77,11 +77,12 @@ public class GENgraphDAOImpl implements GENgraphDAO {
 		index.add(node, property.name(), value);
 	}
 
-	public Relationship addRelationshipProperties(final Relationship rel, final Map<String, ?> properties) {
+	@Override
+	public Relationship addRelationshipProperties(final Relationship rel, final Map<RelationshipProperties, ?> properties) {
 		final Transaction tx = rel.getGraphDatabase().beginTx();
 		try {
-			for (final Entry<String, ?> property : properties.entrySet()) {
-				rel.setProperty(property.getKey(), property.getValue());
+			for (final Entry<RelationshipProperties, ?> property : properties.entrySet()) {
+				rel.setProperty(property.getKey().name(), property.getValue());
 			}
 			tx.success();
 		} finally {
@@ -90,6 +91,7 @@ public class GENgraphDAOImpl implements GENgraphDAO {
 		return rel;
 	}
 
+	@Override
 	public Relationship addRelationshipProperty(final Relationship rel, final RelationshipProperties propertyName,
 			final Object propertyValue) {
 		final Transaction tx = rel.getGraphDatabase().beginTx();

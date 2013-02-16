@@ -5,17 +5,10 @@ import org.gedcomx.graph.persistence.neo4j.embeded.model.GENgraph;
 import org.gedcomx.graph.persistence.neo4j.embeded.model.GENgraphNode;
 import org.gedcomx.graph.persistence.neo4j.embeded.utils.NodeTypes;
 
-public class SourceDescription extends GENgraphNode {
+public class SourceReference extends GENgraphNode {
 
-	public SourceDescription(final GENgraph geNgraph, final org.gedcomx.source.SourceDescription gedcomXSourceDescription)
-			throws MissingFieldException {
-		super(geNgraph, NodeTypes.SOURCE_DESCRIPTION, gedcomXSourceDescription);
-	}
-
-	@Override
-	protected void checkRequiredProperties(final Object gedcomXObject) throws MissingFieldException {
-		// TODO Auto-generated method stub
-
+	public SourceReference(final GENgraph graph, final Object gedcomXObject) throws MissingFieldException {
+		super(graph, NodeTypes.SOURCE_REFERENCE, gedcomXObject);
 	}
 
 	@Override

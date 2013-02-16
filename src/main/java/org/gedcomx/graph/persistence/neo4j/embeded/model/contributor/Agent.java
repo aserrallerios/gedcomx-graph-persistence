@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.gedcomx.common.ResourceReference;
 import org.gedcomx.common.URI;
-import org.gedcomx.graph.persistence.neo4j.embeded.exception.MissingRequiredPropertyException;
+import org.gedcomx.graph.persistence.neo4j.embeded.exception.MissingFieldException;
 import org.gedcomx.graph.persistence.neo4j.embeded.model.GENgraph;
 import org.gedcomx.graph.persistence.neo4j.embeded.model.GENgraphNode;
 import org.gedcomx.graph.persistence.neo4j.embeded.model.common.Identifier;
@@ -22,24 +22,24 @@ public class Agent extends GENgraphNode {
 	private final List<Identifier> identifiers;
 	private final List<TextValue> names;
 
-	public Agent(final GENgraph graf, final org.gedcomx.contributor.Agent gedcomXAgent) throws MissingRequiredPropertyException {
-		super(graf, NodeTypes.AGENT, gedcomXAgent);
+	public Agent(final GENgraph graph, final org.gedcomx.contributor.Agent gedcomXAgent) throws MissingFieldException {
+		super(graph, NodeTypes.AGENT, gedcomXAgent);
 		this.addresses = new LinkedList<>();
 		this.onlineAccounts = new LinkedList<>();
 		this.identifiers = new LinkedList<>();
 		this.names = new LinkedList<>();
 
 		for (final org.gedcomx.contributor.Address gedcomXAddress : gedcomXAgent.getAddresses()) {
-			this.addAddress(new Address(graf, gedcomXAddress));
+			this.addAddress(new Address(graph, gedcomXAddress));
 		}
 		for (final org.gedcomx.contributor.OnlineAccount gedcomXOnlineAccount : gedcomXAgent.getAccounts()) {
-			this.addOnlineAccount(new OnlineAccount(graf, gedcomXOnlineAccount));
+			this.addOnlineAccount(new OnlineAccount(graph, gedcomXOnlineAccount));
 		}
 		for (final org.gedcomx.conclusion.Identifier gedcomXIdentifier : gedcomXAgent.getIdentifiers()) {
-			this.addIdentifier(new Identifier(graf, gedcomXIdentifier));
+			this.addIdentifier(new Identifier(graph, gedcomXIdentifier));
 		}
 		for (final org.gedcomx.common.TextValue gedcomXName : gedcomXAgent.getNames()) {
-			this.addName(new TextValue(graf, gedcomXName));
+			this.addName(new TextValue(graph, gedcomXName));
 		}
 	}
 
@@ -61,11 +61,6 @@ public class Agent extends GENgraphNode {
 	public void addOnlineAccount(final OnlineAccount onlineAccount) {
 		this.onlineAccounts.add(onlineAccount);
 		this.createRelationship(RelTypes.HAS_ACCOUNT, onlineAccount);
-	}
-
-	@Override
-	protected void checkRequiredProperties(final Object gedcomXObject) throws MissingRequiredPropertyException {
-		return;
 	}
 
 	public Collection<Address> getAddresses() {
@@ -107,7 +102,7 @@ public class Agent extends GENgraphNode {
 	}
 
 	public void setEmails(final List<ResourceReference> emails) {
-		this.setURIListProperties(emails, NodeProperties.Agent.EMAILS);
+		this.setURIListProperties(NodeProperties.Agent.EMAILS, emails);
 	}
 
 	public void setHomepage(final ResourceReference homepage) {
@@ -134,7 +129,7 @@ public class Agent extends GENgraphNode {
 	}
 
 	public void setPhones(final List<ResourceReference> phones) {
-		this.setURIListProperties(phones, NodeProperties.Agent.PHONES);
+		this.setURIListProperties(NodeProperties.Agent.PHONES, phones);
 	}
 
 }

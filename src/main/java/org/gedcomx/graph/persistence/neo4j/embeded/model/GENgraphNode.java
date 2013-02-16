@@ -2,15 +2,18 @@ package org.gedcomx.graph.persistence.neo4j.embeded.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.gedcomx.common.ResourceReference;
 import org.gedcomx.common.URI;
 import org.gedcomx.graph.persistence.neo4j.embeded.dao.GENgraphDAO;
-import org.gedcomx.graph.persistence.neo4j.embeded.exception.MissingRequiredPropertyException;
+import org.gedcomx.graph.persistence.neo4j.embeded.exception.MissingFieldException;
 import org.gedcomx.graph.persistence.neo4j.embeded.utils.NodeProperties;
 import org.gedcomx.graph.persistence.neo4j.embeded.utils.NodeTypes;
 import org.gedcomx.graph.persistence.neo4j.embeded.utils.RelTypes;
+import org.gedcomx.graph.persistence.neo4j.embeded.utils.RelationshipProperties;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
 
 public abstract class GENgraphNode {
 
@@ -18,8 +21,7 @@ public abstract class GENgraphNode {
 
 	private final GENgraph graph;
 
-	protected GENgraphNode(final GENgraph graph, final NodeTypes nodeType, final Object gedcomXObject)
-			throws MissingRequiredPropertyException {
+	protected GENgraphNode(final GENgraph graph, final NodeTypes nodeType, final Object gedcomXObject) throws MissingFieldException {
 		this.graph = graph;
 		this.checkRequiredProperties(gedcomXObject);
 		this.underlyingNode = this.graph.getDao().createNode();
@@ -27,17 +29,24 @@ public abstract class GENgraphNode {
 		this.setInitialProperties(gedcomXObject);
 	}
 
-	protected abstract void checkRequiredProperties(final Object gedcomXObject) throws MissingRequiredPropertyException;
+	protected void checkRequiredProperties(final Object gedcomXObject) throws MissingFieldException {
+		return;
+	}
 
 	protected void createRelationship(final RelTypes relType, final GENgraphNode node) {
 		this.getDAO().createRelationship(this.underlyingNode, relType, node.getUnderlyingNode());
+	}
+
+	protected void createRelationship(final RelTypes relType, final GENgraphNode node, final Map<RelationshipProperties, Object> properties) {
+		final Relationship rel = this.getDAO().createRelationship(this.underlyingNode, relType, node.getUnderlyingNode());
+		this.getDAO().addRelationshipProperties(rel, properties);
 	}
 
 	private GENgraphDAO getDAO() {
 		return this.getGraph().getDao();
 	}
 
-	public GENgraph getGraph() {
+	protected GENgraph getGraph() {
 		return this.graph;
 	}
 
@@ -62,6 +71,11 @@ public abstract class GENgraphNode {
 		return resourceList;
 	}
 
+	@Override
+	public int hashCode() {
+		return this.underlyingNode.hashCode();
+	}
+
 	protected abstract void setInitialProperties(final Object gedcomXObject);
 
 	private void setNodeType(final NodeTypes nodeType) {
@@ -79,12 +93,17 @@ public abstract class GENgraphNode {
 		}
 	}
 
-	protected void setURIListProperties(final List<ResourceReference> resourceList, final NodeProperties property) {
+	protected void setURIListProperties(final NodeProperties property, final List<ResourceReference> resourceList) {
 		final String[] values = new String[resourceList.size()];
 		int i = 0;
 		for (final ResourceReference resource : resourceList) {
 			values[i++] = resource.getResource().toString();
 		}
 		this.getDAO().addNodeProperty(this.underlyingNode, property, values);
+	}
+
+	@Override
+	public String toString() {
+		return this.underlyingNode.toString();
 	}
 }

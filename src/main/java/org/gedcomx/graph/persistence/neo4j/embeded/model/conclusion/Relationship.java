@@ -1,17 +1,18 @@
 package org.gedcomx.graph.persistence.neo4j.embeded.model.conclusion;
 
-import org.gedcomx.graph.persistence.neo4j.embeded.exception.MissingRequiredPropertyException;
-import org.gedcomx.graph.persistence.neo4j.embeded.model.GENgraphNode;
+import org.gedcomx.graph.persistence.neo4j.embeded.exception.MissingFieldException;
+import org.gedcomx.graph.persistence.neo4j.embeded.model.GENgraph;
 import org.gedcomx.graph.persistence.neo4j.embeded.utils.NodeTypes;
 
-public class Relationship extends GENgraphNode implements ConclusionSubnode {
+public class Relationship extends ConclusionSubnode {
 
-	protected Relationship(final org.gedcomx.conclusion.Relationship gedcomXRelationship) throws MissingRequiredPropertyException {
-		super(null, NodeTypes.RELATIONSHIP, gedcomXRelationship);
+	protected Relationship(final GENgraph graph, final org.gedcomx.conclusion.Relationship gedcomXRelationship)
+			throws MissingFieldException {
+		super(graph, NodeTypes.RELATIONSHIP, gedcomXRelationship);
 	}
 
 	@Override
-	protected void checkRequiredProperties(final Object gedcomXObject) throws MissingRequiredPropertyException {
+	protected void checkRequiredProperties(final Object gedcomXObject) throws MissingFieldException {
 		// TODO Auto-generated method stub
 
 	}

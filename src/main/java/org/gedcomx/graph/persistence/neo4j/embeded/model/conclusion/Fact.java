@@ -1,25 +1,86 @@
 package org.gedcomx.graph.persistence.neo4j.embeded.model.conclusion;
 
+import org.gedcomx.common.URI;
+import org.gedcomx.graph.persistence.neo4j.embeded.exception.MissingFieldException;
 import org.gedcomx.graph.persistence.neo4j.embeded.exception.MissingRequiredPropertyException;
-import org.gedcomx.graph.persistence.neo4j.embeded.model.GENgraphNode;
+import org.gedcomx.graph.persistence.neo4j.embeded.model.GENgraph;
+import org.gedcomx.graph.persistence.neo4j.embeded.utils.NodeProperties;
 import org.gedcomx.graph.persistence.neo4j.embeded.utils.NodeTypes;
+import org.gedcomx.graph.persistence.neo4j.embeded.utils.RelTypes;
 
-public class Fact extends GENgraphNode implements ConclusionSubnode {
+public class Fact extends ConclusionSubnode {
 
-	protected Fact(final org.gedcomx.conclusion.Fact gedcomXFact) throws MissingRequiredPropertyException {
-		super(null, NodeTypes.FACT, gedcomXFact);
+	PlaceReference placeReference;
+
+	protected Fact(final GENgraph graph, final org.gedcomx.conclusion.Fact gedcomXFact) throws MissingFieldException {
+		super(graph, NodeTypes.FACT, gedcomXFact);
+
+		if (gedcomXFact.getPlace() != null) {
+			this.setPlaceReference(new PlaceReference(graph, gedcomXFact.getPlace()));
+		}
 	}
 
 	@Override
-	protected void checkRequiredProperties(final Object gedcomXObject) throws MissingRequiredPropertyException {
-		// TODO Auto-generated method stub
+	protected void checkRequiredProperties(final Object gedcomXObject) throws MissingFieldException {
+		final org.gedcomx.conclusion.Fact gedcomXFact = (org.gedcomx.conclusion.Fact) gedcomXObject;
 
+		if (gedcomXFact.getType() == null) {
+			throw new MissingRequiredPropertyException(Fact.class, NodeProperties.Generic.TYPE);
+		}
+	}
+
+	public String getDateFormal() {
+		return (String) this.getProperty(NodeProperties.Conclusion.DATE_FORMAL);
+	}
+
+	public String getDateOriginal() {
+		return (String) this.getProperty(NodeProperties.Conclusion.DATE_ORIGINAL);
+	}
+
+	public PlaceReference getPlaceReference() {
+		return this.placeReference;
+	}
+
+	public URI getType() {
+		final String type = (String) this.getProperty(NodeProperties.Generic.TYPE);
+		return new URI(type);
+	}
+
+	public String getValue() {
+		return (String) this.getProperty(NodeProperties.Generic.VALUE);
+	}
+
+	public void setDateFormal(final String value) {
+		this.setProperty(NodeProperties.Conclusion.DATE_FORMAL, value);
+	}
+
+	public void setDateOriginal(final String value) {
+		this.setProperty(NodeProperties.Conclusion.DATE_ORIGINAL, value);
 	}
 
 	@Override
 	protected void setInitialProperties(final Object gedcomXObject) {
-		// TODO Auto-generated method stub
+		final org.gedcomx.conclusion.Fact gedcomXFact = (org.gedcomx.conclusion.Fact) gedcomXObject;
+		this.setValue(gedcomXFact.getValue());
+		this.setType(gedcomXFact.getType());
 
+		if (gedcomXFact.getDate() != null) {
+			this.setDateFormal(gedcomXFact.getDate().getFormal());
+			this.setDateOriginal(gedcomXFact.getDate().getOriginal());
+		}
+	}
+
+	public void setPlaceReference(final PlaceReference placeReference) {
+		this.placeReference = placeReference;
+		this.createRelationship(RelTypes.PLACE, placeReference);
+	}
+
+	public void setType(final URI type) {
+		this.setProperty(NodeProperties.Generic.TYPE, type.toString());
+	}
+
+	public void setValue(final String value) {
+		this.setProperty(NodeProperties.Generic.VALUE, value);
 	}
 
 }
