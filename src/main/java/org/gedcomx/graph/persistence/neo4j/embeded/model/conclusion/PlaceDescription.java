@@ -54,7 +54,7 @@ public class PlaceDescription extends ConclusionSubnode {
 	}
 
 	public URI getAbout() {
-		return new URI((String) this.getProperty(NodeProperties.Conclusion.ABOUT));
+		return new URI((String) this.getProperty(NodeProperties.Generic.ABOUT));
 	}
 
 	public List<Identifier> getIdentifiers() {
@@ -94,7 +94,7 @@ public class PlaceDescription extends ConclusionSubnode {
 	}
 
 	public void setAbout(final URI about) {
-		this.setProperty(NodeProperties.Conclusion.ABOUT, about.toString());
+		this.setProperty(NodeProperties.Generic.ABOUT, about.toString());
 	}
 
 	@Override

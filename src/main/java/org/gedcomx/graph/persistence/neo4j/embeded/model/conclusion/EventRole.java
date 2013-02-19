@@ -4,12 +4,11 @@ import org.gedcomx.common.URI;
 import org.gedcomx.graph.persistence.neo4j.embeded.exception.MissingFieldException;
 import org.gedcomx.graph.persistence.neo4j.embeded.exception.MissingRequiredRelationshipException;
 import org.gedcomx.graph.persistence.neo4j.embeded.model.GENgraph;
-import org.gedcomx.graph.persistence.neo4j.embeded.model.GENgraphNode;
 import org.gedcomx.graph.persistence.neo4j.embeded.utils.NodeProperties;
 import org.gedcomx.graph.persistence.neo4j.embeded.utils.NodeTypes;
 import org.gedcomx.graph.persistence.neo4j.embeded.utils.RelTypes;
 
-public class EventRole extends GENgraphNode {
+public class EventRole extends ConclusionSubnode {
 
 	private Person person;
 

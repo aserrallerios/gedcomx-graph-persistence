@@ -9,7 +9,7 @@ import org.gedcomx.graph.persistence.neo4j.embeded.utils.RelTypes;
 
 public class PlaceReference extends GENgraphNode {
 
-	PlaceDescription placeDescription;
+	private PlaceDescription placeDescription;
 
 	protected PlaceReference(final GENgraph graph, final org.gedcomx.conclusion.PlaceReference gedcomXPlaceReference)
 			throws MissingFieldException {

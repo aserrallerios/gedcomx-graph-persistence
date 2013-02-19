@@ -32,7 +32,7 @@ public interface NodeProperties {
 
 	public static enum Conclusion implements NodeProperties {
 
-		ID, CONFIDENCE(true, IndexNodeNames.TYPES), TEXT(true, IndexNodeNames.OTHER), ABOUT, LATITUDE, LONGITUDE, TEMPORAL_DESCRIPTION_ORIGINAL, SPATIAL_DESCRIPTION, TEMPORAL_DESCRIPTION_FORMAL, ORIGINAL, DATE_ORIGINAL, DATE_FORMAL, PREFERRED, FULL_TEXT, QUALIFIERS, DETAILS;
+		ID, CONFIDENCE(true, IndexNodeNames.TYPES), TEXT(true, IndexNodeNames.OTHER), LATITUDE, LONGITUDE, TEMPORAL_DESCRIPTION_ORIGINAL, SPATIAL_DESCRIPTION, TEMPORAL_DESCRIPTION_FORMAL, ORIGINAL, DATE_ORIGINAL, DATE_FORMAL, PREFERRED, FULL_TEXT, QUALIFIERS, DETAILS, LIVING;
 
 		private final boolean indexed;
 		private final IndexNodeNames indexName;
@@ -60,7 +60,7 @@ public interface NodeProperties {
 	}
 
 	public static enum Generic implements NodeProperties {
-		ID(true, IndexNodeNames.IDS), NODE_TYPE(true, IndexNodeNames.NODE_TYPES), TYPE(true, IndexNodeNames.TYPES), VALUE, LANG, ATTRIBUTION_MODIFIED, ATTRIBUTION_CHANGE_MESSAGE;
+		ID(true, IndexNodeNames.IDS), ABOUT, NODE_TYPE(true, IndexNodeNames.NODE_TYPES), TYPE(true, IndexNodeNames.TYPES), VALUE, LANG, ATTRIBUTION_MODIFIED, ATTRIBUTION_CHANGE_MESSAGE, SUBJECT, TEXT;
 
 		private final boolean indexed;
 		private final IndexNodeNames indexName;
@@ -88,7 +88,7 @@ public interface NodeProperties {
 
 	public static enum SourceDescription implements NodeProperties {
 
-		ID;
+		ID, CITATION_TEMPLATE;
 
 		private final boolean indexed;
 		private final IndexNodeNames indexName;

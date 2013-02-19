@@ -41,6 +41,12 @@ public class Conclusion extends GENgraphNode {
 		if (gedcomXConclusion instanceof org.gedcomx.conclusion.Event) {
 			this.subnode = new Event(graf, (org.gedcomx.conclusion.Event) gedcomXConclusion);
 		}
+		if (gedcomXConclusion instanceof org.gedcomx.conclusion.EventRole) {
+			this.subnode = new EventRole(graf, (org.gedcomx.conclusion.EventRole) gedcomXConclusion);
+		}
+		if (gedcomXConclusion instanceof org.gedcomx.conclusion.Gender) {
+			this.subnode = new Gender(graf, (org.gedcomx.conclusion.Gender) gedcomXConclusion);
+		}
 		if (gedcomXConclusion instanceof org.gedcomx.conclusion.Person) {
 			this.subnode = new Person(graf, (org.gedcomx.conclusion.Person) gedcomXConclusion);
 		}
@@ -86,6 +92,10 @@ public class Conclusion extends GENgraphNode {
 		return (String) this.getProperty(NodeProperties.Generic.ID);
 	}
 
+	public String getLang() {
+		return (String) this.getProperty(NodeProperties.Generic.LANG);
+	}
+
 	public List<Note> getNotes() {
 		return this.notes;
 	}
@@ -125,7 +135,6 @@ public class Conclusion extends GENgraphNode {
 			this.setAttributionModifiedConfidence(gedcomXConclusion.getAttribution().getModified());
 			this.setAttributionChangeMessage(gedcomXConclusion.getAttribution().getChangeMessage());
 		}
-
 	}
 
 	public void setLang(final String lang) {

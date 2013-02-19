@@ -1,26 +1,105 @@
 package org.gedcomx.graph.persistence.neo4j.embeded.model.conclusion;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import org.gedcomx.common.URI;
 import org.gedcomx.graph.persistence.neo4j.embeded.exception.MissingFieldException;
+import org.gedcomx.graph.persistence.neo4j.embeded.exception.MissingRequiredRelationshipException;
 import org.gedcomx.graph.persistence.neo4j.embeded.model.GENgraph;
+import org.gedcomx.graph.persistence.neo4j.embeded.model.common.Identifier;
+import org.gedcomx.graph.persistence.neo4j.embeded.utils.NodeProperties;
 import org.gedcomx.graph.persistence.neo4j.embeded.utils.NodeTypes;
+import org.gedcomx.graph.persistence.neo4j.embeded.utils.RelTypes;
 
 public class Relationship extends ConclusionSubnode {
+
+	private final List<Identifier> identifiers;
+	private final List<Fact> facts;
+
+	private Person person1;
+	private Person person2;
 
 	protected Relationship(final GENgraph graph, final org.gedcomx.conclusion.Relationship gedcomXRelationship)
 			throws MissingFieldException {
 		super(graph, NodeTypes.RELATIONSHIP, gedcomXRelationship);
+
+		this.identifiers = new LinkedList<Identifier>();
+		this.facts = new LinkedList<Fact>();
+
+		// for (final org.gedcomx.conclusion.Identifier identifier :
+		// gedcomXRelationship.getIdentifiers()) {
+		// this.addIdentifier(new Identifier(graph, identifier));
+		// }
+		for (final org.gedcomx.conclusion.Fact fact : gedcomXRelationship.getFacts()) {
+			this.addFact(new Fact(graph, fact));
+		}
+		// TODO
+	}
+
+	public void addFact(final Fact fact) {
+		this.facts.add(fact);
+		this.createRelationship(RelTypes.HAS_FACT, fact);
+	}
+
+	public void addIdentifier(final Identifier identifier) {
+		this.identifiers.add(identifier);
+		this.createRelationship(RelTypes.HAS_IDENTIFIER, identifier);
 	}
 
 	@Override
 	protected void checkRequiredProperties(final Object gedcomXObject) throws MissingFieldException {
-		// TODO Auto-generated method stub
+		final org.gedcomx.conclusion.Relationship gedcomXRelationship = (org.gedcomx.conclusion.Relationship) gedcomXObject;
 
+		if (gedcomXRelationship.getPerson1() == null) {
+			throw new MissingRequiredRelationshipException(Relationship.class, RelTypes.PERSON1);
+		}
+
+		if (gedcomXRelationship.getPerson2() == null) {
+			throw new MissingRequiredRelationshipException(Relationship.class, RelTypes.PERSON2);
+		}
+	}
+
+	public List<Fact> getFacts() {
+		return this.facts;
+	}
+
+	public List<Identifier> getIdentifiers() {
+		return this.identifiers;
+	}
+
+	public Person getPerson1() {
+		return this.person1;
+	}
+
+	public Person getPerson2() {
+		return this.person2;
+	}
+
+	public URI getType() {
+		final String type = (String) this.getProperty(NodeProperties.Generic.TYPE);
+		return new URI(type);
 	}
 
 	@Override
 	protected void setInitialProperties(final Object gedcomXObject) {
-		// TODO Auto-generated method stub
+		final org.gedcomx.conclusion.Relationship gedcomXRelationship = (org.gedcomx.conclusion.Relationship) gedcomXObject;
 
+		this.setType(gedcomXRelationship.getType());
+	}
+
+	public void setPerson1(final Person person1) {
+		this.person1 = person1;
+		this.createRelationship(RelTypes.PERSON1, person1);
+	}
+
+	public void setPerson2(final Person person2) {
+		this.person2 = person2;
+		this.createRelationship(RelTypes.PERSON2, person2);
+	}
+
+	public void setType(final URI type) {
+		this.setProperty(NodeProperties.Generic.TYPE, type.toString());
 	}
 
 }
