@@ -4,10 +4,11 @@ import org.gedcomx.common.URI;
 import org.gedcomx.graph.persistence.neo4j.embeded.exception.MissingFieldException;
 import org.gedcomx.graph.persistence.neo4j.embeded.exception.MissingRequiredPropertyException;
 import org.gedcomx.graph.persistence.neo4j.embeded.model.GENgraph;
+import org.gedcomx.graph.persistence.neo4j.embeded.model.GENgraphTopLevelNode;
 import org.gedcomx.graph.persistence.neo4j.embeded.utils.NodeProperties;
 import org.gedcomx.graph.persistence.neo4j.embeded.utils.NodeTypes;
 
-public class Document extends ConclusionSubnode {
+public class Document extends ConclusionSubnode implements GENgraphTopLevelNode {
 
 	protected Document(final GENgraph graph, final org.gedcomx.conclusion.Document gedcomXDocument) throws MissingFieldException {
 		super(graph, NodeTypes.DOCUMENT, gedcomXDocument);

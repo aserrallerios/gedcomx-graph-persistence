@@ -8,30 +8,21 @@ import org.gedcomx.common.URI;
 import org.gedcomx.graph.persistence.neo4j.embeded.exception.MissingFieldException;
 import org.gedcomx.graph.persistence.neo4j.embeded.exception.MissingRequiredRelationshipException;
 import org.gedcomx.graph.persistence.neo4j.embeded.model.GENgraph;
+import org.gedcomx.graph.persistence.neo4j.embeded.model.GENgraphTopLevelNode;
 import org.gedcomx.graph.persistence.neo4j.embeded.model.common.Identifier;
 import org.gedcomx.graph.persistence.neo4j.embeded.model.common.TextValue;
 import org.gedcomx.graph.persistence.neo4j.embeded.utils.NodeProperties;
 import org.gedcomx.graph.persistence.neo4j.embeded.utils.NodeTypes;
 import org.gedcomx.graph.persistence.neo4j.embeded.utils.RelTypes;
 
-public class PlaceDescription extends ConclusionSubnode {
+public class PlaceDescription extends ConclusionSubnode implements GENgraphTopLevelNode {
 
-	private final List<TextValue> names;
-	private final List<Identifier> identifiers;
+	private final List<TextValue> names = new LinkedList<>();
+	private final List<Identifier> identifiers = new LinkedList<>();
 
 	protected PlaceDescription(final GENgraph graph, final org.gedcomx.conclusion.PlaceDescription gedcomXPlaceDescription)
 			throws MissingFieldException {
 		super(graph, NodeTypes.PLACE_DESCRIPTION, gedcomXPlaceDescription);
-
-		this.identifiers = new LinkedList<>();
-		this.names = new LinkedList<>();
-
-		for (final org.gedcomx.common.TextValue gedcomXName : gedcomXPlaceDescription.getNames()) {
-			this.addName(new TextValue(graph, gedcomXName));
-		}
-		for (final org.gedcomx.conclusion.Identifier gedcomXIdentifier : gedcomXPlaceDescription.getIdentifiers()) {
-			this.addIdentifier(new Identifier(graph, gedcomXIdentifier));
-		}
 	}
 
 	public void addIdentifier(final Identifier identifier) {
@@ -49,7 +40,7 @@ public class PlaceDescription extends ConclusionSubnode {
 		final org.gedcomx.conclusion.PlaceDescription gedcomXPlaceDescription = (org.gedcomx.conclusion.PlaceDescription) gedcomXObject;
 
 		if ((gedcomXPlaceDescription.getNames() == null) || gedcomXPlaceDescription.getNames().isEmpty()) {
-			throw new MissingRequiredRelationshipException(PlaceDescription.class, RelTypes.HAS_NAME);
+			throw new MissingRequiredRelationshipException(PlaceDescription.class, gedcomXPlaceDescription.getId(), RelTypes.HAS_NAME);
 		}
 	}
 
@@ -122,6 +113,18 @@ public class PlaceDescription extends ConclusionSubnode {
 	public void setLongitude(final Double longitude) {
 		this.setProperty(NodeProperties.Conclusion.LONGITUDE, longitude);
 
+	}
+
+	@Override
+	protected void setRelations(final Object gedcomXObject) throws MissingFieldException {
+		final org.gedcomx.conclusion.PlaceDescription gedcomXPlaceDescription = (org.gedcomx.conclusion.PlaceDescription) gedcomXObject;
+
+		for (final org.gedcomx.common.TextValue gedcomXName : gedcomXPlaceDescription.getNames()) {
+			this.addName(new TextValue(this.getGraph(), gedcomXName));
+		}
+		for (final org.gedcomx.conclusion.Identifier gedcomXIdentifier : gedcomXPlaceDescription.getIdentifiers()) {
+			this.addIdentifier(new Identifier(this.getGraph(), gedcomXIdentifier));
+		}
 	}
 
 	public void setSpatialDescription(final ResourceReference spatialDescription) {

@@ -11,11 +11,10 @@ import org.gedcomx.graph.persistence.neo4j.embeded.utils.RelTypes;
 public class EventRole extends ConclusionSubnode {
 
 	private Person person;
+	private URI personURI;
 
 	protected EventRole(final GENgraph graph, final org.gedcomx.conclusion.EventRole gedcomXEventRole) throws MissingFieldException {
 		super(graph, NodeTypes.EVENT_ROLE, gedcomXEventRole);
-
-		// TODO
 	}
 
 	@Override
@@ -23,7 +22,7 @@ public class EventRole extends ConclusionSubnode {
 		final org.gedcomx.conclusion.EventRole gedcomXEventRole = (org.gedcomx.conclusion.EventRole) gedcomXObject;
 
 		if (gedcomXEventRole.getPerson() == null) {
-			throw new MissingRequiredRelationshipException(EventRole.class, RelTypes.PERSON);
+			throw new MissingRequiredRelationshipException(EventRole.class, gedcomXEventRole.getId(), RelTypes.PERSON);
 		}
 	}
 
@@ -37,6 +36,16 @@ public class EventRole extends ConclusionSubnode {
 
 	public URI getType() {
 		return new URI((String) this.getProperty(NodeProperties.Generic.TYPE));
+	}
+
+	@Override
+	protected void resolveReferences() {
+		if ((this.person == null) && (this.personURI != null)) {
+			final Conclusion conclusion = this.getGraph().getConclusion(this.personURI);
+			if (conclusion != null) {
+				this.setPerson((Person) conclusion.getSubnode());
+			}
+		}
 	}
 
 	public void setDetails(final String details) {
@@ -55,6 +64,19 @@ public class EventRole extends ConclusionSubnode {
 	public void setPerson(final Person person) {
 		this.person = person;
 		this.createRelationship(RelTypes.PERSON, person);
+	}
+
+	@Override
+	protected void setRelations(final Object gedcomXObject) throws MissingFieldException {
+		final org.gedcomx.conclusion.EventRole gedcomXEventRole = (org.gedcomx.conclusion.EventRole) gedcomXObject;
+
+		this.personURI = gedcomXEventRole.getPerson().getResource();
+		final Conclusion conclusion = this.getGraph().getConclusion(this.personURI);
+		if (conclusion != null) {
+			this.setPerson((Person) conclusion.getSubnode());
+		} else {
+			this.addNodeToResolveReferences();
+		}
 	}
 
 	public void setType(final URI type) {

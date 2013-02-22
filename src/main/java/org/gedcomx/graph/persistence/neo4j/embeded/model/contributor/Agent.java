@@ -9,38 +9,23 @@ import org.gedcomx.common.URI;
 import org.gedcomx.graph.persistence.neo4j.embeded.exception.MissingFieldException;
 import org.gedcomx.graph.persistence.neo4j.embeded.model.GENgraph;
 import org.gedcomx.graph.persistence.neo4j.embeded.model.GENgraphNode;
+import org.gedcomx.graph.persistence.neo4j.embeded.model.GENgraphTopLevelNode;
 import org.gedcomx.graph.persistence.neo4j.embeded.model.common.Identifier;
 import org.gedcomx.graph.persistence.neo4j.embeded.model.common.TextValue;
 import org.gedcomx.graph.persistence.neo4j.embeded.utils.NodeProperties;
 import org.gedcomx.graph.persistence.neo4j.embeded.utils.NodeTypes;
 import org.gedcomx.graph.persistence.neo4j.embeded.utils.RelTypes;
 
-public class Agent extends GENgraphNode {
+public class Agent extends GENgraphNode implements GENgraphTopLevelNode {
 
-	private final List<Address> addresses;
-	private final List<OnlineAccount> onlineAccounts;
-	private final List<Identifier> identifiers;
-	private final List<TextValue> names;
+	private final List<Address> addresses = new LinkedList<>();
+	private final List<OnlineAccount> onlineAccounts = new LinkedList<>();
+	private final List<Identifier> identifiers = new LinkedList<>();
+	private final List<TextValue> names = new LinkedList<>();
 
 	public Agent(final GENgraph graph, final org.gedcomx.contributor.Agent gedcomXAgent) throws MissingFieldException {
 		super(graph, NodeTypes.AGENT, gedcomXAgent);
-		this.addresses = new LinkedList<>();
-		this.onlineAccounts = new LinkedList<>();
-		this.identifiers = new LinkedList<>();
-		this.names = new LinkedList<>();
 
-		for (final org.gedcomx.contributor.Address gedcomXAddress : gedcomXAgent.getAddresses()) {
-			this.addAddress(new Address(graph, gedcomXAddress));
-		}
-		for (final org.gedcomx.contributor.OnlineAccount gedcomXOnlineAccount : gedcomXAgent.getAccounts()) {
-			this.addOnlineAccount(new OnlineAccount(graph, gedcomXOnlineAccount));
-		}
-		for (final org.gedcomx.conclusion.Identifier gedcomXIdentifier : gedcomXAgent.getIdentifiers()) {
-			this.addIdentifier(new Identifier(graph, gedcomXIdentifier));
-		}
-		for (final org.gedcomx.common.TextValue gedcomXName : gedcomXAgent.getNames()) {
-			this.addName(new TextValue(graph, gedcomXName));
-		}
 	}
 
 	public void addAddress(final Address address) {
@@ -130,6 +115,24 @@ public class Agent extends GENgraphNode {
 
 	public void setPhones(final List<ResourceReference> phones) {
 		this.setURIListProperties(NodeProperties.Agent.PHONES, phones);
+	}
+
+	@Override
+	protected void setRelations(final Object gedcomXObject) throws MissingFieldException {
+		final org.gedcomx.contributor.Agent gedcomXAgent = (org.gedcomx.contributor.Agent) gedcomXObject;
+
+		for (final org.gedcomx.contributor.Address gedcomXAddress : gedcomXAgent.getAddresses()) {
+			this.addAddress(new Address(this.getGraph(), gedcomXAddress));
+		}
+		for (final org.gedcomx.contributor.OnlineAccount gedcomXOnlineAccount : gedcomXAgent.getAccounts()) {
+			this.addOnlineAccount(new OnlineAccount(this.getGraph(), gedcomXOnlineAccount));
+		}
+		for (final org.gedcomx.conclusion.Identifier gedcomXIdentifier : gedcomXAgent.getIdentifiers()) {
+			this.addIdentifier(new Identifier(this.getGraph(), gedcomXIdentifier));
+		}
+		for (final org.gedcomx.common.TextValue gedcomXName : gedcomXAgent.getNames()) {
+			this.addName(new TextValue(this.getGraph(), gedcomXName));
+		}
 	}
 
 }

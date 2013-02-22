@@ -5,35 +5,21 @@ import java.util.List;
 
 import org.gedcomx.graph.persistence.neo4j.embeded.exception.MissingFieldException;
 import org.gedcomx.graph.persistence.neo4j.embeded.model.GENgraph;
+import org.gedcomx.graph.persistence.neo4j.embeded.model.GENgraphTopLevelNode;
 import org.gedcomx.graph.persistence.neo4j.embeded.model.common.Identifier;
 import org.gedcomx.graph.persistence.neo4j.embeded.utils.NodeProperties;
 import org.gedcomx.graph.persistence.neo4j.embeded.utils.NodeTypes;
 import org.gedcomx.graph.persistence.neo4j.embeded.utils.RelTypes;
 
-public class Person extends ConclusionSubnode {
+public class Person extends ConclusionSubnode implements GENgraphTopLevelNode {
 
 	private Gender gender;
-	private final List<Identifier> identifiers;
-	private final List<Fact> facts;
-	private final List<Name> names;
+	private final List<Identifier> identifiers = new LinkedList<>();
+	private final List<Fact> facts = new LinkedList<>();
+	private final List<Name> names = new LinkedList<>();
 
-	public Person(final GENgraph graph, final org.gedcomx.conclusion.Person gedcomXPerson) throws MissingFieldException {
+	protected Person(final GENgraph graph, final org.gedcomx.conclusion.Person gedcomXPerson) throws MissingFieldException {
 		super(graph, NodeTypes.PERSON, gedcomXPerson);
-
-		this.identifiers = new LinkedList<Identifier>();
-		this.names = new LinkedList<Name>();
-		this.facts = new LinkedList<Fact>();
-
-		this.setGender(new Gender(graph, gedcomXPerson.getGender()));
-		for (final org.gedcomx.conclusion.Identifier identifier : gedcomXPerson.getIdentifiers()) {
-			this.addIdentifier(new Identifier(graph, identifier));
-		}
-		for (final org.gedcomx.conclusion.Name name : gedcomXPerson.getNames()) {
-			this.addName(new Name(graph, name));
-		}
-		for (final org.gedcomx.conclusion.Fact fact : gedcomXPerson.getFacts()) {
-			this.addFact(new Fact(graph, fact));
-		}
 	}
 
 	public void addFact(final Fact fact) {
@@ -85,5 +71,21 @@ public class Person extends ConclusionSubnode {
 
 	public void setLiving(final Boolean living) {
 		this.setProperty(NodeProperties.Conclusion.LIVING, living);
+	}
+
+	@Override
+	protected void setRelations(final Object gedcomXObject) throws MissingFieldException {
+		final org.gedcomx.conclusion.Person gedcomXPerson = (org.gedcomx.conclusion.Person) gedcomXObject;
+
+		this.setGender(new Gender(this.getGraph(), gedcomXPerson.getGender()));
+		for (final org.gedcomx.conclusion.Identifier identifier : gedcomXPerson.getIdentifiers()) {
+			this.addIdentifier(new Identifier(this.getGraph(), identifier));
+		}
+		for (final org.gedcomx.conclusion.Name name : gedcomXPerson.getNames()) {
+			this.addName((Name) new Conclusion(this.getGraph(), name).getSubnode());
+		}
+		for (final org.gedcomx.conclusion.Fact fact : gedcomXPerson.getFacts()) {
+			this.addFact((Fact) new Conclusion(this.getGraph(), fact).getSubnode());
+		}
 	}
 }

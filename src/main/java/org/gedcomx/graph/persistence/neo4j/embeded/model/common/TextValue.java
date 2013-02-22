@@ -9,14 +9,14 @@ import org.gedcomx.graph.persistence.neo4j.embeded.utils.NodeTypes;
 
 public class TextValue extends GENgraphNode {
 
-	public TextValue(final GENgraph graf, final org.gedcomx.common.TextValue gedcomXName) throws MissingFieldException {
-		super(graf, NodeTypes.TEXT_VALUE, gedcomXName);
+	public TextValue(final GENgraph graf, final org.gedcomx.common.TextValue gedcomXTextValue) throws MissingFieldException {
+		super(graf, NodeTypes.TEXT_VALUE, gedcomXTextValue);
 	}
 
 	@Override
 	protected void checkRequiredProperties(final Object gedcomXObject) throws MissingFieldException {
-		final org.gedcomx.common.TextValue gedcomXName = (org.gedcomx.common.TextValue) gedcomXObject;
-		if ((gedcomXName.getValue() == null) || gedcomXName.getValue().isEmpty()) {
+		final org.gedcomx.common.TextValue gedcomXTextValue = (org.gedcomx.common.TextValue) gedcomXObject;
+		if ((gedcomXTextValue.getValue() == null) || gedcomXTextValue.getValue().isEmpty()) {
 			throw new MissingRequiredPropertyException(TextValue.class, NodeProperties.Generic.VALUE);
 		}
 	}

@@ -4,8 +4,8 @@
     name="org.gedcomx.graph.persistence.neo4j.embeded.model.conclusion.Fact" project="gedcomx-graph-persistence" 
     file="/gedcomx-graph-persistence/src/main/java/org/gedcomx/graph/persistence/neo4j/embeded/model/conclusion/Fact.java" 
     binary="false">    
-    <position height="-1" width="-1" x="494" y="851"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+    <position height="-1" width="-1" x="1032" y="1290"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
@@ -14,7 +14,7 @@
     name="org.gedcomx.graph.persistence.neo4j.embeded.model.common.TextValue" project="gedcomx-graph-persistence" 
     file="/gedcomx-graph-persistence/src/main/java/org/gedcomx/graph/persistence/neo4j/embeded/model/common/TextValue.java" 
     binary="false">    
-    <position height="-1" width="-1" x="2878" y="640"/>    
+    <position height="-1" width="-1" x="3011" y="1894"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -25,8 +25,8 @@
     
     file="/gedcomx-graph-persistence/src/main/java/org/gedcomx/graph/persistence/neo4j/embeded/model/conclusion/Relationship.java" 
     binary="false">    
-    <position height="-1" width="-1" x="814" y="851"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+    <position height="-1" width="-1" x="1304" y="1626"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
@@ -35,7 +35,7 @@
     name="org.gedcomx.graph.persistence.neo4j.embeded.model.common.Identifier" project="gedcomx-graph-persistence" 
     file="/gedcomx-graph-persistence/src/main/java/org/gedcomx/graph/persistence/neo4j/embeded/model/common/Identifier.java" 
     binary="false">    
-    <position height="-1" width="-1" x="2566" y="640"/>    
+    <position height="-1" width="-1" x="2372" y="1888"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -46,7 +46,7 @@
     project="gedcomx-graph-persistence" 
     file="/gedcomx-graph-persistence/src/main/java/org/gedcomx/graph/persistence/neo4j/embeded/model/contributor/OnlineAccount.java" 
     binary="false">    
-    <position height="-1" width="-1" x="3194" y="640"/>    
+    <position height="-1" width="-1" x="3676" y="908"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -56,7 +56,7 @@
     name="org.gedcomx.graph.persistence.neo4j.embeded.model.GENgraphNode" project="gedcomx-graph-persistence" 
     file="/gedcomx-graph-persistence/src/main/java/org/gedcomx/graph/persistence/neo4j/embeded/model/GENgraphNode.java" 
     binary="false">    
-    <position height="-1" width="-1" x="2345" y="-28"/>    
+    <position height="-1" width="-1" x="2345" y="-296"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -67,7 +67,7 @@
     project="gedcomx-graph-persistence" 
     file="/gedcomx-graph-persistence/src/main/java/org/gedcomx/graph/persistence/neo4j/embeded/model/source/SourceDescription.java" 
     binary="false">    
-    <position height="-1" width="-1" x="1715" y="-194"/>    
+    <position height="-1" width="-1" x="2883" y="440"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -77,7 +77,7 @@
     name="org.gedcomx.graph.persistence.neo4j.embeded.model.contributor.Agent" project="gedcomx-graph-persistence" 
     file="/gedcomx-graph-persistence/src/main/java/org/gedcomx/graph/persistence/neo4j/embeded/model/contributor/Agent.java" 
     binary="false">    
-    <position height="-1" width="-1" x="3050" y="121"/>    
+    <position height="-1" width="-1" x="3738" y="323"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -87,8 +87,8 @@
     name="org.gedcomx.graph.persistence.neo4j.embeded.model.conclusion.Name" project="gedcomx-graph-persistence" 
     file="/gedcomx-graph-persistence/src/main/java/org/gedcomx/graph/persistence/neo4j/embeded/model/conclusion/Name.java" 
     binary="false">    
-    <position height="-1" width="-1" x="1134" y="851"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+    <position height="-1" width="-1" x="584" y="1302"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
@@ -98,7 +98,7 @@
     project="gedcomx-graph-persistence" 
     file="/gedcomx-graph-persistence/src/main/java/org/gedcomx/graph/persistence/neo4j/embeded/model/conclusion/ConclusionSubnode.java" 
     binary="false">    
-    <position height="-1" width="-1" x="1543" y="467"/>    
+    <position height="-1" width="-1" x="1163" y="399"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -108,7 +108,7 @@
     name="org.gedcomx.graph.persistence.neo4j.embeded.model.conclusion.Conclusion" project="gedcomx-graph-persistence" 
     file="/gedcomx-graph-persistence/src/main/java/org/gedcomx/graph/persistence/neo4j/embeded/model/conclusion/Conclusion.java" 
     binary="false">    
-    <position height="-1" width="-1" x="1542" y="128"/>    
+    <position height="-1" width="-1" x="1164" y="102"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -118,8 +118,8 @@
     name="org.gedcomx.graph.persistence.neo4j.embeded.model.conclusion.Event" project="gedcomx-graph-persistence" 
     file="/gedcomx-graph-persistence/src/main/java/org/gedcomx/graph/persistence/neo4j/embeded/model/conclusion/Event.java" 
     binary="false">    
-    <position height="-1" width="-1" x="1454" y="851"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+    <position height="265" width="280" x="66" y="970"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
@@ -128,7 +128,7 @@
     name="org.gedcomx.graph.persistence.neo4j.embeded.model.contributor.Address" project="gedcomx-graph-persistence" 
     file="/gedcomx-graph-persistence/src/main/java/org/gedcomx/graph/persistence/neo4j/embeded/model/contributor/Address.java" 
     binary="false">    
-    <position height="-1" width="-1" x="3514" y="742"/>    
+    <position height="-1" width="-1" x="4002" y="930"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -139,8 +139,8 @@
     project="gedcomx-graph-persistence" 
     file="/gedcomx-graph-persistence/src/main/java/org/gedcomx/graph/persistence/neo4j/embeded/model/conclusion/PlaceDescription.java" 
     binary="false">    
-    <position height="-1" width="-1" x="1774" y="851"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+    <position height="-1" width="-1" x="1812" y="1124"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
@@ -149,8 +149,8 @@
     name="org.gedcomx.graph.persistence.neo4j.embeded.model.conclusion.Person" project="gedcomx-graph-persistence" 
     file="/gedcomx-graph-persistence/src/main/java/org/gedcomx/graph/persistence/neo4j/embeded/model/conclusion/Person.java" 
     binary="false">    
-    <position height="-1" width="-1" x="2094" y="851"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+    <position height="-1" width="-1" x="1802" y="1522"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
@@ -159,8 +159,8 @@
     name="org.gedcomx.graph.persistence.neo4j.embeded.model.conclusion.Document" project="gedcomx-graph-persistence" 
     file="/gedcomx-graph-persistence/src/main/java/org/gedcomx/graph/persistence/neo4j/embeded/model/conclusion/Document.java" 
     binary="false">    
-    <position height="-1" width="-1" x="2414" y="851"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+    <position height="-1" width="-1" x="204" y="1473"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
@@ -169,7 +169,7 @@
     project="gedcomx-graph-persistence" 
     file="/gedcomx-graph-persistence/src/main/java/org/gedcomx/graph/persistence/neo4j/embeded/model/GENgraph.java" 
     binary="false">    
-    <position height="-1" width="-1" x="2341" y="-466"/>    
+    <position height="-1" width="-1" x="2345" y="-1096"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -180,7 +180,7 @@
     project="gedcomx-graph-persistence" 
     file="/gedcomx-graph-persistence/src/main/java/org/gedcomx/graph/persistence/neo4j/embeded/model/conclusion/PlaceReference.java" 
     binary="false">    
-    <position height="-1" width="-1" x="590" y="1262"/>    
+    <position height="-1" width="-1" x="420" y="380"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -190,8 +190,8 @@
     name="org.gedcomx.graph.persistence.neo4j.embeded.model.conclusion.EventRole" project="gedcomx-graph-persistence" 
     file="/gedcomx-graph-persistence/src/main/java/org/gedcomx/graph/persistence/neo4j/embeded/model/conclusion/EventRole.java" 
     binary="false">    
-    <position height="-1" width="-1" x="1442" y="1272"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+    <position height="-1" width="-1" x="1426" y="1246"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
@@ -200,7 +200,7 @@
     name="org.gedcomx.graph.persistence.neo4j.embeded.model.conclusion.NameForm" project="gedcomx-graph-persistence" 
     file="/gedcomx-graph-persistence/src/main/java/org/gedcomx/graph/persistence/neo4j/embeded/model/conclusion/NameForm.java" 
     binary="false">    
-    <position height="-1" width="-1" x="1020" y="1308"/>    
+    <position height="-1" width="-1" x="784" y="372"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -210,228 +210,454 @@
     name="org.gedcomx.graph.persistence.neo4j.embeded.model.conclusion.NamePart" project="gedcomx-graph-persistence" 
     file="/gedcomx-graph-persistence/src/main/java/org/gedcomx/graph/persistence/neo4j/embeded/model/conclusion/NamePart.java" 
     binary="false">    
-    <position height="-1" width="-1" x="966" y="1686"/>    
+    <position height="-1" width="-1" x="548" y="104"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <association id="22">    
+  <class id="22" corner="BOTTOM_RIGHT" language="java" 
+    name="org.gedcomx.graph.persistence.neo4j.embeded.model.common.Note" project="gedcomx-graph-persistence" 
+    file="/gedcomx-graph-persistence/src/main/java/org/gedcomx/graph/persistence/neo4j/embeded/model/common/Note.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="2693" y="1862"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="23" corner="BOTTOM_RIGHT" language="java" 
+    name="org.gedcomx.graph.persistence.neo4j.embeded.model.source.SourceCitation" project="gedcomx-graph-persistence" 
+    file="/gedcomx-graph-persistence/src/main/java/org/gedcomx/graph/persistence/neo4j/embeded/model/source/SourceCitation.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="2890" y="862"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="24" corner="BOTTOM_RIGHT" language="java" 
+    name="org.gedcomx.graph.persistence.neo4j.embeded.model.source.SourceReference" project="gedcomx-graph-persistence" 
+    file="/gedcomx-graph-persistence/src/main/java/org/gedcomx/graph/persistence/neo4j/embeded/model/source/SourceReference.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="2116" y="516"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="25" corner="BOTTOM_RIGHT" language="java" 
+    name="org.gedcomx.graph.persistence.neo4j.embeded.model.conclusion.Gender" project="gedcomx-graph-persistence" 
+    file="/gedcomx-graph-persistence/src/main/java/org/gedcomx/graph/persistence/neo4j/embeded/model/conclusion/Gender.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="694" y="1558"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="26" corner="BOTTOM_RIGHT" language="java" 
+    name="org.gedcomx.graph.persistence.neo4j.embeded.model.source.CitationField" project="gedcomx-graph-persistence" 
+    file="/gedcomx-graph-persistence/src/main/java/org/gedcomx/graph/persistence/neo4j/embeded/model/source/CitationField.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="2889" y="1133"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <association id="27">    
     <end type="SOURCE" refId="18" navigable="false">      
-      <attribute id="23" name="placeDescription"/>      
-      <multiplicity id="24" minimum="0" maximum="1"/>    
+      <attribute id="28" name="placeDescription"/>      
+      <multiplicity id="29" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="14" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="25">    
-    <end type="SOURCE" refId="14" navigable="false">      
-      <attribute id="26" name="identifiers"/>      
-      <multiplicity id="27" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="4" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="28">    
-    <end type="SOURCE" refId="20" navigable="false">      
-      <attribute id="29" name="nameParts"/>      
-      <multiplicity id="30" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="21" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
+  <generalization id="30">    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="6"/>  
+  </generalization>  
   <generalization id="31">    
-    <end type="SOURCE" refId="8"/>    
-    <end type="TARGET" refId="6"/>  
-  </generalization>  
-  <generalization id="32">    
-    <end type="SOURCE" refId="3"/>    
-    <end type="TARGET" refId="10"/>  
-  </generalization>  
-  <generalization id="33">    
-    <end type="SOURCE" refId="7"/>    
-    <end type="TARGET" refId="6"/>  
-  </generalization>  
-  <generalization id="34">    
-    <end type="SOURCE" refId="9"/>    
-    <end type="TARGET" refId="10"/>  
-  </generalization>  
-  <generalization id="35">    
-    <end type="SOURCE" refId="18"/>    
-    <end type="TARGET" refId="6"/>  
-  </generalization>  
-  <generalization id="36">    
     <end type="SOURCE" refId="11"/>    
     <end type="TARGET" refId="6"/>  
   </generalization>  
-  <generalization id="37">    
-    <end type="SOURCE" refId="12"/>    
-    <end type="TARGET" refId="10"/>  
-  </generalization>  
-  <association id="38">    
-    <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="39" name="placeReference"/>      
-      <multiplicity id="40" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="18" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="41">    
+  <association id="32">    
     <end type="SOURCE" refId="8" navigable="false">      
-      <attribute id="42" name="onlineAccounts"/>      
-      <multiplicity id="43" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="5" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="44">    
-    <end type="SOURCE" refId="8" navigable="false">      
-      <attribute id="45" name="addresses"/>      
-      <multiplicity id="46" minimum="0" maximum="2147483647"/>    
+      <attribute id="33" name="addresses"/>      
+      <multiplicity id="34" minimum="0" maximum="2147483647"/>    
     </end>    
     <end type="TARGET" refId="13" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="47">    
-    <end type="SOURCE" refId="8" navigable="false">      
-      <attribute id="48" name="names"/>      
-      <multiplicity id="49" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="2" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="50">    
+  <generalization id="35">    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="6"/>  
+  </generalization>  
+  <generalization id="36">    
+    <end type="SOURCE" refId="14"/>    
+    <end type="TARGET" refId="10"/>  
+  </generalization>  
+  <generalization id="37">    
     <end type="SOURCE" refId="4"/>    
     <end type="TARGET" refId="6"/>  
   </generalization>  
-  <generalization id="51">    
-    <end type="SOURCE" refId="10"/>    
+  <generalization id="38">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="10"/>  
+  </generalization>  
+  <generalization id="39">    
+    <end type="SOURCE" refId="8"/>    
     <end type="TARGET" refId="6"/>  
   </generalization>  
-  <association id="52">    
-    <end type="SOURCE" refId="6" navigable="false">      
-      <attribute id="53" name="graph"/>      
-      <multiplicity id="54" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="17" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="55">    
-    <end type="SOURCE" refId="9" navigable="false">      
-      <attribute id="56" name="nameForms"/>      
-      <multiplicity id="57" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="20" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="58">    
-    <end type="SOURCE" refId="12" navigable="false">      
-      <attribute id="59" name="placeReference"/>      
-      <multiplicity id="60" minimum="0" maximum="1"/>    
+  <association id="40">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="41" name="placeReference"/>      
+      <multiplicity id="42" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="18" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="61">    
-    <end type="SOURCE" refId="19" navigable="false">      
-      <attribute id="62" name="person"/>      
-      <multiplicity id="63" minimum="0" maximum="1"/>    
+  <association id="43">    
+    <end type="SOURCE" refId="11" navigable="false">      
+      <attribute id="44" name="sourceReferences"/>      
+      <multiplicity id="45" minimum="0" maximum="2147483647"/>    
     </end>    
-    <end type="TARGET" refId="15" navigable="true"/>    
+    <end type="TARGET" refId="24" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="64">    
-    <end type="SOURCE" refId="17" navigable="false">      
-      <attribute id="65" name="conclusions"/>      
-      <multiplicity id="66" minimum="0" maximum="2147483647"/>    
+  <association id="46">    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="47" name="sources"/>      
+      <multiplicity id="48" minimum="0" maximum="2147483647"/>    
     </end>    
-    <end type="TARGET" refId="11" navigable="true"/>    
+    <end type="TARGET" refId="24" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="67">    
-    <end type="SOURCE" refId="17" navigable="false">      
-      <attribute id="68" name="agents"/>      
-      <multiplicity id="69" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="8" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="70">    
-    <end type="SOURCE" refId="14"/>    
-    <end type="TARGET" refId="10"/>  
-  </generalization>  
-  <generalization id="71">    
-    <end type="SOURCE" refId="16"/>    
-    <end type="TARGET" refId="10"/>  
-  </generalization>  
-  <generalization id="72">    
-    <end type="SOURCE" refId="13"/>    
-    <end type="TARGET" refId="6"/>  
-  </generalization>  
-  <association id="73">    
-    <end type="SOURCE" refId="17" navigable="false">      
-      <attribute id="74" name="sources"/>      
-      <multiplicity id="75" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="7" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="76">    
-    <end type="SOURCE" refId="8" navigable="false">      
-      <attribute id="77" name="identifiers"/>      
-      <multiplicity id="78" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="4" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="79">    
-    <end type="SOURCE" refId="2"/>    
-    <end type="TARGET" refId="6"/>  
-  </generalization>  
-  <generalization id="80">    
-    <end type="SOURCE" refId="20"/>    
-    <end type="TARGET" refId="6"/>  
-  </generalization>  
-  <association id="81">    
-    <end type="SOURCE" refId="12" navigable="false">      
-      <attribute id="82" name="roles"/>      
-      <multiplicity id="83" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="19" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="84">    
-    <end type="SOURCE" refId="15"/>    
-    <end type="TARGET" refId="10"/>  
-  </generalization>  
-  <generalization id="85">    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="6"/>  
-  </generalization>  
-  <association id="86">    
+  <association id="49">    
     <end type="SOURCE" refId="14" navigable="false">      
-      <attribute id="87" name="names"/>      
-      <multiplicity id="88" minimum="0" maximum="2147483647"/>    
+      <attribute id="50" name="names"/>      
+      <multiplicity id="51" minimum="0" maximum="2147483647"/>    
     </end>    
     <end type="TARGET" refId="2" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="89">    
+  <association id="52">    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="53" name="person2"/>      
+      <multiplicity id="54" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="15" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="55">    
+    <end type="SOURCE" refId="23"/>    
+    <end type="TARGET" refId="6"/>  
+  </generalization>  
+  <generalization id="56">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="6"/>  
+  </generalization>  
+  <association id="57">    
+    <end type="SOURCE" refId="23" navigable="false">      
+      <attribute id="58" name="fields"/>      
+      <multiplicity id="59" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="26" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="60">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="6"/>  
+  </generalization>  
+  <association id="61">    
+    <end type="SOURCE" refId="15" navigable="false">      
+      <attribute id="62" name="names"/>      
+      <multiplicity id="63" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="9" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="64">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="10"/>  
+  </generalization>  
+  <generalization id="65">    
+    <end type="SOURCE" refId="22"/>    
+    <end type="TARGET" refId="6"/>  
+  </generalization>  
+  <generalization id="66">    
+    <end type="SOURCE" refId="15"/>    
+    <end type="TARGET" refId="10"/>  
+  </generalization>  
+  <association id="67">    
+    <end type="SOURCE" refId="12" navigable="false">      
+      <attribute id="68" name="roles"/>      
+      <multiplicity id="69" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="19" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="70">    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="71" name="sourceCitations"/>      
+      <multiplicity id="72" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="23" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="73">    
     <end type="SOURCE" refId="11" navigable="false">      
-      <attribute id="90" name="subnode"/>      
-      <multiplicity id="91" minimum="0" maximum="1"/>    
+      <attribute id="74" name="notes"/>      
+      <multiplicity id="75" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="22" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="76">    
+    <end type="SOURCE" refId="17" navigable="false">      
+      <attribute id="77" name="sources"/>      
+      <multiplicity id="78" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="7" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="79">    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="80" name="person1"/>      
+      <multiplicity id="81" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="15" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="82">    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="83" name="extractedConclusions"/>      
+      <multiplicity id="84" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="11" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="85">    
+    <end type="SOURCE" refId="9" navigable="false">      
+      <attribute id="86" name="nameForms"/>      
+      <multiplicity id="87" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="20" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="88">    
+    <end type="SOURCE" refId="17" navigable="false">      
+      <attribute id="89" name="conclusions"/>      
+      <multiplicity id="90" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="11" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="91">    
+    <end type="SOURCE" refId="18"/>    
+    <end type="TARGET" refId="6"/>  
+  </generalization>  
+  <association id="92">    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="93" name="graph"/>      
+      <multiplicity id="94" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="17" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="95">    
+    <end type="SOURCE" refId="15" navigable="false">      
+      <attribute id="96" name="identifiers"/>      
+      <multiplicity id="97" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="98">    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="99" name="notes"/>      
+      <multiplicity id="100" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="22" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="101">    
+    <end type="SOURCE" refId="17" navigable="false">      
+      <attribute id="102" name="agents"/>      
+      <multiplicity id="103" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="8" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="104">    
+    <end type="SOURCE" refId="12"/>    
+    <end type="TARGET" refId="10"/>  
+  </generalization>  
+  <association id="105">    
+    <end type="SOURCE" refId="8" navigable="false">      
+      <attribute id="106" name="onlineAccounts"/>      
+      <multiplicity id="107" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="108">    
+    <end type="SOURCE" refId="19"/>    
+    <end type="TARGET" refId="10"/>  
+  </generalization>  
+  <association id="109">    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="110" name="identifiers"/>      
+      <multiplicity id="111" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="112">    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="113" name="componentOf"/>      
+      <multiplicity id="114" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="24" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="115">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="10"/>  
+  </generalization>  
+  <generalization id="116">    
+    <end type="SOURCE" refId="25"/>    
+    <end type="TARGET" refId="10"/>  
+  </generalization>  
+  <association id="117">    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="118" name="facts"/>      
+      <multiplicity id="119" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="1" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="120">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="6"/>  
+  </generalization>  
+  <association id="121">    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="122" name="titles"/>      
+      <multiplicity id="123" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="124">    
+    <end type="SOURCE" refId="20"/>    
+    <end type="TARGET" refId="6"/>  
+  </generalization>  
+  <association id="125">    
+    <end type="SOURCE" refId="8" navigable="false">      
+      <attribute id="126" name="identifiers"/>      
+      <multiplicity id="127" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="128">    
+    <end type="SOURCE" refId="8" navigable="false">      
+      <attribute id="129" name="names"/>      
+      <multiplicity id="130" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="131">    
+    <end type="SOURCE" refId="20" navigable="false">      
+      <attribute id="132" name="nameParts"/>      
+      <multiplicity id="133" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="21" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="134">    
+    <end type="SOURCE" refId="24" navigable="false">      
+      <attribute id="135" name="description"/>      
+      <multiplicity id="136" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="7" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="137">    
+    <end type="SOURCE" refId="16"/>    
+    <end type="TARGET" refId="10"/>  
+  </generalization>  
+  <association id="138">    
+    <end type="SOURCE" refId="11" navigable="false">      
+      <attribute id="139" name="subnode"/>      
+      <multiplicity id="140" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="10" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <generalization id="92">    
-    <end type="SOURCE" refId="1"/>    
-    <end type="TARGET" refId="10"/>  
+  <generalization id="141">    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="6"/>  
   </generalization>  
-  <generalization id="93">    
+  <association id="142">    
+    <end type="SOURCE" refId="15" navigable="false">      
+      <attribute id="143" name="facts"/>      
+      <multiplicity id="144" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="1" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="145">    
+    <end type="SOURCE" refId="15" navigable="false">      
+      <attribute id="146" name="gender"/>      
+      <multiplicity id="147" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="25" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="148">    
+    <end type="SOURCE" refId="24"/>    
+    <end type="TARGET" refId="6"/>  
+  </generalization>  
+  <association id="149">    
+    <end type="SOURCE" refId="14" navigable="false">      
+      <attribute id="150" name="identifiers"/>      
+      <multiplicity id="151" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="152">    
     <end type="SOURCE" refId="21"/>    
     <end type="TARGET" refId="6"/>  
   </generalization>  
+  <association id="153">    
+    <end type="SOURCE" refId="12" navigable="false">      
+      <attribute id="154" name="placeReference"/>      
+      <multiplicity id="155" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="18" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="156">    
+    <end type="SOURCE" refId="19" navigable="false">      
+      <attribute id="157" name="person"/>      
+      <multiplicity id="158" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="15" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="159">    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="160" name="mediator"/>      
+      <multiplicity id="161" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="8" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
     visibility="true">    
     <attributes public="true" package="true" protected="true" private="true"/>    

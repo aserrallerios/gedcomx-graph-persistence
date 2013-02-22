@@ -15,17 +15,11 @@ import org.gedcomx.graph.persistence.neo4j.embeded.utils.RelTypes;
 
 public class SourceCitation extends GENgraphNode {
 
-	private final List<CitationField> fields;
+	private final List<CitationField> fields = new LinkedList<>();
 
 	protected SourceCitation(final GENgraph graph, final org.gedcomx.source.SourceCitation gedcomXSourceCitation)
 			throws MissingFieldException {
 		super(graph, NodeTypes.SOURCE_CITATION, gedcomXSourceCitation);
-
-		this.fields = new LinkedList<>();
-
-		for (final org.gedcomx.source.CitationField field : gedcomXSourceCitation.getFields()) {
-			this.addField(new CitationField(graph, field));
-		}
 	}
 
 	public void addField(final CitationField citationField) {
@@ -78,6 +72,15 @@ public class SourceCitation extends GENgraphNode {
 	public void setLang(final String lang) {
 		this.setProperty(NodeProperties.Generic.LANG, lang);
 
+	}
+
+	@Override
+	protected void setRelations(final Object gedcomXObject) throws MissingFieldException {
+		final org.gedcomx.source.SourceCitation gedcomXSourceCitation = (org.gedcomx.source.SourceCitation) gedcomXObject;
+
+		for (final org.gedcomx.source.CitationField field : gedcomXSourceCitation.getFields()) {
+			this.addField(new CitationField(this.getGraph(), field));
+		}
 	}
 
 	public void setValue(final String value) {

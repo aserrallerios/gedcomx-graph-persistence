@@ -17,52 +17,11 @@ import org.gedcomx.graph.persistence.neo4j.embeded.utils.RelTypes;
 public class Conclusion extends GENgraphNode {
 
 	private ConclusionSubnode subnode;
-	private final List<SourceReference> sourceReferences;
-	private final List<Note> notes;
+	private final List<SourceReference> sourceReferences = new LinkedList<>();
+	private final List<Note> notes = new LinkedList<>();
 
 	public Conclusion(final GENgraph graf, final org.gedcomx.conclusion.Conclusion gedcomXConclusion) throws MissingFieldException {
 		super(graf, NodeTypes.CONCLUSION, gedcomXConclusion);
-
-		this.sourceReferences = new LinkedList<>();
-		this.notes = new LinkedList<>();
-
-		if (gedcomXConclusion instanceof org.gedcomx.conclusion.Document) {
-			this.subnode = new Document(graf, (org.gedcomx.conclusion.Document) gedcomXConclusion);
-		}
-		if (gedcomXConclusion instanceof org.gedcomx.conclusion.PlaceDescription) {
-			this.subnode = new PlaceDescription(graf, (org.gedcomx.conclusion.PlaceDescription) gedcomXConclusion);
-		}
-		if (gedcomXConclusion instanceof org.gedcomx.conclusion.Name) {
-			this.subnode = new Name(graf, (org.gedcomx.conclusion.Name) gedcomXConclusion);
-		}
-		if (gedcomXConclusion instanceof org.gedcomx.conclusion.Fact) {
-			this.subnode = new Fact(graf, (org.gedcomx.conclusion.Fact) gedcomXConclusion);
-		}
-		if (gedcomXConclusion instanceof org.gedcomx.conclusion.Event) {
-			this.subnode = new Event(graf, (org.gedcomx.conclusion.Event) gedcomXConclusion);
-		}
-		if (gedcomXConclusion instanceof org.gedcomx.conclusion.EventRole) {
-			this.subnode = new EventRole(graf, (org.gedcomx.conclusion.EventRole) gedcomXConclusion);
-		}
-		if (gedcomXConclusion instanceof org.gedcomx.conclusion.Gender) {
-			this.subnode = new Gender(graf, (org.gedcomx.conclusion.Gender) gedcomXConclusion);
-		}
-		if (gedcomXConclusion instanceof org.gedcomx.conclusion.Person) {
-			this.subnode = new Person(graf, (org.gedcomx.conclusion.Person) gedcomXConclusion);
-		}
-		if (gedcomXConclusion instanceof org.gedcomx.conclusion.Relationship) {
-			this.subnode = new Relationship(graf, (org.gedcomx.conclusion.Relationship) gedcomXConclusion);
-		} else {
-			// TODO
-		}
-		this.createRelationship(RelTypes.IS_A, this.subnode);
-
-		for (final org.gedcomx.common.Note gedcomXNote : gedcomXConclusion.getNotes()) {
-			this.addNote(new Note(graf, gedcomXNote));
-		}
-		for (final org.gedcomx.source.SourceReference gedcomXSourceReference : gedcomXConclusion.getSources()) {
-			this.addSourceReference(new SourceReference(graf, gedcomXSourceReference));
-		}
 	}
 
 	public void addNote(final Note note) {
@@ -139,6 +98,49 @@ public class Conclusion extends GENgraphNode {
 
 	public void setLang(final String lang) {
 		this.setProperty(NodeProperties.Generic.LANG, lang);
+	}
+
+	@Override
+	protected void setRelations(final Object gedcomXObject) throws MissingFieldException {
+		final org.gedcomx.conclusion.Conclusion gedcomXConclusion = (org.gedcomx.conclusion.Conclusion) gedcomXObject;
+
+		if (gedcomXConclusion instanceof org.gedcomx.conclusion.Document) {
+			this.subnode = new Document(this.getGraph(), (org.gedcomx.conclusion.Document) gedcomXConclusion);
+		}
+		if (gedcomXConclusion instanceof org.gedcomx.conclusion.PlaceDescription) {
+			this.subnode = new PlaceDescription(this.getGraph(), (org.gedcomx.conclusion.PlaceDescription) gedcomXConclusion);
+		}
+		if (gedcomXConclusion instanceof org.gedcomx.conclusion.Name) {
+			this.subnode = new Name(this.getGraph(), (org.gedcomx.conclusion.Name) gedcomXConclusion);
+		}
+		if (gedcomXConclusion instanceof org.gedcomx.conclusion.Fact) {
+			this.subnode = new Fact(this.getGraph(), (org.gedcomx.conclusion.Fact) gedcomXConclusion);
+		}
+		if (gedcomXConclusion instanceof org.gedcomx.conclusion.Event) {
+			this.subnode = new Event(this.getGraph(), (org.gedcomx.conclusion.Event) gedcomXConclusion);
+		}
+		if (gedcomXConclusion instanceof org.gedcomx.conclusion.EventRole) {
+			this.subnode = new EventRole(this.getGraph(), (org.gedcomx.conclusion.EventRole) gedcomXConclusion);
+		}
+		if (gedcomXConclusion instanceof org.gedcomx.conclusion.Gender) {
+			this.subnode = new Gender(this.getGraph(), (org.gedcomx.conclusion.Gender) gedcomXConclusion);
+		}
+		if (gedcomXConclusion instanceof org.gedcomx.conclusion.Person) {
+			this.subnode = new Person(this.getGraph(), (org.gedcomx.conclusion.Person) gedcomXConclusion);
+		}
+		if (gedcomXConclusion instanceof org.gedcomx.conclusion.Relationship) {
+			this.subnode = new Relationship(this.getGraph(), (org.gedcomx.conclusion.Relationship) gedcomXConclusion);
+		} else {
+			// TODO
+		}
+		this.createRelationship(RelTypes.IS_A, this.subnode);
+
+		for (final org.gedcomx.common.Note gedcomXNote : gedcomXConclusion.getNotes()) {
+			this.addNote(new Note(this.getGraph(), gedcomXNote));
+		}
+		for (final org.gedcomx.source.SourceReference gedcomXSourceReference : gedcomXConclusion.getSources()) {
+			this.addSourceReference(new SourceReference(this.getGraph(), gedcomXSourceReference));
+		}
 	}
 
 	public void setSubnode(final ConclusionSubnode subnode) {

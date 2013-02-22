@@ -20,7 +20,7 @@ public class Note extends GENgraphNode {
 		final org.gedcomx.common.Note gedcomXNote = (org.gedcomx.common.Note) gedcomXObject;
 
 		if ((gedcomXNote.getText() == null) || gedcomXNote.getText().isEmpty()) {
-			throw new MissingRequiredPropertyException(Note.class, NodeProperties.Generic.TEXT);
+			throw new MissingRequiredPropertyException(Note.class, gedcomXNote.getId(), NodeProperties.Generic.TEXT);
 		}
 	}
 

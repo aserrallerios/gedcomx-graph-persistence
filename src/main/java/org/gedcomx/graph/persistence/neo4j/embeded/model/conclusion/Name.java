@@ -13,15 +13,10 @@ import org.gedcomx.graph.persistence.neo4j.embeded.utils.RelTypes;
 
 public class Name extends ConclusionSubnode {
 
-	List<NameForm> nameForms;
+	private final List<NameForm> nameForms = new LinkedList<>();
 
 	protected Name(final GENgraph graph, final org.gedcomx.conclusion.Name gedcomXName) throws MissingFieldException {
 		super(graph, NodeTypes.NAME, gedcomXName);
-
-		this.nameForms = new LinkedList<>();
-		for (final org.gedcomx.conclusion.NameForm nameForm : gedcomXName.getNameForms()) {
-			this.addNameForms(new NameForm(graph, nameForm));
-		}
 	}
 
 	public void addNameForms(final NameForm nameForms) {
@@ -34,7 +29,7 @@ public class Name extends ConclusionSubnode {
 		final org.gedcomx.conclusion.Name gedcomXName = (org.gedcomx.conclusion.Name) gedcomXObject;
 
 		if ((gedcomXName.getNameForms() == null) || gedcomXName.getNameForms().isEmpty()) {
-			throw new MissingRequiredRelationshipException(Name.class, RelTypes.HAS_NAME_FORM);
+			throw new MissingRequiredRelationshipException(Name.class, gedcomXName.getId(), RelTypes.HAS_NAME_FORM);
 		}
 	}
 
@@ -81,6 +76,15 @@ public class Name extends ConclusionSubnode {
 
 	public void setPreferred(final Boolean preferred) {
 		this.setProperty(NodeProperties.Conclusion.PREFERRED, preferred);
+	}
+
+	@Override
+	protected void setRelations(final Object gedcomXObject) throws MissingFieldException {
+		final org.gedcomx.conclusion.Name gedcomXName = (org.gedcomx.conclusion.Name) gedcomXObject;
+
+		for (final org.gedcomx.conclusion.NameForm nameForm : gedcomXName.getNameForms()) {
+			this.addNameForms(new NameForm(this.getGraph(), nameForm));
+		}
 	}
 
 	public void setType(final URI type) {

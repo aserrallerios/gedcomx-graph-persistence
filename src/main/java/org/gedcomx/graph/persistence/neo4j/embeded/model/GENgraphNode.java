@@ -2,7 +2,6 @@ package org.gedcomx.graph.persistence.neo4j.embeded.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.gedcomx.common.ResourceReference;
 import org.gedcomx.common.URI;
@@ -11,9 +10,7 @@ import org.gedcomx.graph.persistence.neo4j.embeded.exception.MissingFieldExcepti
 import org.gedcomx.graph.persistence.neo4j.embeded.utils.NodeProperties;
 import org.gedcomx.graph.persistence.neo4j.embeded.utils.NodeTypes;
 import org.gedcomx.graph.persistence.neo4j.embeded.utils.RelTypes;
-import org.gedcomx.graph.persistence.neo4j.embeded.utils.RelationshipProperties;
 import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Relationship;
 
 public abstract class GENgraphNode {
 
@@ -27,6 +24,11 @@ public abstract class GENgraphNode {
 		this.underlyingNode = this.graph.getDao().createNode();
 		this.setNodeType(nodeType);
 		this.setInitialProperties(gedcomXObject);
+		this.setRelations(gedcomXObject);
+	}
+
+	protected void addNodeToResolveReferences() {
+		this.graph.addNodeToResolveReferences(this);
 	}
 
 	protected void checkRequiredProperties(final Object gedcomXObject) throws MissingFieldException {
@@ -37,9 +39,9 @@ public abstract class GENgraphNode {
 		this.getDAO().createRelationship(this.underlyingNode, relType, node.getUnderlyingNode());
 	}
 
-	protected void createRelationship(final RelTypes relType, final GENgraphNode node, final Map<RelationshipProperties, Object> properties) {
-		final Relationship rel = this.getDAO().createRelationship(this.underlyingNode, relType, node.getUnderlyingNode());
-		this.getDAO().addRelationshipProperties(rel, properties);
+	@Override
+	public boolean equals(final Object object) {
+		return this.underlyingNode.equals(object);
 	}
 
 	private GENgraphDAO getDAO() {
@@ -76,6 +78,10 @@ public abstract class GENgraphNode {
 		return this.underlyingNode.hashCode();
 	}
 
+	protected void resolveReferences() {
+		return;
+	}
+
 	protected abstract void setInitialProperties(final Object gedcomXObject);
 
 	private void setNodeType(final NodeTypes nodeType) {
@@ -91,6 +97,10 @@ public abstract class GENgraphNode {
 		if (property.isIndexed()) {
 			this.graph.getDao().addNodeToIndex(property.getIndexName(), this.underlyingNode, property, value);
 		}
+	}
+
+	protected void setRelations(final Object gedcomXObject) throws MissingFieldException {
+		return;
 	}
 
 	protected void setURIListProperties(final NodeProperties property, final List<ResourceReference> resourceList) {

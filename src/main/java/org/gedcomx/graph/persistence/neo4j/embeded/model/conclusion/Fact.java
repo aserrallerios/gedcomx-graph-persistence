@@ -4,20 +4,17 @@ import org.gedcomx.common.URI;
 import org.gedcomx.graph.persistence.neo4j.embeded.exception.MissingFieldException;
 import org.gedcomx.graph.persistence.neo4j.embeded.exception.MissingRequiredPropertyException;
 import org.gedcomx.graph.persistence.neo4j.embeded.model.GENgraph;
+import org.gedcomx.graph.persistence.neo4j.embeded.model.GENgraphTopLevelNode;
 import org.gedcomx.graph.persistence.neo4j.embeded.utils.NodeProperties;
 import org.gedcomx.graph.persistence.neo4j.embeded.utils.NodeTypes;
 import org.gedcomx.graph.persistence.neo4j.embeded.utils.RelTypes;
 
-public class Fact extends ConclusionSubnode {
+public class Fact extends ConclusionSubnode implements GENgraphTopLevelNode {
 
 	PlaceReference placeReference;
 
 	protected Fact(final GENgraph graph, final org.gedcomx.conclusion.Fact gedcomXFact) throws MissingFieldException {
 		super(graph, NodeTypes.FACT, gedcomXFact);
-
-		if (gedcomXFact.getPlace() != null) {
-			this.setPlaceReference(new PlaceReference(graph, gedcomXFact.getPlace()));
-		}
 	}
 
 	@Override
@@ -73,6 +70,14 @@ public class Fact extends ConclusionSubnode {
 	public void setPlaceReference(final PlaceReference placeReference) {
 		this.placeReference = placeReference;
 		this.createRelationship(RelTypes.PLACE, placeReference);
+	}
+
+	@Override
+	protected void setRelations(final Object gedcomXObject) throws MissingFieldException {
+		final org.gedcomx.conclusion.Fact gedcomXFact = (org.gedcomx.conclusion.Fact) gedcomXObject;
+		if (gedcomXFact.getPlace() != null) {
+			this.setPlaceReference(new PlaceReference(this.getGraph(), gedcomXFact.getPlace()));
+		}
 	}
 
 	public void setType(final URI type) {

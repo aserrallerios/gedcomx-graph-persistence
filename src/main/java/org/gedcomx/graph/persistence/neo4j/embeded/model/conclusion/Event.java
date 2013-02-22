@@ -6,26 +6,18 @@ import java.util.List;
 import org.gedcomx.common.URI;
 import org.gedcomx.graph.persistence.neo4j.embeded.exception.MissingFieldException;
 import org.gedcomx.graph.persistence.neo4j.embeded.model.GENgraph;
+import org.gedcomx.graph.persistence.neo4j.embeded.model.GENgraphTopLevelNode;
 import org.gedcomx.graph.persistence.neo4j.embeded.utils.NodeProperties;
 import org.gedcomx.graph.persistence.neo4j.embeded.utils.NodeTypes;
 import org.gedcomx.graph.persistence.neo4j.embeded.utils.RelTypes;
 
-public class Event extends ConclusionSubnode {
+public class Event extends ConclusionSubnode implements GENgraphTopLevelNode {
 
 	PlaceReference placeReference;
-	List<EventRole> roles;
+	List<EventRole> roles = new LinkedList<>();
 
 	protected Event(final GENgraph graph, final org.gedcomx.conclusion.Event gedcomXEvent) throws MissingFieldException {
 		super(graph, NodeTypes.EVENT, gedcomXEvent);
-
-		this.roles = new LinkedList<>();
-
-		if (gedcomXEvent.getPlace() != null) {
-			this.setPlaceReference(new PlaceReference(graph, gedcomXEvent.getPlace()));
-		}
-		for (final org.gedcomx.conclusion.EventRole role : gedcomXEvent.getRoles()) {
-			this.addRole(new EventRole(graph, role));
-		}
 	}
 
 	public void addRole(final EventRole role) {
@@ -77,6 +69,18 @@ public class Event extends ConclusionSubnode {
 	public void setPlaceReference(final PlaceReference placeReference) {
 		this.placeReference = placeReference;
 		this.createRelationship(RelTypes.PLACE, placeReference);
+	}
+
+	@Override
+	protected void setRelations(final Object gedcomXObject) throws MissingFieldException {
+		final org.gedcomx.conclusion.Event gedcomXEvent = (org.gedcomx.conclusion.Event) gedcomXObject;
+
+		if (gedcomXEvent.getPlace() != null) {
+			this.setPlaceReference(new PlaceReference(this.getGraph(), gedcomXEvent.getPlace()));
+		}
+		for (final org.gedcomx.conclusion.EventRole role : gedcomXEvent.getRoles()) {
+			this.addRole(new EventRole(this.getGraph(), role));
+		}
 	}
 
 	public void setType(final URI type) {

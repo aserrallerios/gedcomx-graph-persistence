@@ -88,7 +88,7 @@ public interface NodeProperties {
 
 	public static enum SourceDescription implements NodeProperties {
 
-		ID, CITATION_TEMPLATE;
+		ID, CITATION_TEMPLATE, NAME;
 
 		private final boolean indexed;
 		private final IndexNodeNames indexName;
