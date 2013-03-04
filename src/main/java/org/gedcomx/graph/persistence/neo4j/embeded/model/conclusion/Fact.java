@@ -56,7 +56,7 @@ public class Fact extends ConclusionSubnode implements GENgraphTopLevelNode {
 	}
 
 	@Override
-	protected void setInitialProperties(final Object gedcomXObject) {
+	protected void setGedcomXProperties(final Object gedcomXObject) {
 		final org.gedcomx.conclusion.Fact gedcomXFact = (org.gedcomx.conclusion.Fact) gedcomXObject;
 		this.setValue(gedcomXFact.getValue());
 		this.setType(gedcomXFact.getType());
@@ -73,7 +73,7 @@ public class Fact extends ConclusionSubnode implements GENgraphTopLevelNode {
 	}
 
 	@Override
-	protected void setRelations(final Object gedcomXObject) throws MissingFieldException {
+	protected void setGedcomXRelations(final Object gedcomXObject) throws MissingFieldException {
 		final org.gedcomx.conclusion.Fact gedcomXFact = (org.gedcomx.conclusion.Fact) gedcomXObject;
 		if (gedcomXFact.getPlace() != null) {
 			this.setPlaceReference(new PlaceReference(this.getGraph(), gedcomXFact.getPlace()));

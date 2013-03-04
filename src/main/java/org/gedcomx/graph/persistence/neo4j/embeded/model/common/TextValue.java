@@ -30,7 +30,7 @@ public class TextValue extends GENgraphNode {
 	}
 
 	@Override
-	protected void setInitialProperties(final Object gedcomXObject) {
+	protected void setGedcomXProperties(final Object gedcomXObject) {
 		final org.gedcomx.common.TextValue gedcomXName = (org.gedcomx.common.TextValue) gedcomXObject;
 		this.setLang(gedcomXName.getLang());
 		this.setValue(gedcomXName.getValue());

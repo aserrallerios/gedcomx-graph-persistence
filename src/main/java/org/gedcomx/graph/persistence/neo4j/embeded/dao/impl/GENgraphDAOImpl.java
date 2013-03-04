@@ -46,65 +46,6 @@ public class GENgraphDAOImpl implements GENgraphDAO {
 	}
 
 	@Override
-	public Node addNodeProperties(final Node node, final Map<String, ?> properties) {
-		final Transaction tx = node.getGraphDatabase().beginTx();
-		try {
-			for (final Entry<String, ?> property : properties.entrySet()) {
-				node.setProperty(property.getKey(), property.getValue());
-			}
-			tx.success();
-		} finally {
-			tx.finish();
-		}
-		return node;
-	}
-
-	@Override
-	public Node addNodeProperty(final Node node, final NodeProperties property, final Object value) {
-		final Transaction tx = node.getGraphDatabase().beginTx();
-		try {
-			node.setProperty(property.name(), value);
-			tx.success();
-		} finally {
-			tx.finish();
-		}
-		return node;
-	}
-
-	@Override
-	public void addNodeToIndex(final IndexNodeNames indexName, final Node node, final NodeProperties property, final Object value) {
-		final Index<Node> index = this.graphDb.index().forNodes(indexName.name());
-		index.add(node, property.name(), value);
-	}
-
-	@Override
-	public Relationship addRelationshipProperties(final Relationship rel, final Map<RelationshipProperties, ?> properties) {
-		final Transaction tx = rel.getGraphDatabase().beginTx();
-		try {
-			for (final Entry<RelationshipProperties, ?> property : properties.entrySet()) {
-				rel.setProperty(property.getKey().name(), property.getValue());
-			}
-			tx.success();
-		} finally {
-			tx.finish();
-		}
-		return rel;
-	}
-
-	@Override
-	public Relationship addRelationshipProperty(final Relationship rel, final RelationshipProperties propertyName,
-			final Object propertyValue) {
-		final Transaction tx = rel.getGraphDatabase().beginTx();
-		try {
-			rel.setProperty(propertyName.name(), propertyValue);
-			tx.success();
-		} finally {
-			tx.finish();
-		}
-		return rel;
-	}
-
-	@Override
 	public Node createNode() {
 		final Transaction tx = this.graphDb.beginTx();
 		Node node = null;
@@ -123,6 +64,21 @@ public class GENgraphDAOImpl implements GENgraphDAO {
 		Relationship rel = null;
 		try {
 			rel = node.createRelationshipTo(secondNode, reltype);
+			tx.success();
+		} finally {
+			tx.finish();
+		}
+		return rel;
+	}
+
+	@Override
+	public Relationship createRelationship(final Node node, final RelTypes reltype, final Node secondNode,
+			final Map<RelationshipProperties, ?> properties) {
+		final Transaction tx = node.getGraphDatabase().beginTx();
+		Relationship rel = null;
+		try {
+			rel = node.createRelationshipTo(secondNode, reltype);
+			this.setRelationshipProperties(rel, properties);
 			tx.success();
 		} finally {
 			tx.finish();
@@ -152,5 +108,64 @@ public class GENgraphDAOImpl implements GENgraphDAO {
 				GENgraphDAOImpl.this.graphDb.shutdown();
 			}
 		});
+	}
+
+	@Override
+	public Node setNodeProperties(final Node node, final Map<String, ?> properties) {
+		final Transaction tx = node.getGraphDatabase().beginTx();
+		try {
+			for (final Entry<String, ?> property : properties.entrySet()) {
+				node.setProperty(property.getKey(), property.getValue());
+			}
+			tx.success();
+		} finally {
+			tx.finish();
+		}
+		return node;
+	}
+
+	@Override
+	public Node setNodeProperty(final Node node, final NodeProperties property, final Object value) {
+		final Transaction tx = node.getGraphDatabase().beginTx();
+		try {
+			node.setProperty(property.name(), value);
+			tx.success();
+		} finally {
+			tx.finish();
+		}
+		return node;
+	}
+
+	@Override
+	public void setNodeToIndex(final IndexNodeNames indexName, final Node node, final NodeProperties property, final Object value) {
+		final Index<Node> index = this.graphDb.index().forNodes(indexName.name());
+		index.add(node, property.name(), value);
+	}
+
+	@Override
+	public Relationship setRelationshipProperties(final Relationship rel, final Map<RelationshipProperties, ?> properties) {
+		final Transaction tx = rel.getGraphDatabase().beginTx();
+		try {
+			for (final Entry<RelationshipProperties, ?> property : properties.entrySet()) {
+				rel.setProperty(property.getKey().name(), property.getValue());
+			}
+			tx.success();
+		} finally {
+			tx.finish();
+		}
+		return rel;
+	}
+
+	@Override
+	public Relationship setRelationshipProperty(final Relationship rel, final RelationshipProperties propertyName,
+			final Object propertyValue) {
+		final Transaction tx = rel.getGraphDatabase().beginTx();
+		try {
+			rel.setProperty(propertyName.name(), propertyValue);
+			tx.success();
+		} finally {
+			tx.finish();
+		}
+		return rel;
 	}
 }

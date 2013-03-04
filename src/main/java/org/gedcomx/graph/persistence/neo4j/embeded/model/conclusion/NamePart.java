@@ -39,7 +39,7 @@ public class NamePart extends GENgraphNode {
 	}
 
 	@Override
-	protected void setInitialProperties(final Object gedcomXObject) {
+	protected void setGedcomXProperties(final Object gedcomXObject) {
 		final org.gedcomx.conclusion.NamePart gedcomXNamePart = (org.gedcomx.conclusion.NamePart) gedcomXObject;
 
 		this.setType(gedcomXNamePart.getType());

@@ -89,7 +89,7 @@ public class PlaceDescription extends ConclusionSubnode implements GENgraphTopLe
 	}
 
 	@Override
-	protected void setInitialProperties(final Object gedcomXObject) {
+	protected void setGedcomXProperties(final Object gedcomXObject) {
 		final org.gedcomx.conclusion.PlaceDescription gedcomXPlaceDescription = (org.gedcomx.conclusion.PlaceDescription) gedcomXObject;
 
 		this.setAbout(gedcomXPlaceDescription.getAbout());
@@ -116,7 +116,7 @@ public class PlaceDescription extends ConclusionSubnode implements GENgraphTopLe
 	}
 
 	@Override
-	protected void setRelations(final Object gedcomXObject) throws MissingFieldException {
+	protected void setGedcomXRelations(final Object gedcomXObject) throws MissingFieldException {
 		final org.gedcomx.conclusion.PlaceDescription gedcomXPlaceDescription = (org.gedcomx.conclusion.PlaceDescription) gedcomXObject;
 
 		for (final org.gedcomx.common.TextValue gedcomXName : gedcomXPlaceDescription.getNames()) {

@@ -88,7 +88,7 @@ public class Relationship extends ConclusionSubnode implements GENgraphTopLevelN
 	}
 
 	@Override
-	protected void setInitialProperties(final Object gedcomXObject) {
+	protected void setGedcomXProperties(final Object gedcomXObject) {
 		final org.gedcomx.conclusion.Relationship gedcomXRelationship = (org.gedcomx.conclusion.Relationship) gedcomXObject;
 
 		this.setType(gedcomXRelationship.getType());
@@ -105,7 +105,7 @@ public class Relationship extends ConclusionSubnode implements GENgraphTopLevelN
 	}
 
 	@Override
-	protected void setRelations(final Object gedcomXObject) throws MissingFieldException {
+	protected void setGedcomXRelations(final Object gedcomXObject) throws MissingFieldException {
 		final org.gedcomx.conclusion.Relationship gedcomXRelationship = (org.gedcomx.conclusion.Relationship) gedcomXObject;
 
 		for (final org.gedcomx.conclusion.Fact fact : gedcomXRelationship.getFacts()) {

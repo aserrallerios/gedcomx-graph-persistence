@@ -33,7 +33,7 @@ public class Identifier extends GENgraphNode {
 	}
 
 	@Override
-	protected void setInitialProperties(final Object gedcomXObject) {
+	protected void setGedcomXProperties(final Object gedcomXObject) {
 		final org.gedcomx.conclusion.Identifier gedcomXIdentifier = (org.gedcomx.conclusion.Identifier) gedcomXObject;
 		this.setValue(gedcomXIdentifier.getValue());
 		this.setType(gedcomXIdentifier.getType());

@@ -8,7 +8,7 @@ import org.gedcomx.graph.persistence.neo4j.embeded.utils.NodeTypes;
 
 public class Address extends GENgraphNode {
 
-	protected Address(final GENgraph graf, final org.gedcomx.contributor.Address gedcomXAddress) throws MissingFieldException {
+	protected Address(final GENgraph graf, final org.gedcomx.agent.Address gedcomXAddress) throws MissingFieldException {
 		super(graf, NodeTypes.ADDRESS, gedcomXAddress);
 	}
 
@@ -53,8 +53,8 @@ public class Address extends GENgraphNode {
 	}
 
 	@Override
-	protected void setInitialProperties(final Object gedcomXObject) {
-		final org.gedcomx.contributor.Address gedcomXAddress = (org.gedcomx.contributor.Address) gedcomXObject;
+	protected void setGedcomXProperties(final Object gedcomXObject) {
+		final org.gedcomx.agent.Address gedcomXAddress = (org.gedcomx.agent.Address) gedcomXObject;
 		this.setValue(gedcomXAddress.getValue());
 		this.setCity(gedcomXAddress.getCity());
 		this.setCountry(gedcomXAddress.getCountry());

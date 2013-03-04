@@ -85,7 +85,7 @@ public class Conclusion extends GENgraphNode {
 	}
 
 	@Override
-	protected void setInitialProperties(final Object gedcomXObject) {
+	protected void setGedcomXProperties(final Object gedcomXObject) {
 		final org.gedcomx.conclusion.Conclusion gedcomXConclusion = (org.gedcomx.conclusion.Conclusion) gedcomXObject;
 		this.setId(gedcomXConclusion.getId());
 		this.setLang(gedcomXConclusion.getLang());
@@ -101,7 +101,7 @@ public class Conclusion extends GENgraphNode {
 	}
 
 	@Override
-	protected void setRelations(final Object gedcomXObject) throws MissingFieldException {
+	protected void setGedcomXRelations(final Object gedcomXObject) throws MissingFieldException {
 		final org.gedcomx.conclusion.Conclusion gedcomXConclusion = (org.gedcomx.conclusion.Conclusion) gedcomXObject;
 
 		if (gedcomXConclusion instanceof org.gedcomx.conclusion.Document) {

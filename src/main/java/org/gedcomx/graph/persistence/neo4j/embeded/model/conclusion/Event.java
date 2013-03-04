@@ -55,7 +55,7 @@ public class Event extends ConclusionSubnode implements GENgraphTopLevelNode {
 	}
 
 	@Override
-	protected void setInitialProperties(final Object gedcomXObject) {
+	protected void setGedcomXProperties(final Object gedcomXObject) {
 		final org.gedcomx.conclusion.Event gedcomXEvent = (org.gedcomx.conclusion.Event) gedcomXObject;
 		this.setType(gedcomXEvent.getType());
 
@@ -72,7 +72,7 @@ public class Event extends ConclusionSubnode implements GENgraphTopLevelNode {
 	}
 
 	@Override
-	protected void setRelations(final Object gedcomXObject) throws MissingFieldException {
+	protected void setGedcomXRelations(final Object gedcomXObject) throws MissingFieldException {
 		final org.gedcomx.conclusion.Event gedcomXEvent = (org.gedcomx.conclusion.Event) gedcomXObject;
 
 		if (gedcomXEvent.getPlace() != null) {

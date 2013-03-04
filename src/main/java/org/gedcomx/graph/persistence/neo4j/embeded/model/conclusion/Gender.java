@@ -26,7 +26,7 @@ public class Gender extends ConclusionSubnode {
 	}
 
 	@Override
-	protected void setInitialProperties(final Object gedcomXObject) {
+	protected void setGedcomXProperties(final Object gedcomXObject) {
 		final org.gedcomx.conclusion.Gender gedcomXGender = (org.gedcomx.conclusion.Gender) gedcomXObject;
 		this.setType(gedcomXGender.getType());
 	}

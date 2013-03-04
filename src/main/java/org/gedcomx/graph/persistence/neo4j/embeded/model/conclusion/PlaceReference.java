@@ -33,7 +33,7 @@ public class PlaceReference extends GENgraphNode {
 	}
 
 	@Override
-	protected void setInitialProperties(final Object gedcomXObject) {
+	protected void setGedcomXProperties(final Object gedcomXObject) {
 		final org.gedcomx.conclusion.PlaceReference gedcomXPlaceReference = (org.gedcomx.conclusion.PlaceReference) gedcomXObject;
 		this.setOriginal(gedcomXPlaceReference.getOriginal());
 	}
@@ -52,7 +52,7 @@ public class PlaceReference extends GENgraphNode {
 	}
 
 	@Override
-	protected void setRelations(final Object gedcomXObject) {
+	protected void setGedcomXRelations(final Object gedcomXObject) {
 		final org.gedcomx.conclusion.PlaceReference gedcomXPlaceReference = (org.gedcomx.conclusion.PlaceReference) gedcomXObject;
 
 		if (gedcomXPlaceReference.getDescriptionRef() != null) {

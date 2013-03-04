@@ -54,7 +54,7 @@ public class Note extends GENgraphNode {
 	}
 
 	@Override
-	protected void setInitialProperties(final Object gedcomXObject) {
+	protected void setGedcomXProperties(final Object gedcomXObject) {
 		final org.gedcomx.common.Note gedcomXNote = (org.gedcomx.common.Note) gedcomXObject;
 
 		this.setLang(gedcomXNote.getLang());

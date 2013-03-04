@@ -148,7 +148,7 @@ public class SourceDescription extends GENgraphNode implements GENgraphTopLevelN
 	}
 
 	@Override
-	protected void setInitialProperties(final Object gedcomXObject) {
+	protected void setGedcomXProperties(final Object gedcomXObject) {
 		final org.gedcomx.source.SourceDescription gedcomXSourceDescription = (org.gedcomx.source.SourceDescription) gedcomXObject;
 
 		this.setId(gedcomXSourceDescription.getId());
@@ -166,7 +166,7 @@ public class SourceDescription extends GENgraphNode implements GENgraphTopLevelN
 	}
 
 	@Override
-	protected void setRelations(final Object gedcomXObject) throws MissingFieldException {
+	protected void setGedcomXRelations(final Object gedcomXObject) throws MissingFieldException {
 		final org.gedcomx.source.SourceDescription gedcomXSourceDescription = (org.gedcomx.source.SourceDescription) gedcomXObject;
 
 		this.setComponentOf(new SourceReference(this.getGraph(), gedcomXSourceDescription.getComponentOf()));

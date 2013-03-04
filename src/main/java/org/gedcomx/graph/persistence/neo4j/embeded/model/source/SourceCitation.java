@@ -61,7 +61,7 @@ public class SourceCitation extends GENgraphNode {
 	}
 
 	@Override
-	protected void setInitialProperties(final Object gedcomXObject) {
+	protected void setGedcomXProperties(final Object gedcomXObject) {
 		final org.gedcomx.source.SourceCitation gedcomXSourceCitation = (org.gedcomx.source.SourceCitation) gedcomXObject;
 
 		this.setLang(gedcomXSourceCitation.getLang());
@@ -75,7 +75,7 @@ public class SourceCitation extends GENgraphNode {
 	}
 
 	@Override
-	protected void setRelations(final Object gedcomXObject) throws MissingFieldException {
+	protected void setGedcomXRelations(final Object gedcomXObject) throws MissingFieldException {
 		final org.gedcomx.source.SourceCitation gedcomXSourceCitation = (org.gedcomx.source.SourceCitation) gedcomXObject;
 
 		for (final org.gedcomx.source.CitationField field : gedcomXSourceCitation.getFields()) {

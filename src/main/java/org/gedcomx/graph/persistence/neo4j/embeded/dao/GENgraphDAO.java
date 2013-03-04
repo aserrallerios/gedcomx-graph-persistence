@@ -11,24 +11,26 @@ import org.neo4j.graphdb.Relationship;
 
 public interface GENgraphDAO {
 
-	Node addNodeProperties(Node node, Map<String, ?> metadata);
-
-	Node addNodeProperty(Node underlyingNode, NodeProperties property, Object value);
-
-	void addNodeToIndex(IndexNodeNames indexName, Node node, NodeProperties property, Object value);
-
-	Relationship addRelationshipProperties(Relationship rel, Map<RelationshipProperties, ?> properties);
-
-	Relationship addRelationshipProperty(Relationship rel, RelationshipProperties key, Object value);
-
 	Node createNode();
 
 	Relationship createRelationship(Node node, RelTypes relType, Node secondNode);
+
+	Relationship createRelationship(Node node, RelTypes relType, Node secondNode, Map<RelationshipProperties, ?> properties);
 
 	Node getNode(Long id);
 
 	Object getNodeProperty(Node node, NodeProperties property);
 
 	Node getReferenceNode();
+
+	Node setNodeProperties(Node node, Map<String, ?> metadata);
+
+	Node setNodeProperty(Node underlyingNode, NodeProperties property, Object value);
+
+	void setNodeToIndex(IndexNodeNames indexName, Node node, NodeProperties property, Object value);
+
+	Relationship setRelationshipProperties(Relationship rel, Map<RelationshipProperties, ?> properties);
+
+	Relationship setRelationshipProperty(Relationship rel, RelationshipProperties key, Object value);
 
 }

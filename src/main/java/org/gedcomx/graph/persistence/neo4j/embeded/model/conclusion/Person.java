@@ -63,7 +63,7 @@ public class Person extends ConclusionSubnode implements GENgraphTopLevelNode {
 	}
 
 	@Override
-	protected void setInitialProperties(final Object gedcomXObject) {
+	protected void setGedcomXProperties(final Object gedcomXObject) {
 		final org.gedcomx.conclusion.Person gedcomXPerson = (org.gedcomx.conclusion.Person) gedcomXObject;
 
 		this.setLiving(gedcomXPerson.getLiving());
@@ -74,7 +74,7 @@ public class Person extends ConclusionSubnode implements GENgraphTopLevelNode {
 	}
 
 	@Override
-	protected void setRelations(final Object gedcomXObject) throws MissingFieldException {
+	protected void setGedcomXRelations(final Object gedcomXObject) throws MissingFieldException {
 		final org.gedcomx.conclusion.Person gedcomXPerson = (org.gedcomx.conclusion.Person) gedcomXObject;
 
 		this.setGender(new Gender(this.getGraph(), gedcomXPerson.getGender()));

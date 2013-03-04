@@ -54,7 +54,7 @@ public class EventRole extends ConclusionSubnode {
 	}
 
 	@Override
-	protected void setInitialProperties(final Object gedcomXObject) {
+	protected void setGedcomXProperties(final Object gedcomXObject) {
 		final org.gedcomx.conclusion.EventRole gedcomXEventRole = (org.gedcomx.conclusion.EventRole) gedcomXObject;
 
 		this.setType(gedcomXEventRole.getType());
@@ -67,7 +67,7 @@ public class EventRole extends ConclusionSubnode {
 	}
 
 	@Override
-	protected void setRelations(final Object gedcomXObject) throws MissingFieldException {
+	protected void setGedcomXRelations(final Object gedcomXObject) throws MissingFieldException {
 		final org.gedcomx.conclusion.EventRole gedcomXEventRole = (org.gedcomx.conclusion.EventRole) gedcomXObject;
 
 		this.personURI = gedcomXEventRole.getPerson().getResource();

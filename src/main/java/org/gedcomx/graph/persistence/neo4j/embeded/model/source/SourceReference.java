@@ -66,7 +66,7 @@ public class SourceReference extends GENgraphNode {
 	}
 
 	@Override
-	protected void setInitialProperties(final Object gedcomXObject) {
+	protected void setGedcomXProperties(final Object gedcomXObject) {
 		final org.gedcomx.source.SourceReference gedcomXSourceReference = (org.gedcomx.source.SourceReference) gedcomXObject;
 
 		if (gedcomXSourceReference.getAttribution() != null) {
@@ -77,7 +77,7 @@ public class SourceReference extends GENgraphNode {
 	}
 
 	@Override
-	protected void setRelations(final Object gedcomXObject) throws MissingFieldException {
+	protected void setGedcomXRelations(final Object gedcomXObject) throws MissingFieldException {
 		final org.gedcomx.source.SourceReference gedcomXSourceReference = (org.gedcomx.source.SourceReference) gedcomXObject;
 
 		this.descriptionURI = gedcomXSourceReference.getDescriptionRef();

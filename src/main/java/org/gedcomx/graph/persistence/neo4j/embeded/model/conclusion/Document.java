@@ -31,7 +31,7 @@ public class Document extends ConclusionSubnode implements GENgraphTopLevelNode 
 	}
 
 	@Override
-	protected void setInitialProperties(final Object gedcomXObject) {
+	protected void setGedcomXProperties(final Object gedcomXObject) {
 		final org.gedcomx.conclusion.Document gedcomXDocument = (org.gedcomx.conclusion.Document) gedcomXObject;
 		this.setType(gedcomXDocument.getType());
 		this.setText(gedcomXDocument.getText());

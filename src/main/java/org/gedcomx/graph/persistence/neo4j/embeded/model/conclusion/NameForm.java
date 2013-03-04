@@ -43,7 +43,7 @@ public class NameForm extends GENgraphNode {
 	}
 
 	@Override
-	protected void setInitialProperties(final Object gedcomXObject) {
+	protected void setGedcomXProperties(final Object gedcomXObject) {
 		final org.gedcomx.conclusion.NameForm gedcomXNameForm = (org.gedcomx.conclusion.NameForm) gedcomXObject;
 		this.setLang(gedcomXNameForm.getLang());
 		this.setFullText(gedcomXNameForm.getFullText());
@@ -54,7 +54,7 @@ public class NameForm extends GENgraphNode {
 	}
 
 	@Override
-	protected void setRelations(final Object gedcomXObject) throws MissingFieldException {
+	protected void setGedcomXRelations(final Object gedcomXObject) throws MissingFieldException {
 		final org.gedcomx.conclusion.NameForm gedcomXNameForm = (org.gedcomx.conclusion.NameForm) gedcomXObject;
 
 		for (final org.gedcomx.conclusion.NamePart namePart : gedcomXNameForm.getParts()) {

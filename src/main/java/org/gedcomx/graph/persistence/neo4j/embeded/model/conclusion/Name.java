@@ -63,7 +63,7 @@ public class Name extends ConclusionSubnode {
 	}
 
 	@Override
-	protected void setInitialProperties(final Object gedcomXObject) {
+	protected void setGedcomXProperties(final Object gedcomXObject) {
 		final org.gedcomx.conclusion.Name gedcomXName = (org.gedcomx.conclusion.Name) gedcomXObject;
 		this.setPreferred(gedcomXName.getPreferred());
 		this.setType(gedcomXName.getType());
@@ -79,7 +79,7 @@ public class Name extends ConclusionSubnode {
 	}
 
 	@Override
-	protected void setRelations(final Object gedcomXObject) throws MissingFieldException {
+	protected void setGedcomXRelations(final Object gedcomXObject) throws MissingFieldException {
 		final org.gedcomx.conclusion.Name gedcomXName = (org.gedcomx.conclusion.Name) gedcomXObject;
 
 		for (final org.gedcomx.conclusion.NameForm nameForm : gedcomXName.getNameForms()) {
