@@ -18,9 +18,9 @@ public interface GENgraphDAO {
 
 	Node createNode();
 
-	Relationship createRelationship(Node node, RelTypes relType, Node secondNode);
+	Relationship createRelationship(Node node, RelTypes relType, Node secondNode, Direction dir);
 
-	Relationship createRelationship(Node node, RelTypes relType, Node secondNode, Map<RelationshipProperties, ?> properties);
+	Relationship createRelationship(Node node, RelTypes relType, Node secondNode, Direction dir, Map<RelationshipProperties, ?> properties);
 
 	void delete(Node underlyingNode);
 
@@ -30,17 +30,20 @@ public interface GENgraphDAO {
 
 	Object getNodeProperty(Node node, NodeProperties property);
 
-	Iterable<Node> getNodesByRelationship(Node underlyingNode, RelTypes relation, Direction dir);
+	Iterable<Node> getNodesByRelationship(Node underlyingNode, RelTypes relation, Direction dir, boolean ordered,
+			RelationshipProperties index);
 
 	Node getReferenceNode();
 
 	Node getSingleNodeByRelationship(Node underlyingNode, RelTypes relation, Direction dir);
 
-	boolean hasRelationship(Node underlyingNode, RelTypes relType);
+	boolean hasRelationship(Node node, RelTypes relType, Direction dir);
 
-	boolean hasSingleRelationship(Node node, RelTypes relType, Direction direction);
+	boolean hasSingleRelationship(Node node, RelTypes relType, Direction dir);
 
 	void removeNodeFromIndex(IndexNodeNames indexName, Node node, NodeProperties property);
+
+	void removeNodeProperty(Node underlyingNode, NodeProperties property);
 
 	Node setNodeProperties(Node node, Map<String, ?> metadata);
 

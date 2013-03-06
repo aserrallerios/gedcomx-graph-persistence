@@ -47,13 +47,13 @@ public abstract class GENgraphNode {
 				final int index = this.getMaxRelationshipIndex(relType);
 				final Map<RelationshipProperties, Integer> properties = new HashMap<>();
 				properties.put(RelationshipProperties.INDEX, Integer.valueOf(index + 1));
-				this.getDao().createRelationship(this.getUnderlyingNode(), relType, node.underlyingNode);
+				this.getDao().createRelationship(this.getUnderlyingNode(), relType, node.underlyingNode, Direction.OUTGOING);
 				this.getDao().commitTransaction();
 			} finally {
 				this.getDao().endTransaction();
 			}
 		} else {
-			this.getDao().createRelationship(this.getUnderlyingNode(), relType, node.underlyingNode);
+			this.getDao().createRelationship(this.getUnderlyingNode(), relType, node.underlyingNode, Direction.OUTGOING);
 		}
 	}
 
@@ -62,8 +62,9 @@ public abstract class GENgraphNode {
 		T wrapper = null;
 		try {
 			constructor = type.getConstructor(GENgraphDAO.class, Node.class);
-			wrapper = constructor.newInstance(this.dao, node);
-		} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			wrapper = constructor.newInstance(this.getDao(), node);
+		} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -75,8 +76,9 @@ public abstract class GENgraphNode {
 		T wrapper = null;
 		try {
 			constructor = type.getConstructor(GENgraphDAO.class, Object.class);
-			wrapper = constructor.newInstance(this.dao, gedcomXObject);
-		} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			wrapper = constructor.newInstance(this.getDao(), gedcomXObject);
+		} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -89,7 +91,7 @@ public abstract class GENgraphNode {
 		if (!rel) {
 			this.addRelationship(relType, node);
 		} else {
-			GENgraphNode wrapper = this.getNodeByRelationship(node.getClass(), relType, Direction.OUTGOING);
+			final GENgraphNode wrapper = this.getNodeByRelationship(node.getClass(), relType, Direction.OUTGOING);
 			wrapper.delete();
 			this.addRelationship(relType, node);
 		}
@@ -121,9 +123,9 @@ public abstract class GENgraphNode {
 
 	protected abstract <T> T getGedcomX();
 
-	protected <T> List<T> getGedcomXList(Class<T> type, List<? extends GENgraphNode> nodes) {
-		List<T> list = new ArrayList<>();
-		for (GENgraphNode a : nodes) {
+	protected <T> List<T> getGedcomXList(final Class<T> type, final List<? extends GENgraphNode> nodes) {
+		final List<T> list = new ArrayList<>();
+		for (final GENgraphNode a : nodes) {
 			list.add(type.cast(a.getGedcomX()));
 		}
 		return list;
@@ -141,7 +143,10 @@ public abstract class GENgraphNode {
 
 	protected <T extends GENgraphNode> T getNodeByRelationship(final Class<T> type, final RelTypes relation, final Direction dir) {
 		final Node node = this.getDao().getSingleNodeByRelationship(this.getUnderlyingNode(), relation, dir);
-		return this.createNode(type, node);
+		if (node != null) {
+			return this.createNode(type, node);
+		}
+		return null;
 	}
 
 	protected <T extends GENgraphNode> List<T> getNodesByRelationship(final Class<T> type, final RelTypes relation) {
@@ -149,7 +154,8 @@ public abstract class GENgraphNode {
 	}
 
 	protected <T extends GENgraphNode> List<T> getNodesByRelationship(final Class<T> type, final RelTypes relation, final Direction dir) {
-		final Iterable<Node> nodes = this.getDao().getNodesByRelationship(this.getUnderlyingNode(), relation, dir);
+		final Iterable<Node> nodes = this.getDao().getNodesByRelationship(this.getUnderlyingNode(), relation, dir,
+				(dir == Direction.OUTGOING) && relation.isOrdered(), RelationshipProperties.INDEX);
 
 		final List<T> wrappers = new ArrayList<>();
 		for (final Node node : nodes) {
@@ -202,11 +208,16 @@ public abstract class GENgraphNode {
 	}
 
 	protected void setProperty(final NodeProperties property, final Object value) {
-		this.getDao().setNodeProperty(this.getUnderlyingNode(), property, value);
+		if (value == null) {
+			this.getDao().removeNodeProperty(this.getUnderlyingNode(), property);
+		} else {
+			this.getDao().setNodeProperty(this.getUnderlyingNode(), property, value);
+		}
 		if (property.isIndexed()) {
 			this.getDao().removeNodeFromIndex(property.getIndexName(), this.getUnderlyingNode(), property);
 			this.getDao().setNodeToIndex(property.getIndexName(), this.getUnderlyingNode(), property, value);
 		}
+
 	}
 
 	protected void setURIListProperties(final NodeProperties property, final List<ResourceReference> resourceList) {
