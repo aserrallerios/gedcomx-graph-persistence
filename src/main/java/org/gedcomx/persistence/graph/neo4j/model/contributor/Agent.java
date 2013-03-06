@@ -63,8 +63,10 @@ public class Agent extends GENgraphNode implements GENgraphTopLevelNode {
 		agent.setOpenid(this.getOpenid());
 		agent.setPhones(this.getPhones());
 
-		// extensible data?
-		// links?
+		agent.setAddresses(this.getGedcomXList(org.gedcomx.agent.Address.class, this.getAddresses()));
+		agent.setAccounts(this.getGedcomXList(org.gedcomx.agent.OnlineAccount.class, this.getOnlineAccounts()));
+		agent.setNames(this.getGedcomXList(org.gedcomx.common.TextValue.class, this.getNames()));
+		agent.setIdentifiers(this.getGedcomXList(org.gedcomx.conclusion.Identifier.class, this.getIdentifiers()));
 
 		return agent;
 	}

@@ -1,7 +1,6 @@
 package org.gedcomx.persistence.graph.neo4j.model.contributor;
 
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
-import org.gedcomx.persistence.graph.neo4j.model.GENgraph;
 import org.gedcomx.persistence.graph.neo4j.model.GENgraphNode;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeTypes;
@@ -12,12 +11,24 @@ public class Address extends GENgraphNode {
 		super(graf, NodeTypes.ADDRESS, gedcomXAddress);
 	}
 
+	@Override
+	public void delete() {
+		// TODO Auto-generated method stub
+
+	}
+
 	public String getCity() {
 		return (String) this.getProperty(NodeProperties.Agent.CITY);
 	}
 
 	public String getCountry() {
 		return (String) this.getProperty(NodeProperties.Agent.COUNTRY);
+	}
+
+	@Override
+	public org.gedcomx.agent.Address getGedcomX() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	public String getPostalCode() {

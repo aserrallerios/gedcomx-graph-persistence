@@ -7,7 +7,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<gedcom5-conversion.version>0.2.0-SNAPSHOT</gedcom5-conversion.version>
+		<gedcomx.version>0.34.0-SNAPSHOT</gedcomx.version>
 		<testng.version>6.5.2</testng.version>
 		<neo4j.version>1.8.1</neo4j.version>
 	</properties>
@@ -27,13 +27,25 @@
 	</build>
 
 	<dependencies>
-		<!--gedcom5togedcomx -->
-		<!--this dependency includes the gedcomx java file reader/writer (which 
-			includes the gedcomx core) and a gedcom parser -->
 		<dependency>
 			<groupId>org.gedcomx</groupId>
-			<artifactId>gedcom5-conversion</artifactId>
-			<version>${gedcom5-conversion.version}</version>
+			<artifactId>gedcomx-model</artifactId>
+			<version>${gedcomx.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.gedcomx</groupId>
+			<artifactId>gedcomx-test-support</artifactId>
+			<version>${gedcomx.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.gedcomx</groupId>
+			<artifactId>enunciate-gedcomx-support</artifactId>
+			<version>${gedcomx.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.gedcomx</groupId>
+			<artifactId>gedcomx-rt-support</artifactId>
+			<version>${gedcomx.version}</version>
 		</dependency>
 
 		<dependency>

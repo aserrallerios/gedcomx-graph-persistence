@@ -11,19 +11,20 @@ import org.gedcomx.common.ResourceReference;
 import org.gedcomx.common.URI;
 import org.gedcomx.persistence.graph.neo4j.dao.GENgraphDAO;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
+import org.gedcomx.persistence.graph.neo4j.exception.UninitializedDataBase;
+import org.gedcomx.persistence.graph.neo4j.exception.UninitializedNode;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeTypes;
 import org.gedcomx.persistence.graph.neo4j.utils.RelTypes;
 import org.gedcomx.persistence.graph.neo4j.utils.RelationshipProperties;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Relationship;
 
 public abstract class GENgraphNode {
 
-	private final Node underlyingNode;
-
 	private final GENgraphDAO dao;
+
+	private final Node underlyingNode;
 
 	protected GENgraphNode(final GENgraphDAO dao, final Node underlyingNode) throws MissingFieldException {
 		this.dao = dao;
@@ -40,37 +41,29 @@ public abstract class GENgraphNode {
 	}
 
 	protected void addRelationship(final RelTypes relType, final GENgraphNode node) {
-		this.addRelationship(relType, node, Direction.OUTGOING);
-	}
-
-	protected void addRelationship(final RelTypes relType, final GENgraphNode node, final Direction dir) {
 		if (relType.isOrdered()) {
-			this.dao.beginTransaction();
+			this.getDao().beginTransaction();
 			try {
 				final int index = this.getMaxRelationshipIndex(relType);
 				final Map<RelationshipProperties, Integer> properties = new HashMap<>();
 				properties.put(RelationshipProperties.INDEX, Integer.valueOf(index + 1));
-				this.dao.createRelationship(this.underlyingNode, relType, node.underlyingNode, dir);
-			} catch (final Exception e) {
-				this.dao.rollbackTransaction();
+				this.getDao().createRelationship(this.getUnderlyingNode(), relType, node.underlyingNode);
+				this.getDao().commitTransaction();
 			} finally {
-				this.dao.endTransaction();
+				this.getDao().endTransaction();
 			}
-
 		} else {
-			this.dao.createRelationship(this.underlyingNode, relType, node.underlyingNode());
+			this.getDao().createRelationship(this.getUnderlyingNode(), relType, node.underlyingNode);
 		}
 	}
 
 	protected <T extends GENgraphNode> T createNode(final Class<T> type, final Node node) {
-
 		Constructor<T> constructor;
 		T wrapper = null;
 		try {
 			constructor = type.getConstructor(GENgraphDAO.class, Node.class);
 			wrapper = constructor.newInstance(this.dao, node);
-		} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException
-				| InvocationTargetException e) {
+		} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -78,84 +71,110 @@ public abstract class GENgraphNode {
 	}
 
 	protected <T extends GENgraphNode> T createNode(final Class<T> type, final Object gedcomXObject) {
-
 		Constructor<T> constructor;
 		T wrapper = null;
 		try {
 			constructor = type.getConstructor(GENgraphDAO.class, Object.class);
 			wrapper = constructor.newInstance(this.dao, gedcomXObject);
-		} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException
-				| InvocationTargetException e) {
+		} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return wrapper;
 	}
 
-	protected void createRelationship(final RelTypes relType, final GENgraphNode node, final Direction dir) {
-		final Relationship rel = this.underlyingNode.getSingleRelationship(relType, dir);
+	protected void createRelationship(final RelTypes relType, final GENgraphNode node) {
+		final boolean rel = this.getDao().hasSingleRelationship(this.getUnderlyingNode(), relType, Direction.OUTGOING);
 
-		if (rel == null) {
-			this.addRelationship(relType, node, dir);
+		if (!rel) {
+			this.addRelationship(relType, node);
 		} else {
-			this.deleteSubgraph(relType, rel.getEndNode().getId());
-			this.addRelationship(relType, node, dir);
+			GENgraphNode wrapper = this.getNodeByRelationship(node.getClass(), relType, Direction.OUTGOING);
+			wrapper.delete();
+			this.addRelationship(relType, node);
 		}
 	}
 
 	abstract public void delete();
 
 	protected <T extends GENgraphNode> void deleteReferences(final Class<T> type, final RelTypes relation) {
-		for (final T wrapper : this.getNodesByRelationship(type, relation)) {
+		for (final T wrapper : this.getNodesByRelationship(type, relation, Direction.OUTGOING)) {
 			wrapper.delete();
 		}
 	}
 
 	protected void deleteSelf() {
-		this.underlyingNode.delete();
+		this.getDao().delete(this.getUnderlyingNode());
 	}
 
 	@Override
 	public boolean equals(final Object object) {
-		return this.underlyingNode.equals(object);
+		return this.getUnderlyingNode().equals(object);
 	}
 
-	public abstract Object getGedcomX();
+	private GENgraphDAO getDao() {
+		if (this.dao == null) {
+			throw new UninitializedDataBase();
+		}
+		return this.dao;
+	}
+
+	protected abstract <T> T getGedcomX();
+
+	protected <T> List<T> getGedcomXList(Class<T> type, List<? extends GENgraphNode> nodes) {
+		List<T> list = new ArrayList<>();
+		for (GENgraphNode a : nodes) {
+			list.add(type.cast(a.getGedcomX()));
+		}
+		return list;
+	}
 
 	private int getMaxRelationshipIndex(final RelTypes relType) {
 		// TODO Auto-generated method stub
+		// Traversal
 		return 0;
 	}
 
-	protected <T extends GENgraphNode> T getNodeByRelationship(final Class<T> type, final RelTypes relation, final Direction dir)
-			throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException,
-			InvocationTargetException {
-		final Relationship rel = this.underlyingNode.getSingleRelationship(relation, dir);
+	protected <T extends GENgraphNode> T getNodeByRelationship(final Class<T> type, final RelTypes relation) {
+		return this.getNodeByRelationship(type, relation, Direction.OUTGOING);
+	}
 
-		return this.createNode(type, rel.getEndNode());
+	protected <T extends GENgraphNode> T getNodeByRelationship(final Class<T> type, final RelTypes relation, final Direction dir) {
+		final Node node = this.getDao().getSingleNodeByRelationship(this.getUnderlyingNode(), relation, dir);
+		return this.createNode(type, node);
 	}
 
 	protected <T extends GENgraphNode> List<T> getNodesByRelationship(final Class<T> type, final RelTypes relation) {
-		final Iterable<Relationship> relationships = this.underlyingNode.getRelationships(relation);
+		return this.getNodesByRelationship(type, relation, Direction.OUTGOING);
+	}
+
+	protected <T extends GENgraphNode> List<T> getNodesByRelationship(final Class<T> type, final RelTypes relation, final Direction dir) {
+		final Iterable<Node> nodes = this.getDao().getNodesByRelationship(this.getUnderlyingNode(), relation, dir);
 
 		final List<T> wrappers = new ArrayList<>();
-		for (final Relationship rel : relationships) {
-			wrappers.add(this.createNode(type, rel.getEndNode()));
+		for (final Node node : nodes) {
+			wrappers.add(this.createNode(type, node));
 		}
-
 		return wrappers;
 	}
 
 	public NodeTypes getNodeType() {
-		return NodeTypes.valueOf((String) this.dao.getNodeProperty(this.underlyingNode, NodeProperties.Generic.NODE_TYPE));
+		return NodeTypes.valueOf((String) this.getDao().getNodeProperty(this.getUnderlyingNode(), NodeProperties.Generic.NODE_TYPE));
 	}
 
 	protected Object getProperty(final NodeProperties property) {
-		return this.dao.getNodeProperty(this.underlyingNode, property);
+		return this.getDao().getNodeProperty(this.getUnderlyingNode(), property);
+	}
+
+	private Node getUnderlyingNode() {
+		if (this.underlyingNode == null) {
+			throw new UninitializedNode();
+		}
+		return this.underlyingNode;
 	}
 
 	protected List<ResourceReference> getURIListProperties(final NodeProperties property) {
-		final String[] values = (String[]) this.dao.getNodeProperty(this.underlyingNode, property);
+		final String[] values = (String[]) this.getDao().getNodeProperty(this.getUnderlyingNode(), property);
 		final List<ResourceReference> resourceList = new ArrayList<>();
 		for (final String uri : values) {
 			resourceList.add(new ResourceReference(new URI(uri)));
@@ -165,7 +184,7 @@ public abstract class GENgraphNode {
 
 	@Override
 	public int hashCode() {
-		return this.underlyingNode.hashCode();
+		return this.getUnderlyingNode().hashCode();
 	}
 
 	protected void resolveReferences() {
@@ -183,10 +202,10 @@ public abstract class GENgraphNode {
 	}
 
 	protected void setProperty(final NodeProperties property, final Object value) {
-		this.dao.setNodeProperty(this.underlyingNode, property, value);
+		this.getDao().setNodeProperty(this.getUnderlyingNode(), property, value);
 		if (property.isIndexed()) {
-			this.dao.removeNodeFromIndex(property.getIndexName(), this.underlyingNode, property);
-			this.dao.setNodeToIndex(property.getIndexName(), this.underlyingNode, property, value);
+			this.getDao().removeNodeFromIndex(property.getIndexName(), this.getUnderlyingNode(), property);
+			this.getDao().setNodeToIndex(property.getIndexName(), this.getUnderlyingNode(), property, value);
 		}
 	}
 
@@ -196,12 +215,12 @@ public abstract class GENgraphNode {
 		for (final ResourceReference resource : resourceList) {
 			values[i++] = resource.getResource().toString();
 		}
-		this.dao.setNodeProperty(this.underlyingNode, property, values);
+		this.getDao().setNodeProperty(this.getUnderlyingNode(), property, values);
 	}
 
 	@Override
 	public String toString() {
-		return this.underlyingNode.toString();
+		return this.getUnderlyingNode().toString();
 	}
 
 	protected void validateGedcomXObject(final Object gedcomXObject) throws MissingFieldException {

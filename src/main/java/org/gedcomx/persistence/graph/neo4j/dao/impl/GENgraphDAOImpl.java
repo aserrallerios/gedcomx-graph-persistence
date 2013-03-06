@@ -4,6 +4,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.gedcomx.persistence.graph.neo4j.dao.GENgraphDAO;
+import org.gedcomx.persistence.graph.neo4j.exception.InitializedDataBase;
+import org.gedcomx.persistence.graph.neo4j.exception.UninitializedDataBase;
 import org.gedcomx.persistence.graph.neo4j.utils.IndexNodeNames;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
 import org.gedcomx.persistence.graph.neo4j.utils.RelTypes;
@@ -17,24 +19,25 @@ import org.neo4j.graphdb.index.Index;
 
 public class GENgraphDAOImpl implements GENgraphDAO {
 
-	private final GraphDatabaseService graphDb;
-
 	private static GENgraphDAOImpl instance;
 
 	public static GENgraphDAO getInstance() {
 		if ((GENgraphDAOImpl.instance != null) && (GENgraphDAOImpl.instance.graphDb != null)) {
 			return GENgraphDAOImpl.instance;
 		} else {
-			// TODO: log
-			return null;
+			throw new UninitializedDataBase();
 		}
 	}
 
 	public static void initGENgraphDAO(final String path, final Map<String, String> properties) {
 		if ((GENgraphDAOImpl.instance == null) || (GENgraphDAOImpl.instance.graphDb == null)) {
 			GENgraphDAOImpl.instance = new GENgraphDAOImpl(path, properties);
+		} else {
+			throw new InitializedDataBase();
 		}
 	}
+
+	private final GraphDatabaseService graphDb;
 
 	private GENgraphDAOImpl(final String path, final Map<String, String> properties) {
 		if (properties != null) {
@@ -72,8 +75,7 @@ public class GENgraphDAOImpl implements GENgraphDAO {
 	}
 
 	@Override
-	public Relationship createRelationship(final Node node, final RelTypes reltype, final Node secondNode,
-			final Map<RelationshipProperties, ?> properties) {
+	public Relationship createRelationship(final Node node, final RelTypes reltype, final Node secondNode, final Map<RelationshipProperties, ?> properties) {
 		final Transaction tx = node.getGraphDatabase().beginTx();
 		Relationship rel = null;
 		try {
@@ -163,8 +165,7 @@ public class GENgraphDAOImpl implements GENgraphDAO {
 	}
 
 	@Override
-	public Relationship setRelationshipProperty(final Relationship rel, final RelationshipProperties propertyName,
-			final Object propertyValue) {
+	public Relationship setRelationshipProperty(final Relationship rel, final RelationshipProperties propertyName, final Object propertyValue) {
 		final Transaction tx = rel.getGraphDatabase().beginTx();
 		try {
 			rel.setProperty(propertyName.name(), propertyValue);
