@@ -19,7 +19,7 @@ public class SourceCitation extends GENgraphNode {
 
 	protected SourceCitation(final GENgraph graph, final org.gedcomx.source.SourceCitation gedcomXSourceCitation)
 			throws MissingFieldException {
-		super(graph, NodeTypes.SOURCE_CITATION, gedcomXSourceCitation);
+		super(NodeTypes.SOURCE_CITATION, gedcomXSourceCitation);
 	}
 
 	public void addField(final CitationField citationField) {

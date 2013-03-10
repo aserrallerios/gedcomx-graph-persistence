@@ -9,33 +9,37 @@ import org.gedcomx.persistence.graph.neo4j.utils.RelationshipProperties;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.Transaction;
 
 public interface GENgraphDAO {
 
-	void beginTransaction();
+	Transaction beginTransaction();
 
-	void commitTransaction();
+	void commitTransaction(Transaction transaction);
 
 	Node createNode();
 
-	Relationship createRelationship(Node node, RelTypes relType, Node secondNode, Direction dir);
+	Relationship createRelationship(Node node, RelTypes relType, Node secondNode);
 
-	Relationship createRelationship(Node node, RelTypes relType, Node secondNode, Direction dir, Map<RelationshipProperties, ?> properties);
+	Relationship createRelationship(Node node, RelTypes relType, Node secondNode, Map<RelationshipProperties, ?> properties);
 
-	void delete(Node underlyingNode);
+	void delete(Node node);
 
-	void endTransaction();
+	void delete(Relationship rel);
+
+	void endTransaction(Transaction transaction);
 
 	Node getNode(Long id);
 
 	Object getNodeProperty(Node node, NodeProperties property);
 
-	Iterable<Node> getNodesByRelationship(Node underlyingNode, RelTypes relation, Direction dir, boolean ordered,
-			RelationshipProperties index);
+	Iterable<Node> getNodesByRelationship(Node node, RelTypes relation, Direction dir, boolean ordered, RelationshipProperties index);
 
 	Node getReferenceNode();
 
-	Node getSingleNodeByRelationship(Node underlyingNode, RelTypes relation, Direction dir);
+	Iterable<Relationship> getRelationships(Node node, Direction dir);
+
+	Node getSingleNodeByRelationship(Node node, RelTypes relation, Direction dir);
 
 	boolean hasRelationship(Node node, RelTypes relType, Direction dir);
 
@@ -43,11 +47,11 @@ public interface GENgraphDAO {
 
 	void removeNodeFromIndex(IndexNodeNames indexName, Node node, NodeProperties property);
 
-	void removeNodeProperty(Node underlyingNode, NodeProperties property);
+	void removeNodeProperty(Node node, NodeProperties property);
 
 	Node setNodeProperties(Node node, Map<String, ?> metadata);
 
-	Node setNodeProperty(Node underlyingNode, NodeProperties property, Object value);
+	Node setNodeProperty(Node node, NodeProperties property, Object value);
 
 	void setNodeToIndex(IndexNodeNames indexName, Node node, NodeProperties property, Object value);
 

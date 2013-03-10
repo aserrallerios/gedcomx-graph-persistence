@@ -34,7 +34,7 @@ public class SourceDescription extends GENgraphNode implements GENgraphTopLevelN
 
 	public SourceDescription(final GENgraph graph, final org.gedcomx.source.SourceDescription gedcomXSourceDescription)
 			throws MissingFieldException {
-		super(graph, NodeTypes.SOURCE_DESCRIPTION, gedcomXSourceDescription);
+		super(NodeTypes.SOURCE_DESCRIPTION, gedcomXSourceDescription);
 	}
 
 	public void addExtractedConclusion(final Conclusion conclusion) {

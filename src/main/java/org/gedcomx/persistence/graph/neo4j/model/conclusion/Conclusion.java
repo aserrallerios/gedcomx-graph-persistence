@@ -21,7 +21,7 @@ public class Conclusion extends GENgraphNode {
 	private final List<Note> notes = new LinkedList<>();
 
 	public Conclusion(final GENgraph graf, final org.gedcomx.conclusion.Conclusion gedcomXConclusion) throws MissingFieldException {
-		super(graf, NodeTypes.CONCLUSION, gedcomXConclusion);
+		super(NodeTypes.CONCLUSION, gedcomXConclusion);
 	}
 
 	public void addNote(final Note note) {

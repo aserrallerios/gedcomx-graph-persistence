@@ -2,23 +2,28 @@ package org.gedcomx.persistence.graph.neo4j.model.common;
 
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredPropertyException;
-import org.gedcomx.persistence.graph.neo4j.model.GENgraph;
 import org.gedcomx.persistence.graph.neo4j.model.GENgraphNode;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeTypes;
 
 public class TextValue extends GENgraphNode {
 
-	public TextValue(final GENgraph graf, final org.gedcomx.common.TextValue gedcomXTextValue) throws MissingFieldException {
-		super(graf, NodeTypes.TEXT_VALUE, gedcomXTextValue);
+	public TextValue(final org.gedcomx.common.TextValue gedcomXTextValue) throws MissingFieldException {
+		super(NodeTypes.TEXT_VALUE, gedcomXTextValue);
+	}
+
+	public TextValue(final String value) throws MissingFieldException {
+		super(NodeTypes.TEXT_VALUE, value);
 	}
 
 	@Override
-	protected void checkRequiredProperties(final Object gedcomXObject) throws MissingFieldException {
-		final org.gedcomx.common.TextValue gedcomXTextValue = (org.gedcomx.common.TextValue) gedcomXObject;
-		if ((gedcomXTextValue.getValue() == null) || gedcomXTextValue.getValue().isEmpty()) {
-			throw new MissingRequiredPropertyException(TextValue.class, NodeProperties.Generic.VALUE);
-		}
+	protected org.gedcomx.common.TextValue getGedcomX() {
+		final org.gedcomx.common.TextValue textValue = new org.gedcomx.common.TextValue();
+
+		textValue.setLang(this.getLang());
+		textValue.setValue(this.getValue());
+
+		return textValue;
 	}
 
 	public String getLang() {
@@ -40,7 +45,20 @@ public class TextValue extends GENgraphNode {
 		this.setProperty(NodeProperties.Generic.LANG, lang);
 	}
 
+	@Override
+	protected void setRequiredProperties(final Object... properties) {
+		this.setValue((String) properties[0]);
+	}
+
 	public void setValue(final String value) {
 		this.setProperty(NodeProperties.Generic.VALUE, value);
+	}
+
+	@Override
+	protected void validateGedcomXObject(final Object gedcomXObject) throws MissingFieldException {
+		final org.gedcomx.common.TextValue gedcomXTextValue = (org.gedcomx.common.TextValue) gedcomXObject;
+		if ((gedcomXTextValue.getValue() == null) || gedcomXTextValue.getValue().isEmpty()) {
+			throw new MissingRequiredPropertyException(TextValue.class, NodeProperties.Generic.VALUE);
+		}
 	}
 }

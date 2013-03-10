@@ -41,9 +41,9 @@
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="5" corner="BOTTOM_RIGHT" language="java" 
-    name="org.gedcomx.persistence.graph.neo4j.dao.impl.GENgraphDAOImpl" project="gedcomx-graph-persistence" 
-    file="/gedcomx-graph-persistence/src/main/java/org/gedcomx/persistence/graph/neo4j/dao/impl/GENgraphDAOImpl.java" 
+  <class id="5" corner="BOTTOM_RIGHT" language="java" name="org.gedcomx.persistence.graph.neo4j.dao.GENgraphDAOImpl" 
+    project="gedcomx-graph-persistence" 
+    file="/gedcomx-graph-persistence/src/main/java/org/gedcomx/persistence/graph/neo4j/dao/GENgraphDAOImpl.java" 
     binary="false">    
     <position height="-1" width="-1" x="714" y="1025"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" visibility="true">      

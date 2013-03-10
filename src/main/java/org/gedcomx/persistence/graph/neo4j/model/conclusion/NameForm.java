@@ -15,7 +15,7 @@ public class NameForm extends GENgraphNode {
 	private final List<NamePart> nameParts;
 
 	protected NameForm(final GENgraph graph, final org.gedcomx.conclusion.NameForm gedcomXNameForm) throws MissingFieldException {
-		super(graph, NodeTypes.NAME_FORM, gedcomXNameForm);
+		super(NodeTypes.NAME_FORM, gedcomXNameForm);
 
 		this.nameParts = new LinkedList<>();
 

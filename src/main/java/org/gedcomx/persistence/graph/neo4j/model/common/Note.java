@@ -12,7 +12,7 @@ import org.gedcomx.persistence.graph.neo4j.utils.NodeTypes;
 public class Note extends GENgraphNode {
 
 	public Note(final GENgraph graph, final org.gedcomx.common.Note gedcomXNote) throws MissingFieldException {
-		super(graph, NodeTypes.NOTE, gedcomXNote);
+		super(NodeTypes.NOTE, gedcomXNote);
 	}
 
 	@Override

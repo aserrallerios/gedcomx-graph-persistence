@@ -4,17 +4,21 @@ import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.model.GENgraphNode;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeTypes;
+import org.gedcomx.persistence.graph.neo4j.utils.RelTypes;
+import org.neo4j.graphdb.Direction;
 
 public class Address extends GENgraphNode {
 
-	protected Address(final GENgraph graf, final org.gedcomx.agent.Address gedcomXAddress) throws MissingFieldException {
-		super(graf, NodeTypes.ADDRESS, gedcomXAddress);
+	public Address() {
+		super(NodeTypes.ADDRESS);
 	}
 
-	@Override
-	public void delete() {
-		// TODO Auto-generated method stub
+	protected Address(final org.gedcomx.agent.Address gedcomXAddress) throws MissingFieldException {
+		super(NodeTypes.ADDRESS, gedcomXAddress);
+	}
 
+	public Agent getAgent() {
+		return this.getNodeByRelationship(Agent.class, RelTypes.HAS_ADDRESS, Direction.INCOMING);
 	}
 
 	public String getCity() {
@@ -27,8 +31,18 @@ public class Address extends GENgraphNode {
 
 	@Override
 	public org.gedcomx.agent.Address getGedcomX() {
-		// TODO Auto-generated method stub
-		return null;
+		final org.gedcomx.agent.Address gedcomXAddress = new org.gedcomx.agent.Address();
+
+		gedcomXAddress.setCity(this.getCity());
+		gedcomXAddress.setCountry(this.getCountry());
+		gedcomXAddress.setPostalCode(this.getPostalCode());
+		gedcomXAddress.setStateOrProvince(this.getStateOrProvince());
+		gedcomXAddress.setStreet(this.getStreet());
+		gedcomXAddress.setStreet2(this.getStreet2());
+		gedcomXAddress.setStreet3(this.getStreet3());
+		gedcomXAddress.setValue(this.getValue());
+
+		return gedcomXAddress;
 	}
 
 	public String getPostalCode() {
@@ -66,6 +80,7 @@ public class Address extends GENgraphNode {
 	@Override
 	protected void setGedcomXProperties(final Object gedcomXObject) {
 		final org.gedcomx.agent.Address gedcomXAddress = (org.gedcomx.agent.Address) gedcomXObject;
+
 		this.setValue(gedcomXAddress.getValue());
 		this.setCity(gedcomXAddress.getCity());
 		this.setCountry(gedcomXAddress.getCountry());

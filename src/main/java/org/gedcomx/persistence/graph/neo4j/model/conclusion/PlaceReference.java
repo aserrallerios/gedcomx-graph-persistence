@@ -15,7 +15,7 @@ public class PlaceReference extends GENgraphNode {
 
 	protected PlaceReference(final GENgraph graph, final org.gedcomx.conclusion.PlaceReference gedcomXPlaceReference)
 			throws MissingFieldException {
-		super(graph, NodeTypes.PLACE_REFERENCE, gedcomXPlaceReference);
+		super(NodeTypes.PLACE_REFERENCE, gedcomXPlaceReference);
 	}
 
 	public PlaceDescription getPlaceDescription() {

@@ -18,7 +18,7 @@ public class SourceReference extends GENgraphNode {
 
 	public SourceReference(final GENgraph graph, final org.gedcomx.source.SourceReference gedcomXSourceReference)
 			throws MissingFieldException {
-		super(graph, NodeTypes.SOURCE_REFERENCE, gedcomXSourceReference);
+		super(NodeTypes.SOURCE_REFERENCE, gedcomXSourceReference);
 	}
 
 	@Override

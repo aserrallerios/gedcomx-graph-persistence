@@ -11,7 +11,7 @@ import org.gedcomx.persistence.graph.neo4j.utils.NodeTypes;
 public class CitationField extends GENgraphNode {
 
 	protected CitationField(final GENgraph graph, final org.gedcomx.source.CitationField gedcomXCitationField) throws MissingFieldException {
-		super(graph, NodeTypes.CITATION_FIELD, gedcomXCitationField);
+		super(NodeTypes.CITATION_FIELD, gedcomXCitationField);
 	}
 
 	@Override

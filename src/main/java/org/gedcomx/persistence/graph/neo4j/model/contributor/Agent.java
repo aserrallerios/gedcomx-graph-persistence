@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.gedcomx.common.ResourceReference;
 import org.gedcomx.common.URI;
-import org.gedcomx.persistence.graph.neo4j.dao.GENgraphDAO;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.model.GENgraphNode;
 import org.gedcomx.persistence.graph.neo4j.model.GENgraphTopLevelNode;
@@ -16,8 +15,12 @@ import org.gedcomx.persistence.graph.neo4j.utils.RelTypes;
 
 public class Agent extends GENgraphNode implements GENgraphTopLevelNode {
 
-	public Agent(final GENgraphDAO dao, final org.gedcomx.agent.Agent gedcomXAgent) throws MissingFieldException {
-		super(dao, NodeTypes.AGENT, gedcomXAgent);
+	public Agent() {
+		super(NodeTypes.AGENT);
+	}
+
+	public Agent(final org.gedcomx.agent.Agent gedcomXAgent) throws MissingFieldException {
+		super(NodeTypes.AGENT, gedcomXAgent);
 	}
 
 	public void addAddress(final Address address) {
@@ -37,12 +40,11 @@ public class Agent extends GENgraphNode implements GENgraphTopLevelNode {
 	}
 
 	@Override
-	public void delete() {
+	public void deleteAllReferences() {
 		this.deleteReferences(Address.class, RelTypes.HAS_ADDRESS);
 		this.deleteReferences(OnlineAccount.class, RelTypes.HAS_ACCOUNT);
 		this.deleteReferences(Identifier.class, RelTypes.HAS_IDENTIFIER);
 		this.deleteReferences(TextValue.class, RelTypes.HAS_NAME);
-		this.deleteSelf();
 	}
 
 	public List<Address> getAddresses() {
@@ -55,20 +57,20 @@ public class Agent extends GENgraphNode implements GENgraphTopLevelNode {
 
 	@Override
 	public org.gedcomx.agent.Agent getGedcomX() {
-		final org.gedcomx.agent.Agent agent = new org.gedcomx.agent.Agent();
+		final org.gedcomx.agent.Agent gedcomXAgent = new org.gedcomx.agent.Agent();
 
-		agent.setEmails(this.getEmails());
-		agent.setHomepage(this.getHomepage());
-		agent.setId(this.getId());
-		agent.setOpenid(this.getOpenid());
-		agent.setPhones(this.getPhones());
+		gedcomXAgent.setEmails(this.getEmails());
+		gedcomXAgent.setHomepage(this.getHomepage());
+		gedcomXAgent.setId(this.getId());
+		gedcomXAgent.setOpenid(this.getOpenid());
+		gedcomXAgent.setPhones(this.getPhones());
 
-		agent.setAddresses(this.getGedcomXList(org.gedcomx.agent.Address.class, this.getAddresses()));
-		agent.setAccounts(this.getGedcomXList(org.gedcomx.agent.OnlineAccount.class, this.getOnlineAccounts()));
-		agent.setNames(this.getGedcomXList(org.gedcomx.common.TextValue.class, this.getNames()));
-		agent.setIdentifiers(this.getGedcomXList(org.gedcomx.conclusion.Identifier.class, this.getIdentifiers()));
+		gedcomXAgent.setAddresses(this.getGedcomXList(org.gedcomx.agent.Address.class, this.getAddresses()));
+		gedcomXAgent.setAccounts(this.getGedcomXList(org.gedcomx.agent.OnlineAccount.class, this.getOnlineAccounts()));
+		gedcomXAgent.setNames(this.getGedcomXList(org.gedcomx.common.TextValue.class, this.getNames()));
+		gedcomXAgent.setIdentifiers(this.getGedcomXList(org.gedcomx.conclusion.Identifier.class, this.getIdentifiers()));
 
-		return agent;
+		return gedcomXAgent;
 	}
 
 	public ResourceReference getHomepage() {

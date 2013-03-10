@@ -14,7 +14,7 @@ import org.gedcomx.persistence.graph.neo4j.utils.NodeTypes;
 public class NamePart extends GENgraphNode {
 
 	protected NamePart(final GENgraph graph, final org.gedcomx.conclusion.NamePart gedcomXNamePart) throws MissingFieldException {
-		super(graph, NodeTypes.NAME_PART, gedcomXNamePart);
+		super(NodeTypes.NAME_PART, gedcomXNamePart);
 	}
 
 	@Override
