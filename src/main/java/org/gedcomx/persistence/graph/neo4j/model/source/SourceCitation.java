@@ -7,19 +7,27 @@ import org.gedcomx.common.ResourceReference;
 import org.gedcomx.common.URI;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredPropertyException;
-import org.gedcomx.persistence.graph.neo4j.model.GENgraph;
+import org.gedcomx.persistence.graph.neo4j.exception.WrongNodeType;
 import org.gedcomx.persistence.graph.neo4j.model.GENgraphNode;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeTypes;
 import org.gedcomx.persistence.graph.neo4j.utils.RelTypes;
+import org.neo4j.graphdb.Node;
 
 public class SourceCitation extends GENgraphNode {
 
 	private final List<CitationField> fields = new LinkedList<>();
 
-	protected SourceCitation(final GENgraph graph, final org.gedcomx.source.SourceCitation gedcomXSourceCitation)
-			throws MissingFieldException {
+	protected SourceCitation(final Node node) throws WrongNodeType {
+		super(NodeTypes.SOURCE_CITATION, node);
+	}
+
+	protected SourceCitation(final org.gedcomx.source.SourceCitation gedcomXSourceCitation) throws MissingFieldException {
 		super(NodeTypes.SOURCE_CITATION, gedcomXSourceCitation);
+	}
+
+	public SourceCitation(final String value) {
+		super(NodeTypes.SOURCE_CITATION, new Object[] { value });
 	}
 
 	public void addField(final CitationField citationField) {
@@ -51,7 +59,7 @@ public class SourceCitation extends GENgraphNode {
 
 	}
 
-	public String getValue(final String value) {
+	public String getValue() {
 		return (String) this.getProperty(NodeProperties.Generic.VALUE);
 
 	}
@@ -69,11 +77,6 @@ public class SourceCitation extends GENgraphNode {
 		this.setCitationTemplate(gedcomXSourceCitation.getCitationTemplate());
 	}
 
-	public void setLang(final String lang) {
-		this.setProperty(NodeProperties.Generic.LANG, lang);
-
-	}
-
 	@Override
 	protected void setGedcomXRelations(final Object gedcomXObject) throws MissingFieldException {
 		final org.gedcomx.source.SourceCitation gedcomXSourceCitation = (org.gedcomx.source.SourceCitation) gedcomXObject;
@@ -81,6 +84,11 @@ public class SourceCitation extends GENgraphNode {
 		for (final org.gedcomx.source.CitationField field : gedcomXSourceCitation.getFields()) {
 			this.addField(new CitationField(this.getGraph(), field));
 		}
+	}
+
+	public void setLang(final String lang) {
+		this.setProperty(NodeProperties.Generic.LANG, lang);
+
 	}
 
 	public void setValue(final String value) {

@@ -3,18 +3,31 @@ package org.gedcomx.persistence.graph.neo4j.model.common;
 import org.gedcomx.common.URI;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredPropertyException;
+import org.gedcomx.persistence.graph.neo4j.exception.WrongNodeType;
 import org.gedcomx.persistence.graph.neo4j.model.GENgraphNode;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeTypes;
+import org.gedcomx.persistence.graph.neo4j.utils.RelTypes;
+import org.neo4j.graphdb.Direction;
+import org.neo4j.graphdb.Node;
 
 public class Identifier extends GENgraphNode {
+
+	public Identifier(final Node node) throws WrongNodeType {
+		super(NodeTypes.IDENTIFIER, node);
+	}
 
 	public Identifier(final org.gedcomx.conclusion.Identifier gedcomXIdentifier) throws MissingFieldException {
 		super(NodeTypes.IDENTIFIER, gedcomXIdentifier);
 	}
 
-	public Identifier(final URI value) throws MissingFieldException {
-		super(NodeTypes.IDENTIFIER, value);
+	public Identifier(final URI value) {
+		super(NodeTypes.IDENTIFIER, new Object[] { value });
+	}
+
+	@Override
+	protected void deleteAllReferences() {
+		return;
 	}
 
 	@Override
@@ -25,6 +38,11 @@ public class Identifier extends GENgraphNode {
 		gedcomXIdentifier.setType(this.getType());
 
 		return gedcomXIdentifier;
+	}
+
+	public GENgraphNode getParentNode() {
+		// TODO
+		return this.getNodeByRelationship(GENgraphNode.class, RelTypes.HAS_IDENTIFIER, Direction.INCOMING);
 	}
 
 	public URI getType() {
@@ -38,10 +56,20 @@ public class Identifier extends GENgraphNode {
 	}
 
 	@Override
+	protected void resolveReferences() {
+		return;
+	}
+
+	@Override
 	protected void setGedcomXProperties(final Object gedcomXObject) {
 		final org.gedcomx.conclusion.Identifier gedcomXIdentifier = (org.gedcomx.conclusion.Identifier) gedcomXObject;
 		this.setValue(gedcomXIdentifier.getValue());
 		this.setType(gedcomXIdentifier.getType());
+	}
+
+	@Override
+	protected void setGedcomXRelations(final Object gedcomXObject) {
+		return;
 	}
 
 	@Override
@@ -62,6 +90,13 @@ public class Identifier extends GENgraphNode {
 		final org.gedcomx.conclusion.Identifier gedcomXIdentifier = (org.gedcomx.conclusion.Identifier) gedcomXObject;
 		if (gedcomXIdentifier.getValue() == null) {
 			throw new MissingRequiredPropertyException(Identifier.class, NodeProperties.Generic.VALUE);
+		}
+	}
+
+	@Override
+	protected void validateUnderlyingNode() throws WrongNodeType {
+		if ((this.getValue() == null)) {
+			throw new WrongNodeType();
 		}
 	}
 

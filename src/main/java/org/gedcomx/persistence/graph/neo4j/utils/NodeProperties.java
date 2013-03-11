@@ -60,7 +60,7 @@ public interface NodeProperties {
 	}
 
 	public static enum Generic implements NodeProperties {
-		ID(true, IndexNodeNames.IDS), ABOUT, NODE_TYPE(true, IndexNodeNames.NODE_TYPES), TYPE(true, IndexNodeNames.TYPES), VALUE, LANG, ATTRIBUTION_MODIFIED, ATTRIBUTION_CHANGE_MESSAGE, SUBJECT, TEXT;
+		ID(true, IndexNodeNames.IDS), ABOUT, NODE_TYPE(true, IndexNodeNames.NODE_TYPES), TYPE(true, IndexNodeNames.TYPES), VALUE, LANG, MODIFIED, CHANGE_MESSAGE, SUBJECT, TEXT;
 
 		private final boolean indexed;
 		private final IndexNodeNames indexName;

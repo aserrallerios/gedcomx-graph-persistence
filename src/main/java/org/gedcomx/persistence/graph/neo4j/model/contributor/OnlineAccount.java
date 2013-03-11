@@ -4,20 +4,31 @@ import org.gedcomx.common.ResourceReference;
 import org.gedcomx.common.URI;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredPropertyException;
+import org.gedcomx.persistence.graph.neo4j.exception.WrongNodeType;
 import org.gedcomx.persistence.graph.neo4j.model.GENgraphNode;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeTypes;
 import org.gedcomx.persistence.graph.neo4j.utils.RelTypes;
 import org.neo4j.graphdb.Direction;
+import org.neo4j.graphdb.Node;
 
 public class OnlineAccount extends GENgraphNode {
+
+	protected OnlineAccount(final Node node) throws WrongNodeType {
+		super(NodeTypes.ACCOUNT, node);
+	}
 
 	protected OnlineAccount(final org.gedcomx.agent.OnlineAccount gedcomXOnlineAccount) throws MissingFieldException {
 		super(NodeTypes.ACCOUNT, gedcomXOnlineAccount);
 	}
 
-	protected OnlineAccount(final String accountName, final ResourceReference serviceHomepage) throws MissingFieldException {
+	protected OnlineAccount(final String accountName, final ResourceReference serviceHomepage) {
 		super(NodeTypes.ACCOUNT, accountName, serviceHomepage);
+	}
+
+	@Override
+	protected void deleteAllReferences() {
+		return;
 	}
 
 	public String getAccountName() {
@@ -43,6 +54,11 @@ public class OnlineAccount extends GENgraphNode {
 		return new ResourceReference(new URI(serviceHomepage));
 	}
 
+	@Override
+	protected void resolveReferences() {
+		return;
+	}
+
 	public void setAccountName(final String accountName) {
 		this.setProperty(NodeProperties.Agent.ACCOUNT_NAME, accountName);
 	}
@@ -53,6 +69,11 @@ public class OnlineAccount extends GENgraphNode {
 		this.setAccountName(gedcomXOnlineAccount.getAccountName());
 		this.setServiceHomepage(gedcomXOnlineAccount.getServiceHomepage());
 
+	}
+
+	@Override
+	protected void setGedcomXRelations(final Object gedcomXObject) {
+		return;
 	}
 
 	@Override
@@ -73,6 +94,16 @@ public class OnlineAccount extends GENgraphNode {
 		}
 		if ((gedcomXOnlineAccount.getServiceHomepage() == null) || (gedcomXOnlineAccount.getServiceHomepage().getResource() == null)) {
 			throw new MissingRequiredPropertyException(OnlineAccount.class, NodeProperties.Agent.SERVICE_HOMEPAGE);
+		}
+	}
+
+	@Override
+	protected void validateUnderlyingNode() throws WrongNodeType {
+		if ((this.getAccountName() == null) || this.getAccountName().isEmpty()) {
+			throw new WrongNodeType();
+		}
+		if (this.getServiceHomepage() == null) {
+			throw new WrongNodeType();
 		}
 	}
 }

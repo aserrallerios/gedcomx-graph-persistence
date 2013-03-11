@@ -1,6 +1,5 @@
 package org.gedcomx.persistence.graph.neo4j.model.source;
 
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -8,9 +7,10 @@ import org.gedcomx.common.ResourceReference;
 import org.gedcomx.common.URI;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredRelationshipException;
-import org.gedcomx.persistence.graph.neo4j.model.GENgraph;
+import org.gedcomx.persistence.graph.neo4j.exception.WrongNodeType;
 import org.gedcomx.persistence.graph.neo4j.model.GENgraphNode;
 import org.gedcomx.persistence.graph.neo4j.model.GENgraphTopLevelNode;
+import org.gedcomx.persistence.graph.neo4j.model.common.Attribution;
 import org.gedcomx.persistence.graph.neo4j.model.common.Note;
 import org.gedcomx.persistence.graph.neo4j.model.common.TextValue;
 import org.gedcomx.persistence.graph.neo4j.model.conclusion.Conclusion;
@@ -18,6 +18,7 @@ import org.gedcomx.persistence.graph.neo4j.model.contributor.Agent;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeTypes;
 import org.gedcomx.persistence.graph.neo4j.utils.RelTypes;
+import org.neo4j.graphdb.Node;
 
 public class SourceDescription extends GENgraphNode implements GENgraphTopLevelNode {
 
@@ -32,9 +33,21 @@ public class SourceDescription extends GENgraphNode implements GENgraphTopLevelN
 	private Agent mediator;
 	private URI mediatorURI;
 
-	public SourceDescription(final GENgraph graph, final org.gedcomx.source.SourceDescription gedcomXSourceDescription)
-			throws MissingFieldException {
+	public SourceDescription(final Node node) throws WrongNodeType {
+		super(NodeTypes.SOURCE_DESCRIPTION, node);
+	}
+
+	public SourceDescription(final org.gedcomx.source.SourceDescription gedcomXSourceDescription) throws MissingFieldException {
 		super(NodeTypes.SOURCE_DESCRIPTION, gedcomXSourceDescription);
+	}
+
+	public SourceDescription(final String citationValue) {
+		super(NodeTypes.SOURCE_DESCRIPTION, new Object[] { citationValue });
+	}
+
+	public void addCitation(final SourceCitation sourceCitation) {
+		this.sourceCitations.add(sourceCitation);
+		this.createRelationship(RelTypes.HAS_CITATION, sourceCitation);
 	}
 
 	public void addExtractedConclusion(final Conclusion conclusion) {
@@ -52,27 +65,24 @@ public class SourceDescription extends GENgraphNode implements GENgraphTopLevelN
 		this.createRelationship(RelTypes.HAS_SOURCE_REFERENCE, sourceReference);
 	}
 
-	public void addSourceCitation(final SourceCitation sourceCitation) {
-		this.sourceCitations.add(sourceCitation);
-		this.createRelationship(RelTypes.HAS_CITATION, sourceCitation);
-	}
-
 	public void addTitle(final TextValue textValue) {
 		this.titles.add(textValue);
 		this.createRelationship(RelTypes.HAS_TITLE, textValue);
 	}
 
 	@Override
-	protected void checkRequiredProperties(final Object gedcomXObject) throws MissingFieldException {
-		final org.gedcomx.source.SourceDescription gedcomXSourceDescription = (org.gedcomx.source.SourceDescription) gedcomXObject;
-
-		if ((gedcomXSourceDescription.getCitations() == null) || gedcomXSourceDescription.getCitations().isEmpty()) {
-			throw new MissingRequiredRelationshipException(SourceDescription.class, gedcomXSourceDescription.getId(), RelTypes.HAS_CITATION);
-		}
+	protected void deleteAllReferences() {
+		this.deleteReferencedNodes(Note.class, RelTypes.HAS_NOTE);
+		this.deleteReferencedNodes(TextValue.class, RelTypes.HAS_TITLE);
+		this.deleteReference(Conclusion.class, RelTypes.CONCLUSION);
 	}
 
 	public URI getAbout(final URI about) {
 		return new URI((String) this.getProperty(NodeProperties.Generic.ABOUT));
+	}
+
+	public List<SourceCitation> getCitations() {
+		return this.sourceCitations;
 	}
 
 	public SourceReference getComponentOf() {
@@ -81,6 +91,13 @@ public class SourceDescription extends GENgraphNode implements GENgraphTopLevelN
 
 	public List<Conclusion> getExtractedConclusions() {
 		return this.extractedConclusions;
+	}
+
+	@Override
+	protected org.gedcomx.source.SourceDescription getGedcomX() {
+		final org.gedcomx.source.SourceDescription gedcomXSourceDescription = new org.gedcomx.source.SourceDescription();
+		// TODO Auto-generated method stub
+		return gedcomXSourceDescription;
 	}
 
 	public String getId() {
@@ -95,10 +112,6 @@ public class SourceDescription extends GENgraphNode implements GENgraphTopLevelN
 		return this.notes;
 	}
 
-	public List<SourceCitation> getSourceCitations() {
-		return this.sourceCitations;
-	}
-
 	public List<SourceReference> getSources() {
 		return this.sources;
 	}
@@ -109,42 +122,20 @@ public class SourceDescription extends GENgraphNode implements GENgraphTopLevelN
 
 	@Override
 	protected void resolveReferences() {
-		if ((this.mediator == null) && (this.mediatorURI != null)) {
-			final Agent mediator = this.getGraph().getAgent(this.mediatorURI);
-			if (mediator != null) {
-				this.setMediator(mediator);
-			}
-		}
-		for (final URI conclusionsReferences : this.extractedConclusionsURI) {
-			final Conclusion conclusion = this.getGraph().getConclusion(conclusionsReferences);
-			if (conclusion != null) {
-				if (this.extractedConclusions.indexOf(conclusion) == -1) {
-					this.addExtractedConclusion(conclusion);
-				}
-			}
-		}
+		// TODO
 	}
 
 	public void setAbout(final URI about) {
 		this.setProperty(NodeProperties.Generic.ABOUT, about.toString());
 	}
 
-	public void setAttributionChangeMessage(final String changeMessage) {
-		this.setProperty(NodeProperties.Generic.ATTRIBUTION_CHANGE_MESSAGE, changeMessage);
-
-	}
-
-	public void setAttributionModifiedConfidence(final Date modified) {
-		this.setProperty(NodeProperties.Generic.ATTRIBUTION_MODIFIED, modified.getTime());
+	public void setAttribution(final Attribution attribution) {
+		this.createRelationship(RelTypes.ATTRIBUTION, attribution);
 	}
 
 	public void setComponentOf(final SourceReference componentOf) {
 		this.componentOf = componentOf;
 		this.createRelationship(RelTypes.COMPONENT_OF, componentOf);
-	}
-
-	public void setId(final String id) {
-		this.setProperty(NodeProperties.Generic.ID, id);
 	}
 
 	@Override
@@ -153,35 +144,26 @@ public class SourceDescription extends GENgraphNode implements GENgraphTopLevelN
 
 		this.setId(gedcomXSourceDescription.getId());
 		this.setAbout(gedcomXSourceDescription.getAbout());
-
-		if (gedcomXSourceDescription.getAttribution() != null) {
-			this.setAttributionModifiedConfidence(gedcomXSourceDescription.getAttribution().getModified());
-			this.setAttributionChangeMessage(gedcomXSourceDescription.getAttribution().getChangeMessage());
-		}
-	}
-
-	public void setMediator(final Agent mediator) {
-		this.mediator = mediator;
-		this.createRelationship(RelTypes.MEDIATOR, mediator);
 	}
 
 	@Override
 	protected void setGedcomXRelations(final Object gedcomXObject) throws MissingFieldException {
 		final org.gedcomx.source.SourceDescription gedcomXSourceDescription = (org.gedcomx.source.SourceDescription) gedcomXObject;
 
-		this.setComponentOf(new SourceReference(this.getGraph(), gedcomXSourceDescription.getComponentOf()));
+		this.setComponentOf(new SourceReference(gedcomXSourceDescription.getComponentOf()));
+		this.setAttribution(new Attribution(gedcomXSourceDescription.getAttribution()));
 
 		for (final org.gedcomx.common.Note note : gedcomXSourceDescription.getNotes()) {
-			this.addNote(new Note(this.getGraph(), note));
+			this.addNote(new Note(note));
 		}
 		for (final org.gedcomx.common.TextValue title : gedcomXSourceDescription.getTitles()) {
-			this.addTitle(new TextValue(this.getGraph(), title));
+			this.addTitle(new TextValue(title));
 		}
 		for (final org.gedcomx.source.SourceCitation sourceCitation : gedcomXSourceDescription.getCitations()) {
-			this.addSourceCitation(new SourceCitation(this.getGraph(), sourceCitation));
+			this.addSourceCitation(new SourceCitation(sourceCitation));
 		}
 		for (final org.gedcomx.source.SourceReference source : gedcomXSourceDescription.getSources()) {
-			this.addSource(new SourceReference(this.getGraph(), source));
+			this.addSource(new SourceReference(source));
 		}
 
 		if (gedcomXSourceDescription.getMediator() != null) {
@@ -205,4 +187,38 @@ public class SourceDescription extends GENgraphNode implements GENgraphTopLevelN
 		return;
 	}
 
+	public void setId(final String id) {
+		this.setProperty(NodeProperties.Generic.ID, id);
+	}
+
+	public void setMediator(final Agent mediator) {
+		this.mediator = mediator;
+		this.createRelationship(RelTypes.MEDIATOR, mediator);
+	}
+
+	@Override
+	protected void setRequiredProperties(final Object... properties) {
+		this.addRelationship(RelTypes.HAS_CITATION, new SourceCitation((String) properties[0]));
+	}
+
+	@Override
+	protected void validateGedcomXObject(final Object gedcomXObject) throws MissingFieldException {
+		final org.gedcomx.source.SourceDescription gedcomXSourceDescription = (org.gedcomx.source.SourceDescription) gedcomXObject;
+
+		if ((gedcomXSourceDescription.getCitations() == null) || gedcomXSourceDescription.getCitations().isEmpty()) {
+			throw new MissingRequiredRelationshipException(SourceDescription.class, gedcomXSourceDescription.getId(), RelTypes.HAS_CITATION);
+		}
+	}
+
+	@Override
+	protected void validateUnderlyingNode() throws WrongNodeType {
+		if ((this.getCitations() == null) || this.getCitations().isEmpty()) {
+			throw new WrongNodeType();
+		}
+		for (final SourceCitation citation : this.getCitations()) {
+			if ((citation.getValue() == null) || citation.getValue().isEmpty()) {
+				throw new WrongNodeType();
+			}
+		}
+	}
 }

@@ -68,12 +68,24 @@ public class GENgraphDAOUtil {
 		return GENgraphDAOUtil.getDao().getReferenceNode();
 	}
 
+	public static Object getRelationshipProperty(final Relationship rel, final RelationshipProperties property) {
+		return GENgraphDAOUtil.getDao().getRelationshipProperty(rel, property);
+	}
+
 	public static Iterable<Relationship> getRelationships(final Node node, final Direction dir) {
 		return GENgraphDAOUtil.getDao().getRelationships(node, dir);
 	}
 
+	public static Iterable<Relationship> getRelationships(final Node node, final RelTypes relType, final Direction dir) {
+		return GENgraphDAOUtil.getDao().getRelationships(node, relType, dir);
+	}
+
 	public static Node getSingleNodeByRelationship(final Node node, final RelTypes relation, final Direction dir) {
 		return GENgraphDAOUtil.getDao().getSingleNodeByRelationship(node, relation, dir);
+	}
+
+	public static Relationship getSingleRelationship(final Node node, final RelTypes rel, final Direction dir) {
+		return GENgraphDAOUtil.getDao().getSingleRelationship(node, rel, dir);
 	}
 
 	public static boolean hasRelationship(final Node node, final RelTypes relType, final Direction dir) {

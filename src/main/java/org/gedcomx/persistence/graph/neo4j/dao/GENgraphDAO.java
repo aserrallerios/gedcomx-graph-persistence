@@ -37,9 +37,15 @@ public interface GENgraphDAO {
 
 	Node getReferenceNode();
 
+	Object getRelationshipProperty(Relationship rel, RelationshipProperties property);
+
 	Iterable<Relationship> getRelationships(Node node, Direction dir);
 
+	Iterable<Relationship> getRelationships(Node node, RelTypes relType, Direction dir);
+
 	Node getSingleNodeByRelationship(Node node, RelTypes relation, Direction dir);
+
+	Relationship getSingleRelationship(Node node, RelTypes rel, Direction dir);
 
 	boolean hasRelationship(Node node, RelTypes relType, Direction dir);
 

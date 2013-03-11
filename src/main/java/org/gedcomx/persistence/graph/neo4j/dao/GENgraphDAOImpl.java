@@ -172,14 +172,29 @@ public class GENgraphDAOImpl implements GENgraphDAO {
 	}
 
 	@Override
+	public Object getRelationshipProperty(final Relationship rel, final RelationshipProperties property) {
+		return rel.getProperty(property.name());
+	}
+
+	@Override
 	public Iterable<Relationship> getRelationships(final Node node, final Direction dir) {
 		return node.getRelationships(dir);
+	}
+
+	@Override
+	public Iterable<Relationship> getRelationships(final Node node, final RelTypes relType, final Direction dir) {
+		return node.getRelationships(relType, dir);
 	}
 
 	@Override
 	public Node getSingleNodeByRelationship(final Node node, final RelTypes relation, final Direction dir) {
 		final Relationship rel = node.getSingleRelationship(relation, dir);
 		return rel.getOtherNode(node);
+	}
+
+	@Override
+	public Relationship getSingleRelationship(final Node node, final RelTypes rel, final Direction dir) {
+		return node.getSingleRelationship(rel, dir);
 	}
 
 	@Override

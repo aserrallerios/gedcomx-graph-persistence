@@ -1,11 +1,13 @@
 package org.gedcomx.persistence.graph.neo4j.model.contributor;
 
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
+import org.gedcomx.persistence.graph.neo4j.exception.WrongNodeType;
 import org.gedcomx.persistence.graph.neo4j.model.GENgraphNode;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeTypes;
 import org.gedcomx.persistence.graph.neo4j.utils.RelTypes;
 import org.neo4j.graphdb.Direction;
+import org.neo4j.graphdb.Node;
 
 public class Address extends GENgraphNode {
 
@@ -13,8 +15,17 @@ public class Address extends GENgraphNode {
 		super(NodeTypes.ADDRESS);
 	}
 
+	public Address(final Node node) throws WrongNodeType {
+		super(NodeTypes.ADDRESS, node);
+	}
+
 	protected Address(final org.gedcomx.agent.Address gedcomXAddress) throws MissingFieldException {
 		super(NodeTypes.ADDRESS, gedcomXAddress);
+	}
+
+	@Override
+	protected void deleteAllReferences() {
+		return;
 	}
 
 	public Agent getAgent() {
@@ -69,6 +80,11 @@ public class Address extends GENgraphNode {
 		return (String) this.getProperty(NodeProperties.Agent.VALUE);
 	}
 
+	@Override
+	protected void resolveReferences() {
+		return;
+	}
+
 	public void setCity(final String city) {
 		this.setProperty(NodeProperties.Agent.CITY, city);
 	}
@@ -91,8 +107,18 @@ public class Address extends GENgraphNode {
 		this.setStreet3(gedcomXAddress.getStreet3());
 	}
 
+	@Override
+	protected void setGedcomXRelations(final Object gedcomXObject) {
+		return;
+	}
+
 	public void setPostalCode(final String postalCode) {
 		this.setProperty(NodeProperties.Agent.POSTAL_CODE, postalCode);
+	}
+
+	@Override
+	protected void setRequiredProperties(final Object... properties) {
+		return;
 	}
 
 	public void setStateOrProvince(final String stateOrProvince) {
@@ -113,6 +139,16 @@ public class Address extends GENgraphNode {
 
 	public void setValue(final String value) {
 		this.setProperty(NodeProperties.Agent.VALUE, value);
+	}
+
+	@Override
+	protected void validateGedcomXObject(final Object gedcomXObject) throws MissingFieldException {
+		return;
+	}
+
+	@Override
+	protected void validateUnderlyingNode() {
+		return;
 	}
 
 }

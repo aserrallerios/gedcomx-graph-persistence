@@ -24,7 +24,7 @@ public class GENgraphPersistenceServiceImpl implements GENgraphPersistenceServic
 
 	@Override
 	public void addAgent(final org.gedcomx.agent.Agent agent) throws MissingFieldException {
-		new Agent(this.dao, agent);
+		new Agent(agent);
 	}
 
 	@Override
@@ -32,13 +32,13 @@ public class GENgraphPersistenceServiceImpl implements GENgraphPersistenceServic
 		if ((conclusion instanceof org.gedcomx.conclusion.Person) || (conclusion instanceof org.gedcomx.conclusion.Document)
 				|| (conclusion instanceof org.gedcomx.conclusion.Event) || (conclusion instanceof org.gedcomx.conclusion.Relationship)
 				|| (conclusion instanceof org.gedcomx.conclusion.PlaceDescription)) {
-			new Conclusion(this.dao, conclusion);
+			new Conclusion(conclusion);
 		}
 	}
 
 	@Override
-	public void addSource(final org.gedcomx.source.SourceDescription sourceDescription) {
-		new SourceDescription(this.dao, sourceDescription);
+	public void addSource(final org.gedcomx.source.SourceDescription sourceDescription) throws MissingFieldException {
+		new SourceDescription(sourceDescription);
 	}
 
 	@Override

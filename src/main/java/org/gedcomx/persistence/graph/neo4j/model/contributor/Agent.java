@@ -5,6 +5,7 @@ import java.util.List;
 import org.gedcomx.common.ResourceReference;
 import org.gedcomx.common.URI;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
+import org.gedcomx.persistence.graph.neo4j.exception.WrongNodeType;
 import org.gedcomx.persistence.graph.neo4j.model.GENgraphNode;
 import org.gedcomx.persistence.graph.neo4j.model.GENgraphTopLevelNode;
 import org.gedcomx.persistence.graph.neo4j.model.common.Identifier;
@@ -12,11 +13,16 @@ import org.gedcomx.persistence.graph.neo4j.model.common.TextValue;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeTypes;
 import org.gedcomx.persistence.graph.neo4j.utils.RelTypes;
+import org.neo4j.graphdb.Node;
 
 public class Agent extends GENgraphNode implements GENgraphTopLevelNode {
 
 	public Agent() {
 		super(NodeTypes.AGENT);
+	}
+
+	public Agent(final Node node) throws WrongNodeType {
+		super(NodeTypes.AGENT, node);
 	}
 
 	public Agent(final org.gedcomx.agent.Agent gedcomXAgent) throws MissingFieldException {
@@ -41,10 +47,10 @@ public class Agent extends GENgraphNode implements GENgraphTopLevelNode {
 
 	@Override
 	public void deleteAllReferences() {
-		this.deleteReferences(Address.class, RelTypes.HAS_ADDRESS);
-		this.deleteReferences(OnlineAccount.class, RelTypes.HAS_ACCOUNT);
-		this.deleteReferences(Identifier.class, RelTypes.HAS_IDENTIFIER);
-		this.deleteReferences(TextValue.class, RelTypes.HAS_NAME);
+		this.deleteReferencedNodes(Address.class, RelTypes.HAS_ADDRESS);
+		this.deleteReferencedNodes(OnlineAccount.class, RelTypes.HAS_ACCOUNT);
+		this.deleteReferencedNodes(Identifier.class, RelTypes.HAS_IDENTIFIER);
+		this.deleteReferencedNodes(TextValue.class, RelTypes.HAS_NAME);
 	}
 
 	public List<Address> getAddresses() {
@@ -103,6 +109,11 @@ public class Agent extends GENgraphNode implements GENgraphTopLevelNode {
 		return this.getURIListProperties(NodeProperties.Agent.PHONES);
 	}
 
+	@Override
+	protected void resolveReferences() {
+		return;
+	}
+
 	public void setEmails(final List<ResourceReference> emails) {
 		this.setURIListProperties(NodeProperties.Agent.EMAILS, emails);
 	}
@@ -150,6 +161,21 @@ public class Agent extends GENgraphNode implements GENgraphTopLevelNode {
 
 	public void setPhones(final List<ResourceReference> phones) {
 		this.setURIListProperties(NodeProperties.Agent.PHONES, phones);
+	}
+
+	@Override
+	protected void setRequiredProperties(final Object... properties) {
+		return;
+	}
+
+	@Override
+	protected void validateGedcomXObject(final Object gedcomXObject) throws MissingFieldException {
+		return;
+	}
+
+	@Override
+	protected void validateUnderlyingNode() {
+		return;
 	}
 
 }
