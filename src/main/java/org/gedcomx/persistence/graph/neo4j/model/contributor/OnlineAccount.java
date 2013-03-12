@@ -9,12 +9,13 @@ import org.gedcomx.persistence.graph.neo4j.model.GENgraphNode;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeTypes;
 import org.gedcomx.persistence.graph.neo4j.utils.RelTypes;
+import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 
 public class OnlineAccount extends GENgraphNode {
 
-	protected OnlineAccount(final Node node) throws WrongNodeType {
+	protected OnlineAccount(final Node node) throws WrongNodeType, MissingFieldException {
 		super(NodeTypes.ACCOUNT, node);
 	}
 
@@ -22,7 +23,7 @@ public class OnlineAccount extends GENgraphNode {
 		super(NodeTypes.ACCOUNT, gedcomXOnlineAccount);
 	}
 
-	protected OnlineAccount(final String accountName, final ResourceReference serviceHomepage) {
+	protected OnlineAccount(final String accountName, final ResourceReference serviceHomepage) throws MissingFieldException {
 		super(NodeTypes.ACCOUNT, accountName, serviceHomepage);
 	}
 
@@ -87,23 +88,12 @@ public class OnlineAccount extends GENgraphNode {
 	}
 
 	@Override
-	protected void validateGedcomXObject(final Object gedcomXObject) throws MissingFieldException {
-		final org.gedcomx.agent.OnlineAccount gedcomXOnlineAccount = (org.gedcomx.agent.OnlineAccount) gedcomXObject;
-		if ((gedcomXOnlineAccount.getAccountName() == null) || gedcomXOnlineAccount.getAccountName().isEmpty()) {
+	protected void validateUnderlyingNode() throws MissingRequiredPropertyException {
+		if (ValidationTools.nullOrEmpty(this.getAccountName())) {
 			throw new MissingRequiredPropertyException(OnlineAccount.class, NodeProperties.Agent.ACCOUNT_NAME);
 		}
-		if ((gedcomXOnlineAccount.getServiceHomepage() == null) || (gedcomXOnlineAccount.getServiceHomepage().getResource() == null)) {
+		if (ValidationTools.nullOrEmpty(this.getServiceHomepage())) {
 			throw new MissingRequiredPropertyException(OnlineAccount.class, NodeProperties.Agent.SERVICE_HOMEPAGE);
-		}
-	}
-
-	@Override
-	protected void validateUnderlyingNode() throws WrongNodeType {
-		if ((this.getAccountName() == null) || this.getAccountName().isEmpty()) {
-			throw new WrongNodeType();
-		}
-		if (this.getServiceHomepage() == null) {
-			throw new WrongNodeType();
 		}
 	}
 }

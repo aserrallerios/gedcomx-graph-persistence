@@ -13,11 +13,11 @@ import org.neo4j.graphdb.Node;
 
 public class Attribution extends GENgraphNode {
 
-	protected Attribution() {
+	protected Attribution() throws MissingFieldException {
 		super(NodeTypes.ATTRIBUTION);
 	}
 
-	protected Attribution(final Node node) throws WrongNodeType {
+	protected Attribution(final Node node) throws WrongNodeType, MissingFieldException {
 		super(NodeTypes.ATTRIBUTION, node);
 	}
 
@@ -35,7 +35,7 @@ public class Attribution extends GENgraphNode {
 	}
 
 	@Override
-	protected org.gedcomx.common.Attribution getGedcomX() {
+	public org.gedcomx.common.Attribution getGedcomX() {
 		final org.gedcomx.common.Attribution gedcomXAttribution = new org.gedcomx.common.Attribution();
 
 		gedcomXAttribution.setChangeMessage(this.getChangeMessage());
@@ -86,11 +86,6 @@ public class Attribution extends GENgraphNode {
 
 	@Override
 	protected void setRequiredProperties(final Object... properties) {
-		return;
-	}
-
-	@Override
-	protected void validateGedcomXObject(final Object gedcomXObject) throws MissingFieldException {
 		return;
 	}
 

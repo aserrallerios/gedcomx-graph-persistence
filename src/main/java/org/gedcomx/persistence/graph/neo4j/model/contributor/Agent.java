@@ -17,11 +17,11 @@ import org.neo4j.graphdb.Node;
 
 public class Agent extends GENgraphNode implements GENgraphTopLevelNode {
 
-	public Agent() {
+	public Agent() throws MissingFieldException {
 		super(NodeTypes.AGENT);
 	}
 
-	public Agent(final Node node) throws WrongNodeType {
+	public Agent(final Node node) throws WrongNodeType, MissingFieldException {
 		super(NodeTypes.AGENT, node);
 	}
 
@@ -130,20 +130,20 @@ public class Agent extends GENgraphNode implements GENgraphTopLevelNode {
 	}
 
 	@Override
-	protected void setGedcomXRelations(final Object gedcomXObject) {
+	protected void setGedcomXRelations(final Object gedcomXObject) throws MissingFieldException {
 		final org.gedcomx.agent.Agent gedcomXAgent = (org.gedcomx.agent.Agent) gedcomXObject;
 
 		for (final org.gedcomx.agent.Address gedcomXAddress : gedcomXAgent.getAddresses()) {
-			this.addAddress(this.createNode(Address.class, gedcomXAddress));
+			this.addAddress(new Address(gedcomXAddress));
 		}
 		for (final org.gedcomx.agent.OnlineAccount gedcomXOnlineAccount : gedcomXAgent.getAccounts()) {
-			this.addOnlineAccount(this.createNode(OnlineAccount.class, gedcomXOnlineAccount));
+			this.addOnlineAccount(new OnlineAccount(gedcomXOnlineAccount));
 		}
 		for (final org.gedcomx.conclusion.Identifier gedcomXIdentifier : gedcomXAgent.getIdentifiers()) {
-			this.addIdentifier(this.createNode(Identifier.class, gedcomXIdentifier));
+			this.addIdentifier(new Identifier(gedcomXIdentifier));
 		}
 		for (final org.gedcomx.common.TextValue gedcomXName : gedcomXAgent.getNames()) {
-			this.addName(this.createNode(TextValue.class, gedcomXName));
+			this.addName(new TextValue(gedcomXName));
 		}
 	}
 
@@ -165,11 +165,6 @@ public class Agent extends GENgraphNode implements GENgraphTopLevelNode {
 
 	@Override
 	protected void setRequiredProperties(final Object... properties) {
-		return;
-	}
-
-	@Override
-	protected void validateGedcomXObject(final Object gedcomXObject) throws MissingFieldException {
 		return;
 	}
 

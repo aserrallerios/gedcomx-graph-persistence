@@ -7,12 +7,13 @@ import org.gedcomx.persistence.graph.neo4j.model.GENgraphNode;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeTypes;
 import org.gedcomx.persistence.graph.neo4j.utils.RelTypes;
+import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 
 public class TextValue extends GENgraphNode {
 
-	public TextValue(final Node node) throws WrongNodeType {
+	public TextValue(final Node node) throws WrongNodeType, MissingFieldException {
 		super(NodeTypes.TEXT_VALUE, node);
 	}
 
@@ -20,7 +21,7 @@ public class TextValue extends GENgraphNode {
 		super(NodeTypes.TEXT_VALUE, gedcomXTextValue);
 	}
 
-	public TextValue(final String value) {
+	public TextValue(final String value) throws MissingFieldException {
 		super(NodeTypes.TEXT_VALUE, new Object[] { value });
 	}
 
@@ -83,17 +84,9 @@ public class TextValue extends GENgraphNode {
 	}
 
 	@Override
-	protected void validateGedcomXObject(final Object gedcomXObject) throws MissingFieldException {
-		final org.gedcomx.common.TextValue gedcomXTextValue = (org.gedcomx.common.TextValue) gedcomXObject;
-		if ((gedcomXTextValue.getValue() == null) || gedcomXTextValue.getValue().isEmpty()) {
+	protected void validateUnderlyingNode() throws MissingRequiredPropertyException {
+		if (ValidationTools.nullOrEmpty(this.getValue())) {
 			throw new MissingRequiredPropertyException(TextValue.class, NodeProperties.Generic.VALUE);
-		}
-	}
-
-	@Override
-	protected void validateUnderlyingNode() throws WrongNodeType {
-		if ((this.getValue() == null) || this.getValue().isEmpty()) {
-			throw new WrongNodeType();
 		}
 	}
 }

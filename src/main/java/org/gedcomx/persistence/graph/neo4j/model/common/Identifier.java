@@ -8,12 +8,13 @@ import org.gedcomx.persistence.graph.neo4j.model.GENgraphNode;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeTypes;
 import org.gedcomx.persistence.graph.neo4j.utils.RelTypes;
+import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 
 public class Identifier extends GENgraphNode {
 
-	public Identifier(final Node node) throws WrongNodeType {
+	public Identifier(final Node node) throws WrongNodeType, MissingFieldException {
 		super(NodeTypes.IDENTIFIER, node);
 	}
 
@@ -21,7 +22,7 @@ public class Identifier extends GENgraphNode {
 		super(NodeTypes.IDENTIFIER, gedcomXIdentifier);
 	}
 
-	public Identifier(final URI value) {
+	public Identifier(final URI value) throws MissingFieldException {
 		super(NodeTypes.IDENTIFIER, new Object[] { value });
 	}
 
@@ -86,17 +87,9 @@ public class Identifier extends GENgraphNode {
 	}
 
 	@Override
-	protected void validateGedcomXObject(final Object gedcomXObject) throws MissingFieldException {
-		final org.gedcomx.conclusion.Identifier gedcomXIdentifier = (org.gedcomx.conclusion.Identifier) gedcomXObject;
-		if (gedcomXIdentifier.getValue() == null) {
+	protected void validateUnderlyingNode() throws MissingRequiredPropertyException {
+		if (ValidationTools.nullOrEmpty(this.getValue())) {
 			throw new MissingRequiredPropertyException(Identifier.class, NodeProperties.Generic.VALUE);
-		}
-	}
-
-	@Override
-	protected void validateUnderlyingNode() throws WrongNodeType {
-		if ((this.getValue() == null)) {
-			throw new WrongNodeType();
 		}
 	}
 

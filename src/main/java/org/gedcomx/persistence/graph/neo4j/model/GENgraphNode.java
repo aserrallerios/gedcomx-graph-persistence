@@ -27,7 +27,7 @@ public abstract class GENgraphNode {
 
 	private final Node underlyingNode;
 
-	protected GENgraphNode(final NodeTypes nodeType, final Node underlyingNode) throws WrongNodeType {
+	protected GENgraphNode(final NodeTypes nodeType, final Node underlyingNode) throws MissingFieldException, WrongNodeType {
 		final Transaction t = GENgraphDAOUtil.beginTransaction();
 		try {
 			this.underlyingNode = underlyingNode;
@@ -41,7 +41,7 @@ public abstract class GENgraphNode {
 		}
 	}
 
-	protected GENgraphNode(final NodeTypes nodeType, final Object... properties) {
+	protected GENgraphNode(final NodeTypes nodeType, final Object... properties) throws MissingFieldException {
 		final Transaction t = GENgraphDAOUtil.beginTransaction();
 		try {
 			this.underlyingNode = GENgraphDAOUtil.createNode();
@@ -49,6 +49,7 @@ public abstract class GENgraphNode {
 			if ((properties != null) && (properties.length > 0)) {
 				this.setRequiredProperties(properties);
 			}
+			this.validateUnderlyingNode();
 			GENgraphDAOUtil.commitTransaction(t);
 		} finally {
 			GENgraphDAOUtil.endTransaction(t);
@@ -58,11 +59,11 @@ public abstract class GENgraphNode {
 	protected GENgraphNode(final NodeTypes nodeType, final Object gedcomXObject) throws MissingFieldException {
 		final Transaction t = GENgraphDAOUtil.beginTransaction();
 		try {
-			this.validateGedcomXObject(gedcomXObject);
 			this.underlyingNode = GENgraphDAOUtil.createNode();
 			this.setNodeType(nodeType);
 			this.setGedcomXProperties(gedcomXObject);
 			this.setGedcomXRelations(gedcomXObject);
+			this.validateUnderlyingNode();
 			GENgraphDAOUtil.commitTransaction(t);
 		} finally {
 			GENgraphDAOUtil.endTransaction(t);
@@ -92,20 +93,6 @@ public abstract class GENgraphNode {
 		try {
 			constructor = type.getConstructor(GENgraphDAO.class, Node.class);
 			wrapper = constructor.newInstance(node);
-		} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException
-				| InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return wrapper;
-	}
-
-	protected <T extends GENgraphNode> T createNode(final Class<T> type, final Object gedcomXObject) {
-		Constructor<T> constructor;
-		T wrapper = null;
-		try {
-			constructor = type.getConstructor(GENgraphDAO.class, Object.class);
-			wrapper = constructor.newInstance(gedcomXObject);
 		} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException
 				| InvocationTargetException e) {
 			// TODO Auto-generated catch block
@@ -260,7 +247,7 @@ public abstract class GENgraphNode {
 
 	protected abstract void setGedcomXProperties(final Object gedcomXObject);
 
-	protected abstract void setGedcomXRelations(final Object gedcomXObject);
+	protected abstract void setGedcomXRelations(final Object gedcomXObject) throws MissingFieldException;
 
 	private void setNodeType(final NodeTypes nodeType) {
 		this.setProperty(NodeProperties.Generic.NODE_TYPE, nodeType.name());
@@ -279,7 +266,7 @@ public abstract class GENgraphNode {
 
 	}
 
-	protected abstract void setRequiredProperties(final Object... properties);
+	protected abstract void setRequiredProperties(final Object... properties) throws MissingFieldException;
 
 	protected void setURIListProperties(final NodeProperties property, final List<ResourceReference> resourceList) {
 		final String[] values = new String[resourceList.size()];
@@ -295,7 +282,5 @@ public abstract class GENgraphNode {
 		return this.getUnderlyingNode().toString();
 	}
 
-	protected abstract void validateGedcomXObject(final Object gedcomXObject) throws MissingFieldException;
-
-	protected abstract void validateUnderlyingNode() throws WrongNodeType;
+	protected abstract void validateUnderlyingNode() throws MissingFieldException;
 }

@@ -11,11 +11,11 @@ import org.neo4j.graphdb.Node;
 
 public class Address extends GENgraphNode {
 
-	public Address() {
+	public Address() throws MissingFieldException {
 		super(NodeTypes.ADDRESS);
 	}
 
-	public Address(final Node node) throws WrongNodeType {
+	public Address(final Node node) throws WrongNodeType, MissingFieldException {
 		super(NodeTypes.ADDRESS, node);
 	}
 
@@ -139,11 +139,6 @@ public class Address extends GENgraphNode {
 
 	public void setValue(final String value) {
 		this.setProperty(NodeProperties.Agent.VALUE, value);
-	}
-
-	@Override
-	protected void validateGedcomXObject(final Object gedcomXObject) throws MissingFieldException {
-		return;
 	}
 
 	@Override

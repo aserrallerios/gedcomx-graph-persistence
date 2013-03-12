@@ -1,6 +1,5 @@
 package org.gedcomx.persistence.graph.neo4j.model.source;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import org.gedcomx.common.ResourceReference;
@@ -12,13 +11,13 @@ import org.gedcomx.persistence.graph.neo4j.model.GENgraphNode;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeTypes;
 import org.gedcomx.persistence.graph.neo4j.utils.RelTypes;
+import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
+import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 
 public class SourceCitation extends GENgraphNode {
 
-	private final List<CitationField> fields = new LinkedList<>();
-
-	protected SourceCitation(final Node node) throws WrongNodeType {
+	protected SourceCitation(final Node node) throws WrongNodeType, MissingFieldException {
 		super(NodeTypes.SOURCE_CITATION, node);
 	}
 
@@ -26,42 +25,54 @@ public class SourceCitation extends GENgraphNode {
 		super(NodeTypes.SOURCE_CITATION, gedcomXSourceCitation);
 	}
 
-	public SourceCitation(final String value) {
+	public SourceCitation(final String value) throws MissingFieldException {
 		super(NodeTypes.SOURCE_CITATION, new Object[] { value });
 	}
 
 	public void addField(final CitationField citationField) {
-		this.fields.add(citationField);
-		this.createRelationship(RelTypes.HAS_CITATION_FIELD, citationField);
+		this.addRelationship(RelTypes.HAS_CITATION_FIELD, citationField);
 	}
 
 	@Override
-	protected void checkRequiredProperties(final Object gedcomXObject) throws MissingFieldException {
-		final org.gedcomx.source.SourceCitation gedcomXSourceCitation = (org.gedcomx.source.SourceCitation) gedcomXObject;
-
-		if ((gedcomXSourceCitation.getValue() == null) || gedcomXSourceCitation.getValue().isEmpty()) {
-			throw new MissingRequiredPropertyException(SourceCitation.class, NodeProperties.Generic.VALUE);
-		}
-
-		return;
+	protected void deleteAllReferences() {
+		this.deleteReferencedNodes(CitationField.class, RelTypes.HAS_CITATION_FIELD);
 	}
 
 	public ResourceReference getCitationTemplate() {
 		return new ResourceReference(new URI((String) this.getProperty(NodeProperties.SourceDescription.CITATION_TEMPLATE)));
 	}
 
-	public List<CitationField> getFields() {
-		return this.fields;
+	public SourceDescription getDescription() {
+		return this.getNodeByRelationship(SourceDescription.class, RelTypes.HAS_CITATION, Direction.INCOMING);
 	}
 
-	public String getLang(final String lang) {
-		return (String) this.getProperty(NodeProperties.Generic.LANG);
+	public List<CitationField> getFields() {
+		return this.getNodesByRelationship(CitationField.class, RelTypes.HAS_CITATION_FIELD);
+	}
 
+	@Override
+	protected org.gedcomx.source.SourceCitation getGedcomX() {
+		final org.gedcomx.source.SourceCitation gedcomXSourceCitation = new org.gedcomx.source.SourceCitation();
+
+		gedcomXSourceCitation.setCitationTemplate(this.getCitationTemplate());
+		gedcomXSourceCitation.setFields(this.getGedcomXList(org.gedcomx.source.CitationField.class, this.getFields()));
+		gedcomXSourceCitation.setLang(this.getLang());
+		gedcomXSourceCitation.setValue(this.getValue());
+
+		return gedcomXSourceCitation;
+	}
+
+	public String getLang() {
+		return (String) this.getProperty(NodeProperties.Generic.LANG);
 	}
 
 	public String getValue() {
 		return (String) this.getProperty(NodeProperties.Generic.VALUE);
+	}
 
+	@Override
+	protected void resolveReferences() {
+		return;
 	}
 
 	public void setCitationTemplate(final ResourceReference citationTemplate) {
@@ -82,18 +93,28 @@ public class SourceCitation extends GENgraphNode {
 		final org.gedcomx.source.SourceCitation gedcomXSourceCitation = (org.gedcomx.source.SourceCitation) gedcomXObject;
 
 		for (final org.gedcomx.source.CitationField field : gedcomXSourceCitation.getFields()) {
-			this.addField(new CitationField(this.getGraph(), field));
+			this.addField(new CitationField(field));
 		}
 	}
 
 	public void setLang(final String lang) {
 		this.setProperty(NodeProperties.Generic.LANG, lang);
+	}
 
+	@Override
+	protected void setRequiredProperties(final Object... properties) {
+		this.setValue((String) properties[0]);
 	}
 
 	public void setValue(final String value) {
 		this.setProperty(NodeProperties.Generic.VALUE, value);
+	}
 
+	@Override
+	protected void validateUnderlyingNode() throws MissingRequiredPropertyException {
+		if (ValidationTools.nullOrEmpty(this.getValue())) {
+			throw new MissingRequiredPropertyException(SourceCitation.class, NodeProperties.Generic.VALUE);
+		}
 	}
 
 }

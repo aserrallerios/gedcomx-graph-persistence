@@ -7,12 +7,13 @@ import org.gedcomx.persistence.graph.neo4j.model.GENgraphNode;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeTypes;
 import org.gedcomx.persistence.graph.neo4j.utils.RelTypes;
+import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 
 public class Note extends GENgraphNode {
 
-	protected Note(final Node node) throws WrongNodeType {
+	protected Note(final Node node) throws WrongNodeType, MissingFieldException {
 		super(NodeTypes.NOTE, node);
 	}
 
@@ -20,7 +21,7 @@ public class Note extends GENgraphNode {
 		super(NodeTypes.NOTE, gedcomXNote);
 	}
 
-	public Note(final String text) {
+	public Note(final String text) throws MissingFieldException {
 		super(NodeTypes.NOTE, new Object[] { text });
 	}
 
@@ -43,6 +44,10 @@ public class Note extends GENgraphNode {
 		gedcomXNote.setAttribution(this.getAttribution().getGedcomX());
 
 		return gedcomXNote;
+	}
+
+	public String getId() {
+		return (String) this.getProperty(NodeProperties.Generic.ID);
 	}
 
 	public String getLang() {
@@ -75,6 +80,7 @@ public class Note extends GENgraphNode {
 	protected void setGedcomXProperties(final Object gedcomXObject) {
 		final org.gedcomx.common.Note gedcomXNote = (org.gedcomx.common.Note) gedcomXObject;
 
+		this.setId(gedcomXNote.getId());
 		this.setLang(gedcomXNote.getLang());
 		this.setSubject(gedcomXNote.getSubject());
 		this.setText(gedcomXNote.getText());
@@ -82,10 +88,14 @@ public class Note extends GENgraphNode {
 	}
 
 	@Override
-	protected void setGedcomXRelations(final Object gedcomXObject) {
+	protected void setGedcomXRelations(final Object gedcomXObject) throws MissingFieldException {
 		final org.gedcomx.common.Note gedcomXNote = (org.gedcomx.common.Note) gedcomXObject;
 
-		this.setAttribution(this.createNode(Attribution.class, gedcomXNote.getAttribution()));
+		this.setAttribution(new Attribution(gedcomXNote.getAttribution()));
+	}
+
+	public void setId(final String id) {
+		this.setProperty(NodeProperties.Generic.ID, id);
 	}
 
 	public void setLang(final String lang) {
@@ -106,18 +116,9 @@ public class Note extends GENgraphNode {
 	}
 
 	@Override
-	protected void validateGedcomXObject(final Object gedcomXObject) throws MissingFieldException {
-		final org.gedcomx.common.Note gedcomXNote = (org.gedcomx.common.Note) gedcomXObject;
-
-		if ((gedcomXNote.getText() == null) || gedcomXNote.getText().isEmpty()) {
-			throw new MissingRequiredPropertyException(Note.class, gedcomXNote.getId(), NodeProperties.Generic.TEXT);
-		}
-	}
-
-	@Override
-	protected void validateUnderlyingNode() throws WrongNodeType {
-		if ((this.getText() == null) || this.getText().isEmpty()) {
-			throw new WrongNodeType();
+	protected void validateUnderlyingNode() throws MissingRequiredPropertyException {
+		if (ValidationTools.nullOrEmpty(this.getText())) {
+			throw new MissingRequiredPropertyException(Note.class, this.getId(), NodeProperties.Generic.TEXT);
 		}
 	}
 
