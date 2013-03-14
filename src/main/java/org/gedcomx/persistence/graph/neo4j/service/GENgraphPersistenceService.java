@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.gedcomx.common.URI;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
-import org.gedcomx.persistence.graph.neo4j.model.GENgraphNode;
+import org.gedcomx.persistence.graph.neo4j.model.NodeWrapper;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeTypes;
 import org.neo4j.graphdb.Node;
@@ -27,13 +27,13 @@ public interface GENgraphPersistenceService {
 
 	public Node[] getGraph();
 
-	public GENgraphNode getNodeByGedcomXId(String id);
+	public NodeWrapper getNodeByGedcomXId(String id);
 
-	public GENgraphNode getNodeById(Long id);
+	public NodeWrapper getNodeById(Long id);
 
-	public GENgraphNode[] getNodesByFilters(Map<NodeProperties, Object> filters);
+	public NodeWrapper[] getNodesByFilters(Map<NodeProperties, Object> filters);
 
-	public GENgraphNode[] getNodesByType(NodeTypes type);
+	public NodeWrapper[] getNodesByType(NodeTypes type);
 
 	public Node[] searchAlivePeopleWithoutChildren();
 

@@ -2,10 +2,6 @@ package org.gedcomx.persistence.graph.neo4j.dao;
 
 import java.util.Map;
 
-import org.gedcomx.persistence.graph.neo4j.utils.IndexNodeNames;
-import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
-import org.gedcomx.persistence.graph.neo4j.utils.RelTypes;
-import org.gedcomx.persistence.graph.neo4j.utils.RelationshipProperties;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -19,9 +15,9 @@ public interface GENgraphDAO {
 
 	Node createNode();
 
-	Relationship createRelationship(Node node, RelTypes relType, Node secondNode);
+	Relationship createRelationship(Node node, GENgraphRelTypes relType, Node secondNode);
 
-	Relationship createRelationship(Node node, RelTypes relType, Node secondNode, Map<RelationshipProperties, ?> properties);
+	Relationship createRelationship(Node node, GENgraphRelTypes relType, Node secondNode, Map<String, ?> properties);
 
 	void delete(Node node);
 
@@ -31,38 +27,38 @@ public interface GENgraphDAO {
 
 	Node getNode(Long id);
 
-	Object getNodeProperty(Node node, NodeProperties property);
+	Object getNodeProperty(Node node, String property);
 
-	Iterable<Node> getNodesByRelationship(Node node, RelTypes relation, Direction dir, boolean ordered, RelationshipProperties index);
+	Iterable<Node> getNodesByRelationship(Node node, GENgraphRelTypes relation, Direction dir, boolean ordered, String index);
 
 	Node getReferenceNode();
 
-	Object getRelationshipProperty(Relationship rel, RelationshipProperties property);
+	Object getRelationshipProperty(Relationship rel, String property);
 
 	Iterable<Relationship> getRelationships(Node node, Direction dir);
 
-	Iterable<Relationship> getRelationships(Node node, RelTypes relType, Direction dir);
+	Iterable<Relationship> getRelationships(Node node, GENgraphRelTypes relType, Direction dir);
 
-	Node getSingleNodeByRelationship(Node node, RelTypes relation, Direction dir);
+	Node getSingleNodeByRelationship(Node node, GENgraphRelTypes relation, Direction dir);
 
-	Relationship getSingleRelationship(Node node, RelTypes rel, Direction dir);
+	Relationship getSingleRelationship(Node node, GENgraphRelTypes rel, Direction dir);
 
-	boolean hasRelationship(Node node, RelTypes relType, Direction dir);
+	boolean hasRelationship(Node node, GENgraphRelTypes relType, Direction dir);
 
-	boolean hasSingleRelationship(Node node, RelTypes relType, Direction dir);
+	boolean hasSingleRelationship(Node node, GENgraphRelTypes relType, Direction dir);
 
-	void removeNodeFromIndex(IndexNodeNames indexName, Node node, NodeProperties property);
+	void removeNodeFromIndex(String indexName, Node node, String property);
 
-	void removeNodeProperty(Node node, NodeProperties property);
+	void removeNodeProperty(Node node, String property);
 
 	Node setNodeProperties(Node node, Map<String, ?> metadata);
 
-	Node setNodeProperty(Node node, NodeProperties property, Object value);
+	Node setNodeProperty(Node node, String property, Object value);
 
-	void setNodeToIndex(IndexNodeNames indexName, Node node, NodeProperties property, Object value);
+	void setNodeToIndex(String indexName, Node node, String property, Object value);
 
-	Relationship setRelationshipProperties(Relationship rel, Map<RelationshipProperties, ?> properties);
+	Relationship setRelationshipProperties(Relationship rel, Map<String, ?> properties);
 
-	Relationship setRelationshipProperty(Relationship rel, RelationshipProperties key, Object value);
+	Relationship setRelationshipProperty(Relationship rel, String key, Object value);
 
 }

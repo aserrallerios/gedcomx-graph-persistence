@@ -1,10 +1,9 @@
-package org.gedcomx.persistence.graph.neo4j.model.conclusion;
+package org.gedcomx.persistence.graph.neo4j.model;
 
 import org.gedcomx.common.URI;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredPropertyException;
 import org.gedcomx.persistence.graph.neo4j.model.GENgraph;
-import org.gedcomx.persistence.graph.neo4j.model.GENgraphTopLevelNode;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeTypes;
 

@@ -1,29 +1,28 @@
-package org.gedcomx.persistence.graph.neo4j.model.common;
+package org.gedcomx.persistence.graph.neo4j.model;
 
 import org.gedcomx.common.URI;
+import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
+import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredPropertyException;
 import org.gedcomx.persistence.graph.neo4j.exception.WrongNodeType;
-import org.gedcomx.persistence.graph.neo4j.model.GENgraphNode;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
-import org.gedcomx.persistence.graph.neo4j.utils.NodeTypes;
-import org.gedcomx.persistence.graph.neo4j.utils.RelTypes;
 import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
-import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 
-public class Identifier extends GENgraphNode {
+@NodeType("IDENTIFIER")
+public class Identifier extends NodeWrapper {
 
 	public Identifier(final Node node) throws WrongNodeType, MissingFieldException {
-		super(NodeTypes.IDENTIFIER, node);
+		super(node);
 	}
 
 	public Identifier(final org.gedcomx.conclusion.Identifier gedcomXIdentifier) throws MissingFieldException {
-		super(NodeTypes.IDENTIFIER, gedcomXIdentifier);
+		super(gedcomXIdentifier);
 	}
 
 	public Identifier(final URI value) throws MissingFieldException {
-		super(NodeTypes.IDENTIFIER, new Object[] { value });
+		super(new Object[] { value });
 	}
 
 	@Override
@@ -41,9 +40,8 @@ public class Identifier extends GENgraphNode {
 		return gedcomXIdentifier;
 	}
 
-	public GENgraphNode getParentNode() {
-		// TODO
-		return this.getNodeByRelationship(GENgraphNode.class, RelTypes.HAS_IDENTIFIER, Direction.INCOMING);
+	public NodeWrapper getParentNode() {
+		return super.getParentNode(GENgraphRelTypes.HAS_IDENTIFIER);
 	}
 
 	public URI getType() {

@@ -1,21 +1,16 @@
-package org.gedcomx.persistence.graph.neo4j.model.conclusion;
+package org.gedcomx.persistence.graph.neo4j.model;
 
 import java.util.LinkedList;
 import java.util.List;
 
 import org.gedcomx.common.ResourceReference;
 import org.gedcomx.common.URI;
+import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredRelationshipException;
-import org.gedcomx.persistence.graph.neo4j.model.GENgraph;
-import org.gedcomx.persistence.graph.neo4j.model.GENgraphTopLevelNode;
-import org.gedcomx.persistence.graph.neo4j.model.common.Identifier;
-import org.gedcomx.persistence.graph.neo4j.model.common.TextValue;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
-import org.gedcomx.persistence.graph.neo4j.utils.NodeTypes;
-import org.gedcomx.persistence.graph.neo4j.utils.RelTypes;
 
-public class PlaceDescription extends ConclusionSubnode implements GENgraphTopLevelNode {
+public class PlaceDescription extends Conclusion {
 
 	private final List<TextValue> names = new LinkedList<>();
 	private final List<Identifier> identifiers = new LinkedList<>();
@@ -27,12 +22,12 @@ public class PlaceDescription extends ConclusionSubnode implements GENgraphTopLe
 
 	public void addIdentifier(final Identifier identifier) {
 		this.identifiers.add(identifier);
-		this.createRelationship(RelTypes.HAS_IDENTIFIER, identifier);
+		this.createRelationship(GENgraphRelTypes.HAS_IDENTIFIER, identifier);
 	}
 
 	public void addName(final TextValue name) {
 		this.names.add(name);
-		this.createRelationship(RelTypes.HAS_NAME, name);
+		this.createRelationship(GENgraphRelTypes.HAS_NAME, name);
 	}
 
 	@Override
@@ -40,7 +35,7 @@ public class PlaceDescription extends ConclusionSubnode implements GENgraphTopLe
 		final org.gedcomx.conclusion.PlaceDescription gedcomXPlaceDescription = (org.gedcomx.conclusion.PlaceDescription) gedcomXObject;
 
 		if ((gedcomXPlaceDescription.getNames() == null) || gedcomXPlaceDescription.getNames().isEmpty()) {
-			throw new MissingRequiredRelationshipException(PlaceDescription.class, gedcomXPlaceDescription.getId(), RelTypes.HAS_NAME);
+			throw new MissingRequiredRelationshipException(PlaceDescription.class, gedcomXPlaceDescription.getId(), GENgraphRelTypes.HAS_NAME);
 		}
 	}
 
@@ -105,16 +100,6 @@ public class PlaceDescription extends ConclusionSubnode implements GENgraphTopLe
 
 	}
 
-	public void setLatitude(final Double latitude) {
-		this.setProperty(NodeProperties.Conclusion.LATITUDE, latitude);
-
-	}
-
-	public void setLongitude(final Double longitude) {
-		this.setProperty(NodeProperties.Conclusion.LONGITUDE, longitude);
-
-	}
-
 	@Override
 	protected void setGedcomXRelations(final Object gedcomXObject) throws MissingFieldException {
 		final org.gedcomx.conclusion.PlaceDescription gedcomXPlaceDescription = (org.gedcomx.conclusion.PlaceDescription) gedcomXObject;
@@ -125,6 +110,16 @@ public class PlaceDescription extends ConclusionSubnode implements GENgraphTopLe
 		for (final org.gedcomx.conclusion.Identifier gedcomXIdentifier : gedcomXPlaceDescription.getIdentifiers()) {
 			this.addIdentifier(new Identifier(this.getGraph(), gedcomXIdentifier));
 		}
+	}
+
+	public void setLatitude(final Double latitude) {
+		this.setProperty(NodeProperties.Conclusion.LATITUDE, latitude);
+
+	}
+
+	public void setLongitude(final Double longitude) {
+		this.setProperty(NodeProperties.Conclusion.LONGITUDE, longitude);
+
 	}
 
 	public void setSpatialDescription(final ResourceReference spatialDescription) {

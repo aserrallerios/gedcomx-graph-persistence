@@ -1,4 +1,4 @@
-package org.gedcomx.persistence.graph.neo4j.model.conclusion;
+package org.gedcomx.persistence.graph.neo4j.model;
 
 import java.util.List;
 
@@ -7,11 +7,10 @@ import org.gedcomx.common.URI;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredPropertyException;
 import org.gedcomx.persistence.graph.neo4j.model.GENgraph;
-import org.gedcomx.persistence.graph.neo4j.model.GENgraphNode;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeTypes;
 
-public class NamePart extends GENgraphNode {
+public class NamePart extends NodeWrapper {
 
 	protected NamePart(final GENgraph graph, final org.gedcomx.conclusion.NamePart gedcomXNamePart) throws MissingFieldException {
 		super(NodeTypes.NAME_PART, gedcomXNamePart);

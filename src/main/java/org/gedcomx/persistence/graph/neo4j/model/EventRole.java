@@ -1,12 +1,12 @@
-package org.gedcomx.persistence.graph.neo4j.model.conclusion;
+package org.gedcomx.persistence.graph.neo4j.model;
 
 import org.gedcomx.common.URI;
+import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredRelationshipException;
 import org.gedcomx.persistence.graph.neo4j.model.GENgraph;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeTypes;
-import org.gedcomx.persistence.graph.neo4j.utils.RelTypes;
 
 public class EventRole extends ConclusionSubnode {
 
@@ -22,7 +22,7 @@ public class EventRole extends ConclusionSubnode {
 		final org.gedcomx.conclusion.EventRole gedcomXEventRole = (org.gedcomx.conclusion.EventRole) gedcomXObject;
 
 		if (gedcomXEventRole.getPerson() == null) {
-			throw new MissingRequiredRelationshipException(EventRole.class, gedcomXEventRole.getId(), RelTypes.PERSON);
+			throw new MissingRequiredRelationshipException(EventRole.class, gedcomXEventRole.getId(), GENgraphRelTypes.PERSON);
 		}
 	}
 
@@ -63,7 +63,7 @@ public class EventRole extends ConclusionSubnode {
 
 	public void setPerson(final Person person) {
 		this.person = person;
-		this.createRelationship(RelTypes.PERSON, person);
+		this.createRelationship(GENgraphRelTypes.PERSON, person);
 	}
 
 	@Override

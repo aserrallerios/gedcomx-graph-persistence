@@ -1,41 +1,41 @@
-package org.gedcomx.persistence.graph.neo4j.model.source;
+package org.gedcomx.persistence.graph.neo4j.model;
 
 import java.util.List;
 
 import org.gedcomx.common.ResourceReference;
 import org.gedcomx.common.URI;
+import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
+import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredPropertyException;
 import org.gedcomx.persistence.graph.neo4j.exception.WrongNodeType;
-import org.gedcomx.persistence.graph.neo4j.model.GENgraphNode;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
-import org.gedcomx.persistence.graph.neo4j.utils.NodeTypes;
-import org.gedcomx.persistence.graph.neo4j.utils.RelTypes;
 import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 
-public class SourceCitation extends GENgraphNode {
+@NodeType("SOURCE_CITATION")
+public class SourceCitation extends NodeWrapper {
 
 	protected SourceCitation(final Node node) throws WrongNodeType, MissingFieldException {
-		super(NodeTypes.SOURCE_CITATION, node);
+		super(node);
 	}
 
 	protected SourceCitation(final org.gedcomx.source.SourceCitation gedcomXSourceCitation) throws MissingFieldException {
-		super(NodeTypes.SOURCE_CITATION, gedcomXSourceCitation);
+		super(gedcomXSourceCitation);
 	}
 
 	public SourceCitation(final String value) throws MissingFieldException {
-		super(NodeTypes.SOURCE_CITATION, new Object[] { value });
+		super(new Object[] { value });
 	}
 
 	public void addField(final CitationField citationField) {
-		this.addRelationship(RelTypes.HAS_CITATION_FIELD, citationField);
+		this.addRelationship(GENgraphRelTypes.HAS_CITATION_FIELD, citationField);
 	}
 
 	@Override
 	protected void deleteAllReferences() {
-		this.deleteReferencedNodes(CitationField.class, RelTypes.HAS_CITATION_FIELD);
+		this.deleteReferencedNodes(CitationField.class, GENgraphRelTypes.HAS_CITATION_FIELD);
 	}
 
 	public ResourceReference getCitationTemplate() {
@@ -43,11 +43,11 @@ public class SourceCitation extends GENgraphNode {
 	}
 
 	public SourceDescription getDescription() {
-		return this.getNodeByRelationship(SourceDescription.class, RelTypes.HAS_CITATION, Direction.INCOMING);
+		return this.getNodeByRelationship(SourceDescription.class, GENgraphRelTypes.HAS_CITATION, Direction.INCOMING);
 	}
 
 	public List<CitationField> getFields() {
-		return this.getNodesByRelationship(CitationField.class, RelTypes.HAS_CITATION_FIELD);
+		return this.getNodesByRelationship(CitationField.class, GENgraphRelTypes.HAS_CITATION_FIELD);
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-package org.gedcomx.persistence.graph.neo4j.model.conclusion;
+package org.gedcomx.persistence.graph.neo4j.model;
 
 import org.gedcomx.common.URI;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;

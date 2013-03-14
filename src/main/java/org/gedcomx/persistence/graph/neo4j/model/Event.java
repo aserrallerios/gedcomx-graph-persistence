@@ -1,15 +1,14 @@
-package org.gedcomx.persistence.graph.neo4j.model.conclusion;
+package org.gedcomx.persistence.graph.neo4j.model;
 
 import java.util.LinkedList;
 import java.util.List;
 
 import org.gedcomx.common.URI;
+import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.model.GENgraph;
-import org.gedcomx.persistence.graph.neo4j.model.GENgraphTopLevelNode;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeTypes;
-import org.gedcomx.persistence.graph.neo4j.utils.RelTypes;
 
 public class Event extends ConclusionSubnode implements GENgraphTopLevelNode {
 
@@ -22,7 +21,7 @@ public class Event extends ConclusionSubnode implements GENgraphTopLevelNode {
 
 	public void addRole(final EventRole role) {
 		this.roles.add(role);
-		this.createRelationship(RelTypes.HAS_ROLE, role);
+		this.createRelationship(GENgraphRelTypes.HAS_ROLE, role);
 	}
 
 	public String getDateFormal() {
@@ -68,7 +67,7 @@ public class Event extends ConclusionSubnode implements GENgraphTopLevelNode {
 
 	public void setPlaceReference(final PlaceReference placeReference) {
 		this.placeReference = placeReference;
-		this.createRelationship(RelTypes.PLACE, placeReference);
+		this.createRelationship(GENgraphRelTypes.PLACE, placeReference);
 	}
 
 	@Override

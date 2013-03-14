@@ -7,10 +7,6 @@ import java.util.Map.Entry;
 
 import org.gedcomx.persistence.graph.neo4j.exception.InitializedDataBase;
 import org.gedcomx.persistence.graph.neo4j.exception.UninitializedDataBase;
-import org.gedcomx.persistence.graph.neo4j.utils.IndexNodeNames;
-import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
-import org.gedcomx.persistence.graph.neo4j.utils.RelTypes;
-import org.gedcomx.persistence.graph.neo4j.utils.RelationshipProperties;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
@@ -75,7 +71,7 @@ public class GENgraphDAOImpl implements GENgraphDAO {
 	}
 
 	@Override
-	public Relationship createRelationship(final Node node, final RelTypes reltype, final Node secondNode) {
+	public Relationship createRelationship(final Node node, final GENgraphRelTypes reltype, final Node secondNode) {
 		final Transaction tx = node.getGraphDatabase().beginTx();
 		Relationship rel = null;
 		try {
@@ -88,8 +84,8 @@ public class GENgraphDAOImpl implements GENgraphDAO {
 	}
 
 	@Override
-	public Relationship createRelationship(final Node node, final RelTypes reltype, final Node secondNode,
-			final Map<RelationshipProperties, ?> properties) {
+	public Relationship createRelationship(final Node node, final GENgraphRelTypes reltype, final Node secondNode,
+			final Map<String, ?> properties) {
 		final Transaction tx = node.getGraphDatabase().beginTx();
 		Relationship rel = null;
 		try {
@@ -136,20 +132,20 @@ public class GENgraphDAOImpl implements GENgraphDAO {
 	}
 
 	@Override
-	public Object getNodeProperty(final Node node, final NodeProperties property) {
-		return node.getProperty(property.name());
+	public Object getNodeProperty(final Node node, final String property) {
+		return node.getProperty(property);
 	}
 
 	@Override
-	public Iterable<Node> getNodesByRelationship(final Node node, final RelTypes relation, final Direction dir, final boolean ordered,
-			final RelationshipProperties index) {
+	public Iterable<Node> getNodesByRelationship(final Node node, final GENgraphRelTypes relation, final Direction dir,
+			final boolean ordered, final String index) {
 		final Iterable<Relationship> rels = node.getRelationships(relation, dir);
 
 		if (ordered) {
 			final List<Relationship> sortedRels = new ArrayList<>();
 			int i;
 			for (final Relationship rel : rels) {
-				i = (Integer) rel.getProperty(index.name());
+				i = (Integer) rel.getProperty(index);
 				sortedRels.add(i, rel);
 			}
 			final List<Node> nodes = new ArrayList<>();
@@ -172,8 +168,8 @@ public class GENgraphDAOImpl implements GENgraphDAO {
 	}
 
 	@Override
-	public Object getRelationshipProperty(final Relationship rel, final RelationshipProperties property) {
-		return rel.getProperty(property.name());
+	public Object getRelationshipProperty(final Relationship rel, final String property) {
+		return rel.getProperty(property);
 	}
 
 	@Override
@@ -182,30 +178,30 @@ public class GENgraphDAOImpl implements GENgraphDAO {
 	}
 
 	@Override
-	public Iterable<Relationship> getRelationships(final Node node, final RelTypes relType, final Direction dir) {
+	public Iterable<Relationship> getRelationships(final Node node, final GENgraphRelTypes relType, final Direction dir) {
 		return node.getRelationships(relType, dir);
 	}
 
 	@Override
-	public Node getSingleNodeByRelationship(final Node node, final RelTypes relation, final Direction dir) {
+	public Node getSingleNodeByRelationship(final Node node, final GENgraphRelTypes relation, final Direction dir) {
 		final Relationship rel = node.getSingleRelationship(relation, dir);
 		return rel.getOtherNode(node);
 	}
 
 	@Override
-	public Relationship getSingleRelationship(final Node node, final RelTypes rel, final Direction dir) {
+	public Relationship getSingleRelationship(final Node node, final GENgraphRelTypes rel, final Direction dir) {
 		return node.getSingleRelationship(rel, dir);
 	}
 
 	@Override
-	public boolean hasRelationship(final Node node, final RelTypes relType, final Direction dir) {
+	public boolean hasRelationship(final Node node, final GENgraphRelTypes relType, final Direction dir) {
 		final Iterable<Relationship> rels = node.getRelationships(relType, dir);
 
 		return rels.iterator().hasNext();
 	}
 
 	@Override
-	public boolean hasSingleRelationship(final Node node, final RelTypes relType, final Direction dir) {
+	public boolean hasSingleRelationship(final Node node, final GENgraphRelTypes relType, final Direction dir) {
 		final Relationship rel = node.getSingleRelationship(relType, dir);
 		return rel == null ? false : true;
 	}
@@ -220,16 +216,16 @@ public class GENgraphDAOImpl implements GENgraphDAO {
 	}
 
 	@Override
-	public void removeNodeFromIndex(final IndexNodeNames indexName, final Node node, final NodeProperties property) {
-		final Index<Node> index = this.graphDb.index().forNodes(indexName.name());
-		index.remove(node, property.name());
+	public void removeNodeFromIndex(final String indexName, final Node node, final String property) {
+		final Index<Node> index = this.graphDb.index().forNodes(indexName);
+		index.remove(node, property);
 	}
 
 	@Override
-	public void removeNodeProperty(final Node node, final NodeProperties property) {
+	public void removeNodeProperty(final Node node, final String property) {
 		final Transaction tx = node.getGraphDatabase().beginTx();
 		try {
-			node.removeProperty(property.name());
+			node.removeProperty(property);
 			tx.success();
 		} finally {
 			tx.finish();
@@ -251,10 +247,10 @@ public class GENgraphDAOImpl implements GENgraphDAO {
 	}
 
 	@Override
-	public Node setNodeProperty(final Node node, final NodeProperties property, final Object value) {
+	public Node setNodeProperty(final Node node, final String property, final Object value) {
 		final Transaction tx = node.getGraphDatabase().beginTx();
 		try {
-			node.setProperty(property.name(), value);
+			node.setProperty(property, value);
 			tx.success();
 		} finally {
 			tx.finish();
@@ -263,17 +259,17 @@ public class GENgraphDAOImpl implements GENgraphDAO {
 	}
 
 	@Override
-	public void setNodeToIndex(final IndexNodeNames indexName, final Node node, final NodeProperties property, final Object value) {
-		final Index<Node> index = this.graphDb.index().forNodes(indexName.name());
-		index.add(node, property.name(), value);
+	public void setNodeToIndex(final String indexName, final Node node, final String property, final Object value) {
+		final Index<Node> index = this.graphDb.index().forNodes(indexName);
+		index.add(node, property, value);
 	}
 
 	@Override
-	public Relationship setRelationshipProperties(final Relationship rel, final Map<RelationshipProperties, ?> properties) {
+	public Relationship setRelationshipProperties(final Relationship rel, final Map<String, ?> properties) {
 		final Transaction tx = rel.getGraphDatabase().beginTx();
 		try {
-			for (final Entry<RelationshipProperties, ?> property : properties.entrySet()) {
-				rel.setProperty(property.getKey().name(), property.getValue());
+			for (final Entry<String, ?> property : properties.entrySet()) {
+				rel.setProperty(property.getKey(), property.getValue());
 			}
 			tx.success();
 		} finally {
@@ -283,11 +279,10 @@ public class GENgraphDAOImpl implements GENgraphDAO {
 	}
 
 	@Override
-	public Relationship setRelationshipProperty(final Relationship rel, final RelationshipProperties propertyName,
-			final Object propertyValue) {
+	public Relationship setRelationshipProperty(final Relationship rel, final String propertyName, final Object propertyValue) {
 		final Transaction tx = rel.getGraphDatabase().beginTx();
 		try {
-			rel.setProperty(propertyName.name(), propertyValue);
+			rel.setProperty(propertyName, propertyValue);
 			tx.success();
 		} finally {
 			tx.finish();

@@ -5,10 +5,10 @@ import java.util.Map;
 import org.gedcomx.common.URI;
 import org.gedcomx.persistence.graph.neo4j.dao.GENgraphDAO;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
-import org.gedcomx.persistence.graph.neo4j.model.GENgraphNode;
-import org.gedcomx.persistence.graph.neo4j.model.conclusion.Conclusion;
-import org.gedcomx.persistence.graph.neo4j.model.contributor.Agent;
-import org.gedcomx.persistence.graph.neo4j.model.source.SourceDescription;
+import org.gedcomx.persistence.graph.neo4j.model.Agent;
+import org.gedcomx.persistence.graph.neo4j.model.Conclusion;
+import org.gedcomx.persistence.graph.neo4j.model.NodeWrapper;
+import org.gedcomx.persistence.graph.neo4j.model.SourceDescription;
 import org.gedcomx.persistence.graph.neo4j.service.GENgraphPersistenceService;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeTypes;
@@ -86,22 +86,22 @@ public class GENgraphPersistenceServiceImpl implements GENgraphPersistenceServic
 	}
 
 	@Override
-	public GENgraphNode getNodeByGedcomXId(final String id) {
+	public NodeWrapper getNodeByGedcomXId(final String id) {
 		return null;
 	}
 
 	@Override
-	public GENgraphNode getNodeById(final Long id) {
+	public NodeWrapper getNodeById(final Long id) {
 		return null;
 	}
 
 	@Override
-	public GENgraphNode[] getNodesByFilters(final Map<NodeProperties, Object> filters) {
+	public NodeWrapper[] getNodesByFilters(final Map<NodeProperties, Object> filters) {
 		return null;
 	}
 
 	@Override
-	public GENgraphNode[] getNodesByType(final NodeTypes type) {
+	public NodeWrapper[] getNodesByType(final NodeTypes type) {
 		return null;
 	}
 

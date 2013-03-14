@@ -1,28 +1,27 @@
-package org.gedcomx.persistence.graph.neo4j.model.common;
+package org.gedcomx.persistence.graph.neo4j.model;
 
+import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
+import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredPropertyException;
 import org.gedcomx.persistence.graph.neo4j.exception.WrongNodeType;
-import org.gedcomx.persistence.graph.neo4j.model.GENgraphNode;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
-import org.gedcomx.persistence.graph.neo4j.utils.NodeTypes;
-import org.gedcomx.persistence.graph.neo4j.utils.RelTypes;
 import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
-import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 
-public class TextValue extends GENgraphNode {
+@NodeType("TEXT_VALUE")
+public class TextValue extends NodeWrapper {
 
 	public TextValue(final Node node) throws WrongNodeType, MissingFieldException {
-		super(NodeTypes.TEXT_VALUE, node);
+		super(node);
 	}
 
 	public TextValue(final org.gedcomx.common.TextValue gedcomXTextValue) throws MissingFieldException {
-		super(NodeTypes.TEXT_VALUE, gedcomXTextValue);
+		super(gedcomXTextValue);
 	}
 
 	public TextValue(final String value) throws MissingFieldException {
-		super(NodeTypes.TEXT_VALUE, new Object[] { value });
+		super(new Object[] { value });
 	}
 
 	@Override
@@ -44,9 +43,8 @@ public class TextValue extends GENgraphNode {
 		return (String) this.getProperty(NodeProperties.Generic.LANG);
 	}
 
-	public GENgraphNode getParentNode() {
-		// TODO
-		return this.getNodeByRelationship(GENgraphNode.class, RelTypes.HAS_NAME, Direction.INCOMING);
+	public NodeWrapper getParentNode() {
+		return super.getParentNode(GENgraphRelTypes.HAS_NAME);
 	}
 
 	public String getValue() {

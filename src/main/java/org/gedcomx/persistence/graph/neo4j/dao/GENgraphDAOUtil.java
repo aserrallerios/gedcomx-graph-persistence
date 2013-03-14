@@ -2,10 +2,6 @@ package org.gedcomx.persistence.graph.neo4j.dao;
 
 import java.util.Map;
 
-import org.gedcomx.persistence.graph.neo4j.utils.IndexNodeNames;
-import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
-import org.gedcomx.persistence.graph.neo4j.utils.RelTypes;
-import org.gedcomx.persistence.graph.neo4j.utils.RelationshipProperties;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -25,12 +21,12 @@ public class GENgraphDAOUtil {
 		return GENgraphDAOUtil.getDao().createNode();
 	}
 
-	public static Relationship createRelationship(final Node node, final RelTypes relType, final Node secondNode) {
+	public static Relationship createRelationship(final Node node, final GENgraphRelTypes relType, final Node secondNode) {
 		return GENgraphDAOUtil.getDao().createRelationship(node, relType, secondNode);
 	}
 
-	public static Relationship createRelationship(final Node node, final RelTypes relType, final Node secondNode,
-			final Map<RelationshipProperties, ?> properties) {
+	public static Relationship createRelationship(final Node node, final GENgraphRelTypes relType, final Node secondNode,
+			final Map<String, ?> properties) {
 		return GENgraphDAOUtil.getDao().createRelationship(node, relType, secondNode, properties);
 	}
 
@@ -55,12 +51,12 @@ public class GENgraphDAOUtil {
 		return GENgraphDAOUtil.getDao().getNode(id);
 	}
 
-	public static Object getNodeProperty(final Node node, final NodeProperties property) {
+	public static Object getNodeProperty(final Node node, final String property) {
 		return GENgraphDAOUtil.getDao().getNodeProperty(node, property);
 	}
 
-	public static Iterable<Node> getNodesByRelationship(final Node node, final RelTypes relation, final Direction dir,
-			final boolean ordered, final RelationshipProperties index) {
+	public static Iterable<Node> getNodesByRelationship(final Node node, final GENgraphRelTypes relation, final Direction dir,
+			final boolean ordered, final String index) {
 		return GENgraphDAOUtil.getDao().getNodesByRelationship(node, relation, dir, ordered, index);
 	}
 
@@ -68,7 +64,7 @@ public class GENgraphDAOUtil {
 		return GENgraphDAOUtil.getDao().getReferenceNode();
 	}
 
-	public static Object getRelationshipProperty(final Relationship rel, final RelationshipProperties property) {
+	public static Object getRelationshipProperty(final Relationship rel, final String property) {
 		return GENgraphDAOUtil.getDao().getRelationshipProperty(rel, property);
 	}
 
@@ -76,31 +72,31 @@ public class GENgraphDAOUtil {
 		return GENgraphDAOUtil.getDao().getRelationships(node, dir);
 	}
 
-	public static Iterable<Relationship> getRelationships(final Node node, final RelTypes relType, final Direction dir) {
+	public static Iterable<Relationship> getRelationships(final Node node, final GENgraphRelTypes relType, final Direction dir) {
 		return GENgraphDAOUtil.getDao().getRelationships(node, relType, dir);
 	}
 
-	public static Node getSingleNodeByRelationship(final Node node, final RelTypes relation, final Direction dir) {
+	public static Node getSingleNodeByRelationship(final Node node, final GENgraphRelTypes relation, final Direction dir) {
 		return GENgraphDAOUtil.getDao().getSingleNodeByRelationship(node, relation, dir);
 	}
 
-	public static Relationship getSingleRelationship(final Node node, final RelTypes rel, final Direction dir) {
+	public static Relationship getSingleRelationship(final Node node, final GENgraphRelTypes rel, final Direction dir) {
 		return GENgraphDAOUtil.getDao().getSingleRelationship(node, rel, dir);
 	}
 
-	public static boolean hasRelationship(final Node node, final RelTypes relType, final Direction dir) {
+	public static boolean hasRelationship(final Node node, final GENgraphRelTypes relType, final Direction dir) {
 		return GENgraphDAOUtil.getDao().hasRelationship(node, relType, dir);
 	}
 
-	public static boolean hasSingleRelationship(final Node node, final RelTypes relType, final Direction dir) {
+	public static boolean hasSingleRelationship(final Node node, final GENgraphRelTypes relType, final Direction dir) {
 		return GENgraphDAOUtil.getDao().hasSingleRelationship(node, relType, dir);
 	}
 
-	public static void removeNodeFromIndex(final IndexNodeNames indexName, final Node node, final NodeProperties property) {
+	public static void removeNodeFromIndex(final String indexName, final Node node, final String property) {
 		GENgraphDAOUtil.getDao().removeNodeFromIndex(indexName, node, property);
 	}
 
-	public static void removeNodeProperty(final Node node, final NodeProperties property) {
+	public static void removeNodeProperty(final Node node, final String property) {
 		GENgraphDAOUtil.getDao().removeNodeProperty(node, property);
 	}
 
@@ -108,19 +104,19 @@ public class GENgraphDAOUtil {
 		return GENgraphDAOUtil.getDao().setNodeProperties(node, metadata);
 	}
 
-	public static Node setNodeProperty(final Node node, final NodeProperties property, final Object value) {
+	public static Node setNodeProperty(final Node node, final String property, final Object value) {
 		return GENgraphDAOUtil.getDao().setNodeProperty(node, property, value);
 	}
 
-	public static void setNodeToIndex(final IndexNodeNames indexName, final Node node, final NodeProperties property, final Object value) {
+	public static void setNodeToIndex(final String indexName, final Node node, final String property, final Object value) {
 		GENgraphDAOUtil.getDao().setNodeToIndex(indexName, node, property, value);
 	}
 
-	public static Relationship setRelationshipProperties(final Relationship rel, final Map<RelationshipProperties, ?> properties) {
+	public static Relationship setRelationshipProperties(final Relationship rel, final Map<String, ?> properties) {
 		return GENgraphDAOUtil.getDao().setRelationshipProperties(rel, properties);
 	}
 
-	public static Relationship setRelationshipProperty(final Relationship rel, final RelationshipProperties key, final Object value) {
+	public static Relationship setRelationshipProperty(final Relationship rel, final String key, final Object value) {
 		return GENgraphDAOUtil.getDao().setRelationshipProperty(rel, key, value);
 	}
 

@@ -1,15 +1,15 @@
-package org.gedcomx.persistence.graph.neo4j.model.conclusion;
+package org.gedcomx.persistence.graph.neo4j.model;
 
 import java.util.LinkedList;
 import java.util.List;
 
 import org.gedcomx.common.URI;
+import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredRelationshipException;
 import org.gedcomx.persistence.graph.neo4j.model.GENgraph;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeTypes;
-import org.gedcomx.persistence.graph.neo4j.utils.RelTypes;
 
 public class Name extends ConclusionSubnode {
 
@@ -21,7 +21,7 @@ public class Name extends ConclusionSubnode {
 
 	public void addNameForms(final NameForm nameForms) {
 		this.nameForms.add(nameForms);
-		this.createRelationship(RelTypes.HAS_NAME_FORM, nameForms);
+		this.createRelationship(GENgraphRelTypes.HAS_NAME_FORM, nameForms);
 	}
 
 	@Override
@@ -29,7 +29,7 @@ public class Name extends ConclusionSubnode {
 		final org.gedcomx.conclusion.Name gedcomXName = (org.gedcomx.conclusion.Name) gedcomXObject;
 
 		if ((gedcomXName.getNameForms() == null) || gedcomXName.getNameForms().isEmpty()) {
-			throw new MissingRequiredRelationshipException(Name.class, gedcomXName.getId(), RelTypes.HAS_NAME_FORM);
+			throw new MissingRequiredRelationshipException(Name.class, gedcomXName.getId(), GENgraphRelTypes.HAS_NAME_FORM);
 		}
 	}
 

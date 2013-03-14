@@ -1,29 +1,29 @@
-package org.gedcomx.persistence.graph.neo4j.model.source;
+package org.gedcomx.persistence.graph.neo4j.model;
 
 import org.gedcomx.common.URI;
+import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
+import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredPropertyException;
 import org.gedcomx.persistence.graph.neo4j.exception.WrongNodeType;
-import org.gedcomx.persistence.graph.neo4j.model.GENgraphNode;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
-import org.gedcomx.persistence.graph.neo4j.utils.NodeTypes;
-import org.gedcomx.persistence.graph.neo4j.utils.RelTypes;
 import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 
-public class CitationField extends GENgraphNode {
+@NodeType("CITATION_FIELD")
+public class CitationField extends NodeWrapper {
 
 	protected CitationField(final Node node) throws MissingFieldException, WrongNodeType {
-		super(NodeTypes.CITATION_FIELD, node);
+		super(node);
 	}
 
-	protected CitationField(final org.gedcomx.source.CitationField gedcomXCitationField) throws MissingFieldException {
-		super(NodeTypes.CITATION_FIELD, gedcomXCitationField);
+	public CitationField(final org.gedcomx.source.CitationField gedcomXCitationField) throws MissingFieldException {
+		super(gedcomXCitationField);
 	}
 
-	protected CitationField(final URI name, final String value) throws MissingFieldException {
-		super(NodeTypes.CITATION_FIELD, name, value);
+	public CitationField(final URI name, final String value) throws MissingFieldException {
+		super(name, value);
 	}
 
 	@Override
@@ -32,7 +32,7 @@ public class CitationField extends GENgraphNode {
 	}
 
 	public SourceCitation getCitation() {
-		return this.getNodeByRelationship(SourceCitation.class, RelTypes.HAS_CITATION_FIELD, Direction.INCOMING);
+		return this.getNodeByRelationship(SourceCitation.class, GENgraphRelTypes.HAS_CITATION_FIELD, Direction.INCOMING);
 	}
 
 	@Override

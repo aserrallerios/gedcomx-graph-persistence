@@ -1,37 +1,36 @@
-package org.gedcomx.persistence.graph.neo4j.model.common;
+package org.gedcomx.persistence.graph.neo4j.model;
 
+import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
+import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredPropertyException;
 import org.gedcomx.persistence.graph.neo4j.exception.WrongNodeType;
-import org.gedcomx.persistence.graph.neo4j.model.GENgraphNode;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
-import org.gedcomx.persistence.graph.neo4j.utils.NodeTypes;
-import org.gedcomx.persistence.graph.neo4j.utils.RelTypes;
 import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
-import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 
-public class Note extends GENgraphNode {
+@NodeType("NOTE")
+public class Note extends NodeWrapper {
 
 	protected Note(final Node node) throws WrongNodeType, MissingFieldException {
-		super(NodeTypes.NOTE, node);
+		super(node);
 	}
 
 	public Note(final org.gedcomx.common.Note gedcomXNote) throws MissingFieldException {
-		super(NodeTypes.NOTE, gedcomXNote);
+		super(gedcomXNote);
 	}
 
 	public Note(final String text) throws MissingFieldException {
-		super(NodeTypes.NOTE, new Object[] { text });
+		super(new Object[] { text });
 	}
 
 	@Override
 	protected void deleteAllReferences() {
-		this.deleteReferencedNode(Attribution.class, RelTypes.ATTRIBUTION);
+		this.deleteReferencedNode(Attribution.class, GENgraphRelTypes.ATTRIBUTION);
 	}
 
 	public Attribution getAttribution() {
-		return this.getNodeByRelationship(Attribution.class, RelTypes.ATTRIBUTION);
+		return this.getNodeByRelationship(Attribution.class, GENgraphRelTypes.ATTRIBUTION);
 	}
 
 	@Override
@@ -54,9 +53,8 @@ public class Note extends GENgraphNode {
 		return (String) this.getProperty(NodeProperties.Generic.LANG);
 	}
 
-	public GENgraphNode getParentNode() {
-		// TODO
-		return this.getNodeByRelationship(GENgraphNode.class, RelTypes.HAS_NOTE, Direction.INCOMING);
+	public NodeWrapper getParentNode() {
+		return super.getParentNode(GENgraphRelTypes.HAS_NOTE);
 	}
 
 	public String getSubject() {
@@ -73,7 +71,7 @@ public class Note extends GENgraphNode {
 	}
 
 	public void setAttribution(final Attribution attribution) {
-		this.createRelationship(RelTypes.ATTRIBUTION, attribution);
+		this.createRelationship(GENgraphRelTypes.ATTRIBUTION, attribution);
 	}
 
 	@Override

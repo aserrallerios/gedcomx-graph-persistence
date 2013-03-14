@@ -1,33 +1,33 @@
-package org.gedcomx.persistence.graph.neo4j.model.common;
+package org.gedcomx.persistence.graph.neo4j.model;
 
 import java.util.Date;
 
+import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
+import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.WrongNodeType;
-import org.gedcomx.persistence.graph.neo4j.model.GENgraphNode;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
-import org.gedcomx.persistence.graph.neo4j.utils.NodeTypes;
-import org.gedcomx.persistence.graph.neo4j.utils.RelTypes;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 
-public class Attribution extends GENgraphNode {
+@NodeType("ATTRIBUTION")
+public class Attribution extends NodeWrapper {
 
-	protected Attribution() throws MissingFieldException {
-		super(NodeTypes.ATTRIBUTION);
+	public Attribution() throws MissingFieldException {
+		super();
 	}
 
 	protected Attribution(final Node node) throws WrongNodeType, MissingFieldException {
-		super(NodeTypes.ATTRIBUTION, node);
+		super(node);
 	}
 
 	public Attribution(final org.gedcomx.common.Attribution gedcomXAttribution) throws MissingFieldException {
-		super(NodeTypes.ATTRIBUTION, gedcomXAttribution);
+		super(gedcomXAttribution);
 	}
 
 	@Override
 	protected void deleteAllReferences() {
-		this.deleteReference(RelTypes.CONTRIBUTOR);
+		this.deleteReference(GENgraphRelTypes.CONTRIBUTOR);
 	}
 
 	public String getChangeMessage() {
@@ -50,9 +50,9 @@ public class Attribution extends GENgraphNode {
 		return new Date((Long) this.getProperty(NodeProperties.Generic.MODIFIED));
 	}
 
-	public GENgraphNode getParentNode() {
+	public NodeWrapper getParentNode() {
 		// TODO
-		return this.getNodeByRelationship(GENgraphNode.class, RelTypes.HAS_NAME, Direction.INCOMING);
+		return this.getNodeByRelationship(NodeWrapper.class, GENgraphRelTypes.ATTRIBUTION, Direction.INCOMING);
 	}
 
 	@Override

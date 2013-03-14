@@ -1,60 +1,57 @@
-package org.gedcomx.persistence.graph.neo4j.model.contributor;
+package org.gedcomx.persistence.graph.neo4j.model;
 
 import java.util.List;
 
 import org.gedcomx.common.ResourceReference;
 import org.gedcomx.common.URI;
+import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
+import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.WrongNodeType;
-import org.gedcomx.persistence.graph.neo4j.model.GENgraphNode;
-import org.gedcomx.persistence.graph.neo4j.model.GENgraphTopLevelNode;
-import org.gedcomx.persistence.graph.neo4j.model.common.Identifier;
-import org.gedcomx.persistence.graph.neo4j.model.common.TextValue;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
-import org.gedcomx.persistence.graph.neo4j.utils.NodeTypes;
-import org.gedcomx.persistence.graph.neo4j.utils.RelTypes;
 import org.neo4j.graphdb.Node;
 
-public class Agent extends GENgraphNode implements GENgraphTopLevelNode {
+@NodeType("AGENT")
+public class Agent extends NodeWrapper {
 
 	public Agent() throws MissingFieldException {
-		super(NodeTypes.AGENT);
+		super();
 	}
 
-	public Agent(final Node node) throws WrongNodeType, MissingFieldException {
-		super(NodeTypes.AGENT, node);
+	protected Agent(final Node node) throws WrongNodeType, MissingFieldException {
+		super(node);
 	}
 
 	public Agent(final org.gedcomx.agent.Agent gedcomXAgent) throws MissingFieldException {
-		super(NodeTypes.AGENT, gedcomXAgent);
+		super(gedcomXAgent);
 	}
 
 	public void addAddress(final Address address) {
-		this.addRelationship(RelTypes.HAS_ADDRESS, address);
+		this.addRelationship(GENgraphRelTypes.HAS_ADDRESS, address);
 	}
 
 	public void addIdentifier(final Identifier identifier) {
-		this.addRelationship(RelTypes.HAS_IDENTIFIER, identifier);
+		this.addRelationship(GENgraphRelTypes.HAS_IDENTIFIER, identifier);
 	}
 
 	public void addName(final TextValue name) {
-		this.addRelationship(RelTypes.HAS_NAME, name);
+		this.addRelationship(GENgraphRelTypes.HAS_NAME, name);
 	}
 
 	public void addOnlineAccount(final OnlineAccount onlineAccount) {
-		this.addRelationship(RelTypes.HAS_ACCOUNT, onlineAccount);
+		this.addRelationship(GENgraphRelTypes.HAS_ACCOUNT, onlineAccount);
 	}
 
 	@Override
 	public void deleteAllReferences() {
-		this.deleteReferencedNodes(Address.class, RelTypes.HAS_ADDRESS);
-		this.deleteReferencedNodes(OnlineAccount.class, RelTypes.HAS_ACCOUNT);
-		this.deleteReferencedNodes(Identifier.class, RelTypes.HAS_IDENTIFIER);
-		this.deleteReferencedNodes(TextValue.class, RelTypes.HAS_NAME);
+		this.deleteReferencedNodes(Address.class, GENgraphRelTypes.HAS_ADDRESS);
+		this.deleteReferencedNodes(OnlineAccount.class, GENgraphRelTypes.HAS_ACCOUNT);
+		this.deleteReferencedNodes(Identifier.class, GENgraphRelTypes.HAS_IDENTIFIER);
+		this.deleteReferencedNodes(TextValue.class, GENgraphRelTypes.HAS_NAME);
 	}
 
 	public List<Address> getAddresses() {
-		return this.getNodesByRelationship(Address.class, RelTypes.HAS_ADDRESS);
+		return this.getNodesByRelationship(Address.class, GENgraphRelTypes.HAS_ADDRESS);
 	}
 
 	public List<ResourceReference> getEmails() {
@@ -89,15 +86,15 @@ public class Agent extends GENgraphNode implements GENgraphTopLevelNode {
 	}
 
 	public List<Identifier> getIdentifiers() {
-		return this.getNodesByRelationship(Identifier.class, RelTypes.HAS_IDENTIFIER);
+		return this.getNodesByRelationship(Identifier.class, GENgraphRelTypes.HAS_IDENTIFIER);
 	}
 
 	public List<TextValue> getNames() {
-		return this.getNodesByRelationship(TextValue.class, RelTypes.HAS_NAME);
+		return this.getNodesByRelationship(TextValue.class, GENgraphRelTypes.HAS_NAME);
 	}
 
 	public List<OnlineAccount> getOnlineAccounts() {
-		return this.getNodesByRelationship(OnlineAccount.class, RelTypes.HAS_ACCOUNT);
+		return this.getNodesByRelationship(OnlineAccount.class, GENgraphRelTypes.HAS_ACCOUNT);
 	}
 
 	public ResourceReference getOpenid() {

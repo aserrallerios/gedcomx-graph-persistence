@@ -1,26 +1,26 @@
-package org.gedcomx.persistence.graph.neo4j.model.contributor;
+package org.gedcomx.persistence.graph.neo4j.model;
 
+import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
+import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.WrongNodeType;
-import org.gedcomx.persistence.graph.neo4j.model.GENgraphNode;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
-import org.gedcomx.persistence.graph.neo4j.utils.NodeTypes;
-import org.gedcomx.persistence.graph.neo4j.utils.RelTypes;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 
-public class Address extends GENgraphNode {
+@NodeType("ADDRESS")
+public class Address extends NodeWrapper {
 
 	public Address() throws MissingFieldException {
-		super(NodeTypes.ADDRESS);
+		super();
 	}
 
-	public Address(final Node node) throws WrongNodeType, MissingFieldException {
-		super(NodeTypes.ADDRESS, node);
+	protected Address(final Node node) throws WrongNodeType, MissingFieldException {
+		super(node);
 	}
 
-	protected Address(final org.gedcomx.agent.Address gedcomXAddress) throws MissingFieldException {
-		super(NodeTypes.ADDRESS, gedcomXAddress);
+	public Address(final org.gedcomx.agent.Address gedcomXAddress) throws MissingFieldException {
+		super(gedcomXAddress);
 	}
 
 	@Override
@@ -29,7 +29,7 @@ public class Address extends GENgraphNode {
 	}
 
 	public Agent getAgent() {
-		return this.getNodeByRelationship(Agent.class, RelTypes.HAS_ADDRESS, Direction.INCOMING);
+		return this.getNodeByRelationship(Agent.class, GENgraphRelTypes.HAS_ADDRESS, Direction.INCOMING);
 	}
 
 	public String getCity() {

@@ -1,17 +1,15 @@
-package org.gedcomx.persistence.graph.neo4j.model.conclusion;
+package org.gedcomx.persistence.graph.neo4j.model;
 
 import java.util.LinkedList;
 import java.util.List;
 
 import org.gedcomx.common.URI;
+import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredRelationshipException;
 import org.gedcomx.persistence.graph.neo4j.model.GENgraph;
-import org.gedcomx.persistence.graph.neo4j.model.GENgraphTopLevelNode;
-import org.gedcomx.persistence.graph.neo4j.model.common.Identifier;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeTypes;
-import org.gedcomx.persistence.graph.neo4j.utils.RelTypes;
 
 public class Relationship extends ConclusionSubnode implements GENgraphTopLevelNode {
 
@@ -30,12 +28,12 @@ public class Relationship extends ConclusionSubnode implements GENgraphTopLevelN
 
 	public void addFact(final Fact fact) {
 		this.facts.add(fact);
-		this.createRelationship(RelTypes.HAS_FACT, fact);
+		this.createRelationship(GENgraphRelTypes.HAS_FACT, fact);
 	}
 
 	public void addIdentifier(final Identifier identifier) {
 		this.identifiers.add(identifier);
-		this.createRelationship(RelTypes.HAS_IDENTIFIER, identifier);
+		this.createRelationship(GENgraphRelTypes.HAS_IDENTIFIER, identifier);
 	}
 
 	@Override
@@ -43,10 +41,10 @@ public class Relationship extends ConclusionSubnode implements GENgraphTopLevelN
 		final org.gedcomx.conclusion.Relationship gedcomXRelationship = (org.gedcomx.conclusion.Relationship) gedcomXObject;
 
 		if (gedcomXRelationship.getPerson1() == null) {
-			throw new MissingRequiredRelationshipException(Relationship.class, gedcomXRelationship.getId(), RelTypes.PERSON1);
+			throw new MissingRequiredRelationshipException(Relationship.class, gedcomXRelationship.getId(), GENgraphRelTypes.PERSON1);
 		}
 		if (gedcomXRelationship.getPerson2() == null) {
-			throw new MissingRequiredRelationshipException(Relationship.class, gedcomXRelationship.getId(), RelTypes.PERSON2);
+			throw new MissingRequiredRelationshipException(Relationship.class, gedcomXRelationship.getId(), GENgraphRelTypes.PERSON2);
 		}
 	}
 
@@ -96,12 +94,12 @@ public class Relationship extends ConclusionSubnode implements GENgraphTopLevelN
 
 	public void setPerson1(final Person person1) {
 		this.person1 = person1;
-		this.createRelationship(RelTypes.PERSON1, person1);
+		this.createRelationship(GENgraphRelTypes.PERSON1, person1);
 	}
 
 	public void setPerson2(final Person person2) {
 		this.person2 = person2;
-		this.createRelationship(RelTypes.PERSON2, person2);
+		this.createRelationship(GENgraphRelTypes.PERSON2, person2);
 	}
 
 	@Override

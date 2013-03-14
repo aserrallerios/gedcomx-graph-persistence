@@ -1,15 +1,13 @@
-package org.gedcomx.persistence.graph.neo4j.model.conclusion;
+package org.gedcomx.persistence.graph.neo4j.model;
 
 import java.util.LinkedList;
 import java.util.List;
 
+import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.model.GENgraph;
-import org.gedcomx.persistence.graph.neo4j.model.GENgraphTopLevelNode;
-import org.gedcomx.persistence.graph.neo4j.model.common.Identifier;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeTypes;
-import org.gedcomx.persistence.graph.neo4j.utils.RelTypes;
 
 public class Person extends ConclusionSubnode implements GENgraphTopLevelNode {
 
@@ -24,17 +22,17 @@ public class Person extends ConclusionSubnode implements GENgraphTopLevelNode {
 
 	public void addFact(final Fact fact) {
 		this.facts.add(fact);
-		this.createRelationship(RelTypes.HAS_FACT, fact);
+		this.createRelationship(GENgraphRelTypes.HAS_FACT, fact);
 	}
 
 	public void addIdentifier(final Identifier identifier) {
 		this.identifiers.add(identifier);
-		this.createRelationship(RelTypes.HAS_IDENTIFIER, identifier);
+		this.createRelationship(GENgraphRelTypes.HAS_IDENTIFIER, identifier);
 	}
 
 	public void addName(final Name name) {
 		this.names.add(name);
-		this.createRelationship(RelTypes.HAS_NAME, name);
+		this.createRelationship(GENgraphRelTypes.HAS_NAME, name);
 	}
 
 	public List<Fact> getFacts() {
@@ -59,7 +57,7 @@ public class Person extends ConclusionSubnode implements GENgraphTopLevelNode {
 
 	public void setGender(final Gender gender) {
 		this.gender = gender;
-		this.createRelationship(RelTypes.GENDER, gender);
+		this.createRelationship(GENgraphRelTypes.GENDER, gender);
 	}
 
 	@Override

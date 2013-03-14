@@ -1,16 +1,15 @@
-package org.gedcomx.persistence.graph.neo4j.model.conclusion;
+package org.gedcomx.persistence.graph.neo4j.model;
 
 import java.util.LinkedList;
 import java.util.List;
 
+import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.model.GENgraph;
-import org.gedcomx.persistence.graph.neo4j.model.GENgraphNode;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeTypes;
-import org.gedcomx.persistence.graph.neo4j.utils.RelTypes;
 
-public class NameForm extends GENgraphNode {
+public class NameForm extends NodeWrapper {
 
 	private final List<NamePart> nameParts;
 
@@ -23,7 +22,7 @@ public class NameForm extends GENgraphNode {
 
 	public void addNameParts(final NamePart namePart) {
 		this.nameParts.add(namePart);
-		this.createRelationship(RelTypes.HAS_NAME_PART, namePart);
+		this.createRelationship(GENgraphRelTypes.HAS_NAME_PART, namePart);
 	}
 
 	public String getFullText() {

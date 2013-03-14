@@ -1,30 +1,30 @@
-package org.gedcomx.persistence.graph.neo4j.model.contributor;
+package org.gedcomx.persistence.graph.neo4j.model;
 
 import org.gedcomx.common.ResourceReference;
 import org.gedcomx.common.URI;
+import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
+import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredPropertyException;
 import org.gedcomx.persistence.graph.neo4j.exception.WrongNodeType;
-import org.gedcomx.persistence.graph.neo4j.model.GENgraphNode;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
-import org.gedcomx.persistence.graph.neo4j.utils.NodeTypes;
-import org.gedcomx.persistence.graph.neo4j.utils.RelTypes;
 import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 
-public class OnlineAccount extends GENgraphNode {
+@NodeType("ACCOUNT")
+public class OnlineAccount extends NodeWrapper {
 
 	protected OnlineAccount(final Node node) throws WrongNodeType, MissingFieldException {
-		super(NodeTypes.ACCOUNT, node);
+		super(node);
 	}
 
 	protected OnlineAccount(final org.gedcomx.agent.OnlineAccount gedcomXOnlineAccount) throws MissingFieldException {
-		super(NodeTypes.ACCOUNT, gedcomXOnlineAccount);
+		super(gedcomXOnlineAccount);
 	}
 
 	protected OnlineAccount(final String accountName, final ResourceReference serviceHomepage) throws MissingFieldException {
-		super(NodeTypes.ACCOUNT, accountName, serviceHomepage);
+		super(accountName, serviceHomepage);
 	}
 
 	@Override
@@ -37,7 +37,7 @@ public class OnlineAccount extends GENgraphNode {
 	}
 
 	public Agent getAgent() {
-		return this.getNodeByRelationship(Agent.class, RelTypes.HAS_ACCOUNT, Direction.INCOMING);
+		return this.getNodeByRelationship(Agent.class, GENgraphRelTypes.HAS_ACCOUNT, Direction.INCOMING);
 	}
 
 	@Override
