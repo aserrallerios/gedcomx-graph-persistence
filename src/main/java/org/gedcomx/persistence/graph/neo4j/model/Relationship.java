@@ -1,136 +1,149 @@
 package org.gedcomx.persistence.graph.neo4j.model;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import org.gedcomx.common.URI;
+import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
 import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredRelationshipException;
-import org.gedcomx.persistence.graph.neo4j.model.GENgraph;
+import org.gedcomx.persistence.graph.neo4j.exception.WrongNodeType;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
-import org.gedcomx.persistence.graph.neo4j.utils.NodeTypes;
+import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
+import org.gedcomx.types.RelationshipType;
+import org.neo4j.graphdb.Node;
 
-public class Relationship extends ConclusionSubnode implements GENgraphTopLevelNode {
+@NodeType("RELATIONSHIP")
+public class Relationship extends Conclusion {
 
-	private final List<Identifier> identifiers = new LinkedList<>();
-	private final List<Fact> facts = new LinkedList<>();
+	protected Relationship(final Node node) throws MissingFieldException, WrongNodeType {
+		super(node);
+	}
 
-	private Person person1;
-	private URI person1URI;
-	private Person person2;
-	private URI person2URI;
+	public Relationship(final org.gedcomx.conclusion.Relationship gedcomXRelationship) throws MissingFieldException {
+		super(gedcomXRelationship);
+	}
 
-	protected Relationship(final GENgraph graph, final org.gedcomx.conclusion.Relationship gedcomXRelationship)
-			throws MissingFieldException {
-		super(graph, NodeTypes.RELATIONSHIP, gedcomXRelationship);
+	public Relationship(final Person p1, final Person p2) throws MissingFieldException {
+		super(p1, p2);
 	}
 
 	public void addFact(final Fact fact) {
-		this.facts.add(fact);
-		this.createRelationship(GENgraphRelTypes.HAS_FACT, fact);
+		this.addRelationship(GENgraphRelTypes.HAS_FACT, fact);
 	}
 
 	public void addIdentifier(final Identifier identifier) {
-		this.identifiers.add(identifier);
-		this.createRelationship(GENgraphRelTypes.HAS_IDENTIFIER, identifier);
+		this.addRelationship(GENgraphRelTypes.HAS_IDENTIFIER, identifier);
 	}
 
 	@Override
-	protected void checkRequiredProperties(final Object gedcomXObject) throws MissingFieldException {
-		final org.gedcomx.conclusion.Relationship gedcomXRelationship = (org.gedcomx.conclusion.Relationship) gedcomXObject;
+	protected void deleteAllConcreteReferences() {
+		this.deleteReferencedNodes(this.getIdentifiers());
+		this.deleteReferencedNodes(this.getFacts());
 
-		if (gedcomXRelationship.getPerson1() == null) {
-			throw new MissingRequiredRelationshipException(Relationship.class, gedcomXRelationship.getId(), GENgraphRelTypes.PERSON1);
-		}
-		if (gedcomXRelationship.getPerson2() == null) {
-			throw new MissingRequiredRelationshipException(Relationship.class, gedcomXRelationship.getId(), GENgraphRelTypes.PERSON2);
-		}
+		this.deleteReference(GENgraphRelTypes.PERSON1);
+		this.deleteReference(GENgraphRelTypes.PERSON2);
 	}
 
 	public List<Fact> getFacts() {
-		return this.facts;
+		return this.getNodesByRelationship(Fact.class, GENgraphRelTypes.HAS_FACT);
+	}
+
+	@Override
+	protected org.gedcomx.conclusion.Relationship getGedcomX() {
+		final org.gedcomx.conclusion.Relationship gedcomXRelationship = new org.gedcomx.conclusion.Relationship();
+
+		this.getGedcomXConclusion(gedcomXRelationship);
+
+		gedcomXRelationship.setFacts(this.getGedcomXList(org.gedcomx.conclusion.Fact.class, this.getFacts()));
+		gedcomXRelationship.setIdentifiers(this.getGedcomXList(org.gedcomx.conclusion.Identifier.class, this.getIdentifiers()));
+
+		gedcomXRelationship.setKnownType(this.getKnownType());
+		gedcomXRelationship.setType(this.getType());
+
+		// gedcomXRelationship.setPerson1(this.getPerson1().getId());
+		// gedcomXRelationship.setPerson2(this.getPerson2().getId());
+		// TODO
+
+		return gedcomXRelationship;
 	}
 
 	public List<Identifier> getIdentifiers() {
-		return this.identifiers;
+		return this.getNodesByRelationship(Identifier.class, GENgraphRelTypes.HAS_IDENTIFIER);
+	}
+
+	public RelationshipType getKnownType() {
+		return RelationshipType.fromQNameURI(this.getType());
 	}
 
 	public Person getPerson1() {
-		return this.person1;
+		return this.getNodeByRelationship(Person.class, GENgraphRelTypes.PERSON1);
 	}
 
 	public Person getPerson2() {
-		return this.person2;
+		return this.getNodeByRelationship(Person.class, GENgraphRelTypes.PERSON2);
 	}
 
 	public URI getType() {
-		final String type = (String) this.getProperty(NodeProperties.Generic.TYPE);
-		return new URI(type);
+		return new URI((String) this.getProperty(NodeProperties.Generic.TYPE));
 	}
 
 	@Override
 	protected void resolveReferences() {
-		if ((this.person1 == null) && (this.person1URI != null)) {
-			final Conclusion conclusion = this.getGraph().getConclusion(this.person1URI);
-			if (conclusion != null) {
-				this.setPerson1((Person) conclusion.getSubnode());
-			}
-		}
-		if ((this.person2 == null) && (this.person2URI != null)) {
-			final Conclusion conclusion = this.getGraph().getConclusion(this.person2URI);
-			if (conclusion != null) {
-				this.setPerson2((Person) conclusion.getSubnode());
-			}
-		}
+		// TODO
 	}
 
 	@Override
-	protected void setGedcomXProperties(final Object gedcomXObject) {
+	protected void setGedcomXConcreteProperties(final Object gedcomXObject) {
 		final org.gedcomx.conclusion.Relationship gedcomXRelationship = (org.gedcomx.conclusion.Relationship) gedcomXObject;
 
 		this.setType(gedcomXRelationship.getType());
 	}
 
+	@Override
+	protected void setGedcomXConcreteRelations(final Object gedcomXObject) throws MissingFieldException {
+		final org.gedcomx.conclusion.Relationship gedcomXRelationship = (org.gedcomx.conclusion.Relationship) gedcomXObject;
+
+		for (final org.gedcomx.conclusion.Fact fact : gedcomXRelationship.getFacts()) {
+			this.addFact(new Fact(fact));
+		}
+		for (final org.gedcomx.conclusion.Identifier identifier : gedcomXRelationship.getIdentifiers()) {
+			this.addIdentifier(new Identifier(identifier));
+		}
+		// TODO
+	}
+
+	public void setKnownType(final RelationshipType type) {
+		this.setType(type.toQNameURI());
+	}
+
 	public void setPerson1(final Person person1) {
-		this.person1 = person1;
 		this.createRelationship(GENgraphRelTypes.PERSON1, person1);
 	}
 
 	public void setPerson2(final Person person2) {
-		this.person2 = person2;
 		this.createRelationship(GENgraphRelTypes.PERSON2, person2);
 	}
 
 	@Override
-	protected void setGedcomXRelations(final Object gedcomXObject) throws MissingFieldException {
-		final org.gedcomx.conclusion.Relationship gedcomXRelationship = (org.gedcomx.conclusion.Relationship) gedcomXObject;
-
-		for (final org.gedcomx.conclusion.Fact fact : gedcomXRelationship.getFacts()) {
-			this.addFact((Fact) new Conclusion(this.getGraph(), fact).getSubnode());
-		}
-		// for (final org.gedcomx.conclusion.Identifier identifier :
-		// gedcomXRelationship.getIdentifiers()) {
-		// this.addIdentifier(new Identifier(graph, identifier));
-		// }
-		this.person1URI = gedcomXRelationship.getPerson1().getResource();
-		final Conclusion conclusion1 = this.getGraph().getConclusion(this.person1URI);
-		if (conclusion1 != null) {
-			this.setPerson1((Person) conclusion1.getSubnode());
-		} else {
-			this.addNodeToResolveReferences();
-		}
-		this.person2URI = gedcomXRelationship.getPerson2().getResource();
-		final Conclusion conclusion2 = this.getGraph().getConclusion(this.person2URI);
-		if (conclusion2 != null) {
-			this.setPerson2((Person) conclusion2.getSubnode());
-		} else {
-			this.addNodeToResolveReferences();
-		}
+	protected void setRequiredProperties(final Object... properties) throws MissingFieldException {
+		this.setPerson1((Person) properties[0]);
+		this.setPerson2((Person) properties[1]);
+		// TODO
 	}
 
 	public void setType(final URI type) {
 		this.setProperty(NodeProperties.Generic.TYPE, type.toString());
+	}
+
+	@Override
+	protected void validateUnderlyingNode() throws MissingFieldException {
+		if (ValidationTools.nullOrEmpty(this.getPerson1())) {
+			throw new MissingRequiredRelationshipException(Relationship.class, this.getId(), GENgraphRelTypes.PERSON1);
+		}
+		if (ValidationTools.nullOrEmpty(this.getPerson1())) {
+			throw new MissingRequiredRelationshipException(Relationship.class, this.getId(), GENgraphRelTypes.PERSON2);
+		}
 	}
 
 }

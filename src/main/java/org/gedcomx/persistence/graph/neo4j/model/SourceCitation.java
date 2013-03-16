@@ -11,7 +11,6 @@ import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredPropertyExce
 import org.gedcomx.persistence.graph.neo4j.exception.WrongNodeType;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
 import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
-import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 
 @NodeType("SOURCE_CITATION")
@@ -35,7 +34,7 @@ public class SourceCitation extends NodeWrapper {
 
 	@Override
 	protected void deleteAllReferences() {
-		this.deleteReferencedNodes(CitationField.class, GENgraphRelTypes.HAS_CITATION_FIELD);
+		this.deleteReferencedNodes(this.getFields());
 	}
 
 	public ResourceReference getCitationTemplate() {
@@ -43,7 +42,7 @@ public class SourceCitation extends NodeWrapper {
 	}
 
 	public SourceDescription getDescription() {
-		return this.getNodeByRelationship(SourceDescription.class, GENgraphRelTypes.HAS_CITATION, Direction.INCOMING);
+		return (SourceDescription) this.getParentNode(GENgraphRelTypes.HAS_CITATION);
 	}
 
 	public List<CitationField> getFields() {

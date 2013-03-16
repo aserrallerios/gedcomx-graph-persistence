@@ -4,37 +4,71 @@ import java.util.List;
 
 import org.gedcomx.common.ResourceReference;
 import org.gedcomx.common.URI;
+import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
+import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredPropertyException;
-import org.gedcomx.persistence.graph.neo4j.model.GENgraph;
+import org.gedcomx.persistence.graph.neo4j.exception.WrongNodeType;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
-import org.gedcomx.persistence.graph.neo4j.utils.NodeTypes;
+import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
+import org.gedcomx.types.NamePartType;
+import org.neo4j.graphdb.Node;
 
+@NodeType("NAME_PART")
 public class NamePart extends NodeWrapper {
 
-	protected NamePart(final GENgraph graph, final org.gedcomx.conclusion.NamePart gedcomXNamePart) throws MissingFieldException {
-		super(NodeTypes.NAME_PART, gedcomXNamePart);
+	protected NamePart(final Node node) throws MissingFieldException, WrongNodeType {
+		super(node);
+	}
+
+	protected NamePart(final org.gedcomx.conclusion.NamePart gedcomXNamePart) throws MissingFieldException {
+		super(gedcomXNamePart);
+	}
+
+	protected NamePart(final String value) throws MissingFieldException {
+		super(value);
 	}
 
 	@Override
-	protected void checkRequiredProperties(final Object gedcomXObject) throws MissingFieldException {
-		final org.gedcomx.conclusion.NamePart gedcomXNamePart = (org.gedcomx.conclusion.NamePart) gedcomXObject;
-
-		if ((gedcomXNamePart.getValue() == null) || gedcomXNamePart.getValue().isEmpty()) {
-			throw new MissingRequiredPropertyException(NamePart.class, NodeProperties.Generic.VALUE);
-		}
+	protected void deleteAllReferences() {
+		return;
 	}
 
-	public List<ResourceReference> getQualifiers(final List<ResourceReference> qualifiers) {
+	@Override
+	protected org.gedcomx.conclusion.NamePart getGedcomX() {
+		final org.gedcomx.conclusion.NamePart gedcomXNamePart = new org.gedcomx.conclusion.NamePart();
+
+		gedcomXNamePart.setType(this.getType());
+		gedcomXNamePart.setKnownType(this.getKnownType());
+		gedcomXNamePart.setValue(this.getValue());
+		gedcomXNamePart.setQualifiers(this.getQualifiers());
+
+		return gedcomXNamePart;
+	}
+
+	public NamePartType getKnownType() {
+		return NamePartType.fromQNameURI(this.getType());
+	}
+
+	public NameForm getNameForm() {
+		return (NameForm) this.getParentNode(GENgraphRelTypes.HAS_NAME_PART);
+	}
+
+	public List<ResourceReference> getQualifiers() {
 		return this.getURIListProperties(NodeProperties.Conclusion.QUALIFIERS);
 	}
 
-	public URI getType(final URI type) {
+	public URI getType() {
 		return new URI((String) this.getProperty(NodeProperties.Generic.TYPE));
 	}
 
-	public String getValue(final String value) {
+	public String getValue() {
 		return (String) this.getProperty(NodeProperties.Generic.VALUE);
+	}
+
+	@Override
+	protected void resolveReferences() {
+		return;
 	}
 
 	@Override
@@ -44,11 +78,24 @@ public class NamePart extends NodeWrapper {
 		this.setType(gedcomXNamePart.getType());
 		this.setValue(gedcomXNamePart.getValue());
 		this.setQualifiers(gedcomXNamePart.getQualifiers());
+	}
 
+	@Override
+	protected void setGedcomXRelations(final Object gedcomXObject) throws MissingFieldException {
+		return;
+	}
+
+	public void setKnownType(final NamePartType type) {
+		this.setType(type.toQNameURI());
 	}
 
 	public void setQualifiers(final List<ResourceReference> qualifiers) {
 		this.setURIListProperties(NodeProperties.Conclusion.QUALIFIERS, qualifiers);
+	}
+
+	@Override
+	protected void setRequiredProperties(final Object... properties) throws MissingFieldException {
+		this.setValue((String) properties[0]);
 	}
 
 	public void setType(final URI type) {
@@ -57,6 +104,13 @@ public class NamePart extends NodeWrapper {
 
 	public void setValue(final String value) {
 		this.setProperty(NodeProperties.Generic.VALUE, value);
+	}
+
+	@Override
+	protected void validateUnderlyingNode() throws MissingFieldException {
+		if (ValidationTools.nullOrEmpty(this.getValue())) {
+			throw new MissingRequiredPropertyException(NamePart.class, NodeProperties.Generic.VALUE);
+		}
 	}
 
 }

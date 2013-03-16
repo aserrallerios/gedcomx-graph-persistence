@@ -1,28 +1,41 @@
 package org.gedcomx.persistence.graph.neo4j.model;
 
 import org.gedcomx.common.URI;
+import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
 import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredPropertyException;
-import org.gedcomx.persistence.graph.neo4j.model.GENgraph;
+import org.gedcomx.persistence.graph.neo4j.exception.WrongNodeType;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
-import org.gedcomx.persistence.graph.neo4j.utils.NodeTypes;
+import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
+import org.gedcomx.types.FactType;
+import org.neo4j.graphdb.Node;
 
-public class Fact extends ConclusionSubnode implements GENgraphTopLevelNode {
+@NodeType("FACT")
+public class Fact extends Conclusion {
 
-	PlaceReference placeReference;
+	protected Fact(final Node node) throws MissingFieldException, WrongNodeType {
+		super(node);
+	}
 
-	protected Fact(final GENgraph graph, final org.gedcomx.conclusion.Fact gedcomXFact) throws MissingFieldException {
-		super(graph, NodeTypes.FACT, gedcomXFact);
+	public Fact(final org.gedcomx.conclusion.Fact gedcomXFact) throws MissingFieldException {
+		super(gedcomXFact);
+	}
+
+	public Fact(final URI type) throws MissingFieldException {
+		super(new Object[] { type });
 	}
 
 	@Override
-	protected void checkRequiredProperties(final Object gedcomXObject) throws MissingFieldException {
-		final org.gedcomx.conclusion.Fact gedcomXFact = (org.gedcomx.conclusion.Fact) gedcomXObject;
+	protected void deleteAllConcreteReferences() {
+		this.deleteReferencedNode(this.getPlaceReference());
+	}
 
-		if (gedcomXFact.getType() == null) {
-			throw new MissingRequiredPropertyException(Fact.class, NodeProperties.Generic.TYPE);
-		}
+	@Override
+	protected void deleteAllReferences() {
+		super.deleteAllReferences();
+
+		this.getPlaceReference().delete();
 	}
 
 	public String getDateFormal() {
@@ -33,17 +46,49 @@ public class Fact extends ConclusionSubnode implements GENgraphTopLevelNode {
 		return (String) this.getProperty(NodeProperties.Conclusion.DATE_ORIGINAL);
 	}
 
+	@Override
+	protected org.gedcomx.conclusion.Fact getGedcomX() {
+		final org.gedcomx.conclusion.Fact gedcomXFact = new org.gedcomx.conclusion.Fact();
+
+		this.getGedcomXConclusion(gedcomXFact);
+
+		final org.gedcomx.conclusion.Date date = new org.gedcomx.conclusion.Date();
+		date.setFormal(this.getDateFormal());
+		date.setOriginal(this.getDateOriginal());
+		gedcomXFact.setDate(date);
+
+		gedcomXFact.setKnownType(this.getKnownType());
+		gedcomXFact.setType(this.getType());
+		gedcomXFact.setValue(this.getValue());
+
+		gedcomXFact.setPlace(this.getPlaceReference().getGedcomX());
+
+		return gedcomXFact;
+	}
+
+	public FactType getKnownType() {
+		return FactType.fromQNameURI(this.getType());
+	}
+
+	public NodeWrapper getParentNode() {
+		return super.getParentNode(GENgraphRelTypes.HAS_FACT);
+	}
+
 	public PlaceReference getPlaceReference() {
-		return this.placeReference;
+		return this.getNodeByRelationship(PlaceReference.class, GENgraphRelTypes.PLACE);
 	}
 
 	public URI getType() {
-		final String type = (String) this.getProperty(NodeProperties.Generic.TYPE);
-		return new URI(type);
+		return new URI((String) this.getProperty(NodeProperties.Generic.TYPE));
 	}
 
 	public String getValue() {
 		return (String) this.getProperty(NodeProperties.Generic.VALUE);
+	}
+
+	@Override
+	protected void resolveReferences() {
+		return;
 	}
 
 	public void setDateFormal(final String value) {
@@ -55,7 +100,7 @@ public class Fact extends ConclusionSubnode implements GENgraphTopLevelNode {
 	}
 
 	@Override
-	protected void setGedcomXProperties(final Object gedcomXObject) {
+	protected void setGedcomXConcreteProperties(final Object gedcomXObject) {
 		final org.gedcomx.conclusion.Fact gedcomXFact = (org.gedcomx.conclusion.Fact) gedcomXObject;
 		this.setValue(gedcomXFact.getValue());
 		this.setType(gedcomXFact.getType());
@@ -66,17 +111,26 @@ public class Fact extends ConclusionSubnode implements GENgraphTopLevelNode {
 		}
 	}
 
+	@Override
+	protected void setGedcomXConcreteRelations(final Object gedcomXObject) throws MissingFieldException {
+		final org.gedcomx.conclusion.Fact gedcomXFact = (org.gedcomx.conclusion.Fact) gedcomXObject;
+
+		if (gedcomXFact.getPlace() != null) {
+			this.setPlaceReference(new PlaceReference(gedcomXFact.getPlace()));
+		}
+	}
+
+	public void setKnownType(final FactType type) {
+		this.setType(type.toQNameURI());
+	}
+
 	public void setPlaceReference(final PlaceReference placeReference) {
-		this.placeReference = placeReference;
 		this.createRelationship(GENgraphRelTypes.PLACE, placeReference);
 	}
 
 	@Override
-	protected void setGedcomXRelations(final Object gedcomXObject) throws MissingFieldException {
-		final org.gedcomx.conclusion.Fact gedcomXFact = (org.gedcomx.conclusion.Fact) gedcomXObject;
-		if (gedcomXFact.getPlace() != null) {
-			this.setPlaceReference(new PlaceReference(this.getGraph(), gedcomXFact.getPlace()));
-		}
+	protected void setRequiredProperties(final Object... properties) throws MissingFieldException {
+		this.setType((URI) properties[0]);
 	}
 
 	public void setType(final URI type) {
@@ -85,6 +139,13 @@ public class Fact extends ConclusionSubnode implements GENgraphTopLevelNode {
 
 	public void setValue(final String value) {
 		this.setProperty(NodeProperties.Generic.VALUE, value);
+	}
+
+	@Override
+	protected void validateUnderlyingNode() throws MissingFieldException {
+		if (ValidationTools.nullOrEmpty(this.getType())) {
+			throw new MissingRequiredPropertyException(Fact.class, this.getId(), NodeProperties.Generic.TYPE);
+		}
 	}
 
 }

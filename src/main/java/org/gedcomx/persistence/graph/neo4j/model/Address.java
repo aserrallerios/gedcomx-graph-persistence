@@ -1,5 +1,6 @@
 package org.gedcomx.persistence.graph.neo4j.model;
 
+import org.gedcomx.persistence.graph.neo4j.annotations.GedcomXType;
 import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
 import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
@@ -9,6 +10,7 @@ import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 
 @NodeType("ADDRESS")
+@GedcomXType(org.gedcomx.agent.Address.class)
 public class Address extends NodeWrapper {
 
 	public Address() throws MissingFieldException {

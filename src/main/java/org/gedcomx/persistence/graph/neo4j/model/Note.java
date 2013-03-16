@@ -26,7 +26,7 @@ public class Note extends NodeWrapper {
 
 	@Override
 	protected void deleteAllReferences() {
-		this.deleteReferencedNode(Attribution.class, GENgraphRelTypes.ATTRIBUTION);
+		this.deleteReferencedNode(this.getAttribution());
 	}
 
 	public Attribution getAttribution() {

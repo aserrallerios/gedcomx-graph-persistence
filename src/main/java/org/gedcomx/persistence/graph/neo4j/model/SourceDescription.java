@@ -14,7 +14,7 @@ import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
 import org.neo4j.graphdb.Node;
 
 @NodeType("SOURCE_DESCRIPTION")
-public class SourceDescription extends NodeWrapper implements GENgraphTopLevelNode {
+public class SourceDescription extends NodeWrapper {
 
 	public SourceDescription(final Node node) throws WrongNodeType, MissingFieldException {
 		super(node);
@@ -50,12 +50,12 @@ public class SourceDescription extends NodeWrapper implements GENgraphTopLevelNo
 
 	@Override
 	protected void deleteAllReferences() {
-		this.deleteReferencedNodes(Note.class, GENgraphRelTypes.HAS_NOTE);
-		this.deleteReferencedNodes(TextValue.class, GENgraphRelTypes.HAS_TITLE);
-		this.deleteReferencedNodes(SourceCitation.class, GENgraphRelTypes.HAS_CITATION);
-		this.deleteReferencedNodes(SourceReference.class, GENgraphRelTypes.HAS_SOURCE_REFERENCE);
-		this.deleteReferencedNode(Attribution.class, GENgraphRelTypes.ATTRIBUTION);
-		this.deleteReferencedNode(SourceReference.class, GENgraphRelTypes.COMPONENT_OF);
+		this.deleteReferencedNodes(this.getNotes());
+		this.deleteReferencedNodes(this.getTitles());
+		this.deleteReferencedNodes(this.getCitations());
+		this.deleteReferencedNodes(this.getSources());
+		this.deleteReferencedNode(this.getAttribution());
+		this.deleteReferencedNode(this.getComponentOf());
 
 		this.deleteReferences(GENgraphRelTypes.HAS_CONCLUSION);
 		this.deleteReference(GENgraphRelTypes.MEDIATOR);
@@ -157,7 +157,7 @@ public class SourceDescription extends NodeWrapper implements GENgraphTopLevelNo
 			this.setMediator(new Agent());
 		}
 		for (final ResourceReference conclusionReference : gedcomXSourceDescription.getExtractedConclusions()) {
-			this.addExtractedConclusion(conclusionReference);
+			this.addExtractedConclusion(new Conclusion());
 		}
 		// TODO
 		return;

@@ -140,12 +140,14 @@ public abstract class NodeWrapper {
 		GENgraphDAOUtil.delete(GENgraphDAOUtil.getSingleRelationship(this.getUnderlyingNode(), rel, Direction.OUTGOING));
 	}
 
-	protected <T extends NodeWrapper> void deleteReferencedNode(final Class<T> type, final GENgraphRelTypes rel) {
-		this.getNodeByRelationship(type, rel, Direction.OUTGOING).delete();
+	protected <T extends NodeWrapper> void deleteReferencedNode(final T wrapper) {
+		if (wrapper != null) {
+			wrapper.delete();
+		}
 	}
 
-	protected <T extends NodeWrapper> void deleteReferencedNodes(final Class<T> type, final GENgraphRelTypes relation) {
-		for (final T wrapper : this.getNodesByRelationship(type, relation, Direction.OUTGOING)) {
+	protected <T extends NodeWrapper> void deleteReferencedNodes(final List<T> type) {
+		for (final T wrapper : type) {
 			wrapper.delete();
 		}
 	}
@@ -199,7 +201,7 @@ public abstract class NodeWrapper {
 		return null;
 	}
 
-	protected <T extends NodeWrapper> T getNodeByRelationship(final GENgraphRelTypes relation, final Direction dir) {
+	private <T extends NodeWrapper> T getNodeByRelationship(final GENgraphRelTypes relation, final Direction dir) {
 		// final Node node =
 		// GENgraphDAOUtil.getSingleNodeByRelationship(this.getUnderlyingNode(),
 		// relation, dir);

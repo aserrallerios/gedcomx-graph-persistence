@@ -44,10 +44,10 @@ public class Agent extends NodeWrapper {
 
 	@Override
 	public void deleteAllReferences() {
-		this.deleteReferencedNodes(Address.class, GENgraphRelTypes.HAS_ADDRESS);
-		this.deleteReferencedNodes(OnlineAccount.class, GENgraphRelTypes.HAS_ACCOUNT);
-		this.deleteReferencedNodes(Identifier.class, GENgraphRelTypes.HAS_IDENTIFIER);
-		this.deleteReferencedNodes(TextValue.class, GENgraphRelTypes.HAS_NAME);
+		this.deleteReferencedNodes(this.getAddresses());
+		this.deleteReferencedNodes(this.getOnlineAccounts());
+		this.deleteReferencedNodes(this.getIdentifiers());
+		this.deleteReferencedNodes(this.getNames());
 	}
 
 	public List<Address> getAddresses() {

@@ -8,7 +8,6 @@ import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredPropertyExce
 import org.gedcomx.persistence.graph.neo4j.exception.WrongNodeType;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
 import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
-import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 
 @NodeType("CITATION_FIELD")
@@ -32,7 +31,7 @@ public class CitationField extends NodeWrapper {
 	}
 
 	public SourceCitation getCitation() {
-		return this.getNodeByRelationship(SourceCitation.class, GENgraphRelTypes.HAS_CITATION_FIELD, Direction.INCOMING);
+		return (SourceCitation) this.getParentNode(GENgraphRelTypes.HAS_CITATION_FIELD);
 	}
 
 	@Override

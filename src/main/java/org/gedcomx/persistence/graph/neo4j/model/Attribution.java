@@ -7,7 +7,6 @@ import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.WrongNodeType;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
-import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 
 @NodeType("ATTRIBUTION")
@@ -51,8 +50,7 @@ public class Attribution extends NodeWrapper {
 	}
 
 	public NodeWrapper getParentNode() {
-		// TODO
-		return this.getNodeByRelationship(NodeWrapper.class, GENgraphRelTypes.ATTRIBUTION, Direction.INCOMING);
+		return super.getParentNode(GENgraphRelTypes.ATTRIBUTION);
 	}
 
 	@Override

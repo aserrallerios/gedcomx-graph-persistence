@@ -9,7 +9,6 @@ import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredPropertyExce
 import org.gedcomx.persistence.graph.neo4j.exception.WrongNodeType;
 import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
 import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
-import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 
 @NodeType("ACCOUNT")
@@ -37,7 +36,7 @@ public class OnlineAccount extends NodeWrapper {
 	}
 
 	public Agent getAgent() {
-		return this.getNodeByRelationship(Agent.class, GENgraphRelTypes.HAS_ACCOUNT, Direction.INCOMING);
+		return (Agent) this.getParentNode(GENgraphRelTypes.HAS_ACCOUNT);
 	}
 
 	@Override
