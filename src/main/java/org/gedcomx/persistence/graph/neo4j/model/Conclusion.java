@@ -5,14 +5,13 @@ import java.util.List;
 import org.gedcomx.common.URI;
 import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
-import org.gedcomx.persistence.graph.neo4j.exception.WrongNodeType;
-import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
+import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
 import org.gedcomx.types.ConfidenceLevel;
 import org.neo4j.graphdb.Node;
 
 public abstract class Conclusion extends NodeWrapper {
 
-	protected Conclusion(final Node node) throws MissingFieldException, WrongNodeType {
+	protected Conclusion(final Node node) throws MissingFieldException, UnknownNodeType {
 		super(node);
 	}
 
@@ -47,7 +46,7 @@ public abstract class Conclusion extends NodeWrapper {
 	}
 
 	public URI getConfidence() {
-		return new URI((String) this.getProperty(NodeProperties.Conclusion.CONFIDENCE));
+		return new URI((String) this.getProperty(ConclusionProperties.CONFIDENCE));
 	}
 
 	protected org.gedcomx.conclusion.Conclusion getGedcomXConclusion(final org.gedcomx.conclusion.Conclusion gedcomXConclusion) {
@@ -64,7 +63,7 @@ public abstract class Conclusion extends NodeWrapper {
 	}
 
 	public String getId() {
-		return (String) this.getProperty(NodeProperties.Generic.ID);
+		return (String) this.getProperty(GenericProperties.ID);
 	}
 
 	public ConfidenceLevel getKnownConfidenceLevel() {
@@ -72,7 +71,7 @@ public abstract class Conclusion extends NodeWrapper {
 	}
 
 	public String getLang() {
-		return (String) this.getProperty(NodeProperties.Generic.LANG);
+		return (String) this.getProperty(GenericProperties.LANG);
 	}
 
 	public List<Note> getNotes() {
@@ -88,7 +87,7 @@ public abstract class Conclusion extends NodeWrapper {
 	}
 
 	public void setConfidence(final URI confidence) {
-		this.setProperty(NodeProperties.Conclusion.CONFIDENCE, confidence);
+		this.setProperty(ConclusionProperties.CONFIDENCE, confidence);
 	}
 
 	protected abstract void setGedcomXConcreteProperties(Object gedcomXObject);
@@ -121,7 +120,7 @@ public abstract class Conclusion extends NodeWrapper {
 	}
 
 	public void setId(final String id) {
-		this.setProperty(NodeProperties.Generic.ID, id);
+		this.setProperty(GenericProperties.ID, id);
 	}
 
 	public void setKnownConfidenceLevel(final ConfidenceLevel confidence) {
@@ -129,7 +128,7 @@ public abstract class Conclusion extends NodeWrapper {
 	}
 
 	public void setLang(final String lang) {
-		this.setProperty(NodeProperties.Generic.LANG, lang);
+		this.setProperty(GenericProperties.LANG, lang);
 	}
 
 }

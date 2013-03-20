@@ -5,8 +5,7 @@ import java.util.Date;
 import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
 import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
-import org.gedcomx.persistence.graph.neo4j.exception.WrongNodeType;
-import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
+import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
 import org.neo4j.graphdb.Node;
 
 @NodeType("ATTRIBUTION")
@@ -16,7 +15,7 @@ public class Attribution extends NodeWrapper {
 		super();
 	}
 
-	protected Attribution(final Node node) throws WrongNodeType, MissingFieldException {
+	protected Attribution(final Node node) throws UnknownNodeType, MissingFieldException {
 		super(node);
 	}
 
@@ -30,7 +29,7 @@ public class Attribution extends NodeWrapper {
 	}
 
 	public String getChangeMessage() {
-		return (String) this.getProperty(NodeProperties.Generic.CHANGE_MESSAGE);
+		return (String) this.getProperty(GenericProperties.CHANGE_MESSAGE);
 	}
 
 	@Override
@@ -46,7 +45,7 @@ public class Attribution extends NodeWrapper {
 	}
 
 	public Date getModified() {
-		return new Date((Long) this.getProperty(NodeProperties.Generic.MODIFIED));
+		return new Date((Long) this.getProperty(GenericProperties.MODIFIED));
 	}
 
 	public NodeWrapper getParentNode() {
@@ -59,7 +58,7 @@ public class Attribution extends NodeWrapper {
 	}
 
 	public void setChangeMessage(final String changeMessage) {
-		this.setProperty(NodeProperties.Generic.CHANGE_MESSAGE, changeMessage);
+		this.setProperty(GenericProperties.CHANGE_MESSAGE, changeMessage);
 	}
 
 	@Override
@@ -79,7 +78,7 @@ public class Attribution extends NodeWrapper {
 	}
 
 	public void setModified(final Date modified) {
-		this.setProperty(NodeProperties.Generic.MODIFIED, modified.getTime());
+		this.setProperty(GenericProperties.MODIFIED, modified.getTime());
 	}
 
 	@Override

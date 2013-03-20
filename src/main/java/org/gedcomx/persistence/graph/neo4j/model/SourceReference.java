@@ -5,7 +5,7 @@ import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
 import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredRelationshipException;
-import org.gedcomx.persistence.graph.neo4j.exception.WrongNodeType;
+import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
 import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
@@ -13,7 +13,7 @@ import org.neo4j.graphdb.Node;
 @NodeType("SOURCE_REFERENCE")
 public class SourceReference extends NodeWrapper {
 
-	public SourceReference(final Node node) throws MissingFieldException, WrongNodeType {
+	public SourceReference(final Node node) throws MissingFieldException, UnknownNodeType {
 		super(node);
 	}
 
@@ -62,8 +62,7 @@ public class SourceReference extends NodeWrapper {
 		this.createRelationship(GENgraphRelTypes.ATTRIBUTION, attribution);
 	}
 
-	public void setDescription(final URI description) {
-		this.description = description;
+	public void setDescription(final SourceDescription description) {
 		this.createRelationship(GENgraphRelTypes.DESCRIPTION, description);
 		// TODO
 	}

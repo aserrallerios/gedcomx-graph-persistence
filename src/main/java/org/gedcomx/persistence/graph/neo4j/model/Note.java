@@ -4,15 +4,14 @@ import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
 import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredPropertyException;
-import org.gedcomx.persistence.graph.neo4j.exception.WrongNodeType;
-import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
+import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
 import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
 import org.neo4j.graphdb.Node;
 
 @NodeType("NOTE")
 public class Note extends NodeWrapper {
 
-	protected Note(final Node node) throws WrongNodeType, MissingFieldException {
+	protected Note(final Node node) throws UnknownNodeType, MissingFieldException {
 		super(node);
 	}
 
@@ -46,11 +45,11 @@ public class Note extends NodeWrapper {
 	}
 
 	public String getId() {
-		return (String) this.getProperty(NodeProperties.Generic.ID);
+		return (String) this.getProperty(GenericProperties.ID);
 	}
 
 	public String getLang() {
-		return (String) this.getProperty(NodeProperties.Generic.LANG);
+		return (String) this.getProperty(GenericProperties.LANG);
 	}
 
 	public NodeWrapper getParentNode() {
@@ -58,11 +57,11 @@ public class Note extends NodeWrapper {
 	}
 
 	public String getSubject() {
-		return (String) this.getProperty(NodeProperties.Generic.SUBJECT);
+		return (String) this.getProperty(GenericProperties.SUBJECT);
 	}
 
 	public String getText() {
-		return (String) this.getProperty(NodeProperties.Generic.TEXT);
+		return (String) this.getProperty(GenericProperties.TEXT);
 	}
 
 	@Override
@@ -93,11 +92,11 @@ public class Note extends NodeWrapper {
 	}
 
 	public void setId(final String id) {
-		this.setProperty(NodeProperties.Generic.ID, id);
+		this.setProperty(GenericProperties.ID, id);
 	}
 
 	public void setLang(final String lang) {
-		this.setProperty(NodeProperties.Generic.LANG, lang);
+		this.setProperty(GenericProperties.LANG, lang);
 	}
 
 	@Override
@@ -106,17 +105,17 @@ public class Note extends NodeWrapper {
 	}
 
 	public void setSubject(final String subject) {
-		this.setProperty(NodeProperties.Generic.SUBJECT, subject);
+		this.setProperty(GenericProperties.SUBJECT, subject);
 	}
 
 	public void setText(final String text) {
-		this.setProperty(NodeProperties.Generic.TEXT, text);
+		this.setProperty(GenericProperties.TEXT, text);
 	}
 
 	@Override
 	protected void validateUnderlyingNode() throws MissingRequiredPropertyException {
 		if (ValidationTools.nullOrEmpty(this.getText())) {
-			throw new MissingRequiredPropertyException(Note.class, this.getId(), NodeProperties.Generic.TEXT);
+			throw new MissingRequiredPropertyException(Note.class, this.getId(), GenericProperties.TEXT);
 		}
 	}
 

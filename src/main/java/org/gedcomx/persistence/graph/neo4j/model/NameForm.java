@@ -5,8 +5,7 @@ import java.util.List;
 import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
 import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
-import org.gedcomx.persistence.graph.neo4j.exception.WrongNodeType;
-import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
+import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
 import org.neo4j.graphdb.Node;
 
 @NodeType("NAME_FORM")
@@ -16,7 +15,7 @@ public class NameForm extends NodeWrapper {
 		super();
 	}
 
-	protected NameForm(final Node node) throws MissingFieldException, WrongNodeType {
+	protected NameForm(final Node node) throws MissingFieldException, UnknownNodeType {
 		super(node);
 	}
 
@@ -34,7 +33,7 @@ public class NameForm extends NodeWrapper {
 	}
 
 	public String getFullText() {
-		return (String) this.getProperty(NodeProperties.Conclusion.FULL_TEXT);
+		return (String) this.getProperty(ConclusionProperties.FULL_TEXT);
 	}
 
 	@Override
@@ -49,7 +48,7 @@ public class NameForm extends NodeWrapper {
 	}
 
 	public String getLang() {
-		return (String) this.getProperty(NodeProperties.Generic.LANG);
+		return (String) this.getProperty(GenericProperties.LANG);
 	}
 
 	public Name getName() {
@@ -66,7 +65,7 @@ public class NameForm extends NodeWrapper {
 	}
 
 	public void setFullText(final String fullText) {
-		this.setProperty(NodeProperties.Conclusion.FULL_TEXT, fullText);
+		this.setProperty(ConclusionProperties.FULL_TEXT, fullText);
 	}
 
 	@Override
@@ -87,7 +86,7 @@ public class NameForm extends NodeWrapper {
 	}
 
 	public void setLang(final String lang) {
-		this.setProperty(NodeProperties.Generic.LANG, lang);
+		this.setProperty(GenericProperties.LANG, lang);
 	}
 
 	@Override

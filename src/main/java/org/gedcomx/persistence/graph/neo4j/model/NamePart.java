@@ -8,8 +8,7 @@ import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
 import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredPropertyException;
-import org.gedcomx.persistence.graph.neo4j.exception.WrongNodeType;
-import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
+import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
 import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
 import org.gedcomx.types.NamePartType;
 import org.neo4j.graphdb.Node;
@@ -17,7 +16,7 @@ import org.neo4j.graphdb.Node;
 @NodeType("NAME_PART")
 public class NamePart extends NodeWrapper {
 
-	protected NamePart(final Node node) throws MissingFieldException, WrongNodeType {
+	protected NamePart(final Node node) throws MissingFieldException, UnknownNodeType {
 		super(node);
 	}
 
@@ -55,15 +54,16 @@ public class NamePart extends NodeWrapper {
 	}
 
 	public List<ResourceReference> getQualifiers() {
-		return this.getURIListProperties(NodeProperties.Conclusion.QUALIFIERS);
+		// TODO
+		return this.getURIListProperties(ConclusionProperties.QUALIFIERS);
 	}
 
 	public URI getType() {
-		return new URI((String) this.getProperty(NodeProperties.Generic.TYPE));
+		return new URI((String) this.getProperty(GenericProperties.TYPE));
 	}
 
 	public String getValue() {
-		return (String) this.getProperty(NodeProperties.Generic.VALUE);
+		return (String) this.getProperty(GenericProperties.VALUE);
 	}
 
 	@Override
@@ -90,7 +90,7 @@ public class NamePart extends NodeWrapper {
 	}
 
 	public void setQualifiers(final List<ResourceReference> qualifiers) {
-		this.setURIListProperties(NodeProperties.Conclusion.QUALIFIERS, qualifiers);
+		this.setURIListProperties(ConclusionProperties.QUALIFIERS, qualifiers);
 	}
 
 	@Override
@@ -99,17 +99,17 @@ public class NamePart extends NodeWrapper {
 	}
 
 	public void setType(final URI type) {
-		this.setProperty(NodeProperties.Generic.TYPE, type);
+		this.setProperty(GenericProperties.TYPE, type);
 	}
 
 	public void setValue(final String value) {
-		this.setProperty(NodeProperties.Generic.VALUE, value);
+		this.setProperty(GenericProperties.VALUE, value);
 	}
 
 	@Override
 	protected void validateUnderlyingNode() throws MissingFieldException {
 		if (ValidationTools.nullOrEmpty(this.getValue())) {
-			throw new MissingRequiredPropertyException(NamePart.class, NodeProperties.Generic.VALUE);
+			throw new MissingRequiredPropertyException(NamePart.class, GenericProperties.VALUE);
 		}
 	}
 

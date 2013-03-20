@@ -3,18 +3,17 @@ package org.gedcomx.persistence.graph.neo4j.model;
 import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
 import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
-import org.gedcomx.persistence.graph.neo4j.exception.WrongNodeType;
-import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
+import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
 import org.neo4j.graphdb.Node;
 
 @NodeType("PLACE_REFERENCE")
 public class PlaceReference extends NodeWrapper {
 
-	public PlaceReference() throws MissingFieldException, WrongNodeType {
+	public PlaceReference() throws MissingFieldException, UnknownNodeType {
 		super();
 	}
 
-	protected PlaceReference(final Node node) throws MissingFieldException, WrongNodeType {
+	protected PlaceReference(final Node node) throws MissingFieldException, UnknownNodeType {
 		super(node);
 	}
 
@@ -38,7 +37,7 @@ public class PlaceReference extends NodeWrapper {
 	}
 
 	public String getOriginal() {
-		return (String) this.getProperty(NodeProperties.Conclusion.ORIGINAL);
+		return (String) this.getProperty(ConclusionProperties.ORIGINAL);
 	}
 
 	public NodeWrapper getParentNode() {
@@ -72,7 +71,7 @@ public class PlaceReference extends NodeWrapper {
 	}
 
 	public void setOriginal(final String original) {
-		this.setProperty(NodeProperties.Conclusion.ORIGINAL, original);
+		this.setProperty(ConclusionProperties.ORIGINAL, original);
 	}
 
 	public void setPlaceDescription(final PlaceDescription placeDescription) {

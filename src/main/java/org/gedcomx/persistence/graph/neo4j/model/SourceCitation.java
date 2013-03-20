@@ -8,15 +8,14 @@ import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
 import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredPropertyException;
-import org.gedcomx.persistence.graph.neo4j.exception.WrongNodeType;
-import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
+import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
 import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
 import org.neo4j.graphdb.Node;
 
 @NodeType("SOURCE_CITATION")
 public class SourceCitation extends NodeWrapper {
 
-	protected SourceCitation(final Node node) throws WrongNodeType, MissingFieldException {
+	protected SourceCitation(final Node node) throws UnknownNodeType, MissingFieldException {
 		super(node);
 	}
 
@@ -38,7 +37,7 @@ public class SourceCitation extends NodeWrapper {
 	}
 
 	public ResourceReference getCitationTemplate() {
-		return new ResourceReference(new URI((String) this.getProperty(NodeProperties.SourceDescription.CITATION_TEMPLATE)));
+		return new ResourceReference(new URI((String) this.getProperty(SourceProperties.CITATION_TEMPLATE)));
 	}
 
 	public SourceDescription getDescription() {
@@ -62,11 +61,11 @@ public class SourceCitation extends NodeWrapper {
 	}
 
 	public String getLang() {
-		return (String) this.getProperty(NodeProperties.Generic.LANG);
+		return (String) this.getProperty(GenericProperties.LANG);
 	}
 
 	public String getValue() {
-		return (String) this.getProperty(NodeProperties.Generic.VALUE);
+		return (String) this.getProperty(GenericProperties.VALUE);
 	}
 
 	@Override
@@ -75,7 +74,7 @@ public class SourceCitation extends NodeWrapper {
 	}
 
 	public void setCitationTemplate(final ResourceReference citationTemplate) {
-		this.setProperty(NodeProperties.SourceDescription.CITATION_TEMPLATE, citationTemplate.getResource().toString());
+		this.setProperty(SourceProperties.CITATION_TEMPLATE, citationTemplate.getResource().toString());
 	}
 
 	@Override
@@ -97,7 +96,7 @@ public class SourceCitation extends NodeWrapper {
 	}
 
 	public void setLang(final String lang) {
-		this.setProperty(NodeProperties.Generic.LANG, lang);
+		this.setProperty(GenericProperties.LANG, lang);
 	}
 
 	@Override
@@ -106,13 +105,13 @@ public class SourceCitation extends NodeWrapper {
 	}
 
 	public void setValue(final String value) {
-		this.setProperty(NodeProperties.Generic.VALUE, value);
+		this.setProperty(GenericProperties.VALUE, value);
 	}
 
 	@Override
 	protected void validateUnderlyingNode() throws MissingRequiredPropertyException {
 		if (ValidationTools.nullOrEmpty(this.getValue())) {
-			throw new MissingRequiredPropertyException(SourceCitation.class, NodeProperties.Generic.VALUE);
+			throw new MissingRequiredPropertyException(SourceCitation.class, GenericProperties.VALUE);
 		}
 	}
 

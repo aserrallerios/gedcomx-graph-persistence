@@ -5,15 +5,15 @@ import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
 import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredPropertyException;
-import org.gedcomx.persistence.graph.neo4j.exception.WrongNodeType;
-import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
+import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
 import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
+import org.gedcomx.types.IdentifierType;
 import org.neo4j.graphdb.Node;
 
 @NodeType("IDENTIFIER")
 public class Identifier extends NodeWrapper {
 
-	public Identifier(final Node node) throws WrongNodeType, MissingFieldException {
+	public Identifier(final Node node) throws UnknownNodeType, MissingFieldException {
 		super(node);
 	}
 
@@ -40,17 +40,21 @@ public class Identifier extends NodeWrapper {
 		return gedcomXIdentifier;
 	}
 
+	public IdentifierType getKnownType() {
+		return IdentifierType.fromQNameURI(this.getType());
+	}
+
 	public NodeWrapper getParentNode() {
 		return super.getParentNode(GENgraphRelTypes.HAS_IDENTIFIER);
 	}
 
 	public URI getType() {
-		final String type = (String) this.getProperty(NodeProperties.Generic.TYPE);
+		final String type = (String) this.getProperty(GenericProperties.TYPE);
 		return new URI(type);
 	}
 
 	public URI getValue() {
-		final String value = (String) this.getProperty(NodeProperties.Generic.VALUE);
+		final String value = (String) this.getProperty(GenericProperties.VALUE);
 		return new URI(value);
 	}
 
@@ -71,23 +75,27 @@ public class Identifier extends NodeWrapper {
 		return;
 	}
 
+	public void setKnownType(final IdentifierType type) {
+		this.setType(type.toQNameURI());
+	}
+
 	@Override
 	protected void setRequiredProperties(final Object... properties) {
 		this.setValue((URI) properties[0]);
 	}
 
 	public void setType(final URI type) {
-		this.setProperty(NodeProperties.Generic.TYPE, type.toString());
+		this.setProperty(GenericProperties.TYPE, type.toString());
 	}
 
 	public void setValue(final URI value) {
-		this.setProperty(NodeProperties.Generic.VALUE, value.toString());
+		this.setProperty(GenericProperties.VALUE, value.toString());
 	}
 
 	@Override
 	protected void validateUnderlyingNode() throws MissingRequiredPropertyException {
 		if (ValidationTools.nullOrEmpty(this.getValue())) {
-			throw new MissingRequiredPropertyException(Identifier.class, NodeProperties.Generic.VALUE);
+			throw new MissingRequiredPropertyException(Identifier.class, GenericProperties.VALUE);
 		}
 	}
 

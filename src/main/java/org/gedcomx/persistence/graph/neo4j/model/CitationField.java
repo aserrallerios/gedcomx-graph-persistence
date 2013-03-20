@@ -5,15 +5,14 @@ import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
 import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredPropertyException;
-import org.gedcomx.persistence.graph.neo4j.exception.WrongNodeType;
-import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
+import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
 import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
 import org.neo4j.graphdb.Node;
 
 @NodeType("CITATION_FIELD")
 public class CitationField extends NodeWrapper {
 
-	protected CitationField(final Node node) throws MissingFieldException, WrongNodeType {
+	protected CitationField(final Node node) throws MissingFieldException, UnknownNodeType {
 		super(node);
 	}
 
@@ -45,11 +44,11 @@ public class CitationField extends NodeWrapper {
 	}
 
 	public URI getName() {
-		return new URI((String) this.getProperty(NodeProperties.SourceDescription.NAME));
+		return new URI((String) this.getProperty(SourceProperties.NAME));
 	}
 
 	public String getValue() {
-		return (String) this.getProperty(NodeProperties.Generic.VALUE);
+		return (String) this.getProperty(GenericProperties.VALUE);
 	}
 
 	@Override
@@ -71,7 +70,7 @@ public class CitationField extends NodeWrapper {
 	}
 
 	public void setName(final URI name) {
-		this.setProperty(NodeProperties.SourceDescription.NAME, name);
+		this.setProperty(SourceProperties.NAME, name);
 	}
 
 	@Override
@@ -81,16 +80,16 @@ public class CitationField extends NodeWrapper {
 	}
 
 	public void setValue(final String value) {
-		this.setProperty(NodeProperties.Generic.VALUE, value);
+		this.setProperty(GenericProperties.VALUE, value);
 	}
 
 	@Override
 	protected void validateUnderlyingNode() throws MissingRequiredPropertyException {
 		if (ValidationTools.nullOrEmpty(this.getName())) {
-			throw new MissingRequiredPropertyException(CitationField.class, NodeProperties.Generic.VALUE);
+			throw new MissingRequiredPropertyException(CitationField.class, GenericProperties.VALUE);
 		}
 		if (ValidationTools.nullOrEmpty(this.getValue())) {
-			throw new MissingRequiredPropertyException(CitationField.class, NodeProperties.SourceDescription.NAME);
+			throw new MissingRequiredPropertyException(CitationField.class, SourceProperties.NAME);
 		}
 
 	}

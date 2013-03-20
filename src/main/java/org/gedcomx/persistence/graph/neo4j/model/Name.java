@@ -7,8 +7,7 @@ import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
 import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredRelationshipException;
-import org.gedcomx.persistence.graph.neo4j.exception.WrongNodeType;
-import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
+import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
 import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
 import org.gedcomx.types.NameType;
 import org.neo4j.graphdb.Node;
@@ -20,7 +19,7 @@ public class Name extends Conclusion {
 		super();
 	}
 
-	public Name(final Node node) throws MissingFieldException, WrongNodeType {
+	public Name(final Node node) throws MissingFieldException, UnknownNodeType {
 		super(node);
 	}
 
@@ -38,11 +37,11 @@ public class Name extends Conclusion {
 	}
 
 	public String getDateFormal() {
-		return (String) this.getProperty(NodeProperties.Conclusion.DATE_FORMAL);
+		return (String) this.getProperty(ConclusionProperties.DATE_FORMAL);
 	}
 
 	public String getDateOriginal() {
-		return (String) this.getProperty(NodeProperties.Conclusion.DATE_ORIGINAL);
+		return (String) this.getProperty(ConclusionProperties.DATE_ORIGINAL);
 	}
 
 	@Override
@@ -78,11 +77,11 @@ public class Name extends Conclusion {
 	}
 
 	public Boolean getPreferred() {
-		return (Boolean) this.getProperty(NodeProperties.Conclusion.PREFERRED);
+		return (Boolean) this.getProperty(ConclusionProperties.PREFERRED);
 	}
 
 	public URI getType() {
-		final String type = (String) this.getProperty(NodeProperties.Generic.TYPE);
+		final String type = (String) this.getProperty(GenericProperties.TYPE);
 		return new URI(type);
 	}
 
@@ -92,11 +91,11 @@ public class Name extends Conclusion {
 	}
 
 	public void setDateFormal(final String value) {
-		this.setProperty(NodeProperties.Conclusion.DATE_FORMAL, value);
+		this.setProperty(ConclusionProperties.DATE_FORMAL, value);
 	}
 
 	public void setDateOriginal(final String value) {
-		this.setProperty(NodeProperties.Conclusion.DATE_ORIGINAL, value);
+		this.setProperty(ConclusionProperties.DATE_ORIGINAL, value);
 	}
 
 	@Override
@@ -125,7 +124,7 @@ public class Name extends Conclusion {
 	}
 
 	public void setPreferred(final Boolean preferred) {
-		this.setProperty(NodeProperties.Conclusion.PREFERRED, preferred);
+		this.setProperty(ConclusionProperties.PREFERRED, preferred);
 	}
 
 	@Override
@@ -134,7 +133,7 @@ public class Name extends Conclusion {
 	}
 
 	public void setType(final URI type) {
-		this.setProperty(NodeProperties.Generic.TYPE, type.toString());
+		this.setProperty(GenericProperties.TYPE, type.toString());
 	}
 
 	@Override

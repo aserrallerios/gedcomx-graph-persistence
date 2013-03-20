@@ -8,15 +8,14 @@ import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
 import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredRelationshipException;
-import org.gedcomx.persistence.graph.neo4j.exception.WrongNodeType;
-import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
+import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
 import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
 import org.neo4j.graphdb.Node;
 
 @NodeType("SOURCE_DESCRIPTION")
 public class SourceDescription extends NodeWrapper {
 
-	public SourceDescription(final Node node) throws WrongNodeType, MissingFieldException {
+	public SourceDescription(final Node node) throws UnknownNodeType, MissingFieldException {
 		super(node);
 	}
 
@@ -61,8 +60,8 @@ public class SourceDescription extends NodeWrapper {
 		this.deleteReference(GENgraphRelTypes.MEDIATOR);
 	}
 
-	public URI getAbout(final URI about) {
-		return new URI((String) this.getProperty(NodeProperties.Generic.ABOUT));
+	public URI getAbout() {
+		return new URI((String) this.getProperty(GenericProperties.ABOUT));
 	}
 
 	public Attribution getAttribution() {
@@ -84,12 +83,28 @@ public class SourceDescription extends NodeWrapper {
 	@Override
 	protected org.gedcomx.source.SourceDescription getGedcomX() {
 		final org.gedcomx.source.SourceDescription gedcomXSourceDescription = new org.gedcomx.source.SourceDescription();
-		// TODO Auto-generated method stub
+
+		gedcomXSourceDescription.setAbout(this.getAbout());
+		gedcomXSourceDescription.setId(this.getId());
+
+		gedcomXSourceDescription.setAttribution(this.getAttribution().getGedcomX());
+		gedcomXSourceDescription.setComponentOf(this.getComponentOf().getGedcomX());
+
+		gedcomXSourceDescription.setCitations(this.getGedcomXList(org.gedcomx.source.SourceCitation.class, this.getCitations()));
+		gedcomXSourceDescription.setNotes(this.getGedcomXList(org.gedcomx.common.Note.class, this.getNotes()));
+		gedcomXSourceDescription.setSources(this.getGedcomXList(org.gedcomx.source.SourceReference.class, this.getSources()));
+		gedcomXSourceDescription.setTitles(this.getGedcomXList(org.gedcomx.common.TextValue.class, this.getTitles()));
+
+		gedcomXSourceDescription.setMediator();
+		gedcomXSourceDescription.setExtractedConclusions();
+
+		// TODO
+
 		return gedcomXSourceDescription;
 	}
 
 	public String getId() {
-		return (String) this.getProperty(NodeProperties.Generic.ID);
+		return (String) this.getProperty(GenericProperties.ID);
 	}
 
 	public Agent getMediator() {
@@ -114,7 +129,7 @@ public class SourceDescription extends NodeWrapper {
 	}
 
 	public void setAbout(final URI about) {
-		this.setProperty(NodeProperties.Generic.ABOUT, about.toString());
+		this.setProperty(GenericProperties.ABOUT, about.toString());
 	}
 
 	public void setAttribution(final Attribution attribution) {
@@ -164,7 +179,7 @@ public class SourceDescription extends NodeWrapper {
 	}
 
 	public void setId(final String id) {
-		this.setProperty(NodeProperties.Generic.ID, id);
+		this.setProperty(GenericProperties.ID, id);
 	}
 
 	public void setMediator(final Agent mediator) {

@@ -4,9 +4,7 @@ import org.gedcomx.persistence.graph.neo4j.annotations.GedcomXType;
 import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
 import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
-import org.gedcomx.persistence.graph.neo4j.exception.WrongNodeType;
-import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
-import org.neo4j.graphdb.Direction;
+import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
 import org.neo4j.graphdb.Node;
 
 @NodeType("ADDRESS")
@@ -17,7 +15,7 @@ public class Address extends NodeWrapper {
 		super();
 	}
 
-	protected Address(final Node node) throws WrongNodeType, MissingFieldException {
+	protected Address(final Node node) throws UnknownNodeType, MissingFieldException {
 		super(node);
 	}
 
@@ -31,15 +29,15 @@ public class Address extends NodeWrapper {
 	}
 
 	public Agent getAgent() {
-		return this.getNodeByRelationship(Agent.class, GENgraphRelTypes.HAS_ADDRESS, Direction.INCOMING);
+		return (Agent) this.getParentNode(GENgraphRelTypes.HAS_ADDRESS);
 	}
 
 	public String getCity() {
-		return (String) this.getProperty(NodeProperties.Agent.CITY);
+		return (String) this.getProperty(AgentProperties.CITY);
 	}
 
 	public String getCountry() {
-		return (String) this.getProperty(NodeProperties.Agent.COUNTRY);
+		return (String) this.getProperty(AgentProperties.COUNTRY);
 	}
 
 	@Override
@@ -59,27 +57,27 @@ public class Address extends NodeWrapper {
 	}
 
 	public String getPostalCode() {
-		return (String) this.getProperty(NodeProperties.Agent.POSTAL_CODE);
+		return (String) this.getProperty(AgentProperties.POSTAL_CODE);
 	}
 
 	public String getStateOrProvince() {
-		return (String) this.getProperty(NodeProperties.Agent.STATE_OR_PROVINCE);
+		return (String) this.getProperty(AgentProperties.STATE_OR_PROVINCE);
 	}
 
 	public String getStreet() {
-		return (String) this.getProperty(NodeProperties.Agent.STREET);
+		return (String) this.getProperty(AgentProperties.STREET);
 	}
 
 	public String getStreet2() {
-		return (String) this.getProperty(NodeProperties.Agent.STREET2);
+		return (String) this.getProperty(AgentProperties.STREET2);
 	}
 
 	public String getStreet3() {
-		return (String) this.getProperty(NodeProperties.Agent.STREET3);
+		return (String) this.getProperty(AgentProperties.STREET3);
 	}
 
 	public String getValue() {
-		return (String) this.getProperty(NodeProperties.Agent.VALUE);
+		return (String) this.getProperty(AgentProperties.VALUE);
 	}
 
 	@Override
@@ -88,11 +86,11 @@ public class Address extends NodeWrapper {
 	}
 
 	public void setCity(final String city) {
-		this.setProperty(NodeProperties.Agent.CITY, city);
+		this.setProperty(AgentProperties.CITY, city);
 	}
 
 	public void setCountry(final String country) {
-		this.setProperty(NodeProperties.Agent.COUNTRY, country);
+		this.setProperty(AgentProperties.COUNTRY, country);
 	}
 
 	@Override
@@ -115,7 +113,7 @@ public class Address extends NodeWrapper {
 	}
 
 	public void setPostalCode(final String postalCode) {
-		this.setProperty(NodeProperties.Agent.POSTAL_CODE, postalCode);
+		this.setProperty(AgentProperties.POSTAL_CODE, postalCode);
 	}
 
 	@Override
@@ -124,23 +122,23 @@ public class Address extends NodeWrapper {
 	}
 
 	public void setStateOrProvince(final String stateOrProvince) {
-		this.setProperty(NodeProperties.Agent.STATE_OR_PROVINCE, stateOrProvince);
+		this.setProperty(AgentProperties.STATE_OR_PROVINCE, stateOrProvince);
 	}
 
 	public void setStreet(final String street) {
-		this.setProperty(NodeProperties.Agent.STREET, street);
+		this.setProperty(AgentProperties.STREET, street);
 	}
 
 	public void setStreet2(final String street2) {
-		this.setProperty(NodeProperties.Agent.STREET2, street2);
+		this.setProperty(AgentProperties.STREET2, street2);
 	}
 
 	public void setStreet3(final String street3) {
-		this.setProperty(NodeProperties.Agent.STREET3, street3);
+		this.setProperty(AgentProperties.STREET3, street3);
 	}
 
 	public void setValue(final String value) {
-		this.setProperty(NodeProperties.Agent.VALUE, value);
+		this.setProperty(AgentProperties.VALUE, value);
 	}
 
 	@Override

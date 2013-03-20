@@ -6,8 +6,7 @@ import org.gedcomx.common.URI;
 import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
 import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
-import org.gedcomx.persistence.graph.neo4j.exception.WrongNodeType;
-import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
+import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
 import org.gedcomx.types.EventType;
 import org.neo4j.graphdb.Node;
 
@@ -18,7 +17,7 @@ public class Event extends Conclusion {
 		super();
 	}
 
-	public Event(final Node node) throws MissingFieldException, WrongNodeType {
+	public Event(final Node node) throws MissingFieldException, UnknownNodeType {
 		super(node);
 	}
 
@@ -37,11 +36,11 @@ public class Event extends Conclusion {
 	}
 
 	public String getDateFormal() {
-		return (String) this.getProperty(NodeProperties.Conclusion.DATE_FORMAL);
+		return (String) this.getProperty(ConclusionProperties.DATE_FORMAL);
 	}
 
 	public String getDateOriginal() {
-		return (String) this.getProperty(NodeProperties.Conclusion.DATE_ORIGINAL);
+		return (String) this.getProperty(ConclusionProperties.DATE_ORIGINAL);
 	}
 
 	@Override
@@ -75,7 +74,7 @@ public class Event extends Conclusion {
 	}
 
 	public URI getType() {
-		return new URI((String) this.getProperty(NodeProperties.Generic.TYPE));
+		return new URI((String) this.getProperty(GenericProperties.TYPE));
 	}
 
 	@Override
@@ -84,11 +83,11 @@ public class Event extends Conclusion {
 	}
 
 	public void setDateFormal(final String value) {
-		this.setProperty(NodeProperties.Conclusion.DATE_FORMAL, value);
+		this.setProperty(ConclusionProperties.DATE_FORMAL, value);
 	}
 
 	public void setDateOriginal(final String value) {
-		this.setProperty(NodeProperties.Conclusion.DATE_ORIGINAL, value);
+		this.setProperty(ConclusionProperties.DATE_ORIGINAL, value);
 	}
 
 	@Override
@@ -129,7 +128,7 @@ public class Event extends Conclusion {
 	}
 
 	public void setType(final URI type) {
-		this.setProperty(NodeProperties.Generic.TYPE, type.toString());
+		this.setProperty(GenericProperties.TYPE, type.toString());
 	}
 
 	@Override

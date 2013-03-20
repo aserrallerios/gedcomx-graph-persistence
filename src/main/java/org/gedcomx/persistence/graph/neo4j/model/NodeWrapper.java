@@ -15,24 +15,166 @@ import org.gedcomx.persistence.graph.neo4j.dao.GENgraphDAOUtil;
 import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.UninitializedNode;
-import org.gedcomx.persistence.graph.neo4j.exception.WrongNodeType;
-import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
-import org.gedcomx.persistence.graph.neo4j.utils.RelationshipProperties;
+import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;
+import org.reflections.Reflections;
 
 public abstract class NodeWrapper {
 
+	public static enum AgentProperties implements NodeProperties {
+		HOMEPAGE, OPENID, EMAILS, PHONES, STREET, STREET2, STREET3, VALUE, STATE_OR_PROVINCE, CITY, COUNTRY, POSTAL_CODE, ACCOUNT_NAME, SERVICE_HOMEPAGE, IDENTIFIER_TYPE;
+
+		private final boolean indexed;
+		private final IndexNodeNames indexName;
+
+		private AgentProperties() {
+			this.indexed = false;
+			this.indexName = null;
+		}
+
+		private AgentProperties(final boolean indexed, final IndexNodeNames indexName) {
+			this.indexed = indexed;
+			this.indexName = indexName;
+		}
+
+		@Override
+		public IndexNodeNames getIndexName() {
+			return this.indexName;
+		}
+
+		@Override
+		public boolean isIndexed() {
+			return this.indexed;
+		}
+
+	}
+
+	public static enum ConclusionProperties implements NodeProperties {
+
+		ID, CONFIDENCE(true, IndexNodeNames.TYPES), TEXT(true, IndexNodeNames.OTHER), LATITUDE, LONGITUDE, TEMPORAL_DESCRIPTION_ORIGINAL, SPATIAL_DESCRIPTION, TEMPORAL_DESCRIPTION_FORMAL, ORIGINAL, DATE_ORIGINAL, DATE_FORMAL, PREFERRED, FULL_TEXT, QUALIFIERS, DETAILS, LIVING, PERSON_REFERENCE;
+
+		private final boolean indexed;
+		private final IndexNodeNames indexName;
+
+		private ConclusionProperties() {
+			this.indexed = false;
+			this.indexName = null;
+		}
+
+		private ConclusionProperties(final boolean indexed, final IndexNodeNames indexName) {
+			this.indexed = indexed;
+			this.indexName = indexName;
+		}
+
+		@Override
+		public IndexNodeNames getIndexName() {
+			return this.indexName;
+		}
+
+		@Override
+		public boolean isIndexed() {
+			return this.indexed;
+		}
+
+	}
+
+	public static enum GenericProperties implements NodeProperties {
+		ID(true, IndexNodeNames.IDS), ABOUT, NODE_TYPE(true, IndexNodeNames.NODE_TYPES), TYPE(true, IndexNodeNames.TYPES), VALUE, LANG, MODIFIED, CHANGE_MESSAGE, SUBJECT, TEXT;
+
+		private final boolean indexed;
+		private final IndexNodeNames indexName;
+
+		private GenericProperties() {
+			this.indexed = false;
+			this.indexName = null;
+		}
+
+		private GenericProperties(final boolean indexed, final IndexNodeNames indexName) {
+			this.indexed = indexed;
+			this.indexName = indexName;
+		}
+
+		@Override
+		public IndexNodeNames getIndexName() {
+			return this.indexName;
+		}
+
+		@Override
+		public boolean isIndexed() {
+			return this.indexed;
+		}
+	}
+
+	public enum IndexNodeNames {
+		NODE_TYPES, IDS, TYPES, OTHER
+	}
+
+	public interface NodeProperties {
+
+		public IndexNodeNames getIndexName();
+
+		public boolean isIndexed();
+
+		public String name();
+
+	}
+
+	public enum RelationshipProperties {
+		INDEX
+	}
+
+	public static enum SourceProperties implements NodeProperties {
+
+		ID, CITATION_TEMPLATE, NAME;
+
+		private final boolean indexed;
+		private final IndexNodeNames indexName;
+
+		private SourceProperties() {
+			this.indexed = false;
+			this.indexName = null;
+		}
+
+		private SourceProperties(final boolean indexed, final IndexNodeNames indexName) {
+			this.indexed = indexed;
+			this.indexName = indexName;
+		}
+
+		@Override
+		public IndexNodeNames getIndexName() {
+			return this.indexName;
+		}
+
+		@Override
+		public boolean isIndexed() {
+			return this.indexed;
+		}
+	}
+
+	private static Map<String, Class<? extends NodeWrapper>> nodesByType = new HashMap<>();
+
 	private final Node underlyingNode;
 
-	protected NodeWrapper(final Node underlyingNode) throws MissingFieldException, WrongNodeType {
+	static {
+		final Reflections reflections = new Reflections("org.gedcomx.persistence.graph.neo4j.model");
+
+		for (final Class<? extends NodeWrapper> subclass : reflections.getSubTypesOf(NodeWrapper.class)) {
+			final NodeType nodeType = subclass.getAnnotation(NodeType.class);
+			if (nodeType != null) {
+				NodeWrapper.nodesByType.put(nodeType.value(), subclass);
+			}
+		}
+	}
+
+	protected NodeWrapper(final Node underlyingNode) throws MissingFieldException, UnknownNodeType {
 		final Transaction t = GENgraphDAOUtil.beginTransaction();
 		try {
 			this.underlyingNode = underlyingNode;
 			if (this.getNodeType() != this.getClass().getAnnotation(NodeType.class).value()) {
-				throw new WrongNodeType();
+				throw new UnknownNodeType();
 			}
 			this.validateUnderlyingNode();
 			GENgraphDAOUtil.commitTransaction(t);
@@ -102,6 +244,18 @@ public abstract class NodeWrapper {
 	}
 
 	protected void createRelationship(final GENgraphRelTypes relType, final NodeWrapper node) {
+		final boolean rel = GENgraphDAOUtil.hasSingleRelationship(this.getUnderlyingNode(), relType, Direction.OUTGOING);
+
+		if (!rel) {
+			this.addRelationship(relType, node);
+		} else {
+			final NodeWrapper wrapper = this.getNodeByRelationship(node.getClass(), relType, Direction.OUTGOING);
+			wrapper.delete();
+			this.addRelationship(relType, node);
+		}
+	}
+
+	protected void createRelationship(final GENgraphRelTypes relType, final ResourceReference node, final NodeProperties property) {
 		final boolean rel = GENgraphDAOUtil.hasSingleRelationship(this.getUnderlyingNode(), relType, Direction.OUTGOING);
 
 		if (!rel) {
@@ -201,14 +355,20 @@ public abstract class NodeWrapper {
 		return null;
 	}
 
-	private <T extends NodeWrapper> T getNodeByRelationship(final GENgraphRelTypes relation, final Direction dir) {
-		// final Node node =
-		// GENgraphDAOUtil.getSingleNodeByRelationship(this.getUnderlyingNode(),
-		// relation, dir);
-		// String nodeType = (String) GENgraphDAOUtil.getNodeProperty(node,
-		// NodeProperties.Generic.NODE_TYPE.name());
-		// TODO
-		return null;
+	private NodeWrapper getNodeByRelationship(final GENgraphRelTypes relation, final Direction dir) {
+		final Node node = GENgraphDAOUtil.getSingleNodeByRelationship(this.getUnderlyingNode(), relation, dir);
+		final String nodeType = (String) GENgraphDAOUtil.getNodeProperty(node, GenericProperties.NODE_TYPE.name());
+
+		final Class<? extends NodeWrapper> type = NodeWrapper.nodesByType.get(nodeType);
+		Constructor<? extends NodeWrapper> cons;
+		NodeWrapper wrapper;
+		try {
+			cons = type.getConstructor(Node.class);
+			wrapper = cons.newInstance(node);
+		} catch (final Exception e) {
+			throw new UnknownNodeType();
+		}
+		return wrapper;
 	}
 
 	protected <T extends NodeWrapper> List<T> getNodesByRelationship(final Class<T> type, final GENgraphRelTypes relation) {
@@ -227,7 +387,7 @@ public abstract class NodeWrapper {
 	}
 
 	public String getNodeType() {
-		return (String) GENgraphDAOUtil.getNodeProperty(this.getUnderlyingNode(), NodeProperties.Generic.NODE_TYPE.name());
+		return (String) GENgraphDAOUtil.getNodeProperty(this.getUnderlyingNode(), GenericProperties.NODE_TYPE.name());
 	}
 
 	protected NodeWrapper getParentNode(final GENgraphRelTypes relation) {
@@ -266,7 +426,7 @@ public abstract class NodeWrapper {
 	protected abstract void setGedcomXRelations(final Object gedcomXObject) throws MissingFieldException;
 
 	private void setNodeType(final String nodeType) {
-		this.setProperty(NodeProperties.Generic.NODE_TYPE, nodeType);
+		this.setProperty(GenericProperties.NODE_TYPE, nodeType);
 	}
 
 	protected void setProperty(final NodeProperties property, final Object value) {

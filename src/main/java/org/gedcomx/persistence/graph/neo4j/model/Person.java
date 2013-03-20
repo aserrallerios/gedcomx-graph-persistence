@@ -4,8 +4,7 @@ import java.util.List;
 
 import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
-import org.gedcomx.persistence.graph.neo4j.exception.WrongNodeType;
-import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
+import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
 import org.neo4j.graphdb.Node;
 
 public class Person extends Conclusion {
@@ -14,7 +13,7 @@ public class Person extends Conclusion {
 		super();
 	}
 
-	protected Person(final Node node) throws MissingFieldException, WrongNodeType {
+	protected Person(final Node node) throws MissingFieldException, UnknownNodeType {
 		super(node);
 	}
 
@@ -72,7 +71,7 @@ public class Person extends Conclusion {
 	}
 
 	public Boolean getLiving() {
-		return (Boolean) this.getProperty(NodeProperties.Conclusion.LIVING);
+		return (Boolean) this.getProperty(ConclusionProperties.LIVING);
 	}
 
 	public List<Name> getNames() {
@@ -113,7 +112,7 @@ public class Person extends Conclusion {
 	}
 
 	public void setLiving(final Boolean living) {
-		this.setProperty(NodeProperties.Conclusion.LIVING, living);
+		this.setProperty(ConclusionProperties.LIVING, living);
 	}
 
 	@Override

@@ -5,15 +5,14 @@ import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
 import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredPropertyException;
-import org.gedcomx.persistence.graph.neo4j.exception.WrongNodeType;
-import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
+import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
 import org.gedcomx.types.GenderType;
 import org.neo4j.graphdb.Node;
 
 @NodeType("GENDER")
 public class Gender extends Conclusion {
 
-	protected Gender(final Node node) throws MissingFieldException, WrongNodeType {
+	protected Gender(final Node node) throws MissingFieldException, UnknownNodeType {
 		super(node);
 	}
 
@@ -51,7 +50,7 @@ public class Gender extends Conclusion {
 	}
 
 	public URI getType() {
-		return new URI((String) this.getProperty(NodeProperties.Generic.TYPE));
+		return new URI((String) this.getProperty(GenericProperties.TYPE));
 	}
 
 	@Override
@@ -80,13 +79,13 @@ public class Gender extends Conclusion {
 	}
 
 	public void setType(final URI type) {
-		this.setProperty(NodeProperties.Generic.TYPE, type.toString());
+		this.setProperty(GenericProperties.TYPE, type.toString());
 	}
 
 	@Override
 	protected void validateUnderlyingNode() throws MissingFieldException {
 		if (this.getType() == null) {
-			throw new MissingRequiredPropertyException(Gender.class, NodeProperties.Generic.TYPE);
+			throw new MissingRequiredPropertyException(Gender.class, GenericProperties.TYPE);
 		}
 	}
 

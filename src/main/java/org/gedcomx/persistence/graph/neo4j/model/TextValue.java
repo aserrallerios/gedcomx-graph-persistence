@@ -4,15 +4,14 @@ import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
 import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredPropertyException;
-import org.gedcomx.persistence.graph.neo4j.exception.WrongNodeType;
-import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
+import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
 import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
 import org.neo4j.graphdb.Node;
 
 @NodeType("TEXT_VALUE")
 public class TextValue extends NodeWrapper {
 
-	public TextValue(final Node node) throws WrongNodeType, MissingFieldException {
+	public TextValue(final Node node) throws UnknownNodeType, MissingFieldException {
 		super(node);
 	}
 
@@ -40,7 +39,7 @@ public class TextValue extends NodeWrapper {
 	}
 
 	public String getLang() {
-		return (String) this.getProperty(NodeProperties.Generic.LANG);
+		return (String) this.getProperty(GenericProperties.LANG);
 	}
 
 	public NodeWrapper getParentNode() {
@@ -48,7 +47,7 @@ public class TextValue extends NodeWrapper {
 	}
 
 	public String getValue() {
-		return (String) this.getProperty(NodeProperties.Generic.VALUE);
+		return (String) this.getProperty(GenericProperties.VALUE);
 	}
 
 	@Override
@@ -69,7 +68,7 @@ public class TextValue extends NodeWrapper {
 	}
 
 	public void setLang(final String lang) {
-		this.setProperty(NodeProperties.Generic.LANG, lang);
+		this.setProperty(GenericProperties.LANG, lang);
 	}
 
 	@Override
@@ -78,13 +77,13 @@ public class TextValue extends NodeWrapper {
 	}
 
 	public void setValue(final String value) {
-		this.setProperty(NodeProperties.Generic.VALUE, value);
+		this.setProperty(GenericProperties.VALUE, value);
 	}
 
 	@Override
 	protected void validateUnderlyingNode() throws MissingRequiredPropertyException {
 		if (ValidationTools.nullOrEmpty(this.getValue())) {
-			throw new MissingRequiredPropertyException(TextValue.class, NodeProperties.Generic.VALUE);
+			throw new MissingRequiredPropertyException(TextValue.class, GenericProperties.VALUE);
 		}
 	}
 }

@@ -5,8 +5,7 @@ import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
 import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredPropertyException;
-import org.gedcomx.persistence.graph.neo4j.exception.WrongNodeType;
-import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
+import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
 import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
 import org.gedcomx.types.FactType;
 import org.neo4j.graphdb.Node;
@@ -14,7 +13,7 @@ import org.neo4j.graphdb.Node;
 @NodeType("FACT")
 public class Fact extends Conclusion {
 
-	protected Fact(final Node node) throws MissingFieldException, WrongNodeType {
+	protected Fact(final Node node) throws MissingFieldException, UnknownNodeType {
 		super(node);
 	}
 
@@ -39,11 +38,11 @@ public class Fact extends Conclusion {
 	}
 
 	public String getDateFormal() {
-		return (String) this.getProperty(NodeProperties.Conclusion.DATE_FORMAL);
+		return (String) this.getProperty(ConclusionProperties.DATE_FORMAL);
 	}
 
 	public String getDateOriginal() {
-		return (String) this.getProperty(NodeProperties.Conclusion.DATE_ORIGINAL);
+		return (String) this.getProperty(ConclusionProperties.DATE_ORIGINAL);
 	}
 
 	@Override
@@ -79,11 +78,11 @@ public class Fact extends Conclusion {
 	}
 
 	public URI getType() {
-		return new URI((String) this.getProperty(NodeProperties.Generic.TYPE));
+		return new URI((String) this.getProperty(GenericProperties.TYPE));
 	}
 
 	public String getValue() {
-		return (String) this.getProperty(NodeProperties.Generic.VALUE);
+		return (String) this.getProperty(GenericProperties.VALUE);
 	}
 
 	@Override
@@ -92,11 +91,11 @@ public class Fact extends Conclusion {
 	}
 
 	public void setDateFormal(final String value) {
-		this.setProperty(NodeProperties.Conclusion.DATE_FORMAL, value);
+		this.setProperty(ConclusionProperties.DATE_FORMAL, value);
 	}
 
 	public void setDateOriginal(final String value) {
-		this.setProperty(NodeProperties.Conclusion.DATE_ORIGINAL, value);
+		this.setProperty(ConclusionProperties.DATE_ORIGINAL, value);
 	}
 
 	@Override
@@ -134,17 +133,17 @@ public class Fact extends Conclusion {
 	}
 
 	public void setType(final URI type) {
-		this.setProperty(NodeProperties.Generic.TYPE, type.toString());
+		this.setProperty(GenericProperties.TYPE, type.toString());
 	}
 
 	public void setValue(final String value) {
-		this.setProperty(NodeProperties.Generic.VALUE, value);
+		this.setProperty(GenericProperties.VALUE, value);
 	}
 
 	@Override
 	protected void validateUnderlyingNode() throws MissingFieldException {
 		if (ValidationTools.nullOrEmpty(this.getType())) {
-			throw new MissingRequiredPropertyException(Fact.class, this.getId(), NodeProperties.Generic.TYPE);
+			throw new MissingRequiredPropertyException(Fact.class, this.getId(), GenericProperties.TYPE);
 		}
 	}
 

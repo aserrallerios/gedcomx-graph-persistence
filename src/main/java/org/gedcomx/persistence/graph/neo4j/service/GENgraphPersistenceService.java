@@ -5,8 +5,7 @@ import java.util.Map;
 import org.gedcomx.common.URI;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.model.NodeWrapper;
-import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
-import org.gedcomx.persistence.graph.neo4j.utils.NodeTypes;
+import org.gedcomx.persistence.graph.neo4j.model.NodeWrapper.NodeProperties;
 import org.neo4j.graphdb.Node;
 
 public interface GENgraphPersistenceService {

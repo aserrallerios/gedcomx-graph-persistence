@@ -6,15 +6,14 @@ import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
 import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredPropertyException;
-import org.gedcomx.persistence.graph.neo4j.exception.WrongNodeType;
-import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
+import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
 import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
 import org.neo4j.graphdb.Node;
 
 @NodeType("ACCOUNT")
 public class OnlineAccount extends NodeWrapper {
 
-	protected OnlineAccount(final Node node) throws WrongNodeType, MissingFieldException {
+	protected OnlineAccount(final Node node) throws UnknownNodeType, MissingFieldException {
 		super(node);
 	}
 
@@ -32,7 +31,7 @@ public class OnlineAccount extends NodeWrapper {
 	}
 
 	public String getAccountName() {
-		return (String) this.getProperty(NodeProperties.Agent.ACCOUNT_NAME);
+		return (String) this.getProperty(AgentProperties.ACCOUNT_NAME);
 	}
 
 	public Agent getAgent() {
@@ -50,7 +49,7 @@ public class OnlineAccount extends NodeWrapper {
 	}
 
 	public ResourceReference getServiceHomepage() {
-		final String serviceHomepage = (String) this.getProperty(NodeProperties.Agent.SERVICE_HOMEPAGE);
+		final String serviceHomepage = (String) this.getProperty(AgentProperties.SERVICE_HOMEPAGE);
 		return new ResourceReference(new URI(serviceHomepage));
 	}
 
@@ -60,7 +59,7 @@ public class OnlineAccount extends NodeWrapper {
 	}
 
 	public void setAccountName(final String accountName) {
-		this.setProperty(NodeProperties.Agent.ACCOUNT_NAME, accountName);
+		this.setProperty(AgentProperties.ACCOUNT_NAME, accountName);
 	}
 
 	@Override
@@ -83,16 +82,16 @@ public class OnlineAccount extends NodeWrapper {
 	}
 
 	public void setServiceHomepage(final ResourceReference serviceHomepage) {
-		this.setProperty(NodeProperties.Agent.SERVICE_HOMEPAGE, serviceHomepage.getResource().toString());
+		this.setProperty(AgentProperties.SERVICE_HOMEPAGE, serviceHomepage.getResource().toString());
 	}
 
 	@Override
 	protected void validateUnderlyingNode() throws MissingRequiredPropertyException {
 		if (ValidationTools.nullOrEmpty(this.getAccountName())) {
-			throw new MissingRequiredPropertyException(OnlineAccount.class, NodeProperties.Agent.ACCOUNT_NAME);
+			throw new MissingRequiredPropertyException(OnlineAccount.class, AgentProperties.ACCOUNT_NAME);
 		}
 		if (ValidationTools.nullOrEmpty(this.getServiceHomepage())) {
-			throw new MissingRequiredPropertyException(OnlineAccount.class, NodeProperties.Agent.SERVICE_HOMEPAGE);
+			throw new MissingRequiredPropertyException(OnlineAccount.class, AgentProperties.SERVICE_HOMEPAGE);
 		}
 	}
 }

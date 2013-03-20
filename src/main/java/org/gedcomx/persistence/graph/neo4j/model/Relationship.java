@@ -7,8 +7,7 @@ import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
 import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredRelationshipException;
-import org.gedcomx.persistence.graph.neo4j.exception.WrongNodeType;
-import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
+import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
 import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
 import org.gedcomx.types.RelationshipType;
 import org.neo4j.graphdb.Node;
@@ -16,7 +15,7 @@ import org.neo4j.graphdb.Node;
 @NodeType("RELATIONSHIP")
 public class Relationship extends Conclusion {
 
-	protected Relationship(final Node node) throws MissingFieldException, WrongNodeType {
+	protected Relationship(final Node node) throws MissingFieldException, UnknownNodeType {
 		super(node);
 	}
 
@@ -85,7 +84,7 @@ public class Relationship extends Conclusion {
 	}
 
 	public URI getType() {
-		return new URI((String) this.getProperty(NodeProperties.Generic.TYPE));
+		return new URI((String) this.getProperty(GenericProperties.TYPE));
 	}
 
 	@Override
@@ -133,7 +132,7 @@ public class Relationship extends Conclusion {
 	}
 
 	public void setType(final URI type) {
-		this.setProperty(NodeProperties.Generic.TYPE, type.toString());
+		this.setProperty(GenericProperties.TYPE, type.toString());
 	}
 
 	@Override

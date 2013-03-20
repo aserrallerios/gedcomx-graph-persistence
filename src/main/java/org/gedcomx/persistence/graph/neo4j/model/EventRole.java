@@ -1,12 +1,12 @@
 package org.gedcomx.persistence.graph.neo4j.model;
 
+import org.gedcomx.common.ResourceReference;
 import org.gedcomx.common.URI;
 import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
 import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredRelationshipException;
-import org.gedcomx.persistence.graph.neo4j.exception.WrongNodeType;
-import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
+import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
 import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
 import org.gedcomx.types.EventRoleType;
 import org.neo4j.graphdb.Node;
@@ -14,7 +14,7 @@ import org.neo4j.graphdb.Node;
 @NodeType("EVENT_ROLE")
 public class EventRole extends Conclusion {
 
-	protected EventRole(final Node node) throws MissingFieldException, WrongNodeType {
+	protected EventRole(final Node node) throws MissingFieldException, UnknownNodeType {
 		super(node);
 	}
 
@@ -33,7 +33,7 @@ public class EventRole extends Conclusion {
 	}
 
 	public String getDetails() {
-		return (String) this.getProperty(NodeProperties.Conclusion.DETAILS);
+		return (String) this.getProperty(ConclusionProperties.DETAILS);
 	}
 
 	public Event getEvent() {
@@ -50,9 +50,8 @@ public class EventRole extends Conclusion {
 		gedcomXEventRole.setKnownType(this.getKnownType());
 		gedcomXEventRole.setDetails(this.getDetails());
 
-		gedcomXEventRole.setPerson(this.getPerson());
+		gedcomXEventRole.setPerson(new ResourceReference(new URI(this.getPerson().getId())));
 
-		// TODO
 		return gedcomXEventRole;
 	}
 
@@ -65,16 +64,16 @@ public class EventRole extends Conclusion {
 	}
 
 	public URI getType() {
-		return new URI((String) this.getProperty(NodeProperties.Generic.TYPE));
+		return new URI((String) this.getProperty(GenericProperties.TYPE));
 	}
 
 	@Override
 	protected void resolveReferences() {
-		// TODO
+		this.resolveReferences(GENgraphRelTypes.PERSON);
 	}
 
 	public void setDetails(final String details) {
-		this.setProperty(NodeProperties.Conclusion.DETAILS, details);
+		this.setProperty(ConclusionProperties.DETAILS, details);
 	}
 
 	@Override
@@ -87,18 +86,9 @@ public class EventRole extends Conclusion {
 
 	@Override
 	protected void setGedcomXConcreteRelations(final Object gedcomXObject) throws MissingFieldException {
-		// final org.gedcomx.conclusion.EventRole gedcomXEventRole =
-		// (org.gedcomx.conclusion.EventRole) gedcomXObject;
+		final org.gedcomx.conclusion.EventRole gedcomXEventRole = (org.gedcomx.conclusion.EventRole) gedcomXObject;
 
-		// this.personURI = gedcomXEventRole.getPerson().getResource();
-		// final Conclusion conclusion =
-		// this.getGraph().getConclusion(this.personURI);
-		// if (conclusion != null) {
-		// this.setPerson((Person) conclusion.getSubnode());
-		// } else {
-		// this.addNodeToResolveReferences();
-		// }
-		// TODO
+		this.setPerson(gedcomXEventRole.getPerson());
 	}
 
 	public void setKnownType(final EventRoleType type) {
@@ -109,13 +99,17 @@ public class EventRole extends Conclusion {
 		this.createRelationship(GENgraphRelTypes.PERSON, person);
 	}
 
+	private void setPerson(final ResourceReference reference) {
+		this.createRelationship(GENgraphRelTypes.PERSON, reference, ConclusionProperties.PERSON_REFERENCE);
+	}
+
 	@Override
 	protected void setRequiredProperties(final Object... properties) throws MissingFieldException {
 		this.setPerson((Person) properties[0]);
 	}
 
 	public void setType(final URI type) {
-		this.setProperty(NodeProperties.Generic.TYPE, type);
+		this.setProperty(GenericProperties.TYPE, type);
 	}
 
 	@Override

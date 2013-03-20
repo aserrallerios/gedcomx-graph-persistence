@@ -8,15 +8,14 @@ import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
 import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredRelationshipException;
-import org.gedcomx.persistence.graph.neo4j.exception.WrongNodeType;
-import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
+import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
 import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
 import org.neo4j.graphdb.Node;
 
 @NodeType("PLACE_DESCRIPTION")
 public class PlaceDescription extends Conclusion {
 
-	protected PlaceDescription(final Node node) throws MissingFieldException, WrongNodeType {
+	protected PlaceDescription(final Node node) throws MissingFieldException, UnknownNodeType {
 		super(node);
 	}
 
@@ -43,7 +42,7 @@ public class PlaceDescription extends Conclusion {
 	}
 
 	public URI getAbout() {
-		return new URI((String) this.getProperty(NodeProperties.Generic.ABOUT));
+		return new URI((String) this.getProperty(GenericProperties.ABOUT));
 	}
 
 	@Override
@@ -73,12 +72,12 @@ public class PlaceDescription extends Conclusion {
 	}
 
 	public Double getLatitude() {
-		return (Double) this.getProperty(NodeProperties.Conclusion.LATITUDE);
+		return (Double) this.getProperty(ConclusionProperties.LATITUDE);
 
 	}
 
 	public Double getLongitude() {
-		return (Double) this.getProperty(NodeProperties.Conclusion.LONGITUDE);
+		return (Double) this.getProperty(ConclusionProperties.LONGITUDE);
 
 	}
 
@@ -87,21 +86,21 @@ public class PlaceDescription extends Conclusion {
 	}
 
 	public ResourceReference getSpatialDescription() {
-		return new ResourceReference(new URI((String) this.getProperty(NodeProperties.Conclusion.SPATIAL_DESCRIPTION)));
+		return new ResourceReference(new URI((String) this.getProperty(ConclusionProperties.SPATIAL_DESCRIPTION)));
 	}
 
 	public String getTemporalDescriptionFormal() {
-		return (String) this.getProperty(NodeProperties.Conclusion.TEMPORAL_DESCRIPTION_FORMAL);
+		return (String) this.getProperty(ConclusionProperties.TEMPORAL_DESCRIPTION_FORMAL);
 
 	}
 
 	public String getTemporalDescriptionOriginal() {
-		return (String) this.getProperty(NodeProperties.Conclusion.TEMPORAL_DESCRIPTION_ORIGINAL);
+		return (String) this.getProperty(ConclusionProperties.TEMPORAL_DESCRIPTION_ORIGINAL);
 
 	}
 
 	public URI getType() {
-		return new URI((String) this.getProperty(NodeProperties.Generic.TYPE));
+		return new URI((String) this.getProperty(GenericProperties.TYPE));
 	}
 
 	@Override
@@ -110,7 +109,7 @@ public class PlaceDescription extends Conclusion {
 	}
 
 	public void setAbout(final URI about) {
-		this.setProperty(NodeProperties.Generic.ABOUT, about.toString());
+		this.setProperty(GenericProperties.ABOUT, about.toString());
 	}
 
 	@Override
@@ -143,12 +142,12 @@ public class PlaceDescription extends Conclusion {
 	}
 
 	public void setLatitude(final Double latitude) {
-		this.setProperty(NodeProperties.Conclusion.LATITUDE, latitude);
+		this.setProperty(ConclusionProperties.LATITUDE, latitude);
 
 	}
 
 	public void setLongitude(final Double longitude) {
-		this.setProperty(NodeProperties.Conclusion.LONGITUDE, longitude);
+		this.setProperty(ConclusionProperties.LONGITUDE, longitude);
 
 	}
 
@@ -158,21 +157,21 @@ public class PlaceDescription extends Conclusion {
 	}
 
 	public void setSpatialDescription(final ResourceReference spatialDescription) {
-		this.setProperty(NodeProperties.Conclusion.SPATIAL_DESCRIPTION, spatialDescription.getResource().toString());
+		this.setProperty(ConclusionProperties.SPATIAL_DESCRIPTION, spatialDescription.getResource().toString());
 	}
 
 	public void setTemporalDescriptionFormal(final String formal) {
-		this.setProperty(NodeProperties.Conclusion.TEMPORAL_DESCRIPTION_FORMAL, formal);
+		this.setProperty(ConclusionProperties.TEMPORAL_DESCRIPTION_FORMAL, formal);
 
 	}
 
 	public void setTemporalDescriptionOriginal(final String original) {
-		this.setProperty(NodeProperties.Conclusion.TEMPORAL_DESCRIPTION_ORIGINAL, original);
+		this.setProperty(ConclusionProperties.TEMPORAL_DESCRIPTION_ORIGINAL, original);
 
 	}
 
 	public void setType(final URI type) {
-		this.setProperty(NodeProperties.Generic.TYPE, type.toString());
+		this.setProperty(GenericProperties.TYPE, type.toString());
 	}
 
 	@Override

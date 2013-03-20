@@ -7,8 +7,7 @@ import org.gedcomx.common.URI;
 import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
 import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
-import org.gedcomx.persistence.graph.neo4j.exception.WrongNodeType;
-import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
+import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
 import org.neo4j.graphdb.Node;
 
 @NodeType("AGENT")
@@ -18,7 +17,7 @@ public class Agent extends NodeWrapper {
 		super();
 	}
 
-	protected Agent(final Node node) throws WrongNodeType, MissingFieldException {
+	protected Agent(final Node node) throws UnknownNodeType, MissingFieldException {
 		super(node);
 	}
 
@@ -55,7 +54,7 @@ public class Agent extends NodeWrapper {
 	}
 
 	public List<ResourceReference> getEmails() {
-		return this.getURIListProperties(NodeProperties.Agent.EMAILS);
+		return this.getURIListProperties(AgentProperties.EMAILS);
 	}
 
 	@Override
@@ -77,12 +76,12 @@ public class Agent extends NodeWrapper {
 	}
 
 	public ResourceReference getHomepage() {
-		final String homepage = (String) this.getProperty(NodeProperties.Agent.HOMEPAGE);
+		final String homepage = (String) this.getProperty(AgentProperties.HOMEPAGE);
 		return new ResourceReference(new URI(homepage));
 	}
 
 	public String getId() {
-		return (String) this.getProperty(NodeProperties.Generic.ID);
+		return (String) this.getProperty(GenericProperties.ID);
 	}
 
 	public List<Identifier> getIdentifiers() {
@@ -98,12 +97,12 @@ public class Agent extends NodeWrapper {
 	}
 
 	public ResourceReference getOpenid() {
-		final String openid = (String) this.getProperty(NodeProperties.Agent.OPENID);
+		final String openid = (String) this.getProperty(AgentProperties.OPENID);
 		return new ResourceReference(new URI(openid));
 	}
 
 	public List<ResourceReference> getPhones() {
-		return this.getURIListProperties(NodeProperties.Agent.PHONES);
+		return this.getURIListProperties(AgentProperties.PHONES);
 	}
 
 	@Override
@@ -112,7 +111,7 @@ public class Agent extends NodeWrapper {
 	}
 
 	public void setEmails(final List<ResourceReference> emails) {
-		this.setURIListProperties(NodeProperties.Agent.EMAILS, emails);
+		this.setURIListProperties(AgentProperties.EMAILS, emails);
 	}
 
 	@Override
@@ -145,19 +144,19 @@ public class Agent extends NodeWrapper {
 	}
 
 	public void setHomepage(final ResourceReference homepage) {
-		this.setProperty(NodeProperties.Agent.HOMEPAGE, homepage.getResource().toString());
+		this.setProperty(AgentProperties.HOMEPAGE, homepage.getResource().toString());
 	}
 
 	public void setId(final String id) {
-		this.setProperty(NodeProperties.Generic.ID, id);
+		this.setProperty(GenericProperties.ID, id);
 	}
 
 	public void setOpenid(final ResourceReference openid) {
-		this.setProperty(NodeProperties.Agent.HOMEPAGE, openid.getResource().toString());
+		this.setProperty(AgentProperties.HOMEPAGE, openid.getResource().toString());
 	}
 
 	public void setPhones(final List<ResourceReference> phones) {
-		this.setURIListProperties(NodeProperties.Agent.PHONES, phones);
+		this.setURIListProperties(AgentProperties.PHONES, phones);
 	}
 
 	@Override

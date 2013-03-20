@@ -4,8 +4,7 @@ import org.gedcomx.common.URI;
 import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredPropertyException;
-import org.gedcomx.persistence.graph.neo4j.exception.WrongNodeType;
-import org.gedcomx.persistence.graph.neo4j.utils.NodeProperties;
+import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
 import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
 import org.gedcomx.types.DocumentType;
 import org.neo4j.graphdb.Node;
@@ -13,7 +12,7 @@ import org.neo4j.graphdb.Node;
 @NodeType("DOCUMENT")
 public class Document extends Conclusion {
 
-	protected Document(final Node node) throws MissingFieldException, WrongNodeType {
+	protected Document(final Node node) throws MissingFieldException, UnknownNodeType {
 		super(node);
 	}
 
@@ -46,11 +45,11 @@ public class Document extends Conclusion {
 	}
 
 	public String getText() {
-		return (String) this.getProperty(NodeProperties.Conclusion.TEXT);
+		return (String) this.getProperty(ConclusionProperties.TEXT);
 	}
 
 	public URI getType() {
-		return new URI((String) this.getProperty(NodeProperties.Generic.TYPE));
+		return new URI((String) this.getProperty(GenericProperties.TYPE));
 	}
 
 	@Override
@@ -80,17 +79,17 @@ public class Document extends Conclusion {
 	}
 
 	public void setText(final String text) {
-		this.setProperty(NodeProperties.Conclusion.TEXT, text);
+		this.setProperty(ConclusionProperties.TEXT, text);
 	}
 
 	public void setType(final URI type) {
-		this.setProperty(NodeProperties.Generic.TYPE, type.toString());
+		this.setProperty(GenericProperties.TYPE, type.toString());
 	}
 
 	@Override
 	protected void validateUnderlyingNode() throws MissingFieldException {
 		if (ValidationTools.nullOrEmpty(this.getText())) {
-			throw new MissingRequiredPropertyException(Document.class, NodeProperties.Conclusion.TEXT);
+			throw new MissingRequiredPropertyException(Document.class, ConclusionProperties.TEXT);
 		}
 	}
 }
