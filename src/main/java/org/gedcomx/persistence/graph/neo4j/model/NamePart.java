@@ -5,10 +5,10 @@ import java.util.List;
 import org.gedcomx.common.ResourceReference;
 import org.gedcomx.common.URI;
 import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
-import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredPropertyException;
 import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
+import org.gedcomx.persistence.graph.neo4j.model.Conclusion.ConclusionProperties;
 import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
 import org.gedcomx.types.NamePartType;
 import org.neo4j.graphdb.Node;
@@ -50,7 +50,7 @@ public class NamePart extends NodeWrapper {
 	}
 
 	public NameForm getNameForm() {
-		return (NameForm) this.getParentNode(GENgraphRelTypes.HAS_NAME_PART);
+		return (NameForm) this.getParentNode(WrapperRelTypes.HAS_NAME_PART);
 	}
 
 	public List<ResourceReference> getQualifiers() {
@@ -109,7 +109,7 @@ public class NamePart extends NodeWrapper {
 	@Override
 	protected void validateUnderlyingNode() throws MissingFieldException {
 		if (ValidationTools.nullOrEmpty(this.getValue())) {
-			throw new MissingRequiredPropertyException(NamePart.class, GenericProperties.VALUE);
+			throw new MissingRequiredPropertyException(this.getAnnotatedNodeType(), GenericProperties.VALUE.toString());
 		}
 	}
 

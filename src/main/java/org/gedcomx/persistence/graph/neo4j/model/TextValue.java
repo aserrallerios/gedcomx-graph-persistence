@@ -1,7 +1,6 @@
 package org.gedcomx.persistence.graph.neo4j.model;
 
 import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
-import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredPropertyException;
 import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
@@ -43,7 +42,7 @@ public class TextValue extends NodeWrapper {
 	}
 
 	public NodeWrapper getParentNode() {
-		return super.getParentNode(GENgraphRelTypes.HAS_NAME);
+		return super.getParentNode(WrapperRelTypes.HAS_NAME);
 	}
 
 	public String getValue() {
@@ -83,7 +82,7 @@ public class TextValue extends NodeWrapper {
 	@Override
 	protected void validateUnderlyingNode() throws MissingRequiredPropertyException {
 		if (ValidationTools.nullOrEmpty(this.getValue())) {
-			throw new MissingRequiredPropertyException(TextValue.class, GenericProperties.VALUE);
+			throw new MissingRequiredPropertyException(this.getAnnotatedNodeType(), GenericProperties.VALUE.toString());
 		}
 	}
 }

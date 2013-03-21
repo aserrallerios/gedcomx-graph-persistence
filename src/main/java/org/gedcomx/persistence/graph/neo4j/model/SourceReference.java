@@ -2,7 +2,6 @@ package org.gedcomx.persistence.graph.neo4j.model;
 
 import org.gedcomx.common.URI;
 import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
-import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredRelationshipException;
 import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
@@ -31,11 +30,11 @@ public class SourceReference extends NodeWrapper {
 	}
 
 	public Attribution getAttribution() {
-		return this.getNodeByRelationship(Attribution.class, GENgraphRelTypes.ATTRIBUTION);
+		return this.getNodeByRelationship(Attribution.class, WrapperRelTypes.ATTRIBUTION);
 	}
 
 	public SourceDescription getDescription() {
-		return this.getNodeByRelationship(SourceDescription.class, GENgraphRelTypes.DESCRIPTION);
+		return this.getNodeByRelationship(SourceDescription.class, WrapperRelTypes.DESCRIPTION);
 	}
 
 	@Override
@@ -50,7 +49,7 @@ public class SourceReference extends NodeWrapper {
 
 	public NodeWrapper getParentNode() {
 		// TODO
-		return this.getNodeByRelationship(NodeWrapper.class, GENgraphRelTypes.HAS_NAME, Direction.INCOMING);
+		return this.getNodeByRelationship(NodeWrapper.class, WrapperRelTypes.HAS_NAME, Direction.INCOMING);
 	}
 
 	@Override
@@ -59,11 +58,11 @@ public class SourceReference extends NodeWrapper {
 	}
 
 	public void setAttribution(final Attribution attribution) {
-		this.createRelationship(GENgraphRelTypes.ATTRIBUTION, attribution);
+		this.createRelationship(WrapperRelTypes.ATTRIBUTION, attribution);
 	}
 
 	public void setDescription(final SourceDescription description) {
-		this.createRelationship(GENgraphRelTypes.DESCRIPTION, description);
+		this.createRelationship(WrapperRelTypes.DESCRIPTION, description);
 		// TODO
 	}
 
@@ -89,7 +88,7 @@ public class SourceReference extends NodeWrapper {
 	@Override
 	protected void validateUnderlyingNode() throws MissingFieldException {
 		if (ValidationTools.nullOrEmpty(this.getDescription())) {
-			throw new MissingRequiredRelationshipException(SourceReference.class, GENgraphRelTypes.DESCRIPTION);
+			throw new MissingRequiredRelationshipException(SourceReference.class, WrapperRelTypes.DESCRIPTION);
 		}
 	}
 }

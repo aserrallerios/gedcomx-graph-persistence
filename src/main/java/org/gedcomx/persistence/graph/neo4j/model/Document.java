@@ -89,7 +89,7 @@ public class Document extends Conclusion {
 	@Override
 	protected void validateUnderlyingNode() throws MissingFieldException {
 		if (ValidationTools.nullOrEmpty(this.getText())) {
-			throw new MissingRequiredPropertyException(Document.class, ConclusionProperties.TEXT);
+			throw new MissingRequiredPropertyException(this.getAnnotatedNodeType(), ConclusionProperties.TEXT.toString());
 		}
 	}
 }

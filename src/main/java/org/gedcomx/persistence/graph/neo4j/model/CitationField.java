@@ -2,10 +2,10 @@ package org.gedcomx.persistence.graph.neo4j.model;
 
 import org.gedcomx.common.URI;
 import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
-import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredPropertyException;
 import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
+import org.gedcomx.persistence.graph.neo4j.model.SourceDescription.SourceProperties;
 import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
 import org.neo4j.graphdb.Node;
 
@@ -30,7 +30,7 @@ public class CitationField extends NodeWrapper {
 	}
 
 	public SourceCitation getCitation() {
-		return (SourceCitation) this.getParentNode(GENgraphRelTypes.HAS_CITATION_FIELD);
+		return (SourceCitation) this.getParentNode(WrapperRelTypes.HAS_CITATION_FIELD);
 	}
 
 	@Override
@@ -86,12 +86,11 @@ public class CitationField extends NodeWrapper {
 	@Override
 	protected void validateUnderlyingNode() throws MissingRequiredPropertyException {
 		if (ValidationTools.nullOrEmpty(this.getName())) {
-			throw new MissingRequiredPropertyException(CitationField.class, GenericProperties.VALUE);
+			throw new MissingRequiredPropertyException(this.getAnnotatedNodeType(), GenericProperties.VALUE.toString());
 		}
 		if (ValidationTools.nullOrEmpty(this.getValue())) {
-			throw new MissingRequiredPropertyException(CitationField.class, SourceProperties.NAME);
+			throw new MissingRequiredPropertyException(this.getAnnotatedNodeType(), SourceProperties.NAME.toString());
 		}
-
 	}
 
 }

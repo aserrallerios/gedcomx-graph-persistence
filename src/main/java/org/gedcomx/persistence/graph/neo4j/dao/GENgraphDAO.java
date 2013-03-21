@@ -5,6 +5,7 @@ import java.util.Map;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.Transaction;
 
 public interface GENgraphDAO {
@@ -15,9 +16,9 @@ public interface GENgraphDAO {
 
 	Node createNode();
 
-	Relationship createRelationship(Node node, GENgraphRelTypes relType, Node secondNode);
+	Relationship createRelationship(Node node, RelationshipType relType, Node secondNode);
 
-	Relationship createRelationship(Node node, GENgraphRelTypes relType, Node secondNode, Map<String, ?> properties);
+	Relationship createRelationship(Node node, RelationshipType relType, Node secondNode, Map<String, ?> properties);
 
 	void delete(Node node);
 
@@ -29,7 +30,7 @@ public interface GENgraphDAO {
 
 	Object getNodeProperty(Node node, String property);
 
-	Iterable<Node> getNodesByRelationship(Node node, GENgraphRelTypes relation, Direction dir, boolean ordered, String index);
+	Iterable<Node> getNodesByRelationship(Node node, RelationshipType relation, Direction dir, boolean ordered, String index);
 
 	Node getReferenceNode();
 
@@ -37,15 +38,15 @@ public interface GENgraphDAO {
 
 	Iterable<Relationship> getRelationships(Node node, Direction dir);
 
-	Iterable<Relationship> getRelationships(Node node, GENgraphRelTypes relType, Direction dir);
+	Iterable<Relationship> getRelationships(Node node, RelationshipType relType, Direction dir);
 
-	Node getSingleNodeByRelationship(Node node, GENgraphRelTypes relation, Direction dir);
+	Node getSingleNodeByRelationship(Node node, RelationshipType relation, Direction dir);
 
-	Relationship getSingleRelationship(Node node, GENgraphRelTypes rel, Direction dir);
+	Relationship getSingleRelationship(Node node, RelationshipType rel, Direction dir);
 
-	boolean hasRelationship(Node node, GENgraphRelTypes relType, Direction dir);
+	boolean hasRelationship(Node node, RelationshipType relType, Direction dir);
 
-	boolean hasSingleRelationship(Node node, GENgraphRelTypes relType, Direction dir);
+	boolean hasSingleRelationship(Node node, RelationshipType relType, Direction dir);
 
 	void removeNodeFromIndex(String indexName, Node node, String property);
 

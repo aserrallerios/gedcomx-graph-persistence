@@ -3,13 +3,41 @@ package org.gedcomx.persistence.graph.neo4j.model;
 import java.util.List;
 
 import org.gedcomx.common.URI;
-import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
 import org.gedcomx.types.ConfidenceLevel;
 import org.neo4j.graphdb.Node;
 
 public abstract class Conclusion extends NodeWrapper {
+
+	public enum ConclusionProperties implements NodeProperties {
+
+		ID, CONFIDENCE(true, IndexNodeNames.TYPES), TEXT(true, IndexNodeNames.OTHER), LATITUDE, LONGITUDE, TEMPORAL_DESCRIPTION_ORIGINAL, SPATIAL_DESCRIPTION, TEMPORAL_DESCRIPTION_FORMAL, ORIGINAL, DATE_ORIGINAL, DATE_FORMAL, PREFERRED, FULL_TEXT, QUALIFIERS, DETAILS, LIVING, PERSON_REFERENCE;
+
+		private final boolean indexed;
+		private final IndexNodeNames indexName;
+
+		private ConclusionProperties() {
+			this.indexed = false;
+			this.indexName = null;
+		}
+
+		private ConclusionProperties(final boolean indexed, final IndexNodeNames indexName) {
+			this.indexed = indexed;
+			this.indexName = indexName;
+		}
+
+		@Override
+		public IndexNodeNames getIndexName() {
+			return this.indexName;
+		}
+
+		@Override
+		public boolean isIndexed() {
+			return this.indexed;
+		}
+
+	}
 
 	protected Conclusion(final Node node) throws MissingFieldException, UnknownNodeType {
 		super(node);
@@ -24,11 +52,11 @@ public abstract class Conclusion extends NodeWrapper {
 	}
 
 	public void addNote(final Note note) {
-		this.addRelationship(GENgraphRelTypes.HAS_NOTE, note);
+		this.addRelationship(WrapperRelTypes.HAS_NOTE, note);
 	}
 
 	public void addSourceReference(final SourceReference sourceReference) {
-		this.addRelationship(GENgraphRelTypes.HAS_SOURCE_REFERENCE, sourceReference);
+		this.addRelationship(WrapperRelTypes.HAS_SOURCE_REFERENCE, sourceReference);
 	}
 
 	protected abstract void deleteAllConcreteReferences();
@@ -42,7 +70,7 @@ public abstract class Conclusion extends NodeWrapper {
 	}
 
 	public Attribution getAttribution() {
-		return this.getNodeByRelationship(Attribution.class, GENgraphRelTypes.ATTRIBUTION);
+		return this.getNodeByRelationship(Attribution.class, WrapperRelTypes.ATTRIBUTION);
 	}
 
 	public URI getConfidence() {
@@ -75,15 +103,15 @@ public abstract class Conclusion extends NodeWrapper {
 	}
 
 	public List<Note> getNotes() {
-		return this.getNodesByRelationship(Note.class, GENgraphRelTypes.HAS_NOTE);
+		return this.getNodesByRelationship(Note.class, WrapperRelTypes.HAS_NOTE);
 	}
 
 	public List<SourceReference> getSourceReferences() {
-		return this.getNodesByRelationship(SourceReference.class, GENgraphRelTypes.HAS_SOURCE_REFERENCE);
+		return this.getNodesByRelationship(SourceReference.class, WrapperRelTypes.HAS_SOURCE_REFERENCE);
 	}
 
 	public void setAttribution(final Attribution attribution) {
-		this.createRelationship(GENgraphRelTypes.ATTRIBUTION, attribution);
+		this.createRelationship(WrapperRelTypes.ATTRIBUTION, attribution);
 	}
 
 	public void setConfidence(final URI confidence) {

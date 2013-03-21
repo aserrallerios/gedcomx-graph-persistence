@@ -11,6 +11,7 @@ import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 import org.neo4j.graphdb.index.Index;
@@ -71,7 +72,7 @@ public class GENgraphDAOImpl implements GENgraphDAO {
 	}
 
 	@Override
-	public Relationship createRelationship(final Node node, final GENgraphRelTypes reltype, final Node secondNode) {
+	public Relationship createRelationship(final Node node, final RelationshipType reltype, final Node secondNode) {
 		final Transaction tx = node.getGraphDatabase().beginTx();
 		Relationship rel = null;
 		try {
@@ -84,7 +85,7 @@ public class GENgraphDAOImpl implements GENgraphDAO {
 	}
 
 	@Override
-	public Relationship createRelationship(final Node node, final GENgraphRelTypes reltype, final Node secondNode,
+	public Relationship createRelationship(final Node node, final RelationshipType reltype, final Node secondNode,
 			final Map<String, ?> properties) {
 		final Transaction tx = node.getGraphDatabase().beginTx();
 		Relationship rel = null;
@@ -137,7 +138,7 @@ public class GENgraphDAOImpl implements GENgraphDAO {
 	}
 
 	@Override
-	public Iterable<Node> getNodesByRelationship(final Node node, final GENgraphRelTypes relation, final Direction dir,
+	public Iterable<Node> getNodesByRelationship(final Node node, final RelationshipType relation, final Direction dir,
 			final boolean ordered, final String index) {
 		final Iterable<Relationship> rels = node.getRelationships(relation, dir);
 
@@ -178,30 +179,30 @@ public class GENgraphDAOImpl implements GENgraphDAO {
 	}
 
 	@Override
-	public Iterable<Relationship> getRelationships(final Node node, final GENgraphRelTypes relType, final Direction dir) {
+	public Iterable<Relationship> getRelationships(final Node node, final RelationshipType relType, final Direction dir) {
 		return node.getRelationships(relType, dir);
 	}
 
 	@Override
-	public Node getSingleNodeByRelationship(final Node node, final GENgraphRelTypes relation, final Direction dir) {
+	public Node getSingleNodeByRelationship(final Node node, final RelationshipType relation, final Direction dir) {
 		final Relationship rel = node.getSingleRelationship(relation, dir);
 		return rel.getOtherNode(node);
 	}
 
 	@Override
-	public Relationship getSingleRelationship(final Node node, final GENgraphRelTypes rel, final Direction dir) {
+	public Relationship getSingleRelationship(final Node node, final RelationshipType rel, final Direction dir) {
 		return node.getSingleRelationship(rel, dir);
 	}
 
 	@Override
-	public boolean hasRelationship(final Node node, final GENgraphRelTypes relType, final Direction dir) {
+	public boolean hasRelationship(final Node node, final RelationshipType relType, final Direction dir) {
 		final Iterable<Relationship> rels = node.getRelationships(relType, dir);
 
 		return rels.iterator().hasNext();
 	}
 
 	@Override
-	public boolean hasSingleRelationship(final Node node, final GENgraphRelTypes relType, final Direction dir) {
+	public boolean hasSingleRelationship(final Node node, final RelationshipType relType, final Direction dir) {
 		final Relationship rel = node.getSingleRelationship(relType, dir);
 		return rel == null ? false : true;
 	}

@@ -1,7 +1,6 @@
 package org.gedcomx.persistence.graph.neo4j.model;
 
 import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
-import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredPropertyException;
 import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
@@ -29,7 +28,7 @@ public class Note extends NodeWrapper {
 	}
 
 	public Attribution getAttribution() {
-		return this.getNodeByRelationship(Attribution.class, GENgraphRelTypes.ATTRIBUTION);
+		return this.getNodeByRelationship(Attribution.class, WrapperRelTypes.ATTRIBUTION);
 	}
 
 	@Override
@@ -53,7 +52,7 @@ public class Note extends NodeWrapper {
 	}
 
 	public NodeWrapper getParentNode() {
-		return super.getParentNode(GENgraphRelTypes.HAS_NOTE);
+		return super.getParentNode(WrapperRelTypes.HAS_NOTE);
 	}
 
 	public String getSubject() {
@@ -70,7 +69,7 @@ public class Note extends NodeWrapper {
 	}
 
 	public void setAttribution(final Attribution attribution) {
-		this.createRelationship(GENgraphRelTypes.ATTRIBUTION, attribution);
+		this.createRelationship(WrapperRelTypes.ATTRIBUTION, attribution);
 	}
 
 	@Override
@@ -115,7 +114,7 @@ public class Note extends NodeWrapper {
 	@Override
 	protected void validateUnderlyingNode() throws MissingRequiredPropertyException {
 		if (ValidationTools.nullOrEmpty(this.getText())) {
-			throw new MissingRequiredPropertyException(Note.class, this.getId(), GenericProperties.TEXT);
+			throw new MissingRequiredPropertyException(this.getAnnotatedNodeType(), this.getId(), GenericProperties.TEXT.toString());
 		}
 	}
 

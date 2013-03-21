@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.gedcomx.common.URI;
 import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
-import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredRelationshipException;
 import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
@@ -28,11 +27,11 @@ public class Relationship extends Conclusion {
 	}
 
 	public void addFact(final Fact fact) {
-		this.addRelationship(GENgraphRelTypes.HAS_FACT, fact);
+		this.addRelationship(WrapperRelTypes.HAS_FACT, fact);
 	}
 
 	public void addIdentifier(final Identifier identifier) {
-		this.addRelationship(GENgraphRelTypes.HAS_IDENTIFIER, identifier);
+		this.addRelationship(WrapperRelTypes.HAS_IDENTIFIER, identifier);
 	}
 
 	@Override
@@ -40,12 +39,12 @@ public class Relationship extends Conclusion {
 		this.deleteReferencedNodes(this.getIdentifiers());
 		this.deleteReferencedNodes(this.getFacts());
 
-		this.deleteReference(GENgraphRelTypes.PERSON1);
-		this.deleteReference(GENgraphRelTypes.PERSON2);
+		this.deleteReference(WrapperRelTypes.PERSON1);
+		this.deleteReference(WrapperRelTypes.PERSON2);
 	}
 
 	public List<Fact> getFacts() {
-		return this.getNodesByRelationship(Fact.class, GENgraphRelTypes.HAS_FACT);
+		return this.getNodesByRelationship(Fact.class, WrapperRelTypes.HAS_FACT);
 	}
 
 	@Override
@@ -68,7 +67,7 @@ public class Relationship extends Conclusion {
 	}
 
 	public List<Identifier> getIdentifiers() {
-		return this.getNodesByRelationship(Identifier.class, GENgraphRelTypes.HAS_IDENTIFIER);
+		return this.getNodesByRelationship(Identifier.class, WrapperRelTypes.HAS_IDENTIFIER);
 	}
 
 	public RelationshipType getKnownType() {
@@ -76,11 +75,11 @@ public class Relationship extends Conclusion {
 	}
 
 	public Person getPerson1() {
-		return this.getNodeByRelationship(Person.class, GENgraphRelTypes.PERSON1);
+		return this.getNodeByRelationship(Person.class, WrapperRelTypes.PERSON1);
 	}
 
 	public Person getPerson2() {
-		return this.getNodeByRelationship(Person.class, GENgraphRelTypes.PERSON2);
+		return this.getNodeByRelationship(Person.class, WrapperRelTypes.PERSON2);
 	}
 
 	public URI getType() {
@@ -117,11 +116,11 @@ public class Relationship extends Conclusion {
 	}
 
 	public void setPerson1(final Person person1) {
-		this.createRelationship(GENgraphRelTypes.PERSON1, person1);
+		this.createRelationship(WrapperRelTypes.PERSON1, person1);
 	}
 
 	public void setPerson2(final Person person2) {
-		this.createRelationship(GENgraphRelTypes.PERSON2, person2);
+		this.createRelationship(WrapperRelTypes.PERSON2, person2);
 	}
 
 	@Override
@@ -138,10 +137,10 @@ public class Relationship extends Conclusion {
 	@Override
 	protected void validateUnderlyingNode() throws MissingFieldException {
 		if (ValidationTools.nullOrEmpty(this.getPerson1())) {
-			throw new MissingRequiredRelationshipException(Relationship.class, this.getId(), GENgraphRelTypes.PERSON1);
+			throw new MissingRequiredRelationshipException(Relationship.class, this.getId(), WrapperRelTypes.PERSON1);
 		}
 		if (ValidationTools.nullOrEmpty(this.getPerson1())) {
-			throw new MissingRequiredRelationshipException(Relationship.class, this.getId(), GENgraphRelTypes.PERSON2);
+			throw new MissingRequiredRelationshipException(Relationship.class, this.getId(), WrapperRelTypes.PERSON2);
 		}
 	}
 

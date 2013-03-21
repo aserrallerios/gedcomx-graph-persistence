@@ -3,10 +3,10 @@ package org.gedcomx.persistence.graph.neo4j.model;
 import org.gedcomx.common.ResourceReference;
 import org.gedcomx.common.URI;
 import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
-import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredPropertyException;
 import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
+import org.gedcomx.persistence.graph.neo4j.model.Agent.AgentProperties;
 import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
 import org.neo4j.graphdb.Node;
 
@@ -35,7 +35,7 @@ public class OnlineAccount extends NodeWrapper {
 	}
 
 	public Agent getAgent() {
-		return (Agent) this.getParentNode(GENgraphRelTypes.HAS_ACCOUNT);
+		return (Agent) this.getParentNode(WrapperRelTypes.HAS_ACCOUNT);
 	}
 
 	@Override
@@ -88,10 +88,10 @@ public class OnlineAccount extends NodeWrapper {
 	@Override
 	protected void validateUnderlyingNode() throws MissingRequiredPropertyException {
 		if (ValidationTools.nullOrEmpty(this.getAccountName())) {
-			throw new MissingRequiredPropertyException(OnlineAccount.class, AgentProperties.ACCOUNT_NAME);
+			throw new MissingRequiredPropertyException(this.getAnnotatedNodeType(), AgentProperties.ACCOUNT_NAME.toString());
 		}
 		if (ValidationTools.nullOrEmpty(this.getServiceHomepage())) {
-			throw new MissingRequiredPropertyException(OnlineAccount.class, AgentProperties.SERVICE_HOMEPAGE);
+			throw new MissingRequiredPropertyException(this.getAnnotatedNodeType(), AgentProperties.SERVICE_HOMEPAGE.toString());
 		}
 	}
 }

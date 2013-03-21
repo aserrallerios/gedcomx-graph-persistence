@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.gedcomx.common.URI;
 import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
-import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredRelationshipException;
 import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
@@ -28,7 +27,7 @@ public class Name extends Conclusion {
 	}
 
 	public void addNameForms(final NameForm nameForms) {
-		this.addRelationship(GENgraphRelTypes.HAS_NAME_FORM, nameForms);
+		this.addRelationship(WrapperRelTypes.HAS_NAME_FORM, nameForms);
 	}
 
 	@Override
@@ -69,11 +68,11 @@ public class Name extends Conclusion {
 	}
 
 	public List<NameForm> getNameForms() {
-		return this.getNodesByRelationship(NameForm.class, GENgraphRelTypes.HAS_NAME_FORM);
+		return this.getNodesByRelationship(NameForm.class, WrapperRelTypes.HAS_NAME_FORM);
 	}
 
 	public Person getPerson() {
-		return (Person) this.getParentNode(GENgraphRelTypes.HAS_NAME);
+		return (Person) this.getParentNode(WrapperRelTypes.HAS_NAME);
 	}
 
 	public Boolean getPreferred() {
@@ -139,7 +138,7 @@ public class Name extends Conclusion {
 	@Override
 	protected void validateUnderlyingNode() throws MissingFieldException {
 		if (ValidationTools.nullOrEmpty(this.getNameForms())) {
-			throw new MissingRequiredRelationshipException(Name.class, this.getId(), GENgraphRelTypes.HAS_NAME_FORM);
+			throw new MissingRequiredRelationshipException(Name.class, this.getId(), WrapperRelTypes.HAS_NAME_FORM);
 		}
 	}
 }

@@ -2,7 +2,6 @@ package org.gedcomx.persistence.graph.neo4j.model;
 
 import java.util.List;
 
-import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
 import org.neo4j.graphdb.Node;
@@ -22,15 +21,15 @@ public class Person extends Conclusion {
 	}
 
 	public void addFact(final Fact fact) {
-		this.addRelationship(GENgraphRelTypes.HAS_FACT, fact);
+		this.addRelationship(WrapperRelTypes.HAS_FACT, fact);
 	}
 
 	public void addIdentifier(final Identifier identifier) {
-		this.addRelationship(GENgraphRelTypes.HAS_IDENTIFIER, identifier);
+		this.addRelationship(WrapperRelTypes.HAS_IDENTIFIER, identifier);
 	}
 
 	public void addName(final Name name) {
-		this.addRelationship(GENgraphRelTypes.HAS_NAME, name);
+		this.addRelationship(WrapperRelTypes.HAS_NAME, name);
 	}
 
 	@Override
@@ -42,7 +41,7 @@ public class Person extends Conclusion {
 	}
 
 	public List<Fact> getFacts() {
-		return this.getNodesByRelationship(Fact.class, GENgraphRelTypes.HAS_FACT);
+		return this.getNodesByRelationship(Fact.class, WrapperRelTypes.HAS_FACT);
 	}
 
 	@Override
@@ -63,11 +62,11 @@ public class Person extends Conclusion {
 	}
 
 	public Gender getGender() {
-		return this.getNodeByRelationship(Gender.class, GENgraphRelTypes.GENDER);
+		return this.getNodeByRelationship(Gender.class, WrapperRelTypes.GENDER);
 	}
 
 	public List<Identifier> getIdentifiers() {
-		return this.getNodesByRelationship(Identifier.class, GENgraphRelTypes.HAS_IDENTIFIER);
+		return this.getNodesByRelationship(Identifier.class, WrapperRelTypes.HAS_IDENTIFIER);
 	}
 
 	public Boolean getLiving() {
@@ -75,7 +74,7 @@ public class Person extends Conclusion {
 	}
 
 	public List<Name> getNames() {
-		return this.getNodesByRelationship(Name.class, GENgraphRelTypes.HAS_NAME);
+		return this.getNodesByRelationship(Name.class, WrapperRelTypes.HAS_NAME);
 	}
 
 	@Override
@@ -108,7 +107,7 @@ public class Person extends Conclusion {
 	}
 
 	public void setGender(final Gender gender) {
-		this.createRelationship(GENgraphRelTypes.GENDER, gender);
+		this.createRelationship(WrapperRelTypes.GENDER, gender);
 	}
 
 	public void setLiving(final Boolean living) {

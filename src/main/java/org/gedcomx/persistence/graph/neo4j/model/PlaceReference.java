@@ -1,9 +1,9 @@
 package org.gedcomx.persistence.graph.neo4j.model;
 
 import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
-import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
+import org.gedcomx.persistence.graph.neo4j.model.Conclusion.ConclusionProperties;
 import org.neo4j.graphdb.Node;
 
 @NodeType("PLACE_REFERENCE")
@@ -23,7 +23,7 @@ public class PlaceReference extends NodeWrapper {
 
 	@Override
 	protected void deleteAllReferences() {
-		this.deleteReference(GENgraphRelTypes.PLACE_DESCRIPTION);
+		this.deleteReference(WrapperRelTypes.PLACE_DESCRIPTION);
 	}
 
 	@Override
@@ -41,7 +41,7 @@ public class PlaceReference extends NodeWrapper {
 	}
 
 	public NodeWrapper getParentNode() {
-		return super.getParentNode(GENgraphRelTypes.PLACE);
+		return super.getParentNode(WrapperRelTypes.PLACE);
 	}
 
 	public PlaceDescription getPlaceDescription() {
@@ -75,7 +75,7 @@ public class PlaceReference extends NodeWrapper {
 	}
 
 	public void setPlaceDescription(final PlaceDescription placeDescription) {
-		this.createRelationship(GENgraphRelTypes.PLACE_DESCRIPTION, placeDescription);
+		this.createRelationship(WrapperRelTypes.PLACE_DESCRIPTION, placeDescription);
 	}
 
 	@Override

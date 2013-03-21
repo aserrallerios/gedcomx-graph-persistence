@@ -3,9 +3,9 @@ package org.gedcomx.persistence.graph.neo4j.model;
 import java.util.List;
 
 import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
-import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
+import org.gedcomx.persistence.graph.neo4j.model.Conclusion.ConclusionProperties;
 import org.neo4j.graphdb.Node;
 
 @NodeType("NAME_FORM")
@@ -24,7 +24,7 @@ public class NameForm extends NodeWrapper {
 	}
 
 	public void addNameParts(final NamePart namePart) {
-		this.addRelationship(GENgraphRelTypes.HAS_NAME_PART, namePart);
+		this.addRelationship(WrapperRelTypes.HAS_NAME_PART, namePart);
 	}
 
 	@Override
@@ -52,11 +52,11 @@ public class NameForm extends NodeWrapper {
 	}
 
 	public Name getName() {
-		return (Name) this.getParentNode(GENgraphRelTypes.HAS_NAME_FORM);
+		return (Name) this.getParentNode(WrapperRelTypes.HAS_NAME_FORM);
 	}
 
 	public List<NamePart> getNameParts() {
-		return this.getNodesByRelationship(NamePart.class, GENgraphRelTypes.HAS_NAME_PART);
+		return this.getNodesByRelationship(NamePart.class, WrapperRelTypes.HAS_NAME_PART);
 	}
 
 	@Override

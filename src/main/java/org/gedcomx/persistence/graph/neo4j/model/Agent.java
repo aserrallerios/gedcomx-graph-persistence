@@ -5,13 +5,40 @@ import java.util.List;
 import org.gedcomx.common.ResourceReference;
 import org.gedcomx.common.URI;
 import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
-import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
 import org.neo4j.graphdb.Node;
 
 @NodeType("AGENT")
 public class Agent extends NodeWrapper {
+
+	public enum AgentProperties implements NodeProperties {
+		HOMEPAGE, OPENID, EMAILS, PHONES, STREET, STREET2, STREET3, VALUE, STATE_OR_PROVINCE, CITY, COUNTRY, POSTAL_CODE, ACCOUNT_NAME, SERVICE_HOMEPAGE, IDENTIFIER_TYPE;
+
+		private final boolean indexed;
+		private final IndexNodeNames indexName;
+
+		private AgentProperties() {
+			this.indexed = false;
+			this.indexName = null;
+		}
+
+		private AgentProperties(final boolean indexed, final IndexNodeNames indexName) {
+			this.indexed = indexed;
+			this.indexName = indexName;
+		}
+
+		@Override
+		public IndexNodeNames getIndexName() {
+			return this.indexName;
+		}
+
+		@Override
+		public boolean isIndexed() {
+			return this.indexed;
+		}
+
+	}
 
 	public Agent() throws MissingFieldException {
 		super();
@@ -26,19 +53,19 @@ public class Agent extends NodeWrapper {
 	}
 
 	public void addAddress(final Address address) {
-		this.addRelationship(GENgraphRelTypes.HAS_ADDRESS, address);
+		this.addRelationship(WrapperRelTypes.HAS_ADDRESS, address);
 	}
 
 	public void addIdentifier(final Identifier identifier) {
-		this.addRelationship(GENgraphRelTypes.HAS_IDENTIFIER, identifier);
+		this.addRelationship(WrapperRelTypes.HAS_IDENTIFIER, identifier);
 	}
 
 	public void addName(final TextValue name) {
-		this.addRelationship(GENgraphRelTypes.HAS_NAME, name);
+		this.addRelationship(WrapperRelTypes.HAS_NAME, name);
 	}
 
 	public void addOnlineAccount(final OnlineAccount onlineAccount) {
-		this.addRelationship(GENgraphRelTypes.HAS_ACCOUNT, onlineAccount);
+		this.addRelationship(WrapperRelTypes.HAS_ACCOUNT, onlineAccount);
 	}
 
 	@Override
@@ -50,7 +77,7 @@ public class Agent extends NodeWrapper {
 	}
 
 	public List<Address> getAddresses() {
-		return this.getNodesByRelationship(Address.class, GENgraphRelTypes.HAS_ADDRESS);
+		return this.getNodesByRelationship(Address.class, WrapperRelTypes.HAS_ADDRESS);
 	}
 
 	public List<ResourceReference> getEmails() {
@@ -85,15 +112,15 @@ public class Agent extends NodeWrapper {
 	}
 
 	public List<Identifier> getIdentifiers() {
-		return this.getNodesByRelationship(Identifier.class, GENgraphRelTypes.HAS_IDENTIFIER);
+		return this.getNodesByRelationship(Identifier.class, WrapperRelTypes.HAS_IDENTIFIER);
 	}
 
 	public List<TextValue> getNames() {
-		return this.getNodesByRelationship(TextValue.class, GENgraphRelTypes.HAS_NAME);
+		return this.getNodesByRelationship(TextValue.class, WrapperRelTypes.HAS_NAME);
 	}
 
 	public List<OnlineAccount> getOnlineAccounts() {
-		return this.getNodesByRelationship(OnlineAccount.class, GENgraphRelTypes.HAS_ACCOUNT);
+		return this.getNodesByRelationship(OnlineAccount.class, WrapperRelTypes.HAS_ACCOUNT);
 	}
 
 	public ResourceReference getOpenid() {

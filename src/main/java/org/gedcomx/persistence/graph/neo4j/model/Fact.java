@@ -2,7 +2,6 @@ package org.gedcomx.persistence.graph.neo4j.model;
 
 import org.gedcomx.common.URI;
 import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
-import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredPropertyException;
 import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
@@ -70,11 +69,11 @@ public class Fact extends Conclusion {
 	}
 
 	public NodeWrapper getParentNode() {
-		return super.getParentNode(GENgraphRelTypes.HAS_FACT);
+		return super.getParentNode(WrapperRelTypes.HAS_FACT);
 	}
 
 	public PlaceReference getPlaceReference() {
-		return this.getNodeByRelationship(PlaceReference.class, GENgraphRelTypes.PLACE);
+		return this.getNodeByRelationship(PlaceReference.class, WrapperRelTypes.PLACE);
 	}
 
 	public URI getType() {
@@ -124,7 +123,7 @@ public class Fact extends Conclusion {
 	}
 
 	public void setPlaceReference(final PlaceReference placeReference) {
-		this.createRelationship(GENgraphRelTypes.PLACE, placeReference);
+		this.createRelationship(WrapperRelTypes.PLACE, placeReference);
 	}
 
 	@Override
@@ -143,7 +142,7 @@ public class Fact extends Conclusion {
 	@Override
 	protected void validateUnderlyingNode() throws MissingFieldException {
 		if (ValidationTools.nullOrEmpty(this.getType())) {
-			throw new MissingRequiredPropertyException(Fact.class, this.getId(), GenericProperties.TYPE);
+			throw new MissingRequiredPropertyException(this.getAnnotatedNodeType(), this.getId(), GenericProperties.TYPE.toString());
 		}
 	}
 

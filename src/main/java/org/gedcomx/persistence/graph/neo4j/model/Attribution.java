@@ -3,7 +3,6 @@ package org.gedcomx.persistence.graph.neo4j.model;
 import java.util.Date;
 
 import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
-import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
 import org.neo4j.graphdb.Node;
@@ -25,7 +24,7 @@ public class Attribution extends NodeWrapper {
 
 	@Override
 	protected void deleteAllReferences() {
-		this.deleteReference(GENgraphRelTypes.CONTRIBUTOR);
+		this.deleteReference(WrapperRelTypes.CONTRIBUTOR);
 	}
 
 	public String getChangeMessage() {
@@ -49,7 +48,7 @@ public class Attribution extends NodeWrapper {
 	}
 
 	public NodeWrapper getParentNode() {
-		return super.getParentNode(GENgraphRelTypes.ATTRIBUTION);
+		return super.getParentNode(WrapperRelTypes.ATTRIBUTION);
 	}
 
 	@Override

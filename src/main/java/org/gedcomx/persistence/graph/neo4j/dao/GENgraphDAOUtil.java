@@ -5,6 +5,7 @@ import java.util.Map;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.Transaction;
 
 public class GENgraphDAOUtil {
@@ -21,11 +22,11 @@ public class GENgraphDAOUtil {
 		return GENgraphDAOUtil.getDao().createNode();
 	}
 
-	public static Relationship createRelationship(final Node node, final GENgraphRelTypes relType, final Node secondNode) {
+	public static Relationship createRelationship(final Node node, final RelationshipType relType, final Node secondNode) {
 		return GENgraphDAOUtil.getDao().createRelationship(node, relType, secondNode);
 	}
 
-	public static Relationship createRelationship(final Node node, final GENgraphRelTypes relType, final Node secondNode,
+	public static Relationship createRelationship(final Node node, final RelationshipType relType, final Node secondNode,
 			final Map<String, ?> properties) {
 		return GENgraphDAOUtil.getDao().createRelationship(node, relType, secondNode, properties);
 	}
@@ -55,7 +56,7 @@ public class GENgraphDAOUtil {
 		return GENgraphDAOUtil.getDao().getNodeProperty(node, property);
 	}
 
-	public static Iterable<Node> getNodesByRelationship(final Node node, final GENgraphRelTypes relation, final Direction dir,
+	public static Iterable<Node> getNodesByRelationship(final Node node, final RelationshipType relation, final Direction dir,
 			final boolean ordered, final String index) {
 		return GENgraphDAOUtil.getDao().getNodesByRelationship(node, relation, dir, ordered, index);
 	}
@@ -72,23 +73,23 @@ public class GENgraphDAOUtil {
 		return GENgraphDAOUtil.getDao().getRelationships(node, dir);
 	}
 
-	public static Iterable<Relationship> getRelationships(final Node node, final GENgraphRelTypes relType, final Direction dir) {
+	public static Iterable<Relationship> getRelationships(final Node node, final RelationshipType relType, final Direction dir) {
 		return GENgraphDAOUtil.getDao().getRelationships(node, relType, dir);
 	}
 
-	public static Node getSingleNodeByRelationship(final Node node, final GENgraphRelTypes relation, final Direction dir) {
+	public static Node getSingleNodeByRelationship(final Node node, final RelationshipType relation, final Direction dir) {
 		return GENgraphDAOUtil.getDao().getSingleNodeByRelationship(node, relation, dir);
 	}
 
-	public static Relationship getSingleRelationship(final Node node, final GENgraphRelTypes rel, final Direction dir) {
+	public static Relationship getSingleRelationship(final Node node, final RelationshipType rel, final Direction dir) {
 		return GENgraphDAOUtil.getDao().getSingleRelationship(node, rel, dir);
 	}
 
-	public static boolean hasRelationship(final Node node, final GENgraphRelTypes relType, final Direction dir) {
+	public static boolean hasRelationship(final Node node, final RelationshipType relType, final Direction dir) {
 		return GENgraphDAOUtil.getDao().hasRelationship(node, relType, dir);
 	}
 
-	public static boolean hasSingleRelationship(final Node node, final GENgraphRelTypes relType, final Direction dir) {
+	public static boolean hasSingleRelationship(final Node node, final RelationshipType relType, final Direction dir) {
 		return GENgraphDAOUtil.getDao().hasSingleRelationship(node, relType, dir);
 	}
 

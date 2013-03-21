@@ -1,23 +1,22 @@
 package org.gedcomx.persistence.graph.neo4j.exception;
 
-import org.gedcomx.persistence.graph.neo4j.model.NodeWrapper;
-import org.gedcomx.persistence.graph.neo4j.model.NodeWrapper.NodeProperties;
+
 
 public class MissingRequiredPropertyException extends MissingFieldException {
 
-	private final Class<? extends NodeWrapper> node;
-	private final NodeProperties property;
+	private final String nodeType;
+	private final String property;
 	private String id;
 
-	public MissingRequiredPropertyException(final Class<? extends NodeWrapper> node, final NodeProperties property) {
+	public MissingRequiredPropertyException(final String nodeType, final String property) {
 		super();
-		this.node = node;
+		this.nodeType = nodeType;
 		this.property = property;
 	}
 
-	public MissingRequiredPropertyException(final Class<? extends NodeWrapper> node, final String id, final NodeProperties property) {
+	public MissingRequiredPropertyException(final String nodeType, final String id, final String property) {
 		super();
-		this.node = node;
+		this.nodeType = nodeType;
 		this.id = id;
 		this.property = property;
 	}
@@ -26,11 +25,11 @@ public class MissingRequiredPropertyException extends MissingFieldException {
 		return this.id;
 	}
 
-	public Class<? extends NodeWrapper> getNode() {
-		return this.node;
+	public String getNodeType() {
+		return this.nodeType;
 	}
 
-	public NodeProperties getProperty() {
+	public String getProperty() {
 		return this.property;
 	}
 

@@ -5,7 +5,6 @@ import java.util.List;
 import org.gedcomx.common.ResourceReference;
 import org.gedcomx.common.URI;
 import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
-import org.gedcomx.persistence.graph.neo4j.dao.GENgraphRelTypes;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredRelationshipException;
 import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
@@ -28,11 +27,11 @@ public class PlaceDescription extends Conclusion {
 	}
 
 	public void addIdentifier(final Identifier identifier) {
-		this.addRelationship(GENgraphRelTypes.HAS_IDENTIFIER, identifier);
+		this.addRelationship(WrapperRelTypes.HAS_IDENTIFIER, identifier);
 	}
 
 	public void addName(final TextValue name) {
-		this.addRelationship(GENgraphRelTypes.HAS_NAME, name);
+		this.addRelationship(WrapperRelTypes.HAS_NAME, name);
 	}
 
 	@Override
@@ -68,7 +67,7 @@ public class PlaceDescription extends Conclusion {
 	}
 
 	public List<Identifier> getIdentifiers() {
-		return this.getNodesByRelationship(Identifier.class, GENgraphRelTypes.HAS_IDENTIFIER);
+		return this.getNodesByRelationship(Identifier.class, WrapperRelTypes.HAS_IDENTIFIER);
 	}
 
 	public Double getLatitude() {
@@ -82,7 +81,7 @@ public class PlaceDescription extends Conclusion {
 	}
 
 	public List<TextValue> getNames() {
-		return this.getNodesByRelationship(TextValue.class, GENgraphRelTypes.HAS_NAME);
+		return this.getNodesByRelationship(TextValue.class, WrapperRelTypes.HAS_NAME);
 	}
 
 	public ResourceReference getSpatialDescription() {
@@ -177,7 +176,7 @@ public class PlaceDescription extends Conclusion {
 	@Override
 	protected void validateUnderlyingNode() throws MissingFieldException {
 		if (ValidationTools.nullOrEmpty(this.getNames())) {
-			throw new MissingRequiredRelationshipException(PlaceDescription.class, this.getId(), GENgraphRelTypes.HAS_NAME);
+			throw new MissingRequiredRelationshipException(PlaceDescription.class, this.getId(), WrapperRelTypes.HAS_NAME);
 		}
 	}
 
