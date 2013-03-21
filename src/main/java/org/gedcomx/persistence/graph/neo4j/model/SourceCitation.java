@@ -28,7 +28,7 @@ public class SourceCitation extends NodeWrapper {
 	}
 
 	public void addField(final CitationField citationField) {
-		this.addRelationship(WrapperRelTypes.HAS_CITATION_FIELD, citationField);
+		this.addRelationship(RelTypes.HAS_CITATION_FIELD, citationField);
 	}
 
 	@Override
@@ -41,11 +41,11 @@ public class SourceCitation extends NodeWrapper {
 	}
 
 	public SourceDescription getDescription() {
-		return (SourceDescription) this.getParentNode(WrapperRelTypes.HAS_CITATION);
+		return (SourceDescription) this.getParentNode(RelTypes.HAS_CITATION);
 	}
 
 	public List<CitationField> getFields() {
-		return this.getNodesByRelationship(CitationField.class, WrapperRelTypes.HAS_CITATION_FIELD);
+		return this.getNodesByRelationship(CitationField.class, RelTypes.HAS_CITATION_FIELD);
 	}
 
 	@Override

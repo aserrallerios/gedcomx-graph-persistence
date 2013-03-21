@@ -44,7 +44,7 @@ public class Identifier extends NodeWrapper {
 	}
 
 	public NodeWrapper getParentNode() {
-		return super.getParentNode(WrapperRelTypes.HAS_IDENTIFIER);
+		return super.getParentNode(RelTypes.HAS_IDENTIFIER);
 	}
 
 	public URI getType() {

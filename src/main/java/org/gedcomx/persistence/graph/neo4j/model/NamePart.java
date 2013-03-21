@@ -50,7 +50,7 @@ public class NamePart extends NodeWrapper {
 	}
 
 	public NameForm getNameForm() {
-		return (NameForm) this.getParentNode(WrapperRelTypes.HAS_NAME_PART);
+		return (NameForm) this.getParentNode(RelTypes.HAS_NAME_PART);
 	}
 
 	public List<ResourceReference> getQualifiers() {

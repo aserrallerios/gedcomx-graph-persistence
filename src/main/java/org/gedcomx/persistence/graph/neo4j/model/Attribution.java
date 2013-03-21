@@ -24,7 +24,7 @@ public class Attribution extends NodeWrapper {
 
 	@Override
 	protected void deleteAllReferences() {
-		this.deleteReference(WrapperRelTypes.CONTRIBUTOR);
+		this.deleteReference(RelTypes.CONTRIBUTOR);
 	}
 
 	public String getChangeMessage() {
@@ -48,7 +48,7 @@ public class Attribution extends NodeWrapper {
 	}
 
 	public NodeWrapper getParentNode() {
-		return super.getParentNode(WrapperRelTypes.ATTRIBUTION);
+		return super.getParentNode(RelTypes.ATTRIBUTION);
 	}
 
 	@Override

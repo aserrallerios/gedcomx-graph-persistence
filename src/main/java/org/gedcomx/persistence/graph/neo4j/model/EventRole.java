@@ -27,7 +27,7 @@ public class EventRole extends Conclusion {
 
 	@Override
 	protected void deleteAllConcreteReferences() {
-		this.deleteReference(WrapperRelTypes.PERSON);
+		this.deleteReference(RelTypes.PERSON);
 
 	}
 
@@ -36,7 +36,7 @@ public class EventRole extends Conclusion {
 	}
 
 	public Event getEvent() {
-		return (Event) super.getParentNode(WrapperRelTypes.HAS_ROLE);
+		return (Event) super.getParentNode(RelTypes.HAS_ROLE);
 	}
 
 	@Override
@@ -59,7 +59,7 @@ public class EventRole extends Conclusion {
 	}
 
 	public Person getPerson() {
-		return this.getNodeByRelationship(Person.class, WrapperRelTypes.PERSON);
+		return this.getNodeByRelationship(Person.class, RelTypes.PERSON);
 	}
 
 	public URI getType() {
@@ -68,7 +68,7 @@ public class EventRole extends Conclusion {
 
 	@Override
 	protected void resolveReferences() {
-		this.resolveReferences(WrapperRelTypes.PERSON, ConclusionProperties.PERSON_REFERENCE);
+		this.createReferenceRelationship(RelTypes.PERSON, ConclusionProperties.PERSON_REFERENCE);
 	}
 
 	public void setDetails(final String details) {
@@ -87,7 +87,7 @@ public class EventRole extends Conclusion {
 	protected void setGedcomXConcreteRelations(final Object gedcomXObject) throws MissingFieldException {
 		final org.gedcomx.conclusion.EventRole gedcomXEventRole = (org.gedcomx.conclusion.EventRole) gedcomXObject;
 
-		this.setPerson(gedcomXEventRole.getPerson());
+		this.setProperty(ConclusionProperties.PERSON_REFERENCE, gedcomXEventRole.getPerson());
 	}
 
 	public void setKnownType(final EventRoleType type) {
@@ -95,11 +95,7 @@ public class EventRole extends Conclusion {
 	}
 
 	public void setPerson(final Person person) {
-		this.createRelationship(WrapperRelTypes.PERSON, person);
-	}
-
-	private void setPerson(final ResourceReference reference) {
-		this.createRelationship(WrapperRelTypes.PERSON, reference, ConclusionProperties.PERSON_REFERENCE);
+		this.createReferenceRelationship(RelTypes.PERSON, person);
 	}
 
 	@Override
@@ -114,7 +110,7 @@ public class EventRole extends Conclusion {
 	@Override
 	protected void validateUnderlyingNode() throws MissingFieldException {
 		if (ValidationTools.nullOrEmpty(this.getPerson())) {
-			throw new MissingRequiredRelationshipException(EventRole.class, this.getId(), WrapperRelTypes.PERSON);
+			throw new MissingRequiredRelationshipException(EventRole.class, this.getId(), RelTypes.PERSON.toString());
 		}
 	}
 

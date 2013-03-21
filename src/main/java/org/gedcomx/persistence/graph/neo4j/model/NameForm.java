@@ -24,7 +24,7 @@ public class NameForm extends NodeWrapper {
 	}
 
 	public void addNameParts(final NamePart namePart) {
-		this.addRelationship(WrapperRelTypes.HAS_NAME_PART, namePart);
+		this.addRelationship(RelTypes.HAS_NAME_PART, namePart);
 	}
 
 	@Override
@@ -52,11 +52,11 @@ public class NameForm extends NodeWrapper {
 	}
 
 	public Name getName() {
-		return (Name) this.getParentNode(WrapperRelTypes.HAS_NAME_FORM);
+		return (Name) this.getParentNode(RelTypes.HAS_NAME_FORM);
 	}
 
 	public List<NamePart> getNameParts() {
-		return this.getNodesByRelationship(NamePart.class, WrapperRelTypes.HAS_NAME_PART);
+		return this.getNodesByRelationship(NamePart.class, RelTypes.HAS_NAME_PART);
 	}
 
 	@Override

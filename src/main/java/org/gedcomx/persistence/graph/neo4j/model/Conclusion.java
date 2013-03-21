@@ -12,23 +12,23 @@ public abstract class Conclusion extends NodeWrapper {
 
 	public enum ConclusionProperties implements NodeProperties {
 
-		ID, CONFIDENCE(true, IndexNodeNames.TYPES), TEXT(true, IndexNodeNames.OTHER), LATITUDE, LONGITUDE, TEMPORAL_DESCRIPTION_ORIGINAL, SPATIAL_DESCRIPTION, TEMPORAL_DESCRIPTION_FORMAL, ORIGINAL, DATE_ORIGINAL, DATE_FORMAL, PREFERRED, FULL_TEXT, QUALIFIERS, DETAILS, LIVING, PERSON_REFERENCE;
+		ID, CONFIDENCE(true, IndexNames.TYPES), TEXT(true, IndexNames.OTHER), LATITUDE, LONGITUDE, TEMPORAL_DESCRIPTION_ORIGINAL, SPATIAL_DESCRIPTION, TEMPORAL_DESCRIPTION_FORMAL, ORIGINAL, DATE_ORIGINAL, DATE_FORMAL, PREFERRED, FULL_TEXT, QUALIFIERS, DETAILS, LIVING, PERSON_REFERENCE;
 
 		private final boolean indexed;
-		private final IndexNodeNames indexName;
+		private final IndexNames indexName;
 
 		private ConclusionProperties() {
 			this.indexed = false;
 			this.indexName = null;
 		}
 
-		private ConclusionProperties(final boolean indexed, final IndexNodeNames indexName) {
+		private ConclusionProperties(final boolean indexed, final IndexNames indexName) {
 			this.indexed = indexed;
 			this.indexName = indexName;
 		}
 
 		@Override
-		public IndexNodeNames getIndexName() {
+		public IndexNames getIndexName() {
 			return this.indexName;
 		}
 
@@ -52,11 +52,11 @@ public abstract class Conclusion extends NodeWrapper {
 	}
 
 	public void addNote(final Note note) {
-		this.addRelationship(WrapperRelTypes.HAS_NOTE, note);
+		this.addRelationship(RelTypes.HAS_NOTE, note);
 	}
 
 	public void addSourceReference(final SourceReference sourceReference) {
-		this.addRelationship(WrapperRelTypes.HAS_SOURCE_REFERENCE, sourceReference);
+		this.addRelationship(RelTypes.HAS_SOURCE_REFERENCE, sourceReference);
 	}
 
 	protected abstract void deleteAllConcreteReferences();
@@ -70,7 +70,7 @@ public abstract class Conclusion extends NodeWrapper {
 	}
 
 	public Attribution getAttribution() {
-		return this.getNodeByRelationship(Attribution.class, WrapperRelTypes.ATTRIBUTION);
+		return this.getNodeByRelationship(Attribution.class, RelTypes.ATTRIBUTION);
 	}
 
 	public URI getConfidence() {
@@ -103,15 +103,15 @@ public abstract class Conclusion extends NodeWrapper {
 	}
 
 	public List<Note> getNotes() {
-		return this.getNodesByRelationship(Note.class, WrapperRelTypes.HAS_NOTE);
+		return this.getNodesByRelationship(Note.class, RelTypes.HAS_NOTE);
 	}
 
 	public List<SourceReference> getSourceReferences() {
-		return this.getNodesByRelationship(SourceReference.class, WrapperRelTypes.HAS_SOURCE_REFERENCE);
+		return this.getNodesByRelationship(SourceReference.class, RelTypes.HAS_SOURCE_REFERENCE);
 	}
 
 	public void setAttribution(final Attribution attribution) {
-		this.createRelationship(WrapperRelTypes.ATTRIBUTION, attribution);
+		this.createRelationship(RelTypes.ATTRIBUTION, attribution);
 	}
 
 	public void setConfidence(final URI confidence) {

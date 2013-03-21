@@ -27,11 +27,11 @@ public class PlaceDescription extends Conclusion {
 	}
 
 	public void addIdentifier(final Identifier identifier) {
-		this.addRelationship(WrapperRelTypes.HAS_IDENTIFIER, identifier);
+		this.addRelationship(RelTypes.HAS_IDENTIFIER, identifier);
 	}
 
 	public void addName(final TextValue name) {
-		this.addRelationship(WrapperRelTypes.HAS_NAME, name);
+		this.addRelationship(RelTypes.HAS_NAME, name);
 	}
 
 	@Override
@@ -67,7 +67,7 @@ public class PlaceDescription extends Conclusion {
 	}
 
 	public List<Identifier> getIdentifiers() {
-		return this.getNodesByRelationship(Identifier.class, WrapperRelTypes.HAS_IDENTIFIER);
+		return this.getNodesByRelationship(Identifier.class, RelTypes.HAS_IDENTIFIER);
 	}
 
 	public Double getLatitude() {
@@ -81,7 +81,7 @@ public class PlaceDescription extends Conclusion {
 	}
 
 	public List<TextValue> getNames() {
-		return this.getNodesByRelationship(TextValue.class, WrapperRelTypes.HAS_NAME);
+		return this.getNodesByRelationship(TextValue.class, RelTypes.HAS_NAME);
 	}
 
 	public ResourceReference getSpatialDescription() {
@@ -176,7 +176,7 @@ public class PlaceDescription extends Conclusion {
 	@Override
 	protected void validateUnderlyingNode() throws MissingFieldException {
 		if (ValidationTools.nullOrEmpty(this.getNames())) {
-			throw new MissingRequiredRelationshipException(PlaceDescription.class, this.getId(), WrapperRelTypes.HAS_NAME);
+			throw new MissingRequiredRelationshipException(PlaceDescription.class, this.getId(), RelTypes.HAS_NAME.toString());
 		}
 	}
 

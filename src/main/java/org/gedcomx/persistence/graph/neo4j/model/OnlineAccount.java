@@ -35,7 +35,7 @@ public class OnlineAccount extends NodeWrapper {
 	}
 
 	public Agent getAgent() {
-		return (Agent) this.getParentNode(WrapperRelTypes.HAS_ACCOUNT);
+		return (Agent) this.getParentNode(RelTypes.HAS_ACCOUNT);
 	}
 
 	@Override

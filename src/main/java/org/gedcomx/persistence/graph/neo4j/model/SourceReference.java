@@ -30,11 +30,11 @@ public class SourceReference extends NodeWrapper {
 	}
 
 	public Attribution getAttribution() {
-		return this.getNodeByRelationship(Attribution.class, WrapperRelTypes.ATTRIBUTION);
+		return this.getNodeByRelationship(Attribution.class, RelTypes.ATTRIBUTION);
 	}
 
 	public SourceDescription getDescription() {
-		return this.getNodeByRelationship(SourceDescription.class, WrapperRelTypes.DESCRIPTION);
+		return this.getNodeByRelationship(SourceDescription.class, RelTypes.DESCRIPTION);
 	}
 
 	@Override
@@ -49,7 +49,7 @@ public class SourceReference extends NodeWrapper {
 
 	public NodeWrapper getParentNode() {
 		// TODO
-		return this.getNodeByRelationship(NodeWrapper.class, WrapperRelTypes.HAS_NAME, Direction.INCOMING);
+		return this.getNodeByRelationship(NodeWrapper.class, RelTypes.HAS_NAME, Direction.INCOMING);
 	}
 
 	@Override
@@ -58,11 +58,11 @@ public class SourceReference extends NodeWrapper {
 	}
 
 	public void setAttribution(final Attribution attribution) {
-		this.createRelationship(WrapperRelTypes.ATTRIBUTION, attribution);
+		this.createRelationship(RelTypes.ATTRIBUTION, attribution);
 	}
 
 	public void setDescription(final SourceDescription description) {
-		this.createRelationship(WrapperRelTypes.DESCRIPTION, description);
+		this.createRelationship(RelTypes.DESCRIPTION, description);
 		// TODO
 	}
 
@@ -88,7 +88,7 @@ public class SourceReference extends NodeWrapper {
 	@Override
 	protected void validateUnderlyingNode() throws MissingFieldException {
 		if (ValidationTools.nullOrEmpty(this.getDescription())) {
-			throw new MissingRequiredRelationshipException(SourceReference.class, WrapperRelTypes.DESCRIPTION);
+			throw new MissingRequiredRelationshipException(SourceReference.class, RelTypes.DESCRIPTION.toString());
 		}
 	}
 }

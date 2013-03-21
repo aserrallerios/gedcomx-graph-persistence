@@ -25,7 +25,7 @@ public class Event extends Conclusion {
 	}
 
 	public void addRole(final EventRole role) {
-		this.addRelationship(WrapperRelTypes.HAS_ROLE, role);
+		this.addRelationship(RelTypes.HAS_ROLE, role);
 	}
 
 	@Override
@@ -65,11 +65,11 @@ public class Event extends Conclusion {
 	}
 
 	public PlaceReference getPlaceReference() {
-		return this.getNodeByRelationship(PlaceReference.class, WrapperRelTypes.PLACE);
+		return this.getNodeByRelationship(PlaceReference.class, RelTypes.PLACE);
 	}
 
 	public List<EventRole> getRoles() {
-		return this.getNodesByRelationship(EventRole.class, WrapperRelTypes.HAS_ROLE);
+		return this.getNodesByRelationship(EventRole.class, RelTypes.HAS_ROLE);
 	}
 
 	public URI getType() {
@@ -118,7 +118,7 @@ public class Event extends Conclusion {
 	}
 
 	public void setPlaceReference(final PlaceReference placeReference) {
-		this.createRelationship(WrapperRelTypes.PLACE, placeReference);
+		this.createRelationship(RelTypes.PLACE, placeReference);
 	}
 
 	@Override

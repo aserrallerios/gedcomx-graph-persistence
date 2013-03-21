@@ -19,20 +19,20 @@ public class SourceDescription extends NodeWrapper {
 		ID, CITATION_TEMPLATE, NAME;
 
 		private final boolean indexed;
-		private final IndexNodeNames indexName;
+		private final IndexNames indexName;
 
 		private SourceProperties() {
 			this.indexed = false;
 			this.indexName = null;
 		}
 
-		private SourceProperties(final boolean indexed, final IndexNodeNames indexName) {
+		private SourceProperties(final boolean indexed, final IndexNames indexName) {
 			this.indexed = indexed;
 			this.indexName = indexName;
 		}
 
 		@Override
-		public IndexNodeNames getIndexName() {
+		public IndexNames getIndexName() {
 			return this.indexName;
 		}
 
@@ -55,23 +55,23 @@ public class SourceDescription extends NodeWrapper {
 	}
 
 	public void addCitation(final SourceCitation sourceCitation) {
-		this.addRelationship(WrapperRelTypes.HAS_CITATION, sourceCitation);
+		this.addRelationship(RelTypes.HAS_CITATION, sourceCitation);
 	}
 
 	public void addExtractedConclusion(final Conclusion conclusion) {
-		this.addRelationship(WrapperRelTypes.HAS_CONCLUSION, conclusion);
+		this.addRelationship(RelTypes.HAS_CONCLUSION, conclusion);
 	}
 
 	public void addNote(final Note note) {
-		this.addRelationship(WrapperRelTypes.HAS_NOTE, note);
+		this.addRelationship(RelTypes.HAS_NOTE, note);
 	}
 
 	public void addSource(final SourceReference sourceReference) {
-		this.addRelationship(WrapperRelTypes.HAS_SOURCE_REFERENCE, sourceReference);
+		this.addRelationship(RelTypes.HAS_SOURCE_REFERENCE, sourceReference);
 	}
 
 	public void addTitle(final TextValue textValue) {
-		this.addRelationship(WrapperRelTypes.HAS_TITLE, textValue);
+		this.addRelationship(RelTypes.HAS_TITLE, textValue);
 	}
 
 	@Override
@@ -83,8 +83,8 @@ public class SourceDescription extends NodeWrapper {
 		this.deleteReferencedNode(this.getAttribution());
 		this.deleteReferencedNode(this.getComponentOf());
 
-		this.deleteReferences(WrapperRelTypes.HAS_CONCLUSION);
-		this.deleteReference(WrapperRelTypes.MEDIATOR);
+		this.deleteReferences(RelTypes.HAS_CONCLUSION);
+		this.deleteReference(RelTypes.MEDIATOR);
 	}
 
 	public URI getAbout() {
@@ -92,19 +92,19 @@ public class SourceDescription extends NodeWrapper {
 	}
 
 	public Attribution getAttribution() {
-		return this.getNodeByRelationship(Attribution.class, WrapperRelTypes.ATTRIBUTION);
+		return this.getNodeByRelationship(Attribution.class, RelTypes.ATTRIBUTION);
 	}
 
 	public List<SourceCitation> getCitations() {
-		return this.getNodesByRelationship(SourceCitation.class, WrapperRelTypes.HAS_CITATION);
+		return this.getNodesByRelationship(SourceCitation.class, RelTypes.HAS_CITATION);
 	}
 
 	public SourceReference getComponentOf() {
-		return this.getNodeByRelationship(SourceReference.class, WrapperRelTypes.COMPONENT_OF);
+		return this.getNodeByRelationship(SourceReference.class, RelTypes.COMPONENT_OF);
 	}
 
 	public List<Conclusion> getExtractedConclusions() {
-		return this.getNodesByRelationship(Conclusion.class, WrapperRelTypes.HAS_CONCLUSION);
+		return this.getNodesByRelationship(Conclusion.class, RelTypes.HAS_CONCLUSION);
 	}
 
 	@Override
@@ -135,19 +135,19 @@ public class SourceDescription extends NodeWrapper {
 	}
 
 	public Agent getMediator() {
-		return this.getNodeByRelationship(Agent.class, WrapperRelTypes.MEDIATOR);
+		return this.getNodeByRelationship(Agent.class, RelTypes.MEDIATOR);
 	}
 
 	public List<Note> getNotes() {
-		return this.getNodesByRelationship(Note.class, WrapperRelTypes.HAS_NOTE);
+		return this.getNodesByRelationship(Note.class, RelTypes.HAS_NOTE);
 	}
 
 	public List<SourceReference> getSources() {
-		return this.getNodesByRelationship(SourceReference.class, WrapperRelTypes.HAS_SOURCE_REFERENCE);
+		return this.getNodesByRelationship(SourceReference.class, RelTypes.HAS_SOURCE_REFERENCE);
 	}
 
 	public List<TextValue> getTitles() {
-		return this.getNodesByRelationship(TextValue.class, WrapperRelTypes.HAS_TITLE);
+		return this.getNodesByRelationship(TextValue.class, RelTypes.HAS_TITLE);
 	}
 
 	@Override
@@ -160,11 +160,11 @@ public class SourceDescription extends NodeWrapper {
 	}
 
 	public void setAttribution(final Attribution attribution) {
-		this.createRelationship(WrapperRelTypes.ATTRIBUTION, attribution);
+		this.createRelationship(RelTypes.ATTRIBUTION, attribution);
 	}
 
 	public void setComponentOf(final SourceReference componentOf) {
-		this.createRelationship(WrapperRelTypes.COMPONENT_OF, componentOf);
+		this.createRelationship(RelTypes.COMPONENT_OF, componentOf);
 	}
 
 	@Override
@@ -210,18 +210,18 @@ public class SourceDescription extends NodeWrapper {
 	}
 
 	public void setMediator(final Agent mediator) {
-		this.createRelationship(WrapperRelTypes.MEDIATOR, mediator);
+		this.createRelationship(RelTypes.MEDIATOR, mediator);
 	}
 
 	@Override
 	protected void setRequiredProperties(final Object... properties) throws MissingFieldException {
-		this.addRelationship(WrapperRelTypes.HAS_CITATION, new SourceCitation((String) properties[0]));
+		this.addRelationship(RelTypes.HAS_CITATION, new SourceCitation((String) properties[0]));
 	}
 
 	@Override
 	protected void validateUnderlyingNode() throws MissingRequiredRelationshipException {
 		if (ValidationTools.nullOrEmpty(this.getCitations())) {
-			throw new MissingRequiredRelationshipException(SourceDescription.class, this.getId(), WrapperRelTypes.HAS_CITATION);
+			throw new MissingRequiredRelationshipException(SourceDescription.class, this.getId(), RelTypes.HAS_CITATION.toString());
 		}
 	}
 }

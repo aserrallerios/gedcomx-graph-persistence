@@ -42,7 +42,7 @@ public class TextValue extends NodeWrapper {
 	}
 
 	public NodeWrapper getParentNode() {
-		return super.getParentNode(WrapperRelTypes.HAS_NAME);
+		return super.getParentNode(RelTypes.HAS_NAME);
 	}
 
 	public String getValue() {

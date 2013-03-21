@@ -28,7 +28,7 @@ public class Note extends NodeWrapper {
 	}
 
 	public Attribution getAttribution() {
-		return this.getNodeByRelationship(Attribution.class, WrapperRelTypes.ATTRIBUTION);
+		return this.getNodeByRelationship(Attribution.class, RelTypes.ATTRIBUTION);
 	}
 
 	@Override
@@ -52,7 +52,7 @@ public class Note extends NodeWrapper {
 	}
 
 	public NodeWrapper getParentNode() {
-		return super.getParentNode(WrapperRelTypes.HAS_NOTE);
+		return super.getParentNode(RelTypes.HAS_NOTE);
 	}
 
 	public String getSubject() {
@@ -69,7 +69,7 @@ public class Note extends NodeWrapper {
 	}
 
 	public void setAttribution(final Attribution attribution) {
-		this.createRelationship(WrapperRelTypes.ATTRIBUTION, attribution);
+		this.createRelationship(RelTypes.ATTRIBUTION, attribution);
 	}
 
 	@Override

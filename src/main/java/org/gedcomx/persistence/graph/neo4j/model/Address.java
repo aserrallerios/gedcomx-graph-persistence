@@ -29,7 +29,7 @@ public class Address extends NodeWrapper {
 	}
 
 	public Agent getAgent() {
-		return (Agent) this.getParentNode(WrapperRelTypes.HAS_ADDRESS);
+		return (Agent) this.getParentNode(RelTypes.HAS_ADDRESS);
 	}
 
 	public String getCity() {

@@ -23,7 +23,7 @@ public class PlaceReference extends NodeWrapper {
 
 	@Override
 	protected void deleteAllReferences() {
-		this.deleteReference(WrapperRelTypes.PLACE_DESCRIPTION);
+		this.deleteReference(RelTypes.PLACE_DESCRIPTION);
 	}
 
 	@Override
@@ -41,7 +41,7 @@ public class PlaceReference extends NodeWrapper {
 	}
 
 	public NodeWrapper getParentNode() {
-		return super.getParentNode(WrapperRelTypes.PLACE);
+		return super.getParentNode(RelTypes.PLACE);
 	}
 
 	public PlaceDescription getPlaceDescription() {
@@ -75,7 +75,7 @@ public class PlaceReference extends NodeWrapper {
 	}
 
 	public void setPlaceDescription(final PlaceDescription placeDescription) {
-		this.createRelationship(WrapperRelTypes.PLACE_DESCRIPTION, placeDescription);
+		this.createRelationship(RelTypes.PLACE_DESCRIPTION, placeDescription);
 	}
 
 	@Override

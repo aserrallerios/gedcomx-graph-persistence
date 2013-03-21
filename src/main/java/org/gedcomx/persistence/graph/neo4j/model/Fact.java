@@ -69,11 +69,11 @@ public class Fact extends Conclusion {
 	}
 
 	public NodeWrapper getParentNode() {
-		return super.getParentNode(WrapperRelTypes.HAS_FACT);
+		return super.getParentNode(RelTypes.HAS_FACT);
 	}
 
 	public PlaceReference getPlaceReference() {
-		return this.getNodeByRelationship(PlaceReference.class, WrapperRelTypes.PLACE);
+		return this.getNodeByRelationship(PlaceReference.class, RelTypes.PLACE);
 	}
 
 	public URI getType() {
@@ -123,7 +123,7 @@ public class Fact extends Conclusion {
 	}
 
 	public void setPlaceReference(final PlaceReference placeReference) {
-		this.createRelationship(WrapperRelTypes.PLACE, placeReference);
+		this.createRelationship(RelTypes.PLACE, placeReference);
 	}
 
 	@Override

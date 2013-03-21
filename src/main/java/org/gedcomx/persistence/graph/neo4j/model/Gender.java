@@ -46,7 +46,7 @@ public class Gender extends Conclusion {
 	}
 
 	public Person getPerson() {
-		return (Person) this.getParentNode(WrapperRelTypes.GENDER);
+		return (Person) this.getParentNode(RelTypes.GENDER);
 	}
 
 	public URI getType() {

@@ -30,7 +30,7 @@ public class CitationField extends NodeWrapper {
 	}
 
 	public SourceCitation getCitation() {
-		return (SourceCitation) this.getParentNode(WrapperRelTypes.HAS_CITATION_FIELD);
+		return (SourceCitation) this.getParentNode(RelTypes.HAS_CITATION_FIELD);
 	}
 
 	@Override

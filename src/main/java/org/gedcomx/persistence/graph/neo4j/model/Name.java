@@ -27,7 +27,7 @@ public class Name extends Conclusion {
 	}
 
 	public void addNameForms(final NameForm nameForms) {
-		this.addRelationship(WrapperRelTypes.HAS_NAME_FORM, nameForms);
+		this.addRelationship(RelTypes.HAS_NAME_FORM, nameForms);
 	}
 
 	@Override
@@ -68,11 +68,11 @@ public class Name extends Conclusion {
 	}
 
 	public List<NameForm> getNameForms() {
-		return this.getNodesByRelationship(NameForm.class, WrapperRelTypes.HAS_NAME_FORM);
+		return this.getNodesByRelationship(NameForm.class, RelTypes.HAS_NAME_FORM);
 	}
 
 	public Person getPerson() {
-		return (Person) this.getParentNode(WrapperRelTypes.HAS_NAME);
+		return (Person) this.getParentNode(RelTypes.HAS_NAME);
 	}
 
 	public Boolean getPreferred() {
@@ -138,7 +138,7 @@ public class Name extends Conclusion {
 	@Override
 	protected void validateUnderlyingNode() throws MissingFieldException {
 		if (ValidationTools.nullOrEmpty(this.getNameForms())) {
-			throw new MissingRequiredRelationshipException(Name.class, this.getId(), WrapperRelTypes.HAS_NAME_FORM);
+			throw new MissingRequiredRelationshipException(Name.class, this.getId(), RelTypes.HAS_NAME_FORM.toString());
 		}
 	}
 }

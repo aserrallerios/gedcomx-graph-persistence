@@ -27,11 +27,11 @@ public class Relationship extends Conclusion {
 	}
 
 	public void addFact(final Fact fact) {
-		this.addRelationship(WrapperRelTypes.HAS_FACT, fact);
+		this.addRelationship(RelTypes.HAS_FACT, fact);
 	}
 
 	public void addIdentifier(final Identifier identifier) {
-		this.addRelationship(WrapperRelTypes.HAS_IDENTIFIER, identifier);
+		this.addRelationship(RelTypes.HAS_IDENTIFIER, identifier);
 	}
 
 	@Override
@@ -39,12 +39,12 @@ public class Relationship extends Conclusion {
 		this.deleteReferencedNodes(this.getIdentifiers());
 		this.deleteReferencedNodes(this.getFacts());
 
-		this.deleteReference(WrapperRelTypes.PERSON1);
-		this.deleteReference(WrapperRelTypes.PERSON2);
+		this.deleteReference(RelTypes.PERSON1);
+		this.deleteReference(RelTypes.PERSON2);
 	}
 
 	public List<Fact> getFacts() {
-		return this.getNodesByRelationship(Fact.class, WrapperRelTypes.HAS_FACT);
+		return this.getNodesByRelationship(Fact.class, RelTypes.HAS_FACT);
 	}
 
 	@Override
@@ -67,7 +67,7 @@ public class Relationship extends Conclusion {
 	}
 
 	public List<Identifier> getIdentifiers() {
-		return this.getNodesByRelationship(Identifier.class, WrapperRelTypes.HAS_IDENTIFIER);
+		return this.getNodesByRelationship(Identifier.class, RelTypes.HAS_IDENTIFIER);
 	}
 
 	public RelationshipType getKnownType() {
@@ -75,11 +75,11 @@ public class Relationship extends Conclusion {
 	}
 
 	public Person getPerson1() {
-		return this.getNodeByRelationship(Person.class, WrapperRelTypes.PERSON1);
+		return this.getNodeByRelationship(Person.class, RelTypes.PERSON1);
 	}
 
 	public Person getPerson2() {
-		return this.getNodeByRelationship(Person.class, WrapperRelTypes.PERSON2);
+		return this.getNodeByRelationship(Person.class, RelTypes.PERSON2);
 	}
 
 	public URI getType() {
@@ -116,11 +116,11 @@ public class Relationship extends Conclusion {
 	}
 
 	public void setPerson1(final Person person1) {
-		this.createRelationship(WrapperRelTypes.PERSON1, person1);
+		this.createRelationship(RelTypes.PERSON1, person1);
 	}
 
 	public void setPerson2(final Person person2) {
-		this.createRelationship(WrapperRelTypes.PERSON2, person2);
+		this.createRelationship(RelTypes.PERSON2, person2);
 	}
 
 	@Override
@@ -137,10 +137,10 @@ public class Relationship extends Conclusion {
 	@Override
 	protected void validateUnderlyingNode() throws MissingFieldException {
 		if (ValidationTools.nullOrEmpty(this.getPerson1())) {
-			throw new MissingRequiredRelationshipException(Relationship.class, this.getId(), WrapperRelTypes.PERSON1);
+			throw new MissingRequiredRelationshipException(Relationship.class, this.getId(), RelTypes.PERSON1.toString());
 		}
 		if (ValidationTools.nullOrEmpty(this.getPerson1())) {
-			throw new MissingRequiredRelationshipException(Relationship.class, this.getId(), WrapperRelTypes.PERSON2);
+			throw new MissingRequiredRelationshipException(Relationship.class, this.getId(), RelTypes.PERSON2.toString());
 		}
 	}
 

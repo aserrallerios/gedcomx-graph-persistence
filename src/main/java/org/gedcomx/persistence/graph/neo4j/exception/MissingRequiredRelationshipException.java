@@ -1,20 +1,18 @@
 package org.gedcomx.persistence.graph.neo4j.exception;
 
-import org.neo4j.graphdb.RelationshipType;
-
 public class MissingRequiredRelationshipException extends MissingFieldException {
 
 	private final Class node;
-	private final RelationshipType relationship;
+	private final String relationship;
 	private String id;
 
-	public MissingRequiredRelationshipException(final Class node, final RelationshipType rel) {
+	public MissingRequiredRelationshipException(final Class node, final String rel) {
 		super();
 		this.node = node;
 		this.relationship = rel;
 	}
 
-	public MissingRequiredRelationshipException(final Class node, final String id, final RelationshipType rel) {
+	public MissingRequiredRelationshipException(final Class node, final String id, final String rel) {
 		super();
 		this.node = node;
 		this.id = id;
@@ -29,7 +27,7 @@ public class MissingRequiredRelationshipException extends MissingFieldException 
 		return this.node;
 	}
 
-	public RelationshipType getRelationship() {
+	public String getRelationship() {
 		return this.relationship;
 	}
 
