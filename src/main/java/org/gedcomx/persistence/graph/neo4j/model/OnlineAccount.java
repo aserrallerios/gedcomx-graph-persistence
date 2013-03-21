@@ -82,7 +82,7 @@ public class OnlineAccount extends NodeWrapper {
 	}
 
 	public void setServiceHomepage(final ResourceReference serviceHomepage) {
-		this.setProperty(AgentProperties.SERVICE_HOMEPAGE, serviceHomepage.getResource().toString());
+		this.setProperty(AgentProperties.SERVICE_HOMEPAGE, serviceHomepage);
 	}
 
 	@Override

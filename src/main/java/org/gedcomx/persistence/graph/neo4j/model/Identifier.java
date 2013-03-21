@@ -47,6 +47,7 @@ public class Identifier extends NodeWrapper {
 		return super.getParentNode(RelTypes.HAS_IDENTIFIER);
 	}
 
+	@Deprecated
 	public URI getType() {
 		final String type = (String) this.getProperty(GenericProperties.TYPE);
 		return new URI(type);
@@ -83,12 +84,13 @@ public class Identifier extends NodeWrapper {
 		this.setValue((URI) properties[0]);
 	}
 
+	@Deprecated
 	public void setType(final URI type) {
-		this.setProperty(GenericProperties.TYPE, type.toString());
+		this.setProperty(GenericProperties.TYPE, type);
 	}
 
 	public void setValue(final URI value) {
-		this.setProperty(GenericProperties.VALUE, value.toString());
+		this.setProperty(GenericProperties.VALUE, value);
 	}
 
 	@Override

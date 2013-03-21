@@ -156,7 +156,7 @@ public class SourceDescription extends NodeWrapper {
 	}
 
 	public void setAbout(final URI about) {
-		this.setProperty(GenericProperties.ABOUT, about.toString());
+		this.setProperty(GenericProperties.ABOUT, about);
 	}
 
 	public void setAttribution(final Attribution attribution) {

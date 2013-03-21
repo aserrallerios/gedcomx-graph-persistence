@@ -73,6 +73,7 @@ public abstract class Conclusion extends NodeWrapper {
 		return this.getNodeByRelationship(Attribution.class, RelTypes.ATTRIBUTION);
 	}
 
+	@Deprecated
 	public URI getConfidence() {
 		return new URI((String) this.getProperty(ConclusionProperties.CONFIDENCE));
 	}
@@ -114,6 +115,7 @@ public abstract class Conclusion extends NodeWrapper {
 		this.createRelationship(RelTypes.ATTRIBUTION, attribution);
 	}
 
+	@Deprecated
 	public void setConfidence(final URI confidence) {
 		this.setProperty(ConclusionProperties.CONFIDENCE, confidence);
 	}

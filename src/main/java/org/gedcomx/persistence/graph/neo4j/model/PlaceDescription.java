@@ -108,7 +108,7 @@ public class PlaceDescription extends Conclusion {
 	}
 
 	public void setAbout(final URI about) {
-		this.setProperty(GenericProperties.ABOUT, about.toString());
+		this.setProperty(GenericProperties.ABOUT, about);
 	}
 
 	@Override
@@ -156,7 +156,7 @@ public class PlaceDescription extends Conclusion {
 	}
 
 	public void setSpatialDescription(final ResourceReference spatialDescription) {
-		this.setProperty(ConclusionProperties.SPATIAL_DESCRIPTION, spatialDescription.getResource().toString());
+		this.setProperty(ConclusionProperties.SPATIAL_DESCRIPTION, spatialDescription);
 	}
 
 	public void setTemporalDescriptionFormal(final String formal) {
@@ -170,7 +170,7 @@ public class PlaceDescription extends Conclusion {
 	}
 
 	public void setType(final URI type) {
-		this.setProperty(GenericProperties.TYPE, type.toString());
+		this.setProperty(GenericProperties.TYPE, type);
 	}
 
 	@Override

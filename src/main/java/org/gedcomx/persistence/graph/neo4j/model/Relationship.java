@@ -82,6 +82,7 @@ public class Relationship extends Conclusion {
 		return this.getNodeByRelationship(Person.class, RelTypes.PERSON2);
 	}
 
+	@Deprecated
 	public URI getType() {
 		return new URI((String) this.getProperty(GenericProperties.TYPE));
 	}
@@ -130,8 +131,9 @@ public class Relationship extends Conclusion {
 		// TODO
 	}
 
+	@Deprecated
 	public void setType(final URI type) {
-		this.setProperty(GenericProperties.TYPE, type.toString());
+		this.setProperty(GenericProperties.TYPE, type);
 	}
 
 	@Override

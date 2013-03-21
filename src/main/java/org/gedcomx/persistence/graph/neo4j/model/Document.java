@@ -48,6 +48,7 @@ public class Document extends Conclusion {
 		return (String) this.getProperty(ConclusionProperties.TEXT);
 	}
 
+	@Deprecated
 	public URI getType() {
 		return new URI((String) this.getProperty(GenericProperties.TYPE));
 	}
@@ -82,8 +83,9 @@ public class Document extends Conclusion {
 		this.setProperty(ConclusionProperties.TEXT, text);
 	}
 
+	@Deprecated
 	public void setType(final URI type) {
-		this.setProperty(GenericProperties.TYPE, type.toString());
+		this.setProperty(GenericProperties.TYPE, type);
 	}
 
 	@Override

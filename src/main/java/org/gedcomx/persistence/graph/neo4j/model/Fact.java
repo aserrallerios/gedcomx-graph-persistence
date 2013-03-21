@@ -76,6 +76,7 @@ public class Fact extends Conclusion {
 		return this.getNodeByRelationship(PlaceReference.class, RelTypes.PLACE);
 	}
 
+	@Deprecated
 	public URI getType() {
 		return new URI((String) this.getProperty(GenericProperties.TYPE));
 	}
@@ -131,8 +132,9 @@ public class Fact extends Conclusion {
 		this.setType((URI) properties[0]);
 	}
 
+	@Deprecated
 	public void setType(final URI type) {
-		this.setProperty(GenericProperties.TYPE, type.toString());
+		this.setProperty(GenericProperties.TYPE, type);
 	}
 
 	public void setValue(final String value) {

@@ -79,6 +79,7 @@ public class Name extends Conclusion {
 		return (Boolean) this.getProperty(ConclusionProperties.PREFERRED);
 	}
 
+	@Deprecated
 	public URI getType() {
 		final String type = (String) this.getProperty(GenericProperties.TYPE);
 		return new URI(type);
@@ -131,8 +132,9 @@ public class Name extends Conclusion {
 		this.addNameForms(new NameForm());
 	}
 
+	@Deprecated
 	public void setType(final URI type) {
-		this.setProperty(GenericProperties.TYPE, type.toString());
+		this.setProperty(GenericProperties.TYPE, type);
 	}
 
 	@Override

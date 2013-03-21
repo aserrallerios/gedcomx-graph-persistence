@@ -74,7 +74,7 @@ public class SourceCitation extends NodeWrapper {
 	}
 
 	public void setCitationTemplate(final ResourceReference citationTemplate) {
-		this.setProperty(SourceProperties.CITATION_TEMPLATE, citationTemplate.getResource().toString());
+		this.setProperty(SourceProperties.CITATION_TEMPLATE, citationTemplate);
 	}
 
 	@Override

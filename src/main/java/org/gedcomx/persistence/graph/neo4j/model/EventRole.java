@@ -62,6 +62,7 @@ public class EventRole extends Conclusion {
 		return this.getNodeByRelationship(Person.class, RelTypes.PERSON);
 	}
 
+	@Deprecated
 	public URI getType() {
 		return new URI((String) this.getProperty(GenericProperties.TYPE));
 	}
@@ -103,6 +104,7 @@ public class EventRole extends Conclusion {
 		this.setPerson((Person) properties[0]);
 	}
 
+	@Deprecated
 	public void setType(final URI type) {
 		this.setProperty(GenericProperties.TYPE, type);
 	}

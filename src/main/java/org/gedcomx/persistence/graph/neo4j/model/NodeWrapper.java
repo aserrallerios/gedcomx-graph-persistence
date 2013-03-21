@@ -24,7 +24,6 @@ import org.reflections.Reflections;
 
 public abstract class NodeWrapper {
 
-
 	public enum GenericProperties implements NodeProperties {
 		ID(true, IndexNames.IDS), ABOUT, NODE_TYPE(true, IndexNames.NODE_TYPES), TYPE(true, IndexNames.TYPES), VALUE, LANG, MODIFIED, CHANGE_MESSAGE, SUBJECT, TEXT;
 
@@ -180,15 +179,15 @@ public abstract class NodeWrapper {
 	}
 
 	protected void createReferenceRelationship(final RelTypes relType, final NodeProperties property) {
-		String uri = (String) this.getProperty(property);
+		final URI uri = new URI((String) this.getProperty(property));
 
-		if (uri != null /*is not absolute*/ ){
-		final boolean rel = GENgraphDAOUtil.hasSingleRelationship(this.getUnderlyingNode(), relType, Direction.OUTGOING);
+		if ((uri != null) && !uri.toURI().isAbsolute()) {
+			GENgraphDAOUtil.hasSingleRelationship(this.getUnderlyingNode(), relType, Direction.OUTGOING);
 
-			NodeWrapper wrapper = this.findNodeByReference(uri);
+			final NodeWrapper wrapper = this.findNodeByReference(new ResourceReference(uri));
 			if (wrapper != null) {
 				this.createReferenceRelationship(relType, wrapper);
-		}
+			}
 		}
 	}
 
@@ -209,7 +208,6 @@ public abstract class NodeWrapper {
 		}
 	}
 
-
 	protected void createRelationship(final RelTypes relType, final NodeWrapper node) {
 		final boolean rel = GENgraphDAOUtil.hasSingleRelationship(this.getUnderlyingNode(), relType, Direction.OUTGOING);
 
@@ -218,8 +216,8 @@ public abstract class NodeWrapper {
 		} else {
 			final Transaction t = GENgraphDAOUtil.beginTransaction();
 			try {
-			final NodeWrapper wrapper = this.getNodeByRelationship(node.getClass(), relType, Direction.OUTGOING);
-			wrapper.delete();
+				final NodeWrapper wrapper = this.getNodeByRelationship(node.getClass(), relType, Direction.OUTGOING);
+				wrapper.delete();
 				GENgraphDAOUtil.createRelationship(this.getUnderlyingNode(), relType, node.underlyingNode);
 				GENgraphDAOUtil.commitTransaction(t);
 			} finally {
@@ -282,7 +280,12 @@ public abstract class NodeWrapper {
 		return this.getUnderlyingNode().equals(object);
 	}
 
-	protected String getAnnotatedNodeType(){
+	private NodeWrapper findNodeByReference(final ResourceReference reference) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	protected String getAnnotatedNodeType() {
 		return this.getClass().getAnnotation(NodeType.class).value();
 	}
 
@@ -395,16 +398,34 @@ public abstract class NodeWrapper {
 	}
 
 	protected void setProperty(final NodeProperties property, final Object value) {
-		if (value == null) {
-			GENgraphDAOUtil.removeNodeProperty(this.getUnderlyingNode(), property.name());
-		} else {
-			GENgraphDAOUtil.setNodeProperty(this.getUnderlyingNode(), property.name(), value);
-		}
-		if (property.isIndexed()) {
-			GENgraphDAOUtil.removeNodeFromIndex(property.getIndexName().name(), this.getUnderlyingNode(), property.name());
-			GENgraphDAOUtil.setNodeToIndex(property.getIndexName().name(), this.getUnderlyingNode(), property.name(), value);
-		}
+		final Transaction t = GENgraphDAOUtil.beginTransaction();
+		try {
+			if (value == null) {
+				GENgraphDAOUtil.removeNodeProperty(this.getUnderlyingNode(), property.name());
+				if (property.isIndexed()) {
+					GENgraphDAOUtil.removeNodeFromIndex(property.getIndexName().name(), this.getUnderlyingNode(), property.name());
+				}
+			} else {
+				Object supportedValue = value;
+				if (value instanceof ResourceReference) {
+					supportedValue = ((ResourceReference) value).getResource().toURI().toString();
+				} else if (value instanceof URI) {
+					supportedValue = ((URI) value).toURI().toString();
+				} else if (value instanceof List) {
+					// TODO
+				}
 
+				GENgraphDAOUtil.setNodeProperty(this.getUnderlyingNode(), property.name(), supportedValue);
+				if (property.isIndexed()) {
+					GENgraphDAOUtil.removeNodeFromIndex(property.getIndexName().name(), this.getUnderlyingNode(), property.name());
+					GENgraphDAOUtil.setNodeToIndex(property.getIndexName().name(), this.getUnderlyingNode(), property.name(),
+							supportedValue);
+				}
+			}
+			GENgraphDAOUtil.commitTransaction(t);
+		} finally {
+			GENgraphDAOUtil.endTransaction(t);
+		}
 	}
 
 	protected abstract void setRequiredProperties(final Object... properties) throws MissingFieldException;

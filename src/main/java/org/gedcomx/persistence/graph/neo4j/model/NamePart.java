@@ -1,5 +1,6 @@
 package org.gedcomx.persistence.graph.neo4j.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.gedcomx.common.ResourceReference;
@@ -10,6 +11,7 @@ import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredPropertyExce
 import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
 import org.gedcomx.persistence.graph.neo4j.model.Conclusion.ConclusionProperties;
 import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
+import org.gedcomx.types.NamePartQualifierType;
 import org.gedcomx.types.NamePartType;
 import org.neo4j.graphdb.Node;
 
@@ -45,6 +47,16 @@ public class NamePart extends NodeWrapper {
 		return gedcomXNamePart;
 	}
 
+	public List<NamePartQualifierType> getKnownQualifiers() {
+		final List<ResourceReference> references = this.getURIListProperties(ConclusionProperties.QUALIFIERS);
+
+		final List<NamePartQualifierType> result = new ArrayList<NamePartQualifierType>();
+		for (final ResourceReference ref : references) {
+			result.add(NamePartQualifierType.fromQNameURI(ref.getResource()));
+		}
+		return result;
+	}
+
 	public NamePartType getKnownType() {
 		return NamePartType.fromQNameURI(this.getType());
 	}
@@ -53,11 +65,12 @@ public class NamePart extends NodeWrapper {
 		return (NameForm) this.getParentNode(RelTypes.HAS_NAME_PART);
 	}
 
+	@Deprecated
 	public List<ResourceReference> getQualifiers() {
-		// TODO
 		return this.getURIListProperties(ConclusionProperties.QUALIFIERS);
 	}
 
+	@Deprecated
 	public URI getType() {
 		return new URI((String) this.getProperty(GenericProperties.TYPE));
 	}
@@ -85,10 +98,15 @@ public class NamePart extends NodeWrapper {
 		return;
 	}
 
+	public void setKnownQualifiers(final List<NamePartQualifierType> qualifiers) {
+		this.setProperty(ConclusionProperties.QUALIFIERS, qualifiers);
+	}
+
 	public void setKnownType(final NamePartType type) {
 		this.setType(type.toQNameURI());
 	}
 
+	@Deprecated
 	public void setQualifiers(final List<ResourceReference> qualifiers) {
 		this.setURIListProperties(ConclusionProperties.QUALIFIERS, qualifiers);
 	}
@@ -98,6 +116,7 @@ public class NamePart extends NodeWrapper {
 		this.setValue((String) properties[0]);
 	}
 
+	@Deprecated
 	public void setType(final URI type) {
 		this.setProperty(GenericProperties.TYPE, type);
 	}

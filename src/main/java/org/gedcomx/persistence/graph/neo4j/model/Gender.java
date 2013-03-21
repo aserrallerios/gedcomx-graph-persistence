@@ -49,6 +49,7 @@ public class Gender extends Conclusion {
 		return (Person) this.getParentNode(RelTypes.GENDER);
 	}
 
+	@Deprecated
 	public URI getType() {
 		return new URI((String) this.getProperty(GenericProperties.TYPE));
 	}
@@ -78,8 +79,9 @@ public class Gender extends Conclusion {
 		this.setType((URI) properties[0]);
 	}
 
+	@Deprecated
 	public void setType(final URI type) {
-		this.setProperty(GenericProperties.TYPE, type.toString());
+		this.setProperty(GenericProperties.TYPE, type);
 	}
 
 	@Override

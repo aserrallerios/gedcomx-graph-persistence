@@ -171,7 +171,7 @@ public class Agent extends NodeWrapper {
 	}
 
 	public void setHomepage(final ResourceReference homepage) {
-		this.setProperty(AgentProperties.HOMEPAGE, homepage.getResource().toString());
+		this.setProperty(AgentProperties.HOMEPAGE, homepage);
 	}
 
 	public void setId(final String id) {
@@ -179,7 +179,7 @@ public class Agent extends NodeWrapper {
 	}
 
 	public void setOpenid(final ResourceReference openid) {
-		this.setProperty(AgentProperties.HOMEPAGE, openid.getResource().toString());
+		this.setProperty(AgentProperties.HOMEPAGE, openid);
 	}
 
 	public void setPhones(final List<ResourceReference> phones) {
