@@ -184,7 +184,7 @@ public abstract class NodeWrapper {
 		if (val instanceof String) {
 			final URI uri = new URI((String) val);
 
-			if ((uri != null) && !uri.toURI().isAbsolute()) {
+			if ((uri != null)) {
 				GENgraphDAOUtil.hasSingleRelationship(this.getUnderlyingNode(), relType, Direction.OUTGOING);
 
 				final NodeWrapper wrapper = this.findNodeByReference(new ResourceReference(uri));
@@ -200,7 +200,7 @@ public abstract class NodeWrapper {
 				}
 			}
 		} else if (val instanceof List) {
-			for (final Object aux : (List) val) {
+			for (final Object aux : (List<?>) val) {
 				final URI uri = new URI((String) aux);
 
 				if ((uri != null) && !uri.toURI().isAbsolute()) {
@@ -312,8 +312,27 @@ public abstract class NodeWrapper {
 	}
 
 	private NodeWrapper findNodeByReference(final ResourceReference reference) {
-		// TODO Auto-generated method stub
-		return null;
+		final URI uri = reference.getResource();
+
+		NodeWrapper wrapper = null;
+		if (!uri.toURI().isAbsolute()) {
+			Node node = GENgraphDAOUtil.getNodeFromIndex(IndexNames.IDS.toString(), GenericProperties.ID.toString(), uri.toURI()
+					.getFragment());
+			if (node == null) {
+				node = GENgraphDAOUtil.getNodeFromIndex(IndexNames.IDS.toString(), GenericProperties.ID.toString(), uri.toURI().getPath());
+			}
+			if (node != null) {
+				final String type = (String) GENgraphDAOUtil.getNodeProperty(node, GenericProperties.NODE_TYPE.toString());
+				try {
+					wrapper = NodeWrapper.nodesByType.get(type).getConstructor(Node.class).newInstance(node);
+				} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+						| NoSuchMethodException | SecurityException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		return wrapper;
 	}
 
 	protected String getAnnotatedNodeType() {
@@ -451,7 +470,11 @@ public abstract class NodeWrapper {
 				} else if (value instanceof URI) {
 					supportedValue = ((URI) value).toURI().toString();
 				} else if (value instanceof List) {
-					// TODO
+					final Object[] array = new Object[((List<?>) value).size()];
+					for (int i = 0; i < ((List<?>) value).size(); i++) {
+						array[i] = ((List<?>) value).get(i);
+					}
+					supportedValue = array;
 				}
 
 				GENgraphDAOUtil.setNodeProperty(this.getUnderlyingNode(), property.name(), supportedValue);

@@ -2,25 +2,23 @@ package org.gedcomx.persistence.graph.neo4j.service;
 
 import java.util.Map;
 
-import org.gedcomx.common.URI;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
+import org.gedcomx.persistence.graph.neo4j.model.Agent;
+import org.gedcomx.persistence.graph.neo4j.model.Conclusion;
 import org.gedcomx.persistence.graph.neo4j.model.NodeWrapper;
 import org.gedcomx.persistence.graph.neo4j.model.NodeWrapper.NodeProperties;
+import org.gedcomx.persistence.graph.neo4j.model.SourceDescription;
 import org.neo4j.graphdb.Node;
 
 public interface GENgraphPersistenceService {
 
 	public Agent addAgent(org.gedcomx.agent.Agent agent) throws MissingFieldException;
 
-	public void addConclusion(org.gedcomx.conclusion.Conclusion conclusion) throws MissingFieldException;
+	public Conclusion addConclusion(org.gedcomx.conclusion.Conclusion conclusion) throws MissingFieldException;
 
-	public void addSource(org.gedcomx.source.SourceDescription sourceDescription) throws MissingFieldException;
+	public SourceDescription addSource(org.gedcomx.source.SourceDescription sourceDescription) throws MissingFieldException;
 
-	public void addSource(String id, URI about, String citationValue) throws MissingFieldException;
-
-	public void addTopLevelElement(Object gedcomxElement) throws MissingFieldException;
-
-	public void createGedcomXGraph(Map<String, String> metadata, Object[] gedcomxElements) throws MissingFieldException;
+	public void createGraph(Map<String, String> metadata, Object[] gedcomxElements) throws MissingFieldException;
 
 	public Object getGedcomX();
 

@@ -28,6 +28,8 @@ public interface GENgraphDAO {
 
 	Node getNode(Long id);
 
+	Node getNodeFromIndex(String indexName, String property, String value);
+
 	Object getNodeProperty(Node node, String property);
 
 	Iterable<Node> getNodesByRelationship(Node node, RelationshipType relation, Direction dir, boolean ordered, String index);

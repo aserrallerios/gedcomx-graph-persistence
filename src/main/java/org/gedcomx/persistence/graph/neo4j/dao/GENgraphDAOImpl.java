@@ -15,6 +15,7 @@ import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 import org.neo4j.graphdb.index.Index;
+import org.neo4j.graphdb.index.IndexHits;
 
 public class GENgraphDAOImpl implements GENgraphDAO {
 
@@ -130,6 +131,13 @@ public class GENgraphDAOImpl implements GENgraphDAO {
 	@Override
 	public Node getNode(final Long id) {
 		return this.graphDb.getNodeById(id);
+	}
+
+	@Override
+	public Node getNodeFromIndex(final String indexName, final String property, final String value) {
+		final Index<Node> index = this.graphDb.index().forNodes(indexName);
+		final IndexHits<Node> hits = index.get(property, value);
+		return hits.getSingle();
 	}
 
 	@Override

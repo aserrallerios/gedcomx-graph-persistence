@@ -52,6 +52,10 @@ public class GENgraphDAOUtil {
 		return GENgraphDAOUtil.getDao().getNode(id);
 	}
 
+	public static Node getNodeFromIndex(final String indexName, final String property, final String value) {
+		return GENgraphDAOUtil.getDao().getNodeFromIndex(indexName, property, value);
+	}
+
 	public static Object getNodeProperty(final Node node, final String property) {
 		return GENgraphDAOUtil.getDao().getNodeProperty(node, property);
 	}
