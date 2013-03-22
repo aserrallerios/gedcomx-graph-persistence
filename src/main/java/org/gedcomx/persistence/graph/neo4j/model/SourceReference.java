@@ -1,12 +1,11 @@
 package org.gedcomx.persistence.graph.neo4j.model;
 
-import org.gedcomx.common.URI;
 import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredRelationshipException;
 import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
+import org.gedcomx.persistence.graph.neo4j.model.SourceDescription.SourceProperties;
 import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
-import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 
 @NodeType("SOURCE_REFERENCE")
@@ -20,7 +19,7 @@ public class SourceReference extends NodeWrapper {
 		super(gedcomXSourceReference);
 	}
 
-	public SourceReference(final URI description) throws MissingFieldException {
+	public SourceReference(final SourceDescription description) throws MissingFieldException {
 		super(new Object[] { description });
 	}
 
@@ -41,20 +40,22 @@ public class SourceReference extends NodeWrapper {
 	protected org.gedcomx.source.SourceReference getGedcomX() {
 		final org.gedcomx.source.SourceReference gedcomXSourceReference = new org.gedcomx.source.SourceReference();
 
-		gedcomXSourceReference.setAttribution(this.getAttribution().getGedcomX());
-		gedcomXSourceReference.setDescription(this.getDescription());
+		final Attribution attr = this.getAttribution();
+		if (attr != null) {
+			gedcomXSourceReference.setAttribution(attr.getGedcomX());
+		}
+		gedcomXSourceReference.setDescriptionRef(this.getDescription().getURI());
 
 		return gedcomXSourceReference;
 	}
 
 	public NodeWrapper getParentNode() {
-		// TODO
-		return this.getNodeByRelationship(NodeWrapper.class, RelTypes.HAS_NAME, Direction.INCOMING);
+		return this.getParentNode(RelTypes.HAS_SOURCE_REFERENCE);
 	}
 
 	@Override
 	protected void resolveReferences() {
-		// TODO:
+		this.createReferenceRelationship(RelTypes.DESCRIPTION, SourceProperties.SOURCE_DESCRIPTION_REFERENCE);
 	}
 
 	public void setAttribution(final Attribution attribution) {
@@ -62,8 +63,7 @@ public class SourceReference extends NodeWrapper {
 	}
 
 	public void setDescription(final SourceDescription description) {
-		this.createRelationship(RelTypes.DESCRIPTION, description);
-		// TODO
+		this.createReferenceRelationship(RelTypes.DESCRIPTION, description);
 	}
 
 	@Override
@@ -76,13 +76,13 @@ public class SourceReference extends NodeWrapper {
 		final org.gedcomx.source.SourceReference gedcomXSourceReference = (org.gedcomx.source.SourceReference) gedcomXObject;
 
 		this.setAttribution(new Attribution(gedcomXSourceReference.getAttribution()));
-		this.setDescription(gedcomXSourceReference.getDescriptionRef());
-		// TODO
+
+		this.setProperty(SourceProperties.SOURCE_DESCRIPTION_REFERENCE, gedcomXSourceReference.getDescriptionRef());
 	}
 
 	@Override
 	protected void setRequiredProperties(final Object... properties) {
-		this.setDescription((URI) properties[0]);
+		this.setDescription((SourceDescription) properties[0]);
 	}
 
 	@Override

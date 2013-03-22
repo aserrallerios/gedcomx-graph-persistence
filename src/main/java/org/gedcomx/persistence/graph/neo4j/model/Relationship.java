@@ -59,9 +59,8 @@ public class Relationship extends Conclusion {
 		gedcomXRelationship.setKnownType(this.getKnownType());
 		gedcomXRelationship.setType(this.getType());
 
-		// gedcomXRelationship.setPerson1(this.getPerson1().getId());
-		// gedcomXRelationship.setPerson2(this.getPerson2().getId());
-		// TODO
+		gedcomXRelationship.setPerson1(this.getPerson1().getResourceReference());
+		gedcomXRelationship.setPerson2(this.getPerson2().getResourceReference());
 
 		return gedcomXRelationship;
 	}
@@ -89,7 +88,8 @@ public class Relationship extends Conclusion {
 
 	@Override
 	protected void resolveReferences() {
-		// TODO
+		this.createReferenceRelationship(RelTypes.PERSON1, ConclusionProperties.PERSON1_REFERENCE);
+		this.createReferenceRelationship(RelTypes.PERSON2, ConclusionProperties.PERSON2_REFERENCE);
 	}
 
 	@Override
@@ -109,7 +109,9 @@ public class Relationship extends Conclusion {
 		for (final org.gedcomx.conclusion.Identifier identifier : gedcomXRelationship.getIdentifiers()) {
 			this.addIdentifier(new Identifier(identifier));
 		}
-		// TODO
+
+		this.setProperty(ConclusionProperties.PERSON1_REFERENCE, gedcomXRelationship.getPerson1());
+		this.setProperty(ConclusionProperties.PERSON2_REFERENCE, gedcomXRelationship.getPerson2());
 	}
 
 	public void setKnownType(final RelationshipType type) {
@@ -117,18 +119,17 @@ public class Relationship extends Conclusion {
 	}
 
 	public void setPerson1(final Person person1) {
-		this.createRelationship(RelTypes.PERSON1, person1);
+		this.createReferenceRelationship(RelTypes.PERSON1, person1);
 	}
 
 	public void setPerson2(final Person person2) {
-		this.createRelationship(RelTypes.PERSON2, person2);
+		this.createReferenceRelationship(RelTypes.PERSON2, person2);
 	}
 
 	@Override
 	protected void setRequiredProperties(final Object... properties) throws MissingFieldException {
 		this.setPerson1((Person) properties[0]);
 		this.setPerson2((Person) properties[1]);
-		// TODO
 	}
 
 	@Deprecated

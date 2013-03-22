@@ -124,12 +124,21 @@ public class Agent extends NodeWrapper {
 	}
 
 	public ResourceReference getOpenid() {
-		final String openid = (String) this.getProperty(AgentProperties.OPENID);
-		return new ResourceReference(new URI(openid));
+		return new ResourceReference(new URI((String) this.getProperty(AgentProperties.OPENID)));
 	}
 
 	public List<ResourceReference> getPhones() {
 		return this.getURIListProperties(AgentProperties.PHONES);
+	}
+
+	@Override
+	protected ResourceReference getResourceReference() {
+		return new ResourceReference(new URI(this.getId()));
+	}
+
+	@Override
+	protected URI getURI() {
+		return new URI(this.getId());
 	}
 
 	@Override
@@ -195,5 +204,4 @@ public class Agent extends NodeWrapper {
 	protected void validateUnderlyingNode() {
 		return;
 	}
-
 }

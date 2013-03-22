@@ -49,8 +49,7 @@ public class OnlineAccount extends NodeWrapper {
 	}
 
 	public ResourceReference getServiceHomepage() {
-		final String serviceHomepage = (String) this.getProperty(AgentProperties.SERVICE_HOMEPAGE);
-		return new ResourceReference(new URI(serviceHomepage));
+		return new ResourceReference(new URI((String) this.getProperty(AgentProperties.SERVICE_HOMEPAGE)));
 	}
 
 	@Override

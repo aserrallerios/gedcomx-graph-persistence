@@ -1,4 +1,4 @@
-package org.gedcomx.persistence.graph.neo4j.service.impl;
+package org.gedcomx.persistence.graph.neo4j.service;
 
 import java.util.Map;
 
@@ -10,7 +10,6 @@ import org.gedcomx.persistence.graph.neo4j.model.Conclusion;
 import org.gedcomx.persistence.graph.neo4j.model.NodeWrapper;
 import org.gedcomx.persistence.graph.neo4j.model.NodeWrapper.NodeProperties;
 import org.gedcomx.persistence.graph.neo4j.model.SourceDescription;
-import org.gedcomx.persistence.graph.neo4j.service.GENgraphPersistenceService;
 import org.neo4j.graphdb.Node;
 
 public class GENgraphPersistenceServiceImpl implements GENgraphPersistenceService {

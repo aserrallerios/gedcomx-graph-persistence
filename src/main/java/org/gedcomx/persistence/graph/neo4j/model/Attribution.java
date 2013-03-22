@@ -31,14 +31,21 @@ public class Attribution extends NodeWrapper {
 		return (String) this.getProperty(GenericProperties.CHANGE_MESSAGE);
 	}
 
+	public Agent getContributor() {
+		return this.getNodeByRelationship(Agent.class, RelTypes.CONTRIBUTOR);
+	}
+
 	@Override
 	public org.gedcomx.common.Attribution getGedcomX() {
 		final org.gedcomx.common.Attribution gedcomXAttribution = new org.gedcomx.common.Attribution();
 
 		gedcomXAttribution.setChangeMessage(this.getChangeMessage());
 		gedcomXAttribution.setModified(this.getModified());
-		// gedcomXAttribution.setContributor(this.getContributor());
-		// TODO
+
+		final Agent agent = this.getContributor();
+		if (agent != null) {
+			gedcomXAttribution.setContributor(agent.getResourceReference());
+		}
 
 		return gedcomXAttribution;
 	}
@@ -53,11 +60,15 @@ public class Attribution extends NodeWrapper {
 
 	@Override
 	protected void resolveReferences() {
-		// TODO
+		this.createReferenceRelationship(RelTypes.CONTRIBUTOR, GenericProperties.CONTRIBUTOR_REFERENCE);
 	}
 
 	public void setChangeMessage(final String changeMessage) {
 		this.setProperty(GenericProperties.CHANGE_MESSAGE, changeMessage);
+	}
+
+	public void setContributor(final Agent agent) {
+		this.createReferenceRelationship(RelTypes.CONTRIBUTOR, agent);
 	}
 
 	@Override
@@ -66,14 +77,15 @@ public class Attribution extends NodeWrapper {
 
 		this.setModified(gedcomXAttribution.getModified());
 		this.setChangeMessage(gedcomXAttribution.getChangeMessage());
-
 	}
 
 	@Override
 	protected void setGedcomXRelations(final Object gedcomXObject) {
+		final org.gedcomx.common.Attribution gedcomXAttribution = (org.gedcomx.common.Attribution) gedcomXObject;
 
-		// this.setContributor(gedcomXAttribution.getContributor());
-		// TODO
+		if (gedcomXAttribution.getContributor() != null) {
+			this.setProperty(GenericProperties.CONTRIBUTOR_REFERENCE, gedcomXAttribution.getContributor());
+		}
 	}
 
 	public void setModified(final Date modified) {

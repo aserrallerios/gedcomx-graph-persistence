@@ -14,8 +14,8 @@ import org.neo4j.graphdb.Node;
 @NodeType("NAME")
 public class Name extends Conclusion {
 
-	public Name() throws MissingFieldException {
-		super();
+	public Name(final NameForm nameForm) throws MissingFieldException {
+		super(new Object[] { nameForm });
 	}
 
 	public Name(final Node node) throws MissingFieldException, UnknownNodeType {
@@ -26,8 +26,8 @@ public class Name extends Conclusion {
 		super(gedcomXName);
 	}
 
-	public void addNameForms(final NameForm nameForms) {
-		this.addRelationship(RelTypes.HAS_NAME_FORM, nameForms);
+	public void addNameForms(final NameForm nameForm) {
+		this.addRelationship(RelTypes.HAS_NAME_FORM, nameForm);
 	}
 
 	@Override
@@ -81,8 +81,7 @@ public class Name extends Conclusion {
 
 	@Deprecated
 	public URI getType() {
-		final String type = (String) this.getProperty(GenericProperties.TYPE);
-		return new URI(type);
+		return new URI((String) this.getProperty(GenericProperties.TYPE));
 	}
 
 	@Override
@@ -129,7 +128,7 @@ public class Name extends Conclusion {
 
 	@Override
 	protected void setRequiredProperties(final Object... properties) throws MissingFieldException {
-		this.addNameForms(new NameForm());
+		this.addNameForms((NameForm) properties[0]);
 	}
 
 	@Deprecated

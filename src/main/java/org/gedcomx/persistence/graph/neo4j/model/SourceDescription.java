@@ -1,5 +1,6 @@
 package org.gedcomx.persistence.graph.neo4j.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.gedcomx.common.ResourceReference;
@@ -16,7 +17,7 @@ public class SourceDescription extends NodeWrapper {
 
 	public enum SourceProperties implements NodeProperties {
 
-		ID, CITATION_TEMPLATE, NAME;
+		ID, CITATION_TEMPLATE, NAME, EXTRACTED_CONCLUSIONS_REFERENCE, MEDIATOR_REFERENCE, SOURCE_DESCRIPTION_REFERENCE;
 
 		private final boolean indexed;
 		private final IndexNames indexName;
@@ -114,19 +115,33 @@ public class SourceDescription extends NodeWrapper {
 		gedcomXSourceDescription.setAbout(this.getAbout());
 		gedcomXSourceDescription.setId(this.getId());
 
-		gedcomXSourceDescription.setAttribution(this.getAttribution().getGedcomX());
-		gedcomXSourceDescription.setComponentOf(this.getComponentOf().getGedcomX());
+		final Attribution attr = this.getAttribution();
+		if (attr != null) {
+			gedcomXSourceDescription.setAttribution(attr.getGedcomX());
+		}
+		final SourceReference src = this.getComponentOf();
+		if (src != null) {
+			gedcomXSourceDescription.setComponentOf(src.getGedcomX());
+		}
 
 		gedcomXSourceDescription.setCitations(this.getGedcomXList(org.gedcomx.source.SourceCitation.class, this.getCitations()));
 		gedcomXSourceDescription.setNotes(this.getGedcomXList(org.gedcomx.common.Note.class, this.getNotes()));
 		gedcomXSourceDescription.setSources(this.getGedcomXList(org.gedcomx.source.SourceReference.class, this.getSources()));
 		gedcomXSourceDescription.setTitles(this.getGedcomXList(org.gedcomx.common.TextValue.class, this.getTitles()));
 
-		gedcomXSourceDescription.setMediator();
-		gedcomXSourceDescription.setExtractedConclusions();
+		final Agent mediator = this.getMediator();
+		if (mediator != null) {
+			gedcomXSourceDescription.setMediator(mediator.getResourceReference());
+		}
 
-		// TODO
-
+		final List<Conclusion> conclusions = this.getExtractedConclusions();
+		if (conclusions != null) {
+			final List<ResourceReference> references = new ArrayList<>();
+			for (final Conclusion conclusion : conclusions) {
+				references.add(conclusion.getResourceReference());
+			}
+			gedcomXSourceDescription.setExtractedConclusions(references);
+		}
 		return gedcomXSourceDescription;
 	}
 
@@ -142,6 +157,11 @@ public class SourceDescription extends NodeWrapper {
 		return this.getNodesByRelationship(Note.class, RelTypes.HAS_NOTE);
 	}
 
+	@Override
+	protected ResourceReference getResourceReference() {
+		return new ResourceReference(new URI(this.getId()));
+	}
+
 	public List<SourceReference> getSources() {
 		return this.getNodesByRelationship(SourceReference.class, RelTypes.HAS_SOURCE_REFERENCE);
 	}
@@ -151,8 +171,14 @@ public class SourceDescription extends NodeWrapper {
 	}
 
 	@Override
+	protected URI getURI() {
+		return new URI(this.getId());
+	}
+
+	@Override
 	protected void resolveReferences() {
-		// TODO
+		this.createReferenceRelationship(RelTypes.MEDIATOR, SourceProperties.MEDIATOR_REFERENCE);
+		this.createReferenceRelationship(RelTypes.HAS_CONCLUSION, SourceProperties.EXTRACTED_CONCLUSIONS_REFERENCE);
 	}
 
 	public void setAbout(final URI about) {
@@ -196,13 +222,11 @@ public class SourceDescription extends NodeWrapper {
 		}
 
 		if (gedcomXSourceDescription.getMediator() != null) {
-			this.setMediator(new Agent());
+			this.setProperty(SourceProperties.MEDIATOR_REFERENCE, gedcomXSourceDescription.getMediator());
 		}
-		for (final ResourceReference conclusionReference : gedcomXSourceDescription.getExtractedConclusions()) {
-			this.addExtractedConclusion(new Conclusion());
+		if (gedcomXSourceDescription.getExtractedConclusions() != null) {
+			this.setURIListProperties(SourceProperties.EXTRACTED_CONCLUSIONS_REFERENCE, gedcomXSourceDescription.getExtractedConclusions());
 		}
-		// TODO
-		return;
 	}
 
 	public void setId(final String id) {
@@ -210,7 +234,7 @@ public class SourceDescription extends NodeWrapper {
 	}
 
 	public void setMediator(final Agent mediator) {
-		this.createRelationship(RelTypes.MEDIATOR, mediator);
+		this.createReferenceRelationship(RelTypes.MEDIATOR, mediator);
 	}
 
 	@Override

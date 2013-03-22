@@ -1,6 +1,5 @@
 package org.gedcomx.persistence.graph.neo4j.model;
 
-import org.gedcomx.common.ResourceReference;
 import org.gedcomx.common.URI;
 import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
@@ -49,7 +48,7 @@ public class EventRole extends Conclusion {
 		gedcomXEventRole.setKnownType(this.getKnownType());
 		gedcomXEventRole.setDetails(this.getDetails());
 
-		gedcomXEventRole.setPerson(new ResourceReference(new URI(this.getPerson().getId())));
+		gedcomXEventRole.setPerson(this.getPerson().getResourceReference());
 
 		return gedcomXEventRole;
 	}

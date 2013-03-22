@@ -49,13 +49,11 @@ public class Identifier extends NodeWrapper {
 
 	@Deprecated
 	public URI getType() {
-		final String type = (String) this.getProperty(GenericProperties.TYPE);
-		return new URI(type);
+		return new URI((String) this.getProperty(GenericProperties.TYPE));
 	}
 
 	public URI getValue() {
-		final String value = (String) this.getProperty(GenericProperties.VALUE);
-		return new URI(value);
+		return new URI((String) this.getProperty(GenericProperties.VALUE));
 	}
 
 	@Override

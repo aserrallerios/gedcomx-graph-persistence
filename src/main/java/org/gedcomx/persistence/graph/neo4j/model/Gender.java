@@ -12,6 +12,10 @@ import org.neo4j.graphdb.Node;
 @NodeType("GENDER")
 public class Gender extends Conclusion {
 
+	public Gender(final GenderType type) throws MissingFieldException {
+		super(new Object[] { type });
+	}
+
 	protected Gender(final Node node) throws MissingFieldException, UnknownNodeType {
 		super(node);
 	}
@@ -76,7 +80,11 @@ public class Gender extends Conclusion {
 
 	@Override
 	protected void setRequiredProperties(final Object... properties) throws MissingFieldException {
-		this.setType((URI) properties[0]);
+		if (properties[0] instanceof URI) {
+			this.setType((URI) properties[0]);
+		} else if (properties[0] instanceof GenderType) {
+			this.setKnownType((GenderType) properties[0]);
+		}
 	}
 
 	@Deprecated

@@ -10,7 +10,7 @@ import org.neo4j.graphdb.Node;
 
 public interface GENgraphPersistenceService {
 
-	public void addAgent(org.gedcomx.agent.Agent agent) throws MissingFieldException;
+	public Agent addAgent(org.gedcomx.agent.Agent agent) throws MissingFieldException;
 
 	public void addConclusion(org.gedcomx.conclusion.Conclusion conclusion) throws MissingFieldException;
 
@@ -32,7 +32,7 @@ public interface GENgraphPersistenceService {
 
 	public NodeWrapper[] getNodesByFilters(Map<NodeProperties, Object> filters);
 
-	public NodeWrapper[] getNodesByType(NodeTypes type);
+	public NodeWrapper[] getNodesByType(String type);
 
 	public Node[] searchAlivePeopleWithoutChildren();
 

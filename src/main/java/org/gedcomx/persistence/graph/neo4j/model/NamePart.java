@@ -36,7 +36,7 @@ public class NamePart extends NodeWrapper {
 	}
 
 	@Override
-	protected org.gedcomx.conclusion.NamePart getGedcomX() {
+	public org.gedcomx.conclusion.NamePart getGedcomX() {
 		final org.gedcomx.conclusion.NamePart gedcomXNamePart = new org.gedcomx.conclusion.NamePart();
 
 		gedcomXNamePart.setType(this.getType());

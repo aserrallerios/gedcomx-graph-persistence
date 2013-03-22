@@ -25,7 +25,7 @@ import org.reflections.Reflections;
 public abstract class NodeWrapper {
 
 	public enum GenericProperties implements NodeProperties {
-		ID(true, IndexNames.IDS), ABOUT, NODE_TYPE(true, IndexNames.NODE_TYPES), TYPE(true, IndexNames.TYPES), VALUE, LANG, MODIFIED, CHANGE_MESSAGE, SUBJECT, TEXT;
+		ID(true, IndexNames.IDS), ABOUT, NODE_TYPE(true, IndexNames.NODE_TYPES), TYPE(true, IndexNames.TYPES), VALUE, LANG, MODIFIED, CHANGE_MESSAGE, SUBJECT, TEXT, CONTRIBUTOR_REFERENCE;
 
 		private final boolean indexed;
 		private final IndexNames indexName;
@@ -154,13 +154,13 @@ public abstract class NodeWrapper {
 				final int index = this.getMaxRelationshipIndex(relType);
 				final Map<RelationshipProperties, Integer> properties = new HashMap<>();
 				properties.put(RelationshipProperties.INDEX, Integer.valueOf(index + 1));
-				GENgraphDAOUtil.createRelationship(this.getUnderlyingNode(), relType, node.underlyingNode);
+				GENgraphDAOUtil.createRelationship(this.getUnderlyingNode(), relType, node.getUnderlyingNode());
 				GENgraphDAOUtil.commitTransaction(t);
 			} finally {
 				GENgraphDAOUtil.endTransaction(t);
 			}
 		} else {
-			GENgraphDAOUtil.createRelationship(this.getUnderlyingNode(), relType, node.underlyingNode);
+			GENgraphDAOUtil.createRelationship(this.getUnderlyingNode(), relType, node.getUnderlyingNode());
 		}
 	}
 
@@ -179,14 +179,45 @@ public abstract class NodeWrapper {
 	}
 
 	protected void createReferenceRelationship(final RelTypes relType, final NodeProperties property) {
-		final URI uri = new URI((String) this.getProperty(property));
+		final Object val = this.getProperty(property);
 
-		if ((uri != null) && !uri.toURI().isAbsolute()) {
-			GENgraphDAOUtil.hasSingleRelationship(this.getUnderlyingNode(), relType, Direction.OUTGOING);
+		if (val instanceof String) {
+			final URI uri = new URI((String) val);
 
-			final NodeWrapper wrapper = this.findNodeByReference(new ResourceReference(uri));
-			if (wrapper != null) {
-				this.createReferenceRelationship(relType, wrapper);
+			if ((uri != null) && !uri.toURI().isAbsolute()) {
+				GENgraphDAOUtil.hasSingleRelationship(this.getUnderlyingNode(), relType, Direction.OUTGOING);
+
+				final NodeWrapper wrapper = this.findNodeByReference(new ResourceReference(uri));
+				if (wrapper != null) {
+					final Transaction t = GENgraphDAOUtil.beginTransaction();
+					try {
+						this.createReferenceRelationship(relType, wrapper);
+						GENgraphDAOUtil.removeNodeProperty(this.getUnderlyingNode(), property.toString());
+						GENgraphDAOUtil.commitTransaction(t);
+					} finally {
+						GENgraphDAOUtil.endTransaction(t);
+					}
+				}
+			}
+		} else if (val instanceof List) {
+			for (final Object aux : (List) val) {
+				final URI uri = new URI((String) aux);
+
+				if ((uri != null) && !uri.toURI().isAbsolute()) {
+					GENgraphDAOUtil.hasSingleRelationship(this.getUnderlyingNode(), relType, Direction.OUTGOING);
+
+					final NodeWrapper wrapper = this.findNodeByReference(new ResourceReference(uri));
+					if (wrapper != null) {
+						final Transaction t = GENgraphDAOUtil.beginTransaction();
+						try {
+							this.addRelationship(relType, wrapper);
+							GENgraphDAOUtil.removeNodeProperty(this.getUnderlyingNode(), property.toString());
+							GENgraphDAOUtil.commitTransaction(t);
+						} finally {
+							GENgraphDAOUtil.endTransaction(t);
+						}
+					}
+				}
 			}
 		}
 	}
@@ -201,8 +232,8 @@ public abstract class NodeWrapper {
 			} else {
 				GENgraphDAOUtil.delete(GENgraphDAOUtil.getSingleRelationship(this.getUnderlyingNode(), relType, Direction.OUTGOING));
 				GENgraphDAOUtil.createRelationship(this.getUnderlyingNode(), relType, node.underlyingNode);
-				GENgraphDAOUtil.commitTransaction(t);
 			}
+			GENgraphDAOUtil.commitTransaction(t);
 		} finally {
 			GENgraphDAOUtil.endTransaction(t);
 		}
@@ -366,11 +397,19 @@ public abstract class NodeWrapper {
 		return GENgraphDAOUtil.getNodeProperty(this.getUnderlyingNode(), property.name());
 	}
 
+	protected ResourceReference getResourceReference() {
+		return null;
+	}
+
 	private Node getUnderlyingNode() {
 		if (this.underlyingNode == null) {
 			throw new UninitializedNode();
 		}
 		return this.underlyingNode;
+	}
+
+	protected URI getURI() {
+		return null;
 	}
 
 	protected List<ResourceReference> getURIListProperties(final NodeProperties property) {

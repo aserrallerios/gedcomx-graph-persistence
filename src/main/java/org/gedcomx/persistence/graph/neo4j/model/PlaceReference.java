@@ -31,7 +31,10 @@ public class PlaceReference extends NodeWrapper {
 		final org.gedcomx.conclusion.PlaceReference gedcomXPlaceReference = new org.gedcomx.conclusion.PlaceReference();
 
 		gedcomXPlaceReference.setOriginal(this.getOriginal());
-		gedcomXPlaceReference.setDescriptionRef(this.getPlaceDescription());
+		final PlaceDescription place = this.getPlaceDescription();
+		if (place != null) {
+			gedcomXPlaceReference.setDescriptionRef(place.getURI());
+		}
 
 		return gedcomXPlaceReference;
 	}
@@ -45,13 +48,12 @@ public class PlaceReference extends NodeWrapper {
 	}
 
 	public PlaceDescription getPlaceDescription() {
-		// TODO
-		return null;
+		return this.getNodeByRelationship(PlaceDescription.class, RelTypes.PLACE);
 	}
 
 	@Override
 	protected void resolveReferences() {
-		// TODO
+		this.createReferenceRelationship(RelTypes.PLACE, ConclusionProperties.PLACE_DESC_REFERENCE);
 	}
 
 	@Override
@@ -66,7 +68,7 @@ public class PlaceReference extends NodeWrapper {
 		final org.gedcomx.conclusion.PlaceReference gedcomXPlaceReference = (org.gedcomx.conclusion.PlaceReference) gedcomXObject;
 
 		if (gedcomXPlaceReference.getDescriptionRef() != null) {
-			// TODO
+			this.setProperty(ConclusionProperties.PLACE_DESC_REFERENCE, gedcomXPlaceReference.getDescriptionRef());
 		}
 	}
 

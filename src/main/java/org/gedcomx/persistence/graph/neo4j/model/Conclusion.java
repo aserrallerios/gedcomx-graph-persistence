@@ -2,6 +2,7 @@ package org.gedcomx.persistence.graph.neo4j.model;
 
 import java.util.List;
 
+import org.gedcomx.common.ResourceReference;
 import org.gedcomx.common.URI;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
@@ -12,7 +13,7 @@ public abstract class Conclusion extends NodeWrapper {
 
 	public enum ConclusionProperties implements NodeProperties {
 
-		ID, CONFIDENCE(true, IndexNames.TYPES), TEXT(true, IndexNames.OTHER), LATITUDE, LONGITUDE, TEMPORAL_DESCRIPTION_ORIGINAL, SPATIAL_DESCRIPTION, TEMPORAL_DESCRIPTION_FORMAL, ORIGINAL, DATE_ORIGINAL, DATE_FORMAL, PREFERRED, FULL_TEXT, QUALIFIERS, DETAILS, LIVING, PERSON_REFERENCE;
+		ID, CONFIDENCE(true, IndexNames.TYPES), TEXT(true, IndexNames.OTHER), LATITUDE, LONGITUDE, TEMPORAL_DESCRIPTION_ORIGINAL, SPATIAL_DESCRIPTION, TEMPORAL_DESCRIPTION_FORMAL, ORIGINAL, DATE_ORIGINAL, DATE_FORMAL, PREFERRED, FULL_TEXT, QUALIFIERS, DETAILS, LIVING, PERSON_REFERENCE, PLACE_DESC_REFERENCE, PERSON1_REFERENCE, PERSON2_REFERENCE;
 
 		private final boolean indexed;
 		private final IndexNames indexName;
@@ -107,8 +108,18 @@ public abstract class Conclusion extends NodeWrapper {
 		return this.getNodesByRelationship(Note.class, RelTypes.HAS_NOTE);
 	}
 
+	@Override
+	protected ResourceReference getResourceReference() {
+		return new ResourceReference(new URI(this.getId()));
+	}
+
 	public List<SourceReference> getSourceReferences() {
 		return this.getNodesByRelationship(SourceReference.class, RelTypes.HAS_SOURCE_REFERENCE);
+	}
+
+	@Override
+	protected URI getURI() {
+		return new URI(this.getId());
 	}
 
 	public void setAttribution(final Attribution attribution) {

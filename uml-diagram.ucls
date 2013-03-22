@@ -11,9 +11,9 @@
     </display>  
   </interface>  
   <class id="2" corner="BOTTOM_RIGHT" language="java" 
-    name="org.gedcomx.persistence.graph.neo4j.service.impl.GENgraphPersistenceServiceImpl" 
+    name="org.gedcomx.persistence.graph.neo4j.service.GENgraphPersistenceServiceImpl" 
     project="gedcomx-graph-persistence" 
-    file="/gedcomx-graph-persistence/src/main/java/org/gedcomx/persistence/graph/neo4j/service/impl/GENgraphPersistenceServiceImpl.java" 
+    file="/gedcomx-graph-persistence/src/main/java/org/gedcomx/persistence/graph/neo4j/service/GENgraphPersistenceServiceImpl.java" 
     binary="false">    
     <position height="-1" width="-1" x="1198" y="353"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" visibility="true">      

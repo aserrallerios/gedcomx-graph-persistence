@@ -12,6 +12,10 @@ import org.neo4j.graphdb.Node;
 @NodeType("FACT")
 public class Fact extends Conclusion {
 
+	public Fact(final FactType type) throws MissingFieldException {
+		super(new Object[] { type });
+	}
+
 	protected Fact(final Node node) throws MissingFieldException, UnknownNodeType {
 		super(node);
 	}
@@ -129,7 +133,11 @@ public class Fact extends Conclusion {
 
 	@Override
 	protected void setRequiredProperties(final Object... properties) throws MissingFieldException {
-		this.setType((URI) properties[0]);
+		if (properties[0] instanceof URI) {
+			this.setType((URI) properties[0]);
+		} else if (properties[0] instanceof FactType) {
+			this.setKnownType((FactType) properties[0]);
+		}
 	}
 
 	@Deprecated
