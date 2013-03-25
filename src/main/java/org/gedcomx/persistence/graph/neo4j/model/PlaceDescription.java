@@ -18,11 +18,11 @@ public class PlaceDescription extends Conclusion {
 		super(node);
 	}
 
-	protected PlaceDescription(final org.gedcomx.conclusion.PlaceDescription gedcomXPlaceDescription) throws MissingFieldException {
+	public PlaceDescription(final org.gedcomx.conclusion.PlaceDescription gedcomXPlaceDescription) throws MissingFieldException {
 		super(gedcomXPlaceDescription);
 	}
 
-	protected PlaceDescription(final String nameValue) throws MissingFieldException {
+	public PlaceDescription(final String nameValue) throws MissingFieldException {
 		super(new Object[] { nameValue });
 	}
 

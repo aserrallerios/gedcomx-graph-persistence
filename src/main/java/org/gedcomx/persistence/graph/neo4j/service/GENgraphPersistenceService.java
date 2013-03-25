@@ -12,30 +12,32 @@ import org.neo4j.graphdb.Node;
 
 public interface GENgraphPersistenceService {
 
-	public Agent addAgent(org.gedcomx.agent.Agent agent) throws MissingFieldException;
+	Agent addAgent(org.gedcomx.agent.Agent agent) throws MissingFieldException;
 
-	public Conclusion addConclusion(org.gedcomx.conclusion.Conclusion conclusion) throws MissingFieldException;
+	Conclusion addConclusion(org.gedcomx.conclusion.Conclusion conclusion) throws MissingFieldException;
 
-	public SourceDescription addSource(org.gedcomx.source.SourceDescription sourceDescription) throws MissingFieldException;
+	SourceDescription addSource(org.gedcomx.source.SourceDescription sourceDescription) throws MissingFieldException;
 
-	public void createGraph(Map<String, String> metadata, Object[] gedcomxElements) throws MissingFieldException;
+	NodeWrapper addTopLevelElement(final Object gedcomxElement) throws MissingFieldException;
 
-	public Object getGedcomX();
+	void createGraph(Map<String, String> metadata, Object[] gedcomxElements) throws MissingFieldException;
 
-	public Node[] getGraph();
+	Object getGedcomX();
 
-	public NodeWrapper getNodeByGedcomXId(String id);
+	Node[] getGraph();
 
-	public NodeWrapper getNodeById(Long id);
+	NodeWrapper getNodeByGedcomXId(String id);
 
-	public NodeWrapper[] getNodesByFilters(Map<NodeProperties, Object> filters);
+	NodeWrapper getNodeById(Long id);
 
-	public NodeWrapper[] getNodesByType(String type);
+	NodeWrapper[] getNodesByFilters(Map<NodeProperties, Object> filters);
 
-	public Node[] searchAlivePeopleWithoutChildren();
+	NodeWrapper[] getNodesByType(String type);
 
-	public Node[] searchAllPeopleAndRelationships();
+	Node[] searchAlivePeopleWithoutChildren();
 
-	public Node[] searchNodesByCypher(String query);
+	Node[] searchAllPeopleAndRelationships();
+
+	Node[] searchNodesByCypher(String query);
 
 }

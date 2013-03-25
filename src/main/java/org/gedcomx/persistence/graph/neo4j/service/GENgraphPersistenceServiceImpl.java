@@ -2,13 +2,18 @@ package org.gedcomx.persistence.graph.neo4j.service;
 
 import java.util.Map;
 
-import org.gedcomx.common.URI;
 import org.gedcomx.persistence.graph.neo4j.dao.GENgraphDAO;
+import org.gedcomx.persistence.graph.neo4j.exception.GenericError;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.model.Agent;
 import org.gedcomx.persistence.graph.neo4j.model.Conclusion;
+import org.gedcomx.persistence.graph.neo4j.model.Document;
+import org.gedcomx.persistence.graph.neo4j.model.Event;
 import org.gedcomx.persistence.graph.neo4j.model.NodeWrapper;
 import org.gedcomx.persistence.graph.neo4j.model.NodeWrapper.NodeProperties;
+import org.gedcomx.persistence.graph.neo4j.model.Person;
+import org.gedcomx.persistence.graph.neo4j.model.PlaceDescription;
+import org.gedcomx.persistence.graph.neo4j.model.Relationship;
 import org.gedcomx.persistence.graph.neo4j.model.SourceDescription;
 import org.neo4j.graphdb.Node;
 
@@ -21,44 +26,52 @@ public class GENgraphPersistenceServiceImpl implements GENgraphPersistenceServic
 	}
 
 	@Override
-	public void addAgent(final org.gedcomx.agent.Agent agent) throws MissingFieldException {
-		new Agent(agent);
+	public Agent addAgent(final org.gedcomx.agent.Agent agent) throws MissingFieldException {
+		return new Agent(agent);
 	}
 
 	@Override
-	public void addConclusion(final org.gedcomx.conclusion.Conclusion conclusion) {
-		if ((conclusion instanceof org.gedcomx.conclusion.Person) || (conclusion instanceof org.gedcomx.conclusion.Document)
-				|| (conclusion instanceof org.gedcomx.conclusion.Event) || (conclusion instanceof org.gedcomx.conclusion.Relationship)
-				|| (conclusion instanceof org.gedcomx.conclusion.PlaceDescription)) {
-			new Conclusion(conclusion);
+	public Conclusion addConclusion(final org.gedcomx.conclusion.Conclusion conclusion) throws MissingFieldException {
+		if (conclusion instanceof org.gedcomx.conclusion.Person) {
+			return new Person((org.gedcomx.conclusion.Person) conclusion);
 		}
+		if (conclusion instanceof org.gedcomx.conclusion.Document) {
+			return new Document((org.gedcomx.conclusion.Document) conclusion);
+		}
+		if (conclusion instanceof org.gedcomx.conclusion.Event) {
+			return new Event((org.gedcomx.conclusion.Event) conclusion);
+		}
+		if (conclusion instanceof org.gedcomx.conclusion.Relationship) {
+			return new Relationship((org.gedcomx.conclusion.Relationship) conclusion);
+		}
+		if (conclusion instanceof org.gedcomx.conclusion.PlaceDescription) {
+			return new PlaceDescription((org.gedcomx.conclusion.PlaceDescription) conclusion);
+		}
+		throw new GenericError("Unknown GedcomX Conclusion type");
+
 	}
 
 	@Override
-	public void addSource(final org.gedcomx.source.SourceDescription sourceDescription) throws MissingFieldException {
-		new SourceDescription(sourceDescription);
+	public SourceDescription addSource(final org.gedcomx.source.SourceDescription sourceDescription) throws MissingFieldException {
+		return new SourceDescription(sourceDescription);
 	}
 
 	@Override
-	public void addSource(final String id, final URI about, final String citationValue) {
-
-	}
-
-	@Override
-	public void addTopLevelElement(final Object gedcomxElement) throws MissingFieldException {
+	public NodeWrapper addTopLevelElement(final Object gedcomxElement) throws MissingFieldException {
 		if (gedcomxElement instanceof org.gedcomx.agent.Agent) {
-			this.addAgent((org.gedcomx.agent.Agent) gedcomxElement);
+			return this.addAgent((org.gedcomx.agent.Agent) gedcomxElement);
 		}
 		if (gedcomxElement instanceof org.gedcomx.conclusion.Conclusion) {
-			this.addConclusion((org.gedcomx.conclusion.Conclusion) gedcomxElement);
+			return this.addConclusion((org.gedcomx.conclusion.Conclusion) gedcomxElement);
 		}
 		if (gedcomxElement instanceof org.gedcomx.source.SourceDescription) {
-			this.addSource((org.gedcomx.source.SourceDescription) gedcomxElement);
+			return this.addSource((org.gedcomx.source.SourceDescription) gedcomxElement);
 		}
+		throw new GenericError("Unknown GedcomX Top level type");
 	}
 
 	@Override
-	public void createGedcomXGraph(final Map<String, String> metadata, final Object[] gedcomxElements) throws MissingFieldException {
+	public void createGraph(final Map<String, String> metadata, final Object[] gedcomxElements) throws MissingFieldException {
 		final Node rootNode = this.getInitialGraphNode();
 
 		this.dao.setNodeProperties(rootNode, metadata);
@@ -99,7 +112,7 @@ public class GENgraphPersistenceServiceImpl implements GENgraphPersistenceServic
 	}
 
 	@Override
-	public NodeWrapper[] getNodesByType(final NodeTypes type) {
+	public NodeWrapper[] getNodesByType(final String type) {
 		return null;
 	}
 
