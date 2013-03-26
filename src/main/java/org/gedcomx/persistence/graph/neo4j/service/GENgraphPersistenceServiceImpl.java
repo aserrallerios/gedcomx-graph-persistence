@@ -10,11 +10,11 @@ import org.gedcomx.persistence.graph.neo4j.model.Conclusion;
 import org.gedcomx.persistence.graph.neo4j.model.Document;
 import org.gedcomx.persistence.graph.neo4j.model.Event;
 import org.gedcomx.persistence.graph.neo4j.model.NodeWrapper;
-import org.gedcomx.persistence.graph.neo4j.model.NodeWrapper.NodeProperties;
 import org.gedcomx.persistence.graph.neo4j.model.Person;
 import org.gedcomx.persistence.graph.neo4j.model.PlaceDescription;
 import org.gedcomx.persistence.graph.neo4j.model.Relationship;
 import org.gedcomx.persistence.graph.neo4j.model.SourceDescription;
+import org.gedcomx.persistence.graph.neo4j.model.constants.NodeProperties;
 import org.neo4j.graphdb.Node;
 
 public class GENgraphPersistenceServiceImpl implements GENgraphPersistenceService {

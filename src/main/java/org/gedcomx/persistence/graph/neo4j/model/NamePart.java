@@ -9,7 +9,9 @@ import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredPropertyException;
 import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
-import org.gedcomx.persistence.graph.neo4j.model.Conclusion.ConclusionProperties;
+import org.gedcomx.persistence.graph.neo4j.model.constants.ConclusionProperties;
+import org.gedcomx.persistence.graph.neo4j.model.constants.GenericProperties;
+import org.gedcomx.persistence.graph.neo4j.model.constants.RelationshipTypes;
 import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
 import org.gedcomx.types.NamePartQualifierType;
 import org.gedcomx.types.NamePartType;
@@ -62,7 +64,7 @@ public class NamePart extends NodeWrapper {
 	}
 
 	public NameForm getNameForm() {
-		return (NameForm) this.getParentNode(RelTypes.HAS_NAME_PART);
+		return (NameForm) this.getParentNode(RelationshipTypes.HAS_NAME_PART);
 	}
 
 	@Deprecated

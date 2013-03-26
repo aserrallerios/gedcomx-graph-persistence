@@ -8,6 +8,9 @@ import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredRelationshipException;
 import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
+import org.gedcomx.persistence.graph.neo4j.model.constants.ConclusionProperties;
+import org.gedcomx.persistence.graph.neo4j.model.constants.GenericProperties;
+import org.gedcomx.persistence.graph.neo4j.model.constants.RelationshipTypes;
 import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
 import org.neo4j.graphdb.Node;
 
@@ -27,11 +30,11 @@ public class PlaceDescription extends Conclusion {
 	}
 
 	public void addIdentifier(final Identifier identifier) {
-		this.addRelationship(RelTypes.HAS_IDENTIFIER, identifier);
+		this.addRelationship(RelationshipTypes.HAS_IDENTIFIER, identifier);
 	}
 
 	public void addName(final TextValue name) {
-		this.addRelationship(RelTypes.HAS_NAME, name);
+		this.addRelationship(RelationshipTypes.HAS_NAME, name);
 	}
 
 	@Override
@@ -67,7 +70,7 @@ public class PlaceDescription extends Conclusion {
 	}
 
 	public List<Identifier> getIdentifiers() {
-		return this.getNodesByRelationship(Identifier.class, RelTypes.HAS_IDENTIFIER);
+		return this.getNodesByRelationship(Identifier.class, RelationshipTypes.HAS_IDENTIFIER);
 	}
 
 	public Double getLatitude() {
@@ -81,7 +84,7 @@ public class PlaceDescription extends Conclusion {
 	}
 
 	public List<TextValue> getNames() {
-		return this.getNodesByRelationship(TextValue.class, RelTypes.HAS_NAME);
+		return this.getNodesByRelationship(TextValue.class, RelationshipTypes.HAS_NAME);
 	}
 
 	public ResourceReference getSpatialDescription() {
@@ -176,7 +179,7 @@ public class PlaceDescription extends Conclusion {
 	@Override
 	protected void validateUnderlyingNode() throws MissingFieldException {
 		if (ValidationTools.nullOrEmpty(this.getNames())) {
-			throw new MissingRequiredRelationshipException(PlaceDescription.class, this.getId(), RelTypes.HAS_NAME.toString());
+			throw new MissingRequiredRelationshipException(this.getAnnotatedNodeType(), this.getId(), RelationshipTypes.HAS_NAME.toString());
 		}
 	}
 

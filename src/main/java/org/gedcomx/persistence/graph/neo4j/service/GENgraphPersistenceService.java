@@ -6,8 +6,8 @@ import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.model.Agent;
 import org.gedcomx.persistence.graph.neo4j.model.Conclusion;
 import org.gedcomx.persistence.graph.neo4j.model.NodeWrapper;
-import org.gedcomx.persistence.graph.neo4j.model.NodeWrapper.NodeProperties;
 import org.gedcomx.persistence.graph.neo4j.model.SourceDescription;
+import org.gedcomx.persistence.graph.neo4j.model.constants.NodeProperties;
 import org.neo4j.graphdb.Node;
 
 public interface GENgraphPersistenceService {

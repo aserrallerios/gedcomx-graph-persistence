@@ -6,7 +6,8 @@ import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredPropertyException;
 import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
-import org.gedcomx.persistence.graph.neo4j.model.Agent.AgentProperties;
+import org.gedcomx.persistence.graph.neo4j.model.constants.AgentProperties;
+import org.gedcomx.persistence.graph.neo4j.model.constants.RelationshipTypes;
 import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
 import org.neo4j.graphdb.Node;
 
@@ -35,7 +36,7 @@ public class OnlineAccount extends NodeWrapper {
 	}
 
 	public Agent getAgent() {
-		return (Agent) this.getParentNode(RelTypes.HAS_ACCOUNT);
+		return (Agent) this.getParentNode(RelationshipTypes.HAS_ACCOUNT);
 	}
 
 	@Override

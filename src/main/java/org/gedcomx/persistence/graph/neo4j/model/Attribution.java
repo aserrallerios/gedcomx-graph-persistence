@@ -5,6 +5,8 @@ import java.util.Date;
 import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
+import org.gedcomx.persistence.graph.neo4j.model.constants.GenericProperties;
+import org.gedcomx.persistence.graph.neo4j.model.constants.RelationshipTypes;
 import org.neo4j.graphdb.Node;
 
 @NodeType("ATTRIBUTION")
@@ -24,7 +26,7 @@ public class Attribution extends NodeWrapper {
 
 	@Override
 	protected void deleteAllReferences() {
-		this.deleteReference(RelTypes.CONTRIBUTOR);
+		this.deleteReference(RelationshipTypes.CONTRIBUTOR);
 	}
 
 	public String getChangeMessage() {
@@ -32,7 +34,7 @@ public class Attribution extends NodeWrapper {
 	}
 
 	public Agent getContributor() {
-		return this.getNodeByRelationship(Agent.class, RelTypes.CONTRIBUTOR);
+		return this.getNodeByRelationship(Agent.class, RelationshipTypes.CONTRIBUTOR);
 	}
 
 	@Override
@@ -55,12 +57,12 @@ public class Attribution extends NodeWrapper {
 	}
 
 	public NodeWrapper getParentNode() {
-		return super.getParentNode(RelTypes.ATTRIBUTION);
+		return super.getParentNode(RelationshipTypes.ATTRIBUTION);
 	}
 
 	@Override
 	protected void resolveReferences() {
-		this.createReferenceRelationship(RelTypes.CONTRIBUTOR, GenericProperties.CONTRIBUTOR_REFERENCE);
+		this.createReferenceRelationship(RelationshipTypes.CONTRIBUTOR, GenericProperties.CONTRIBUTOR_REFERENCE);
 	}
 
 	public void setChangeMessage(final String changeMessage) {
@@ -68,7 +70,7 @@ public class Attribution extends NodeWrapper {
 	}
 
 	public void setContributor(final Agent agent) {
-		this.createReferenceRelationship(RelTypes.CONTRIBUTOR, agent);
+		this.createReferenceRelationship(RelationshipTypes.CONTRIBUTOR, agent);
 	}
 
 	@Override

@@ -5,6 +5,9 @@ import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredRelationshipException;
 import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
+import org.gedcomx.persistence.graph.neo4j.model.constants.ConclusionProperties;
+import org.gedcomx.persistence.graph.neo4j.model.constants.GenericProperties;
+import org.gedcomx.persistence.graph.neo4j.model.constants.RelationshipTypes;
 import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
 import org.gedcomx.types.EventRoleType;
 import org.neo4j.graphdb.Node;
@@ -26,7 +29,7 @@ public class EventRole extends Conclusion {
 
 	@Override
 	protected void deleteAllConcreteReferences() {
-		this.deleteReference(RelTypes.PERSON);
+		this.deleteReference(RelationshipTypes.PERSON);
 
 	}
 
@@ -35,7 +38,7 @@ public class EventRole extends Conclusion {
 	}
 
 	public Event getEvent() {
-		return (Event) super.getParentNode(RelTypes.HAS_ROLE);
+		return (Event) super.getParentNode(RelationshipTypes.HAS_ROLE);
 	}
 
 	@Override
@@ -58,7 +61,7 @@ public class EventRole extends Conclusion {
 	}
 
 	public Person getPerson() {
-		return this.getNodeByRelationship(Person.class, RelTypes.PERSON);
+		return this.getNodeByRelationship(Person.class, RelationshipTypes.PERSON);
 	}
 
 	@Deprecated
@@ -68,7 +71,7 @@ public class EventRole extends Conclusion {
 
 	@Override
 	protected void resolveReferences() {
-		this.createReferenceRelationship(RelTypes.PERSON, ConclusionProperties.PERSON_REFERENCE);
+		this.createReferenceRelationship(RelationshipTypes.PERSON, ConclusionProperties.PERSON_REFERENCE);
 	}
 
 	public void setDetails(final String details) {
@@ -95,7 +98,7 @@ public class EventRole extends Conclusion {
 	}
 
 	public void setPerson(final Person person) {
-		this.createReferenceRelationship(RelTypes.PERSON, person);
+		this.createReferenceRelationship(RelationshipTypes.PERSON, person);
 	}
 
 	@Override
@@ -111,7 +114,7 @@ public class EventRole extends Conclusion {
 	@Override
 	protected void validateUnderlyingNode() throws MissingFieldException {
 		if (ValidationTools.nullOrEmpty(this.getPerson())) {
-			throw new MissingRequiredRelationshipException(EventRole.class, this.getId(), RelTypes.PERSON.toString());
+			throw new MissingRequiredRelationshipException(this.getAnnotatedNodeType(), this.getId(), RelationshipTypes.PERSON.toString());
 		}
 	}
 

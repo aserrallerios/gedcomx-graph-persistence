@@ -1,14 +1,13 @@
 package org.gedcomx.persistence.graph.neo4j.model;
 
-import org.gedcomx.persistence.graph.neo4j.annotations.GedcomXType;
 import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
-import org.gedcomx.persistence.graph.neo4j.model.Agent.AgentProperties;
+import org.gedcomx.persistence.graph.neo4j.model.constants.AgentProperties;
+import org.gedcomx.persistence.graph.neo4j.model.constants.RelationshipTypes;
 import org.neo4j.graphdb.Node;
 
 @NodeType("ADDRESS")
-@GedcomXType(org.gedcomx.agent.Address.class)
 public class Address extends NodeWrapper {
 
 	public Address() throws MissingFieldException {
@@ -29,7 +28,7 @@ public class Address extends NodeWrapper {
 	}
 
 	public Agent getAgent() {
-		return (Agent) this.getParentNode(RelTypes.HAS_ADDRESS);
+		return (Agent) this.getParentNode(RelationshipTypes.HAS_ADDRESS);
 	}
 
 	public String getCity() {

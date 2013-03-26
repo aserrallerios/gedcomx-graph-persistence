@@ -6,6 +6,9 @@ import org.gedcomx.common.URI;
 import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
+import org.gedcomx.persistence.graph.neo4j.model.constants.ConclusionProperties;
+import org.gedcomx.persistence.graph.neo4j.model.constants.GenericProperties;
+import org.gedcomx.persistence.graph.neo4j.model.constants.RelationshipTypes;
 import org.gedcomx.types.EventType;
 import org.neo4j.graphdb.Node;
 
@@ -25,7 +28,7 @@ public class Event extends Conclusion {
 	}
 
 	public void addRole(final EventRole role) {
-		this.addRelationship(RelTypes.HAS_ROLE, role);
+		this.addRelationship(RelationshipTypes.HAS_ROLE, role);
 	}
 
 	@Override
@@ -65,11 +68,11 @@ public class Event extends Conclusion {
 	}
 
 	public PlaceReference getPlaceReference() {
-		return this.getNodeByRelationship(PlaceReference.class, RelTypes.PLACE);
+		return this.getNodeByRelationship(PlaceReference.class, RelationshipTypes.PLACE);
 	}
 
 	public List<EventRole> getRoles() {
-		return this.getNodesByRelationship(EventRole.class, RelTypes.HAS_ROLE);
+		return this.getNodesByRelationship(EventRole.class, RelationshipTypes.HAS_ROLE);
 	}
 
 	@Deprecated
@@ -119,7 +122,7 @@ public class Event extends Conclusion {
 	}
 
 	public void setPlaceReference(final PlaceReference placeReference) {
-		this.createRelationship(RelTypes.PLACE, placeReference);
+		this.createRelationship(RelationshipTypes.PLACE, placeReference);
 	}
 
 	@Override

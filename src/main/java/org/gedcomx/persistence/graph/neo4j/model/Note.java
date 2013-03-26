@@ -4,6 +4,8 @@ import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredPropertyException;
 import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
+import org.gedcomx.persistence.graph.neo4j.model.constants.GenericProperties;
+import org.gedcomx.persistence.graph.neo4j.model.constants.RelationshipTypes;
 import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
 import org.neo4j.graphdb.Node;
 
@@ -28,7 +30,7 @@ public class Note extends NodeWrapper {
 	}
 
 	public Attribution getAttribution() {
-		return this.getNodeByRelationship(Attribution.class, RelTypes.ATTRIBUTION);
+		return this.getNodeByRelationship(Attribution.class, RelationshipTypes.ATTRIBUTION);
 	}
 
 	@Override
@@ -52,7 +54,7 @@ public class Note extends NodeWrapper {
 	}
 
 	public NodeWrapper getParentNode() {
-		return super.getParentNode(RelTypes.HAS_NOTE);
+		return super.getParentNode(RelationshipTypes.HAS_NOTE);
 	}
 
 	public String getSubject() {
@@ -69,7 +71,7 @@ public class Note extends NodeWrapper {
 	}
 
 	public void setAttribution(final Attribution attribution) {
-		this.createRelationship(RelTypes.ATTRIBUTION, attribution);
+		this.createRelationship(RelationshipTypes.ATTRIBUTION, attribution);
 	}
 
 	@Override

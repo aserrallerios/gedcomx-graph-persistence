@@ -5,6 +5,8 @@ import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredPropertyException;
 import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
+import org.gedcomx.persistence.graph.neo4j.model.constants.GenericProperties;
+import org.gedcomx.persistence.graph.neo4j.model.constants.RelationshipTypes;
 import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
 import org.gedcomx.types.GenderType;
 import org.neo4j.graphdb.Node;
@@ -50,7 +52,7 @@ public class Gender extends Conclusion {
 	}
 
 	public Person getPerson() {
-		return (Person) this.getParentNode(RelTypes.GENDER);
+		return (Person) this.getParentNode(RelationshipTypes.GENDER);
 	}
 
 	@Deprecated

@@ -7,6 +7,9 @@ import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredRelationshipException;
 import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
+import org.gedcomx.persistence.graph.neo4j.model.constants.ConclusionProperties;
+import org.gedcomx.persistence.graph.neo4j.model.constants.GenericProperties;
+import org.gedcomx.persistence.graph.neo4j.model.constants.RelationshipTypes;
 import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
 import org.gedcomx.types.NameType;
 import org.neo4j.graphdb.Node;
@@ -27,7 +30,7 @@ public class Name extends Conclusion {
 	}
 
 	public void addNameForms(final NameForm nameForm) {
-		this.addRelationship(RelTypes.HAS_NAME_FORM, nameForm);
+		this.addRelationship(RelationshipTypes.HAS_NAME_FORM, nameForm);
 	}
 
 	@Override
@@ -68,11 +71,11 @@ public class Name extends Conclusion {
 	}
 
 	public List<NameForm> getNameForms() {
-		return this.getNodesByRelationship(NameForm.class, RelTypes.HAS_NAME_FORM);
+		return this.getNodesByRelationship(NameForm.class, RelationshipTypes.HAS_NAME_FORM);
 	}
 
 	public Person getPerson() {
-		return (Person) this.getParentNode(RelTypes.HAS_NAME);
+		return (Person) this.getParentNode(RelationshipTypes.HAS_NAME);
 	}
 
 	public Boolean getPreferred() {
@@ -139,7 +142,7 @@ public class Name extends Conclusion {
 	@Override
 	protected void validateUnderlyingNode() throws MissingFieldException {
 		if (ValidationTools.nullOrEmpty(this.getNameForms())) {
-			throw new MissingRequiredRelationshipException(Name.class, this.getId(), RelTypes.HAS_NAME_FORM.toString());
+			throw new MissingRequiredRelationshipException(this.getAnnotatedNodeType(), this.getId(), RelationshipTypes.HAS_NAME_FORM.toString());
 		}
 	}
 }

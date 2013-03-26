@@ -1,5 +1,6 @@
 package org.gedcomx.persistence.graph.neo4j.dao;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
 import org.neo4j.graphdb.Direction;
@@ -7,8 +8,11 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.Transaction;
+import org.reflections.Reflections;
 
 public class GENgraphDAOUtil {
+
+	private static GENgraphDAO dao;
 
 	public static Transaction beginTransaction() {
 		return GENgraphDAOUtil.getDao().beginTransaction();
@@ -45,7 +49,21 @@ public class GENgraphDAOUtil {
 	}
 
 	private static GENgraphDAO getDao() {
-		return GENgraphDAOImpl.getInstance();
+		if (dao == null) {
+			final Reflections reflections = new Reflections(GENgraphDAOUtil.class.getPackage().getName());
+
+			for (final Class<? extends GENgraphDAO> subclass : reflections.getSubTypesOf(GENgraphDAO.class)) {
+				if (subclass != null) {
+					try {
+						dao = subclass.getConstructor().newInstance();
+					} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+		return dao;
 	}
 
 	public static Node getNode(final Long id) {

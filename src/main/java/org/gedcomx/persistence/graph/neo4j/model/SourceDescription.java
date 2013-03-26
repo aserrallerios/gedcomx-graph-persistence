@@ -9,39 +9,14 @@ import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredRelationshipException;
 import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
+import org.gedcomx.persistence.graph.neo4j.model.constants.GenericProperties;
+import org.gedcomx.persistence.graph.neo4j.model.constants.RelationshipTypes;
+import org.gedcomx.persistence.graph.neo4j.model.constants.SourceProperties;
 import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
 import org.neo4j.graphdb.Node;
 
 @NodeType("SOURCE_DESCRIPTION")
 public class SourceDescription extends NodeWrapper {
-
-	public enum SourceProperties implements NodeProperties {
-
-		ID, CITATION_TEMPLATE, NAME, EXTRACTED_CONCLUSIONS_REFERENCE, MEDIATOR_REFERENCE, SOURCE_DESCRIPTION_REFERENCE;
-
-		private final boolean indexed;
-		private final IndexNames indexName;
-
-		private SourceProperties() {
-			this.indexed = false;
-			this.indexName = null;
-		}
-
-		private SourceProperties(final boolean indexed, final IndexNames indexName) {
-			this.indexed = indexed;
-			this.indexName = indexName;
-		}
-
-		@Override
-		public IndexNames getIndexName() {
-			return this.indexName;
-		}
-
-		@Override
-		public boolean isIndexed() {
-			return this.indexed;
-		}
-	}
 
 	public SourceDescription(final Node node) throws UnknownNodeType, MissingFieldException {
 		super(node);
@@ -56,23 +31,23 @@ public class SourceDescription extends NodeWrapper {
 	}
 
 	public void addCitation(final SourceCitation sourceCitation) {
-		this.addRelationship(RelTypes.HAS_CITATION, sourceCitation);
+		this.addRelationship(RelationshipTypes.HAS_CITATION, sourceCitation);
 	}
 
 	public void addExtractedConclusion(final Conclusion conclusion) {
-		this.addRelationship(RelTypes.HAS_CONCLUSION, conclusion);
+		this.addRelationship(RelationshipTypes.HAS_CONCLUSION, conclusion);
 	}
 
 	public void addNote(final Note note) {
-		this.addRelationship(RelTypes.HAS_NOTE, note);
+		this.addRelationship(RelationshipTypes.HAS_NOTE, note);
 	}
 
 	public void addSource(final SourceReference sourceReference) {
-		this.addRelationship(RelTypes.HAS_SOURCE_REFERENCE, sourceReference);
+		this.addRelationship(RelationshipTypes.HAS_SOURCE_REFERENCE, sourceReference);
 	}
 
 	public void addTitle(final TextValue textValue) {
-		this.addRelationship(RelTypes.HAS_TITLE, textValue);
+		this.addRelationship(RelationshipTypes.HAS_TITLE, textValue);
 	}
 
 	@Override
@@ -84,8 +59,8 @@ public class SourceDescription extends NodeWrapper {
 		this.deleteReferencedNode(this.getAttribution());
 		this.deleteReferencedNode(this.getComponentOf());
 
-		this.deleteReferences(RelTypes.HAS_CONCLUSION);
-		this.deleteReference(RelTypes.MEDIATOR);
+		this.deleteReferences(RelationshipTypes.HAS_CONCLUSION);
+		this.deleteReference(RelationshipTypes.MEDIATOR);
 	}
 
 	public URI getAbout() {
@@ -93,19 +68,19 @@ public class SourceDescription extends NodeWrapper {
 	}
 
 	public Attribution getAttribution() {
-		return this.getNodeByRelationship(Attribution.class, RelTypes.ATTRIBUTION);
+		return this.getNodeByRelationship(Attribution.class, RelationshipTypes.ATTRIBUTION);
 	}
 
 	public List<SourceCitation> getCitations() {
-		return this.getNodesByRelationship(SourceCitation.class, RelTypes.HAS_CITATION);
+		return this.getNodesByRelationship(SourceCitation.class, RelationshipTypes.HAS_CITATION);
 	}
 
 	public SourceReference getComponentOf() {
-		return this.getNodeByRelationship(SourceReference.class, RelTypes.COMPONENT_OF);
+		return this.getNodeByRelationship(SourceReference.class, RelationshipTypes.COMPONENT_OF);
 	}
 
 	public List<Conclusion> getExtractedConclusions() {
-		return this.getNodesByRelationship(Conclusion.class, RelTypes.HAS_CONCLUSION);
+		return this.getNodesByRelationship(Conclusion.class, RelationshipTypes.HAS_CONCLUSION);
 	}
 
 	@Override
@@ -150,11 +125,11 @@ public class SourceDescription extends NodeWrapper {
 	}
 
 	public Agent getMediator() {
-		return this.getNodeByRelationship(Agent.class, RelTypes.MEDIATOR);
+		return this.getNodeByRelationship(Agent.class, RelationshipTypes.MEDIATOR);
 	}
 
 	public List<Note> getNotes() {
-		return this.getNodesByRelationship(Note.class, RelTypes.HAS_NOTE);
+		return this.getNodesByRelationship(Note.class, RelationshipTypes.HAS_NOTE);
 	}
 
 	@Override
@@ -163,11 +138,11 @@ public class SourceDescription extends NodeWrapper {
 	}
 
 	public List<SourceReference> getSources() {
-		return this.getNodesByRelationship(SourceReference.class, RelTypes.HAS_SOURCE_REFERENCE);
+		return this.getNodesByRelationship(SourceReference.class, RelationshipTypes.HAS_SOURCE_REFERENCE);
 	}
 
 	public List<TextValue> getTitles() {
-		return this.getNodesByRelationship(TextValue.class, RelTypes.HAS_TITLE);
+		return this.getNodesByRelationship(TextValue.class, RelationshipTypes.HAS_TITLE);
 	}
 
 	@Override
@@ -177,8 +152,8 @@ public class SourceDescription extends NodeWrapper {
 
 	@Override
 	protected void resolveReferences() {
-		this.createReferenceRelationship(RelTypes.MEDIATOR, SourceProperties.MEDIATOR_REFERENCE);
-		this.createReferenceRelationship(RelTypes.HAS_CONCLUSION, SourceProperties.EXTRACTED_CONCLUSIONS_REFERENCE);
+		this.createReferenceRelationship(RelationshipTypes.MEDIATOR, SourceProperties.MEDIATOR_REFERENCE);
+		this.createReferenceRelationship(RelationshipTypes.HAS_CONCLUSION, SourceProperties.EXTRACTED_CONCLUSIONS_REFERENCE);
 	}
 
 	public void setAbout(final URI about) {
@@ -186,11 +161,11 @@ public class SourceDescription extends NodeWrapper {
 	}
 
 	public void setAttribution(final Attribution attribution) {
-		this.createRelationship(RelTypes.ATTRIBUTION, attribution);
+		this.createRelationship(RelationshipTypes.ATTRIBUTION, attribution);
 	}
 
 	public void setComponentOf(final SourceReference componentOf) {
-		this.createRelationship(RelTypes.COMPONENT_OF, componentOf);
+		this.createRelationship(RelationshipTypes.COMPONENT_OF, componentOf);
 	}
 
 	@Override
@@ -234,18 +209,18 @@ public class SourceDescription extends NodeWrapper {
 	}
 
 	public void setMediator(final Agent mediator) {
-		this.createReferenceRelationship(RelTypes.MEDIATOR, mediator);
+		this.createReferenceRelationship(RelationshipTypes.MEDIATOR, mediator);
 	}
 
 	@Override
 	protected void setRequiredProperties(final Object... properties) throws MissingFieldException {
-		this.addRelationship(RelTypes.HAS_CITATION, new SourceCitation((String) properties[0]));
+		this.addRelationship(RelationshipTypes.HAS_CITATION, new SourceCitation((String) properties[0]));
 	}
 
 	@Override
 	protected void validateUnderlyingNode() throws MissingRequiredRelationshipException {
 		if (ValidationTools.nullOrEmpty(this.getCitations())) {
-			throw new MissingRequiredRelationshipException(SourceDescription.class, this.getId(), RelTypes.HAS_CITATION.toString());
+			throw new MissingRequiredRelationshipException(this.getAnnotatedNodeType(), this.getId(), RelationshipTypes.HAS_CITATION.toString());
 		}
 	}
 }

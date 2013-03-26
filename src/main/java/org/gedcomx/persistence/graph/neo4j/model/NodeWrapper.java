@@ -15,86 +15,25 @@ import org.gedcomx.persistence.graph.neo4j.dao.GENgraphDAOUtil;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.UninitializedNode;
 import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
+import org.gedcomx.persistence.graph.neo4j.model.constants.GenericProperties;
+import org.gedcomx.persistence.graph.neo4j.model.constants.IndexNames;
+import org.gedcomx.persistence.graph.neo4j.model.constants.NodeProperties;
+import org.gedcomx.persistence.graph.neo4j.model.constants.RelationshipProperties;
+import org.gedcomx.persistence.graph.neo4j.model.constants.RelationshipTypes;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.Transaction;
 import org.reflections.Reflections;
 
 public abstract class NodeWrapper {
-
-	public enum GenericProperties implements NodeProperties {
-		ID(true, IndexNames.IDS), ABOUT, NODE_TYPE(true, IndexNames.NODE_TYPES), TYPE(true, IndexNames.TYPES), VALUE, LANG, MODIFIED, CHANGE_MESSAGE, SUBJECT, TEXT, CONTRIBUTOR_REFERENCE;
-
-		private final boolean indexed;
-		private final IndexNames indexName;
-
-		private GenericProperties() {
-			this.indexed = false;
-			this.indexName = null;
-		}
-
-		private GenericProperties(final boolean indexed, final IndexNames indexName) {
-			this.indexed = indexed;
-			this.indexName = indexName;
-		}
-
-		@Override
-		public IndexNames getIndexName() {
-			return this.indexName;
-		}
-
-		@Override
-		public boolean isIndexed() {
-			return this.indexed;
-		}
-	}
-
-	public enum IndexNames {
-		NODE_TYPES, IDS, TYPES, OTHER
-	}
-
-	public interface NodeProperties {
-
-		public IndexNames getIndexName();
-
-		public boolean isIndexed();
-
-		public String name();
-
-	}
-
-	public enum RelationshipProperties {
-		INDEX
-	}
-
-	public enum RelTypes implements RelationshipType {
-
-		HAS_CONCLUSION, HAS_AGENT, HAS_SOURCE_DESCRIPTION, IS_A, HAS_ADDRESS(true), HAS_ACCOUNT(true), HAS_IDENTIFIER(true), HAS_NAME, HAS_NOTE, HAS_SOURCE_REFERENCE, PLACE, PLACE_DESCRIPTION, HAS_ROLE(
-				true), HAS_NAME_FORM(true), HAS_NAME_PART, PERSON, GENDER, HAS_FACT, PERSON2, PERSON1, DESCRIPTION, HAS_CITATION, HAS_SOURCE, HAS_TITLE, COMPONENT_OF, MEDIATOR, HAS_CITATION_FIELD, CONTRIBUTOR, ATTRIBUTION;
-
-		private boolean ordered = false;
-
-		private RelTypes() {
-		}
-
-		private RelTypes(final boolean ordered) {
-			this.ordered = ordered;
-		}
-
-		public boolean isOrdered() {
-			return this.ordered;
-		}
-
-	}
 
 	private static Map<String, Class<? extends NodeWrapper>> nodesByType = new HashMap<>();
 
 	private final Node underlyingNode;
 
 	static {
-		final Reflections reflections = new Reflections("org.gedcomx.persistence.graph.neo4j.model");
+		final Reflections reflections = new Reflections(NodeWrapper.class.getPackage().getName());
 
 		for (final Class<? extends NodeWrapper> subclass : reflections.getSubTypesOf(NodeWrapper.class)) {
 			final NodeType nodeType = subclass.getAnnotation(NodeType.class);
@@ -108,7 +47,7 @@ public abstract class NodeWrapper {
 		final Transaction t = GENgraphDAOUtil.beginTransaction();
 		try {
 			this.underlyingNode = underlyingNode;
-			if (this.getNodeType() != this.getClass().getAnnotation(NodeType.class).value()) {
+			if (!this.getNodeType().equals(this.getClass().getAnnotation(NodeType.class).value())) {
 				throw new UnknownNodeType();
 			}
 			this.validateUnderlyingNode();
@@ -147,7 +86,7 @@ public abstract class NodeWrapper {
 		}
 	}
 
-	protected void addRelationship(final RelTypes relType, final NodeWrapper node) {
+	protected void addRelationship(final RelationshipTypes relType, final NodeWrapper node) {
 		if (relType.isOrdered()) {
 			final Transaction t = GENgraphDAOUtil.beginTransaction();
 			try {
@@ -178,7 +117,7 @@ public abstract class NodeWrapper {
 		return wrapper;
 	}
 
-	protected void createReferenceRelationship(final RelTypes relType, final NodeProperties property) {
+	protected void createReferenceRelationship(final RelationshipTypes relType, final NodeProperties property) {
 		final Object val = this.getProperty(property);
 
 		if (val instanceof String) {
@@ -222,7 +161,7 @@ public abstract class NodeWrapper {
 		}
 	}
 
-	protected void createReferenceRelationship(final RelTypes relType, final NodeWrapper node) {
+	protected void createReferenceRelationship(final RelationshipTypes relType, final NodeWrapper node) {
 		final boolean rel = GENgraphDAOUtil.hasSingleRelationship(this.getUnderlyingNode(), relType, Direction.OUTGOING);
 
 		final Transaction t = GENgraphDAOUtil.beginTransaction();
@@ -239,7 +178,7 @@ public abstract class NodeWrapper {
 		}
 	}
 
-	protected void createRelationship(final RelTypes relType, final NodeWrapper node) {
+	protected void createRelationship(final RelationshipTypes relType, final NodeWrapper node) {
 		final boolean rel = GENgraphDAOUtil.hasSingleRelationship(this.getUnderlyingNode(), relType, Direction.OUTGOING);
 
 		if (!rel) {
@@ -280,7 +219,7 @@ public abstract class NodeWrapper {
 		}
 	}
 
-	protected void deleteReference(final RelTypes rel) {
+	protected void deleteReference(final RelationshipTypes rel) {
 		GENgraphDAOUtil.delete(GENgraphDAOUtil.getSingleRelationship(this.getUnderlyingNode(), rel, Direction.OUTGOING));
 	}
 
@@ -296,7 +235,7 @@ public abstract class NodeWrapper {
 		}
 	}
 
-	protected void deleteReferences(final RelTypes rel) {
+	protected void deleteReferences(final RelationshipTypes rel) {
 		for (final Relationship relationship : GENgraphDAOUtil.getRelationships(this.getUnderlyingNode(), rel, Direction.OUTGOING)) {
 			GENgraphDAOUtil.delete(relationship);
 		}
@@ -349,7 +288,7 @@ public abstract class NodeWrapper {
 		return list;
 	}
 
-	private int getMaxRelationshipIndex(final RelTypes relType) {
+	private int getMaxRelationshipIndex(final RelationshipTypes relType) {
 		final Iterable<Relationship> rels = GENgraphDAOUtil.getRelationships(this.getUnderlyingNode(), relType, Direction.OUTGOING);
 
 		int max = 0;
@@ -361,11 +300,11 @@ public abstract class NodeWrapper {
 		return max;
 	}
 
-	protected <T extends NodeWrapper> T getNodeByRelationship(final Class<T> type, final RelTypes relation) {
+	protected <T extends NodeWrapper> T getNodeByRelationship(final Class<T> type, final RelationshipTypes relation) {
 		return this.getNodeByRelationship(type, relation, Direction.OUTGOING);
 	}
 
-	protected <T extends NodeWrapper> T getNodeByRelationship(final Class<T> type, final RelTypes relation, final Direction dir) {
+	protected <T extends NodeWrapper> T getNodeByRelationship(final Class<T> type, final RelationshipTypes relation, final Direction dir) {
 		final Node node = GENgraphDAOUtil.getSingleNodeByRelationship(this.getUnderlyingNode(), relation, dir);
 		if (node != null) {
 			return this.createNode(type, node);
@@ -373,7 +312,7 @@ public abstract class NodeWrapper {
 		return null;
 	}
 
-	private NodeWrapper getNodeByRelationship(final RelTypes relation, final Direction dir) {
+	private NodeWrapper getNodeByRelationship(final RelationshipTypes relation, final Direction dir) {
 		final Node node = GENgraphDAOUtil.getSingleNodeByRelationship(this.getUnderlyingNode(), relation, dir);
 		final String nodeType = (String) GENgraphDAOUtil.getNodeProperty(node, GenericProperties.NODE_TYPE.name());
 
@@ -389,11 +328,11 @@ public abstract class NodeWrapper {
 		return wrapper;
 	}
 
-	protected <T extends NodeWrapper> List<T> getNodesByRelationship(final Class<T> type, final RelTypes relation) {
+	protected <T extends NodeWrapper> List<T> getNodesByRelationship(final Class<T> type, final RelationshipTypes relation) {
 		return this.getNodesByRelationship(type, relation, Direction.OUTGOING);
 	}
 
-	private <T extends NodeWrapper> List<T> getNodesByRelationship(final Class<T> type, final RelTypes relation, final Direction dir) {
+	private <T extends NodeWrapper> List<T> getNodesByRelationship(final Class<T> type, final RelationshipTypes relation, final Direction dir) {
 		final Iterable<Node> nodes = GENgraphDAOUtil.getNodesByRelationship(this.getUnderlyingNode(), relation, dir,
 				(dir == Direction.OUTGOING) && relation.isOrdered(), RelationshipProperties.INDEX.name());
 
@@ -408,7 +347,7 @@ public abstract class NodeWrapper {
 		return (String) GENgraphDAOUtil.getNodeProperty(this.getUnderlyingNode(), GenericProperties.NODE_TYPE.name());
 	}
 
-	protected NodeWrapper getParentNode(final RelTypes relation) {
+	protected NodeWrapper getParentNode(final RelationshipTypes relation) {
 		return this.getNodeByRelationship(relation, Direction.INCOMING);
 	}
 

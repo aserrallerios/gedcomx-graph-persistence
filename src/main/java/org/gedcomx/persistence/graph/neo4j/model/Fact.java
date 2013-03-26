@@ -5,6 +5,9 @@ import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredPropertyException;
 import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
+import org.gedcomx.persistence.graph.neo4j.model.constants.ConclusionProperties;
+import org.gedcomx.persistence.graph.neo4j.model.constants.GenericProperties;
+import org.gedcomx.persistence.graph.neo4j.model.constants.RelationshipTypes;
 import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
 import org.gedcomx.types.FactType;
 import org.neo4j.graphdb.Node;
@@ -73,11 +76,11 @@ public class Fact extends Conclusion {
 	}
 
 	public NodeWrapper getParentNode() {
-		return super.getParentNode(RelTypes.HAS_FACT);
+		return super.getParentNode(RelationshipTypes.HAS_FACT);
 	}
 
 	public PlaceReference getPlaceReference() {
-		return this.getNodeByRelationship(PlaceReference.class, RelTypes.PLACE);
+		return this.getNodeByRelationship(PlaceReference.class, RelationshipTypes.PLACE);
 	}
 
 	@Deprecated
@@ -128,7 +131,7 @@ public class Fact extends Conclusion {
 	}
 
 	public void setPlaceReference(final PlaceReference placeReference) {
-		this.createRelationship(RelTypes.PLACE, placeReference);
+		this.createRelationship(RelationshipTypes.PLACE, placeReference);
 	}
 
 	@Override

@@ -5,7 +5,9 @@ import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredPropertyException;
 import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
-import org.gedcomx.persistence.graph.neo4j.model.SourceDescription.SourceProperties;
+import org.gedcomx.persistence.graph.neo4j.model.constants.GenericProperties;
+import org.gedcomx.persistence.graph.neo4j.model.constants.RelationshipTypes;
+import org.gedcomx.persistence.graph.neo4j.model.constants.SourceProperties;
 import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
 import org.neo4j.graphdb.Node;
 
@@ -30,7 +32,7 @@ public class CitationField extends NodeWrapper {
 	}
 
 	public SourceCitation getCitation() {
-		return (SourceCitation) this.getParentNode(RelTypes.HAS_CITATION_FIELD);
+		return (SourceCitation) this.getParentNode(RelationshipTypes.HAS_CITATION_FIELD);
 	}
 
 	@Override

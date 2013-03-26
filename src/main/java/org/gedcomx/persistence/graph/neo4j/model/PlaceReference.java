@@ -3,7 +3,8 @@ package org.gedcomx.persistence.graph.neo4j.model;
 import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
-import org.gedcomx.persistence.graph.neo4j.model.Conclusion.ConclusionProperties;
+import org.gedcomx.persistence.graph.neo4j.model.constants.ConclusionProperties;
+import org.gedcomx.persistence.graph.neo4j.model.constants.RelationshipTypes;
 import org.neo4j.graphdb.Node;
 
 @NodeType("PLACE_REFERENCE")
@@ -23,7 +24,7 @@ public class PlaceReference extends NodeWrapper {
 
 	@Override
 	protected void deleteAllReferences() {
-		this.deleteReference(RelTypes.PLACE_DESCRIPTION);
+		this.deleteReference(RelationshipTypes.PLACE_DESCRIPTION);
 	}
 
 	@Override
@@ -44,16 +45,16 @@ public class PlaceReference extends NodeWrapper {
 	}
 
 	public NodeWrapper getParentNode() {
-		return super.getParentNode(RelTypes.PLACE);
+		return super.getParentNode(RelationshipTypes.PLACE);
 	}
 
 	public PlaceDescription getPlaceDescription() {
-		return this.getNodeByRelationship(PlaceDescription.class, RelTypes.PLACE);
+		return this.getNodeByRelationship(PlaceDescription.class, RelationshipTypes.PLACE);
 	}
 
 	@Override
 	protected void resolveReferences() {
-		this.createReferenceRelationship(RelTypes.PLACE, ConclusionProperties.PLACE_DESC_REFERENCE);
+		this.createReferenceRelationship(RelationshipTypes.PLACE, ConclusionProperties.PLACE_DESC_REFERENCE);
 	}
 
 	@Override
@@ -77,7 +78,7 @@ public class PlaceReference extends NodeWrapper {
 	}
 
 	public void setPlaceDescription(final PlaceDescription placeDescription) {
-		this.createRelationship(RelTypes.PLACE_DESCRIPTION, placeDescription);
+		this.createReferenceRelationship(RelationshipTypes.PLACE_DESCRIPTION, placeDescription);
 	}
 
 	@Override

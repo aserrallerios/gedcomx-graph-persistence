@@ -4,7 +4,8 @@ import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredRelationshipException;
 import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
-import org.gedcomx.persistence.graph.neo4j.model.SourceDescription.SourceProperties;
+import org.gedcomx.persistence.graph.neo4j.model.constants.RelationshipTypes;
+import org.gedcomx.persistence.graph.neo4j.model.constants.SourceProperties;
 import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
 import org.neo4j.graphdb.Node;
 
@@ -29,11 +30,11 @@ public class SourceReference extends NodeWrapper {
 	}
 
 	public Attribution getAttribution() {
-		return this.getNodeByRelationship(Attribution.class, RelTypes.ATTRIBUTION);
+		return this.getNodeByRelationship(Attribution.class, RelationshipTypes.ATTRIBUTION);
 	}
 
 	public SourceDescription getDescription() {
-		return this.getNodeByRelationship(SourceDescription.class, RelTypes.DESCRIPTION);
+		return this.getNodeByRelationship(SourceDescription.class, RelationshipTypes.DESCRIPTION);
 	}
 
 	@Override
@@ -50,20 +51,20 @@ public class SourceReference extends NodeWrapper {
 	}
 
 	public NodeWrapper getParentNode() {
-		return this.getParentNode(RelTypes.HAS_SOURCE_REFERENCE);
+		return this.getParentNode(RelationshipTypes.HAS_SOURCE_REFERENCE);
 	}
 
 	@Override
 	protected void resolveReferences() {
-		this.createReferenceRelationship(RelTypes.DESCRIPTION, SourceProperties.SOURCE_DESCRIPTION_REFERENCE);
+		this.createReferenceRelationship(RelationshipTypes.DESCRIPTION, SourceProperties.SOURCE_DESCRIPTION_REFERENCE);
 	}
 
 	public void setAttribution(final Attribution attribution) {
-		this.createRelationship(RelTypes.ATTRIBUTION, attribution);
+		this.createRelationship(RelationshipTypes.ATTRIBUTION, attribution);
 	}
 
 	public void setDescription(final SourceDescription description) {
-		this.createReferenceRelationship(RelTypes.DESCRIPTION, description);
+		this.createReferenceRelationship(RelationshipTypes.DESCRIPTION, description);
 	}
 
 	@Override
@@ -88,7 +89,7 @@ public class SourceReference extends NodeWrapper {
 	@Override
 	protected void validateUnderlyingNode() throws MissingFieldException {
 		if (ValidationTools.nullOrEmpty(this.getDescription())) {
-			throw new MissingRequiredRelationshipException(SourceReference.class, RelTypes.DESCRIPTION.toString());
+			throw new MissingRequiredRelationshipException(this.getAnnotatedNodeType(), RelationshipTypes.DESCRIPTION.toString());
 		}
 	}
 }

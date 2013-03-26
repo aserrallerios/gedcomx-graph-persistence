@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
+import org.gedcomx.persistence.graph.neo4j.model.constants.ConclusionProperties;
+import org.gedcomx.persistence.graph.neo4j.model.constants.RelationshipTypes;
 import org.neo4j.graphdb.Node;
 
 public class Person extends Conclusion {
@@ -21,15 +23,15 @@ public class Person extends Conclusion {
 	}
 
 	public void addFact(final Fact fact) {
-		this.addRelationship(RelTypes.HAS_FACT, fact);
+		this.addRelationship(RelationshipTypes.HAS_FACT, fact);
 	}
 
 	public void addIdentifier(final Identifier identifier) {
-		this.addRelationship(RelTypes.HAS_IDENTIFIER, identifier);
+		this.addRelationship(RelationshipTypes.HAS_IDENTIFIER, identifier);
 	}
 
 	public void addName(final Name name) {
-		this.addRelationship(RelTypes.HAS_NAME, name);
+		this.addRelationship(RelationshipTypes.HAS_NAME, name);
 	}
 
 	@Override
@@ -41,7 +43,7 @@ public class Person extends Conclusion {
 	}
 
 	public List<Fact> getFacts() {
-		return this.getNodesByRelationship(Fact.class, RelTypes.HAS_FACT);
+		return this.getNodesByRelationship(Fact.class, RelationshipTypes.HAS_FACT);
 	}
 
 	@Override
@@ -62,11 +64,11 @@ public class Person extends Conclusion {
 	}
 
 	public Gender getGender() {
-		return this.getNodeByRelationship(Gender.class, RelTypes.GENDER);
+		return this.getNodeByRelationship(Gender.class, RelationshipTypes.GENDER);
 	}
 
 	public List<Identifier> getIdentifiers() {
-		return this.getNodesByRelationship(Identifier.class, RelTypes.HAS_IDENTIFIER);
+		return this.getNodesByRelationship(Identifier.class, RelationshipTypes.HAS_IDENTIFIER);
 	}
 
 	public Boolean getLiving() {
@@ -74,7 +76,7 @@ public class Person extends Conclusion {
 	}
 
 	public List<Name> getNames() {
-		return this.getNodesByRelationship(Name.class, RelTypes.HAS_NAME);
+		return this.getNodesByRelationship(Name.class, RelationshipTypes.HAS_NAME);
 	}
 
 	@Override
@@ -107,7 +109,7 @@ public class Person extends Conclusion {
 	}
 
 	public void setGender(final Gender gender) {
-		this.createRelationship(RelTypes.GENDER, gender);
+		this.createRelationship(RelationshipTypes.GENDER, gender);
 	}
 
 	public void setLiving(final Boolean living) {

@@ -6,39 +6,13 @@ import org.gedcomx.common.ResourceReference;
 import org.gedcomx.common.URI;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
+import org.gedcomx.persistence.graph.neo4j.model.constants.ConclusionProperties;
+import org.gedcomx.persistence.graph.neo4j.model.constants.GenericProperties;
+import org.gedcomx.persistence.graph.neo4j.model.constants.RelationshipTypes;
 import org.gedcomx.types.ConfidenceLevel;
 import org.neo4j.graphdb.Node;
 
 public abstract class Conclusion extends NodeWrapper {
-
-	public enum ConclusionProperties implements NodeProperties {
-
-		ID, CONFIDENCE(true, IndexNames.TYPES), TEXT(true, IndexNames.OTHER), LATITUDE, LONGITUDE, TEMPORAL_DESCRIPTION_ORIGINAL, SPATIAL_DESCRIPTION, TEMPORAL_DESCRIPTION_FORMAL, ORIGINAL, DATE_ORIGINAL, DATE_FORMAL, PREFERRED, FULL_TEXT, QUALIFIERS, DETAILS, LIVING, PERSON_REFERENCE, PLACE_DESC_REFERENCE, PERSON1_REFERENCE, PERSON2_REFERENCE;
-
-		private final boolean indexed;
-		private final IndexNames indexName;
-
-		private ConclusionProperties() {
-			this.indexed = false;
-			this.indexName = null;
-		}
-
-		private ConclusionProperties(final boolean indexed, final IndexNames indexName) {
-			this.indexed = indexed;
-			this.indexName = indexName;
-		}
-
-		@Override
-		public IndexNames getIndexName() {
-			return this.indexName;
-		}
-
-		@Override
-		public boolean isIndexed() {
-			return this.indexed;
-		}
-
-	}
 
 	protected Conclusion(final Node node) throws MissingFieldException, UnknownNodeType {
 		super(node);
@@ -53,11 +27,11 @@ public abstract class Conclusion extends NodeWrapper {
 	}
 
 	public void addNote(final Note note) {
-		this.addRelationship(RelTypes.HAS_NOTE, note);
+		this.addRelationship(RelationshipTypes.HAS_NOTE, note);
 	}
 
 	public void addSourceReference(final SourceReference sourceReference) {
-		this.addRelationship(RelTypes.HAS_SOURCE_REFERENCE, sourceReference);
+		this.addRelationship(RelationshipTypes.HAS_SOURCE_REFERENCE, sourceReference);
 	}
 
 	protected abstract void deleteAllConcreteReferences();
@@ -71,7 +45,7 @@ public abstract class Conclusion extends NodeWrapper {
 	}
 
 	public Attribution getAttribution() {
-		return this.getNodeByRelationship(Attribution.class, RelTypes.ATTRIBUTION);
+		return this.getNodeByRelationship(Attribution.class, RelationshipTypes.ATTRIBUTION);
 	}
 
 	@Deprecated
@@ -105,7 +79,7 @@ public abstract class Conclusion extends NodeWrapper {
 	}
 
 	public List<Note> getNotes() {
-		return this.getNodesByRelationship(Note.class, RelTypes.HAS_NOTE);
+		return this.getNodesByRelationship(Note.class, RelationshipTypes.HAS_NOTE);
 	}
 
 	@Override
@@ -114,7 +88,7 @@ public abstract class Conclusion extends NodeWrapper {
 	}
 
 	public List<SourceReference> getSourceReferences() {
-		return this.getNodesByRelationship(SourceReference.class, RelTypes.HAS_SOURCE_REFERENCE);
+		return this.getNodesByRelationship(SourceReference.class, RelationshipTypes.HAS_SOURCE_REFERENCE);
 	}
 
 	@Override
@@ -123,7 +97,7 @@ public abstract class Conclusion extends NodeWrapper {
 	}
 
 	public void setAttribution(final Attribution attribution) {
-		this.createRelationship(RelTypes.ATTRIBUTION, attribution);
+		this.createRelationship(RelationshipTypes.ATTRIBUTION, attribution);
 	}
 
 	@Deprecated

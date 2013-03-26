@@ -7,6 +7,9 @@ import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredRelationshipException;
 import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
+import org.gedcomx.persistence.graph.neo4j.model.constants.ConclusionProperties;
+import org.gedcomx.persistence.graph.neo4j.model.constants.GenericProperties;
+import org.gedcomx.persistence.graph.neo4j.model.constants.RelationshipTypes;
 import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
 import org.gedcomx.types.RelationshipType;
 import org.neo4j.graphdb.Node;
@@ -27,11 +30,11 @@ public class Relationship extends Conclusion {
 	}
 
 	public void addFact(final Fact fact) {
-		this.addRelationship(RelTypes.HAS_FACT, fact);
+		this.addRelationship(RelationshipTypes.HAS_FACT, fact);
 	}
 
 	public void addIdentifier(final Identifier identifier) {
-		this.addRelationship(RelTypes.HAS_IDENTIFIER, identifier);
+		this.addRelationship(RelationshipTypes.HAS_IDENTIFIER, identifier);
 	}
 
 	@Override
@@ -39,12 +42,12 @@ public class Relationship extends Conclusion {
 		this.deleteReferencedNodes(this.getIdentifiers());
 		this.deleteReferencedNodes(this.getFacts());
 
-		this.deleteReference(RelTypes.PERSON1);
-		this.deleteReference(RelTypes.PERSON2);
+		this.deleteReference(RelationshipTypes.PERSON1);
+		this.deleteReference(RelationshipTypes.PERSON2);
 	}
 
 	public List<Fact> getFacts() {
-		return this.getNodesByRelationship(Fact.class, RelTypes.HAS_FACT);
+		return this.getNodesByRelationship(Fact.class, RelationshipTypes.HAS_FACT);
 	}
 
 	@Override
@@ -66,7 +69,7 @@ public class Relationship extends Conclusion {
 	}
 
 	public List<Identifier> getIdentifiers() {
-		return this.getNodesByRelationship(Identifier.class, RelTypes.HAS_IDENTIFIER);
+		return this.getNodesByRelationship(Identifier.class, RelationshipTypes.HAS_IDENTIFIER);
 	}
 
 	public RelationshipType getKnownType() {
@@ -74,11 +77,11 @@ public class Relationship extends Conclusion {
 	}
 
 	public Person getPerson1() {
-		return this.getNodeByRelationship(Person.class, RelTypes.PERSON1);
+		return this.getNodeByRelationship(Person.class, RelationshipTypes.PERSON1);
 	}
 
 	public Person getPerson2() {
-		return this.getNodeByRelationship(Person.class, RelTypes.PERSON2);
+		return this.getNodeByRelationship(Person.class, RelationshipTypes.PERSON2);
 	}
 
 	@Deprecated
@@ -88,8 +91,8 @@ public class Relationship extends Conclusion {
 
 	@Override
 	protected void resolveReferences() {
-		this.createReferenceRelationship(RelTypes.PERSON1, ConclusionProperties.PERSON1_REFERENCE);
-		this.createReferenceRelationship(RelTypes.PERSON2, ConclusionProperties.PERSON2_REFERENCE);
+		this.createReferenceRelationship(RelationshipTypes.PERSON1, ConclusionProperties.PERSON1_REFERENCE);
+		this.createReferenceRelationship(RelationshipTypes.PERSON2, ConclusionProperties.PERSON2_REFERENCE);
 	}
 
 	@Override
@@ -119,11 +122,11 @@ public class Relationship extends Conclusion {
 	}
 
 	public void setPerson1(final Person person1) {
-		this.createReferenceRelationship(RelTypes.PERSON1, person1);
+		this.createReferenceRelationship(RelationshipTypes.PERSON1, person1);
 	}
 
 	public void setPerson2(final Person person2) {
-		this.createReferenceRelationship(RelTypes.PERSON2, person2);
+		this.createReferenceRelationship(RelationshipTypes.PERSON2, person2);
 	}
 
 	@Override
@@ -140,10 +143,10 @@ public class Relationship extends Conclusion {
 	@Override
 	protected void validateUnderlyingNode() throws MissingFieldException {
 		if (ValidationTools.nullOrEmpty(this.getPerson1())) {
-			throw new MissingRequiredRelationshipException(Relationship.class, this.getId(), RelTypes.PERSON1.toString());
+			throw new MissingRequiredRelationshipException(this.getAnnotatedNodeType(), this.getId(), RelationshipTypes.PERSON1.toString());
 		}
 		if (ValidationTools.nullOrEmpty(this.getPerson1())) {
-			throw new MissingRequiredRelationshipException(Relationship.class, this.getId(), RelTypes.PERSON2.toString());
+			throw new MissingRequiredRelationshipException(this.getAnnotatedNodeType(), this.getId(), RelationshipTypes.PERSON2.toString());
 		}
 	}
 

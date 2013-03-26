@@ -4,9 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.ResourceBundle;
 
-import org.gedcomx.persistence.graph.neo4j.exception.InitializedDataBase;
-import org.gedcomx.persistence.graph.neo4j.exception.UninitializedDataBase;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
@@ -19,32 +18,12 @@ import org.neo4j.graphdb.index.IndexHits;
 
 public class GENgraphDAOImpl implements GENgraphDAO {
 
-	private static GENgraphDAOImpl instance;
-
-	public static GENgraphDAO getInstance() {
-		if ((GENgraphDAOImpl.instance != null) && (GENgraphDAOImpl.instance.graphDb != null)) {
-			return GENgraphDAOImpl.instance;
-		} else {
-			throw new UninitializedDataBase();
-		}
-	}
-
-	public static void initGENgraphDAO(final String path, final Map<String, String> properties) {
-		if ((GENgraphDAOImpl.instance == null) || (GENgraphDAOImpl.instance.graphDb == null)) {
-			GENgraphDAOImpl.instance = new GENgraphDAOImpl(path, properties);
-		} else {
-			throw new InitializedDataBase();
-		}
-	}
-
 	private final GraphDatabaseService graphDb;
 
-	private GENgraphDAOImpl(final String path, final Map<String, String> properties) {
-		if (properties != null) {
-			this.graphDb = new GraphDatabaseFactory().newEmbeddedDatabaseBuilder(path).setConfig(properties).newGraphDatabase();
-		} else {
-			this.graphDb = new GraphDatabaseFactory().newEmbeddedDatabase(path);
-		}
+	public static ResourceBundle configuration = ResourceBundle.getBundle("config.dao");
+
+	GENgraphDAOImpl() {
+		this.graphDb = new GraphDatabaseFactory().newEmbeddedDatabaseBuilder(configuration.getString("db.path")).loadPropertiesFromFile(configuration.getString("neo4j.config.file")).newGraphDatabase();
 		this.registerShutdownHook();
 	}
 
