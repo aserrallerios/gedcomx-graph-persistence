@@ -56,7 +56,7 @@ public class Document extends Conclusion {
 	}
 
 	@Override
-	protected void resolveReferences() {
+	public void resolveReferences() {
 		return;
 	}
 

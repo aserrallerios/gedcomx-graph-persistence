@@ -61,7 +61,7 @@ public class Gender extends Conclusion {
 	}
 
 	@Override
-	protected void resolveReferences() {
+	public void resolveReferences() {
 		return;
 	}
 

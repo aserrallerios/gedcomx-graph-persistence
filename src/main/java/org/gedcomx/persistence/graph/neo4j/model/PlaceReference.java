@@ -53,7 +53,7 @@ public class PlaceReference extends NodeWrapper {
 	}
 
 	@Override
-	protected void resolveReferences() {
+	public void resolveReferences() {
 		this.createReferenceRelationship(RelationshipTypes.PLACE, ConclusionProperties.PLACE_DESC_REFERENCE);
 	}
 

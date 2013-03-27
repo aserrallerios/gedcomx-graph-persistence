@@ -62,7 +62,7 @@ public class NameForm extends NodeWrapper {
 	}
 
 	@Override
-	protected void resolveReferences() {
+	public void resolveReferences() {
 		return;
 	}
 

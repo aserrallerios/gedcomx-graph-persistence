@@ -61,7 +61,7 @@ public class Attribution extends NodeWrapper {
 	}
 
 	@Override
-	protected void resolveReferences() {
+	public void resolveReferences() {
 		this.createReferenceRelationship(RelationshipTypes.CONTRIBUTOR, GenericProperties.CONTRIBUTOR_REFERENCE);
 	}
 

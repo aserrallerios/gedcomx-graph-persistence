@@ -70,7 +70,7 @@ public class EventRole extends Conclusion {
 	}
 
 	@Override
-	protected void resolveReferences() {
+	public void resolveReferences() {
 		this.createReferenceRelationship(RelationshipTypes.PERSON, ConclusionProperties.PERSON_REFERENCE);
 	}
 

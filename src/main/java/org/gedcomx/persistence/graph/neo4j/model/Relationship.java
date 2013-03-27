@@ -90,7 +90,7 @@ public class Relationship extends Conclusion {
 	}
 
 	@Override
-	protected void resolveReferences() {
+	public void resolveReferences() {
 		this.createReferenceRelationship(RelationshipTypes.PERSON1, ConclusionProperties.PERSON1_REFERENCE);
 		this.createReferenceRelationship(RelationshipTypes.PERSON2, ConclusionProperties.PERSON2_REFERENCE);
 	}

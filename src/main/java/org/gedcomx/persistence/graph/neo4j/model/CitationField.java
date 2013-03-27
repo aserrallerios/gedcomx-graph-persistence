@@ -54,7 +54,7 @@ public class CitationField extends NodeWrapper {
 	}
 
 	@Override
-	protected void resolveReferences() {
+	public void resolveReferences() {
 		return;
 	}
 

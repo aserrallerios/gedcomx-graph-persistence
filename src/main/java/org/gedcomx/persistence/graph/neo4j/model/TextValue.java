@@ -52,7 +52,7 @@ public class TextValue extends NodeWrapper {
 	}
 
 	@Override
-	protected void resolveReferences() {
+	public void resolveReferences() {
 		return;
 	}
 

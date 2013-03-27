@@ -151,7 +151,7 @@ public class SourceDescription extends NodeWrapper {
 	}
 
 	@Override
-	protected void resolveReferences() {
+	public void resolveReferences() {
 		this.createReferenceRelationship(RelationshipTypes.MEDIATOR, SourceProperties.MEDIATOR_REFERENCE);
 		this.createReferenceRelationship(RelationshipTypes.HAS_CONCLUSION, SourceProperties.EXTRACTED_CONCLUSIONS_REFERENCE);
 	}

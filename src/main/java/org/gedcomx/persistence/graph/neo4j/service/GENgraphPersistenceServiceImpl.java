@@ -2,7 +2,7 @@ package org.gedcomx.persistence.graph.neo4j.service;
 
 import java.util.Map;
 
-import org.gedcomx.persistence.graph.neo4j.dao.GENgraphDAO;
+import org.gedcomx.persistence.graph.neo4j.dao.GENgraphDAOUtil;
 import org.gedcomx.persistence.graph.neo4j.exception.GenericError;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.model.Agent;
@@ -19,62 +19,63 @@ import org.neo4j.graphdb.Node;
 
 public class GENgraphPersistenceServiceImpl implements GENgraphPersistenceService {
 
-	private final GENgraphDAO dao;
-
-	public GENgraphPersistenceServiceImpl(final GENgraphDAO dao) {
-		this.dao = dao;
+	GENgraphPersistenceServiceImpl() {
 	}
 
 	@Override
 	public Agent addAgent(final org.gedcomx.agent.Agent agent) throws MissingFieldException {
-		return new Agent(agent);
+		Agent a = new Agent(agent);
+		a.resolveReferences();
+		return a;
 	}
 
 	@Override
 	public Conclusion addConclusion(final org.gedcomx.conclusion.Conclusion conclusion) throws MissingFieldException {
+		Conclusion c = null;
 		if (conclusion instanceof org.gedcomx.conclusion.Person) {
-			return new Person((org.gedcomx.conclusion.Person) conclusion);
+			c = new Person((org.gedcomx.conclusion.Person) conclusion);
+		} else if (conclusion instanceof org.gedcomx.conclusion.Document) {
+			c = new Document((org.gedcomx.conclusion.Document) conclusion);
+		} else if (conclusion instanceof org.gedcomx.conclusion.Event) {
+			c = new Event((org.gedcomx.conclusion.Event) conclusion);
+		} else if (conclusion instanceof org.gedcomx.conclusion.Relationship) {
+			c = new Relationship((org.gedcomx.conclusion.Relationship) conclusion);
+		} else if (conclusion instanceof org.gedcomx.conclusion.PlaceDescription) {
+			c = new PlaceDescription((org.gedcomx.conclusion.PlaceDescription) conclusion);
+		} else {
+			throw new GenericError("Unknown GedcomX Conclusion type");
 		}
-		if (conclusion instanceof org.gedcomx.conclusion.Document) {
-			return new Document((org.gedcomx.conclusion.Document) conclusion);
-		}
-		if (conclusion instanceof org.gedcomx.conclusion.Event) {
-			return new Event((org.gedcomx.conclusion.Event) conclusion);
-		}
-		if (conclusion instanceof org.gedcomx.conclusion.Relationship) {
-			return new Relationship((org.gedcomx.conclusion.Relationship) conclusion);
-		}
-		if (conclusion instanceof org.gedcomx.conclusion.PlaceDescription) {
-			return new PlaceDescription((org.gedcomx.conclusion.PlaceDescription) conclusion);
-		}
-		throw new GenericError("Unknown GedcomX Conclusion type");
-
+		c.resolveReferences();
+		return c;
 	}
 
 	@Override
 	public SourceDescription addSource(final org.gedcomx.source.SourceDescription sourceDescription) throws MissingFieldException {
-		return new SourceDescription(sourceDescription);
+		SourceDescription s = new SourceDescription(sourceDescription);
+		s.resolveReferences();
+		return s;
 	}
 
 	@Override
 	public NodeWrapper addTopLevelElement(final Object gedcomxElement) throws MissingFieldException {
+		NodeWrapper n = null;
 		if (gedcomxElement instanceof org.gedcomx.agent.Agent) {
-			return this.addAgent((org.gedcomx.agent.Agent) gedcomxElement);
+			n = this.addAgent((org.gedcomx.agent.Agent) gedcomxElement);
+		} else if (gedcomxElement instanceof org.gedcomx.conclusion.Conclusion) {
+			n = this.addConclusion((org.gedcomx.conclusion.Conclusion) gedcomxElement);
+		} else if (gedcomxElement instanceof org.gedcomx.source.SourceDescription) {
+			n = this.addSource((org.gedcomx.source.SourceDescription) gedcomxElement);
+		} else {
+			throw new GenericError("Unknown GedcomX Top level type");
 		}
-		if (gedcomxElement instanceof org.gedcomx.conclusion.Conclusion) {
-			return this.addConclusion((org.gedcomx.conclusion.Conclusion) gedcomxElement);
-		}
-		if (gedcomxElement instanceof org.gedcomx.source.SourceDescription) {
-			return this.addSource((org.gedcomx.source.SourceDescription) gedcomxElement);
-		}
-		throw new GenericError("Unknown GedcomX Top level type");
+		return n;
 	}
 
 	@Override
 	public void createGraph(final Map<String, String> metadata, final Object[] gedcomxElements) throws MissingFieldException {
 		final Node rootNode = this.getInitialGraphNode();
 
-		this.dao.setNodeProperties(rootNode, metadata);
+		GENgraphDAOUtil.setNodeProperties(rootNode, metadata);
 
 		for (final Object gedcomxElement : gedcomxElements) {
 			this.addTopLevelElement(gedcomxElement);
@@ -93,7 +94,7 @@ public class GENgraphPersistenceServiceImpl implements GENgraphPersistenceServic
 	}
 
 	private Node getInitialGraphNode() {
-		return this.dao.getReferenceNode();
+		return GENgraphDAOUtil.getReferenceNode();
 	}
 
 	@Override

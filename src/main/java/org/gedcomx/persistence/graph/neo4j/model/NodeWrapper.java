@@ -384,7 +384,7 @@ public abstract class NodeWrapper {
 		return this.getUnderlyingNode().hashCode();
 	}
 
-	protected abstract void resolveReferences();
+	public abstract void resolveReferences();
 
 	protected abstract void setGedcomXProperties(final Object gedcomXObject);
 

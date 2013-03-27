@@ -55,7 +55,7 @@ public class SourceReference extends NodeWrapper {
 	}
 
 	@Override
-	protected void resolveReferences() {
+	public void resolveReferences() {
 		this.createReferenceRelationship(RelationshipTypes.DESCRIPTION, SourceProperties.SOURCE_DESCRIPTION_REFERENCE);
 	}
 
