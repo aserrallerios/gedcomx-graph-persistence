@@ -48,7 +48,7 @@ public class PlaceDescription extends Conclusion {
 	}
 
 	@Override
-	protected org.gedcomx.conclusion.PlaceDescription getGedcomX() {
+	public org.gedcomx.conclusion.PlaceDescription getGedcomX() {
 		final org.gedcomx.conclusion.PlaceDescription gedcomXPlaceDescription = new org.gedcomx.conclusion.PlaceDescription();
 
 		this.getGedcomXConclusion(gedcomXPlaceDescription);
@@ -106,7 +106,7 @@ public class PlaceDescription extends Conclusion {
 	}
 
 	@Override
-	public void resolveReferences() {
+	protected void resolveConcreteReferences() {
 		return;
 	}
 

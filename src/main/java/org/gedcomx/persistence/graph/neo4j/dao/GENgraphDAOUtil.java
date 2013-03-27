@@ -1,8 +1,10 @@
 package org.gedcomx.persistence.graph.neo4j.dao;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Iterator;
 import java.util.Map;
 
+import org.neo4j.cypher.javacompat.ExecutionResult;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -48,22 +50,27 @@ public class GENgraphDAOUtil {
 		GENgraphDAOUtil.getDao().endTransaction(transaction);
 	}
 
+	public static ExecutionResult executeCypherQuery(final String query) {
+		return GENgraphDAOUtil.executeCypherQuery(query);
+	}
+
 	private static GENgraphDAO getDao() {
-		if (dao == null) {
+		if (GENgraphDAOUtil.dao == null) {
 			final Reflections reflections = new Reflections(GENgraphDAOUtil.class.getPackage().getName());
 
 			for (final Class<? extends GENgraphDAO> subclass : reflections.getSubTypesOf(GENgraphDAO.class)) {
 				if (subclass != null) {
 					try {
-						dao = subclass.getConstructor().newInstance();
-					} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
+						GENgraphDAOUtil.dao = subclass.getConstructor().newInstance();
+					} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+							| NoSuchMethodException | SecurityException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
 			}
 		}
-		return dao;
+		return GENgraphDAOUtil.dao;
 	}
 
 	public static Node getNode(final Long id) {
@@ -81,6 +88,10 @@ public class GENgraphDAOUtil {
 	public static Iterable<Node> getNodesByRelationship(final Node node, final RelationshipType relation, final Direction dir,
 			final boolean ordered, final String index) {
 		return GENgraphDAOUtil.getDao().getNodesByRelationship(node, relation, dir, ordered, index);
+	}
+
+	public static Iterator<Node> getNodesFromIndex(final String indexName, final String property, final String value) {
+		return GENgraphDAOUtil.getDao().getNodesFromIndex(indexName, property, value);
 	}
 
 	public static Node getReferenceNode() {

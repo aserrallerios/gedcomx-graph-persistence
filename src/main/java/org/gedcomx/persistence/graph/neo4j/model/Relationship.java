@@ -51,7 +51,7 @@ public class Relationship extends Conclusion {
 	}
 
 	@Override
-	protected org.gedcomx.conclusion.Relationship getGedcomX() {
+	public org.gedcomx.conclusion.Relationship getGedcomX() {
 		final org.gedcomx.conclusion.Relationship gedcomXRelationship = new org.gedcomx.conclusion.Relationship();
 
 		this.getGedcomXConclusion(gedcomXRelationship);
@@ -90,9 +90,12 @@ public class Relationship extends Conclusion {
 	}
 
 	@Override
-	public void resolveReferences() {
+	protected void resolveConcreteReferences() {
 		this.createReferenceRelationship(RelationshipTypes.PERSON1, ConclusionProperties.PERSON1_REFERENCE);
 		this.createReferenceRelationship(RelationshipTypes.PERSON2, ConclusionProperties.PERSON2_REFERENCE);
+		for (final Fact f : this.getFacts()) {
+			f.resolveReferences();
+		}
 	}
 
 	@Override

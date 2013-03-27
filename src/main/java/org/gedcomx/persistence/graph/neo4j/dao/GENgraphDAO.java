@@ -1,7 +1,9 @@
 package org.gedcomx.persistence.graph.neo4j.dao;
 
+import java.util.Iterator;
 import java.util.Map;
 
+import org.neo4j.cypher.javacompat.ExecutionResult;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -26,6 +28,8 @@ public interface GENgraphDAO {
 
 	void endTransaction(Transaction transaction);
 
+	ExecutionResult executeCypherQuery(String query);
+
 	Node getNode(Long id);
 
 	Node getNodeFromIndex(String indexName, String property, String value);
@@ -33,6 +37,8 @@ public interface GENgraphDAO {
 	Object getNodeProperty(Node node, String property);
 
 	Iterable<Node> getNodesByRelationship(Node node, RelationshipType relation, Direction dir, boolean ordered, String index);
+
+	Iterator<Node> getNodesFromIndex(String indexName, String property, String value);
 
 	Node getReferenceNode();
 

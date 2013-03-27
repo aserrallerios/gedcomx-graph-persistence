@@ -42,7 +42,7 @@ public class EventRole extends Conclusion {
 	}
 
 	@Override
-	protected org.gedcomx.conclusion.EventRole getGedcomX() {
+	public org.gedcomx.conclusion.EventRole getGedcomX() {
 		final org.gedcomx.conclusion.EventRole gedcomXEventRole = new org.gedcomx.conclusion.EventRole();
 
 		this.getGedcomXConclusion(gedcomXEventRole);
@@ -70,7 +70,7 @@ public class EventRole extends Conclusion {
 	}
 
 	@Override
-	public void resolveReferences() {
+	protected void resolveConcreteReferences() {
 		this.createReferenceRelationship(RelationshipTypes.PERSON, ConclusionProperties.PERSON_REFERENCE);
 	}
 

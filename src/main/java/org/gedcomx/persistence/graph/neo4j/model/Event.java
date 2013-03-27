@@ -46,7 +46,7 @@ public class Event extends Conclusion {
 	}
 
 	@Override
-	protected org.gedcomx.conclusion.Event getGedcomX() {
+	public org.gedcomx.conclusion.Event getGedcomX() {
 		final org.gedcomx.conclusion.Event gedcomXEvent = new org.gedcomx.conclusion.Event();
 
 		this.getGedcomXConclusion(gedcomXEvent);
@@ -81,8 +81,11 @@ public class Event extends Conclusion {
 	}
 
 	@Override
-	public void resolveReferences() {
-		return;
+	protected void resolveConcreteReferences() {
+		this.getPlaceReference().resolveReferences();
+		for (final EventRole role : this.getRoles()) {
+			role.resolveReferences();
+		}
 	}
 
 	public void setDateFormal(final String value) {

@@ -1,11 +1,14 @@
 package org.gedcomx.persistence.graph.neo4j.dao;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.ResourceBundle;
 
+import org.neo4j.cypher.javacompat.ExecutionEngine;
+import org.neo4j.cypher.javacompat.ExecutionResult;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
@@ -23,7 +26,8 @@ public class GENgraphDAOImpl implements GENgraphDAO {
 	public static ResourceBundle configuration = ResourceBundle.getBundle("config.dao");
 
 	GENgraphDAOImpl() {
-		this.graphDb = new GraphDatabaseFactory().newEmbeddedDatabaseBuilder(configuration.getString("db.path")).loadPropertiesFromFile(configuration.getString("neo4j.config.file")).newGraphDatabase();
+		this.graphDb = new GraphDatabaseFactory().newEmbeddedDatabaseBuilder(GENgraphDAOImpl.configuration.getString("db.path"))
+				.loadPropertiesFromFile(GENgraphDAOImpl.configuration.getString("neo4j.config.file")).newGraphDatabase();
 		this.registerShutdownHook();
 	}
 
@@ -108,6 +112,13 @@ public class GENgraphDAOImpl implements GENgraphDAO {
 	}
 
 	@Override
+	public ExecutionResult executeCypherQuery(final String query) {
+		final ExecutionEngine engine = new ExecutionEngine(this.graphDb);
+		final ExecutionResult result = engine.execute(query);
+		return result;
+	}
+
+	@Override
 	public Node getNode(final Long id) {
 		return this.graphDb.getNodeById(id);
 	}
@@ -148,6 +159,13 @@ public class GENgraphDAOImpl implements GENgraphDAO {
 			}
 			return nodes;
 		}
+	}
+
+	@Override
+	public Iterator<Node> getNodesFromIndex(final String indexName, final String property, final String value) {
+		final Index<Node> index = this.graphDb.index().forNodes(indexName);
+		final IndexHits<Node> hits = index.get(property, value);
+		return hits;
 	}
 
 	@Override
@@ -249,7 +267,7 @@ public class GENgraphDAOImpl implements GENgraphDAO {
 	@Override
 	public void setNodeToIndex(final String indexName, final Node node, final String property, final Object value) {
 		final Index<Node> index = this.graphDb.index().forNodes(indexName);
-		index.add(node, property, value);
+		index.putIfAbsent(node, property, value);
 	}
 
 	@Override

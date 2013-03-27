@@ -1,5 +1,6 @@
 package org.gedcomx.persistence.graph.neo4j.service;
 
+import java.util.List;
 import java.util.Map;
 
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
@@ -22,7 +23,7 @@ public interface GENgraphPersistenceService {
 
 	void createGraph(Map<String, String> metadata, Object[] gedcomxElements) throws MissingFieldException;
 
-	Object getGedcomX();
+	List<Object> getGedcomXFromGraph();
 
 	Node[] getGraph();
 
@@ -30,9 +31,9 @@ public interface GENgraphPersistenceService {
 
 	NodeWrapper getNodeById(Long id);
 
-	NodeWrapper[] getNodesByFilters(Map<NodeProperties, Object> filters);
+	List<NodeWrapper> getNodesByFilters(Map<NodeProperties, Object> filters);
 
-	NodeWrapper[] getNodesByType(String type);
+	List<NodeWrapper> getNodesByType(String type);
 
 	Node[] searchAlivePeopleWithoutChildren();
 

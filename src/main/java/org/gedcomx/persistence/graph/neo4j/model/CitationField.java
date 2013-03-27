@@ -36,7 +36,7 @@ public class CitationField extends NodeWrapper {
 	}
 
 	@Override
-	protected org.gedcomx.source.CitationField getGedcomX() {
+	public org.gedcomx.source.CitationField getGedcomX() {
 		final org.gedcomx.source.CitationField gedcomXCitationField = new org.gedcomx.source.CitationField();
 
 		gedcomXCitationField.setName(this.getName());

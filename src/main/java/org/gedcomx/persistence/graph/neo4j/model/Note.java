@@ -34,7 +34,7 @@ public class Note extends NodeWrapper {
 	}
 
 	@Override
-	protected org.gedcomx.common.Note getGedcomX() {
+	public org.gedcomx.common.Note getGedcomX() {
 		final org.gedcomx.common.Note gedcomXNote = new org.gedcomx.common.Note();
 
 		gedcomXNote.setText(this.getText());

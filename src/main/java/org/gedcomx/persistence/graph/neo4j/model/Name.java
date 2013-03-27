@@ -47,7 +47,7 @@ public class Name extends Conclusion {
 	}
 
 	@Override
-	protected org.gedcomx.conclusion.Name getGedcomX() {
+	public org.gedcomx.conclusion.Name getGedcomX() {
 		final org.gedcomx.conclusion.Name gedcomXName = new org.gedcomx.conclusion.Name();
 
 		super.getGedcomXConclusion(gedcomXName);
@@ -88,7 +88,7 @@ public class Name extends Conclusion {
 	}
 
 	@Override
-	public void resolveReferences() {
+	protected void resolveConcreteReferences() {
 		return;
 	}
 
@@ -142,7 +142,8 @@ public class Name extends Conclusion {
 	@Override
 	protected void validateUnderlyingNode() throws MissingFieldException {
 		if (ValidationTools.nullOrEmpty(this.getNameForms())) {
-			throw new MissingRequiredRelationshipException(this.getAnnotatedNodeType(), this.getId(), RelationshipTypes.HAS_NAME_FORM.toString());
+			throw new MissingRequiredRelationshipException(this.getAnnotatedNodeType(), this.getId(),
+					RelationshipTypes.HAS_NAME_FORM.toString());
 		}
 	}
 }

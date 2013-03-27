@@ -84,7 +84,7 @@ public class SourceDescription extends NodeWrapper {
 	}
 
 	@Override
-	protected org.gedcomx.source.SourceDescription getGedcomX() {
+	public org.gedcomx.source.SourceDescription getGedcomX() {
 		final org.gedcomx.source.SourceDescription gedcomXSourceDescription = new org.gedcomx.source.SourceDescription();
 
 		gedcomXSourceDescription.setAbout(this.getAbout());
@@ -220,7 +220,8 @@ public class SourceDescription extends NodeWrapper {
 	@Override
 	protected void validateUnderlyingNode() throws MissingRequiredRelationshipException {
 		if (ValidationTools.nullOrEmpty(this.getCitations())) {
-			throw new MissingRequiredRelationshipException(this.getAnnotatedNodeType(), this.getId(), RelationshipTypes.HAS_CITATION.toString());
+			throw new MissingRequiredRelationshipException(this.getAnnotatedNodeType(), this.getId(),
+					RelationshipTypes.HAS_CITATION.toString());
 		}
 	}
 }

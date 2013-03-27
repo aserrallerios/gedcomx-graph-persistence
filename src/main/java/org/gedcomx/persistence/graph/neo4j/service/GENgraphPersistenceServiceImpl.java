@@ -1,5 +1,8 @@
 package org.gedcomx.persistence.graph.neo4j.service;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.gedcomx.persistence.graph.neo4j.dao.GENgraphDAOUtil;
@@ -9,13 +12,18 @@ import org.gedcomx.persistence.graph.neo4j.model.Agent;
 import org.gedcomx.persistence.graph.neo4j.model.Conclusion;
 import org.gedcomx.persistence.graph.neo4j.model.Document;
 import org.gedcomx.persistence.graph.neo4j.model.Event;
+import org.gedcomx.persistence.graph.neo4j.model.NodeTypeMapper;
 import org.gedcomx.persistence.graph.neo4j.model.NodeWrapper;
 import org.gedcomx.persistence.graph.neo4j.model.Person;
 import org.gedcomx.persistence.graph.neo4j.model.PlaceDescription;
 import org.gedcomx.persistence.graph.neo4j.model.Relationship;
 import org.gedcomx.persistence.graph.neo4j.model.SourceDescription;
+import org.gedcomx.persistence.graph.neo4j.model.constants.GenericProperties;
+import org.gedcomx.persistence.graph.neo4j.model.constants.IndexNames;
 import org.gedcomx.persistence.graph.neo4j.model.constants.NodeProperties;
+import org.gedcomx.persistence.graph.neo4j.model.constants.NodeTypes;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Transaction;
 
 public class GENgraphPersistenceServiceImpl implements GENgraphPersistenceService {
 
@@ -24,9 +32,7 @@ public class GENgraphPersistenceServiceImpl implements GENgraphPersistenceServic
 
 	@Override
 	public Agent addAgent(final org.gedcomx.agent.Agent agent) throws MissingFieldException {
-		Agent a = new Agent(agent);
-		a.resolveReferences();
-		return a;
+		return new Agent(agent);
 	}
 
 	@Override
@@ -45,15 +51,12 @@ public class GENgraphPersistenceServiceImpl implements GENgraphPersistenceServic
 		} else {
 			throw new GenericError("Unknown GedcomX Conclusion type");
 		}
-		c.resolveReferences();
 		return c;
 	}
 
 	@Override
 	public SourceDescription addSource(final org.gedcomx.source.SourceDescription sourceDescription) throws MissingFieldException {
-		SourceDescription s = new SourceDescription(sourceDescription);
-		s.resolveReferences();
-		return s;
+		return new SourceDescription(sourceDescription);
 	}
 
 	@Override
@@ -75,17 +78,49 @@ public class GENgraphPersistenceServiceImpl implements GENgraphPersistenceServic
 	public void createGraph(final Map<String, String> metadata, final Object[] gedcomxElements) throws MissingFieldException {
 		final Node rootNode = this.getInitialGraphNode();
 
-		GENgraphDAOUtil.setNodeProperties(rootNode, metadata);
+		final Transaction t = GENgraphDAOUtil.beginTransaction();
+		try {
+			GENgraphDAOUtil.setNodeProperties(rootNode, metadata);
 
-		for (final Object gedcomxElement : gedcomxElements) {
-			this.addTopLevelElement(gedcomxElement);
+			final List<NodeWrapper> wrappers = new ArrayList<>();
+
+			for (final Object gedcomxElement : gedcomxElements) {
+				wrappers.add(this.addTopLevelElement(gedcomxElement));
+			}
+
+			for (final NodeWrapper wrapper : wrappers) {
+				wrapper.resolveReferences();
+			}
+			GENgraphDAOUtil.commitTransaction(t);
+		} finally {
+			GENgraphDAOUtil.endTransaction(t);
 		}
-		this.resolveReferences();
+	}
+
+	private List<Object> getGedcomXByType(final String type) {
+		final List<Object> gedcomXObjects = new ArrayList<>();
+
+		final List<NodeWrapper> wrappers = this.getNodesByType(type);
+
+		for (final NodeWrapper wrapper : wrappers) {
+			gedcomXObjects.add(wrapper.getGedcomX());
+		}
+		return gedcomXObjects;
 	}
 
 	@Override
-	public Object getGedcomX() {
-		return null;
+	public List<Object> getGedcomXFromGraph() {
+		final List<Object> gedcomXObjects = new ArrayList<>();
+
+		gedcomXObjects.addAll(this.getGedcomXByType(NodeTypes.AGENT.toString()));
+		gedcomXObjects.addAll(this.getGedcomXByType(NodeTypes.SOURCE_DESCRIPTION.toString()));
+		gedcomXObjects.addAll(this.getGedcomXByType(NodeTypes.PERSON.toString()));
+		gedcomXObjects.addAll(this.getGedcomXByType(NodeTypes.RELATIONSHIP.toString()));
+		gedcomXObjects.addAll(this.getGedcomXByType(NodeTypes.DOCUMENT.toString()));
+		gedcomXObjects.addAll(this.getGedcomXByType(NodeTypes.PLACE_DESCRIPTION.toString()));
+		gedcomXObjects.addAll(this.getGedcomXByType(NodeTypes.EVENT.toString()));
+
+		return gedcomXObjects;
 	}
 
 	@Override
@@ -99,26 +134,43 @@ public class GENgraphPersistenceServiceImpl implements GENgraphPersistenceServic
 
 	@Override
 	public NodeWrapper getNodeByGedcomXId(final String id) {
-		return null;
+		final Node node = GENgraphDAOUtil.getNodeFromIndex(IndexNames.IDS.toString(), GenericProperties.ID.toString(), id);
+
+		return this.getWrapperByNode(node);
+
 	}
 
 	@Override
 	public NodeWrapper getNodeById(final Long id) {
+		return this.getWrapperByNode(GENgraphDAOUtil.getNode(id));
+	}
+
+	@Override
+	public List<NodeWrapper> getNodesByFilters(final Map<NodeProperties, Object> filters) {
 		return null;
 	}
 
 	@Override
-	public NodeWrapper[] getNodesByFilters(final Map<NodeProperties, Object> filters) {
-		return null;
+	public List<NodeWrapper> getNodesByType(final String type) {
+		final Iterator<Node> nodes = GENgraphDAOUtil.getNodesFromIndex(IndexNames.NODE_TYPES.toString(),
+				GenericProperties.NODE_TYPE.toString(), type);
+
+		final List<NodeWrapper> wrappers = new ArrayList<>();
+		while (nodes.hasNext()) {
+			wrappers.add(NodeTypeMapper.createNode(type, nodes.next()));
+		}
+		return wrappers;
 	}
 
-	@Override
-	public NodeWrapper[] getNodesByType(final String type) {
-		return null;
+	private NodeWrapper getWrapperByNode(final Node node) {
+		return this.getWrapperByNode(node, null);
 	}
 
-	private void resolveReferences() {
-
+	private NodeWrapper getWrapperByNode(final Node node, String type) {
+		if (type == null) {
+			type = (String) GENgraphDAOUtil.getNodeProperty(node, GenericProperties.TYPE.toString());
+		}
+		return NodeTypeMapper.createNode(type, node);
 	}
 
 	@Override
@@ -134,6 +186,8 @@ public class GENgraphPersistenceServiceImpl implements GENgraphPersistenceServic
 
 	@Override
 	public Node[] searchNodesByCypher(final String query) {
+		GENgraphDAOUtil.executeCypherQuery(query);
+		// TODO
 		return null;
 	}
 

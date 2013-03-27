@@ -28,7 +28,7 @@ public class PlaceReference extends NodeWrapper {
 	}
 
 	@Override
-	protected org.gedcomx.conclusion.PlaceReference getGedcomX() {
+	public org.gedcomx.conclusion.PlaceReference getGedcomX() {
 		final org.gedcomx.conclusion.PlaceReference gedcomXPlaceReference = new org.gedcomx.conclusion.PlaceReference();
 
 		gedcomXPlaceReference.setOriginal(this.getOriginal());

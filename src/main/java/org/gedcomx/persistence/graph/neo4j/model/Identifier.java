@@ -32,7 +32,7 @@ public class Identifier extends NodeWrapper {
 	}
 
 	@Override
-	protected org.gedcomx.conclusion.Identifier getGedcomX() {
+	public org.gedcomx.conclusion.Identifier getGedcomX() {
 		final org.gedcomx.conclusion.Identifier gedcomXIdentifier = new org.gedcomx.conclusion.Identifier();
 
 		gedcomXIdentifier.setValue(this.getValue());

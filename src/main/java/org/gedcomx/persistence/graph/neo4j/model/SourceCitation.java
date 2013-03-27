@@ -51,7 +51,7 @@ public class SourceCitation extends NodeWrapper {
 	}
 
 	@Override
-	protected org.gedcomx.source.SourceCitation getGedcomX() {
+	public org.gedcomx.source.SourceCitation getGedcomX() {
 		final org.gedcomx.source.SourceCitation gedcomXSourceCitation = new org.gedcomx.source.SourceCitation();
 
 		gedcomXSourceCitation.setCitationTemplate(this.getCitationTemplate());

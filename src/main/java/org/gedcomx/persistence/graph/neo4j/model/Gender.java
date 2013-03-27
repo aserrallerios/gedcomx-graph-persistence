@@ -36,7 +36,7 @@ public class Gender extends Conclusion {
 	}
 
 	@Override
-	protected org.gedcomx.conclusion.Gender getGedcomX() {
+	public org.gedcomx.conclusion.Gender getGedcomX() {
 		final org.gedcomx.conclusion.Gender gedcomXGender = new org.gedcomx.conclusion.Gender();
 
 		super.getGedcomXConclusion(gedcomXGender);
@@ -61,7 +61,7 @@ public class Gender extends Conclusion {
 	}
 
 	@Override
-	public void resolveReferences() {
+	protected void resolveConcreteReferences() {
 		return;
 	}
 

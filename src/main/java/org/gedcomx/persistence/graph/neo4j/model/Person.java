@@ -47,7 +47,7 @@ public class Person extends Conclusion {
 	}
 
 	@Override
-	protected org.gedcomx.conclusion.Person getGedcomX() {
+	public org.gedcomx.conclusion.Person getGedcomX() {
 		final org.gedcomx.conclusion.Person gedcomXPerson = new org.gedcomx.conclusion.Person();
 
 		this.getGedcomXConclusion(gedcomXPerson);
@@ -80,8 +80,10 @@ public class Person extends Conclusion {
 	}
 
 	@Override
-	public void resolveReferences() {
-		return;
+	protected void resolveConcreteReferences() {
+		for (final Fact f : this.getFacts()) {
+			f.resolveReferences();
+		}
 	}
 
 	@Override

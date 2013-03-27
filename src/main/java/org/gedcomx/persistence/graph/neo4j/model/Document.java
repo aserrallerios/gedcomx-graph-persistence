@@ -32,7 +32,7 @@ public class Document extends Conclusion {
 	}
 
 	@Override
-	protected org.gedcomx.conclusion.Document getGedcomX() {
+	public org.gedcomx.conclusion.Document getGedcomX() {
 		final org.gedcomx.conclusion.Document gedcomXDocument = new org.gedcomx.conclusion.Document();
 
 		gedcomXDocument.setText(this.getText());
@@ -56,7 +56,7 @@ public class Document extends Conclusion {
 	}
 
 	@Override
-	public void resolveReferences() {
+	protected void resolveConcreteReferences() {
 		return;
 	}
 

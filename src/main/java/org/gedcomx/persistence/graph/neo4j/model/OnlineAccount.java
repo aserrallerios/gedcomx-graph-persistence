@@ -40,7 +40,7 @@ public class OnlineAccount extends NodeWrapper {
 	}
 
 	@Override
-	protected org.gedcomx.agent.OnlineAccount getGedcomX() {
+	public org.gedcomx.agent.OnlineAccount getGedcomX() {
 		final org.gedcomx.agent.OnlineAccount gedcomXOnlineAccount = new org.gedcomx.agent.OnlineAccount();
 
 		gedcomXOnlineAccount.setServiceHomepage(this.getServiceHomepage());

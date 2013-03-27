@@ -30,7 +30,7 @@ public class TextValue extends NodeWrapper {
 	}
 
 	@Override
-	protected org.gedcomx.common.TextValue getGedcomX() {
+	public org.gedcomx.common.TextValue getGedcomX() {
 		final org.gedcomx.common.TextValue textValue = new org.gedcomx.common.TextValue();
 
 		textValue.setLang(this.getLang());

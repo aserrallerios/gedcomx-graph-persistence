@@ -38,7 +38,7 @@ public class SourceReference extends NodeWrapper {
 	}
 
 	@Override
-	protected org.gedcomx.source.SourceReference getGedcomX() {
+	public org.gedcomx.source.SourceReference getGedcomX() {
 		final org.gedcomx.source.SourceReference gedcomXSourceReference = new org.gedcomx.source.SourceReference();
 
 		final Attribution attr = this.getAttribution();

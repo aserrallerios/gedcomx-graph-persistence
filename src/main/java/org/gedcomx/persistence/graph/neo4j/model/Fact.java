@@ -52,7 +52,7 @@ public class Fact extends Conclusion {
 	}
 
 	@Override
-	protected org.gedcomx.conclusion.Fact getGedcomX() {
+	public org.gedcomx.conclusion.Fact getGedcomX() {
 		final org.gedcomx.conclusion.Fact gedcomXFact = new org.gedcomx.conclusion.Fact();
 
 		this.getGedcomXConclusion(gedcomXFact);
@@ -93,8 +93,8 @@ public class Fact extends Conclusion {
 	}
 
 	@Override
-	public void resolveReferences() {
-		return;
+	protected void resolveConcreteReferences() {
+		this.getPlaceReference().resolveReferences();
 	}
 
 	public void setDateFormal(final String value) {

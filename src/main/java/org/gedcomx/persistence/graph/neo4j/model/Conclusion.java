@@ -96,6 +96,17 @@ public abstract class Conclusion extends NodeWrapper {
 		return new URI(this.getId());
 	}
 
+	protected abstract void resolveConcreteReferences();
+
+	@Override
+	public void resolveReferences() {
+		this.getAttribution().resolveReferences();
+		for (final SourceReference s : this.getSourceReferences()) {
+			s.resolveReferences();
+		}
+		this.resolveConcreteReferences();
+	}
+
 	public void setAttribution(final Attribution attribution) {
 		this.createRelationship(RelationshipTypes.ATTRIBUTION, attribution);
 	}

@@ -39,7 +39,7 @@ public class NameForm extends NodeWrapper {
 	}
 
 	@Override
-	protected org.gedcomx.conclusion.NameForm getGedcomX() {
+	public org.gedcomx.conclusion.NameForm getGedcomX() {
 		final org.gedcomx.conclusion.NameForm gedcomXNameForm = new org.gedcomx.conclusion.NameForm();
 
 		gedcomXNameForm.setFullText(this.getFullText());
