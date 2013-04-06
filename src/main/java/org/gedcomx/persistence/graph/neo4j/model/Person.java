@@ -2,12 +2,14 @@ package org.gedcomx.persistence.graph.neo4j.model;
 
 import java.util.List;
 
+import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
 import org.gedcomx.persistence.graph.neo4j.model.constants.ConclusionProperties;
 import org.gedcomx.persistence.graph.neo4j.model.constants.RelationshipTypes;
 import org.neo4j.graphdb.Node;
 
+@NodeType("PERSON")
 public class Person extends Conclusion {
 
 	protected Person() throws MissingFieldException {

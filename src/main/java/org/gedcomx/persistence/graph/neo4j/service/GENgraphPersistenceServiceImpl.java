@@ -1,13 +1,17 @@
 package org.gedcomx.persistence.graph.neo4j.service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.gedcomx.persistence.graph.neo4j.dao.GENgraphDAOUtil;
 import org.gedcomx.persistence.graph.neo4j.exception.GenericError;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
+import org.gedcomx.persistence.graph.neo4j.messages.ErrorMessages;
 import org.gedcomx.persistence.graph.neo4j.model.Agent;
 import org.gedcomx.persistence.graph.neo4j.model.Conclusion;
 import org.gedcomx.persistence.graph.neo4j.model.Document;
@@ -26,6 +30,8 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Transaction;
 
 public class GENgraphPersistenceServiceImpl implements GENgraphPersistenceService {
+
+	private static Logger logger = LogManager.getLogger("GENGraphService");
 
 	GENgraphPersistenceServiceImpl() {
 	}
@@ -49,7 +55,7 @@ public class GENgraphPersistenceServiceImpl implements GENgraphPersistenceServic
 		} else if (conclusion instanceof org.gedcomx.conclusion.PlaceDescription) {
 			c = new PlaceDescription((org.gedcomx.conclusion.PlaceDescription) conclusion);
 		} else {
-			throw new GenericError("Unknown GedcomX Conclusion type");
+			throw new GenericError(ErrorMessages.GEDCOMX_CONCLUSION_TYPE);
 		}
 		return c;
 	}
@@ -69,13 +75,13 @@ public class GENgraphPersistenceServiceImpl implements GENgraphPersistenceServic
 		} else if (gedcomxElement instanceof org.gedcomx.source.SourceDescription) {
 			n = this.addSource((org.gedcomx.source.SourceDescription) gedcomxElement);
 		} else {
-			throw new GenericError("Unknown GedcomX Top level type");
+			throw new GenericError(ErrorMessages.GEDCOMX_UNKNOWN_TYPE);
 		}
 		return n;
 	}
 
 	@Override
-	public void createGraph(final Map<String, String> metadata, final Object[] gedcomxElements) throws MissingFieldException {
+	public void createGraphByGedcomX(final Map<String, String> metadata, final Collection<Object> gedcomxElements) {
 		final Node rootNode = this.getInitialGraphNode();
 
 		final Transaction t = GENgraphDAOUtil.beginTransaction();
@@ -85,7 +91,11 @@ public class GENgraphPersistenceServiceImpl implements GENgraphPersistenceServic
 			final List<NodeWrapper> wrappers = new ArrayList<>();
 
 			for (final Object gedcomxElement : gedcomxElements) {
-				wrappers.add(this.addTopLevelElement(gedcomxElement));
+				try {
+					wrappers.add(this.addTopLevelElement(gedcomxElement));
+				} catch (final MissingFieldException e) {
+					GENgraphPersistenceServiceImpl.logger.warn(ErrorMessages.GEDCOMX_MISSING_FIELD);
+				}
 			}
 
 			for (final NodeWrapper wrapper : wrappers) {

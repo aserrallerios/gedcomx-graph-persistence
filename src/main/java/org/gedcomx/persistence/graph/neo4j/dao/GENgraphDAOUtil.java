@@ -1,6 +1,5 @@
 package org.gedcomx.persistence.graph.neo4j.dao;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -61,9 +60,8 @@ public class GENgraphDAOUtil {
 			for (final Class<? extends GENgraphDAO> subclass : reflections.getSubTypesOf(GENgraphDAO.class)) {
 				if (subclass != null) {
 					try {
-						GENgraphDAOUtil.dao = subclass.getConstructor().newInstance();
-					} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
-							| NoSuchMethodException | SecurityException e) {
+						GENgraphDAOUtil.dao = subclass.newInstance();
+					} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | SecurityException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}

@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.ResourceBundle;
 
 import org.neo4j.cypher.javacompat.ExecutionEngine;
 import org.neo4j.cypher.javacompat.ExecutionResult;
@@ -23,11 +22,9 @@ public class GENgraphDAOImpl implements GENgraphDAO {
 
 	private final GraphDatabaseService graphDb;
 
-	public static ResourceBundle configuration = ResourceBundle.getBundle("config.dao");
-
 	GENgraphDAOImpl() {
-		this.graphDb = new GraphDatabaseFactory().newEmbeddedDatabaseBuilder(GENgraphDAOImpl.configuration.getString("db.path"))
-				.loadPropertiesFromFile(GENgraphDAOImpl.configuration.getString("neo4j.config.file")).newGraphDatabase();
+		this.graphDb = new GraphDatabaseFactory().newEmbeddedDatabaseBuilder(ConfigurationProvider.getDBPath())
+				.loadPropertiesFromFile(ConfigurationProvider.getPropertiesFile()).newGraphDatabase();
 		this.registerShutdownHook();
 	}
 

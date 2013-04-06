@@ -1,5 +1,6 @@
 package org.gedcomx.persistence.graph.neo4j.service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -21,7 +22,7 @@ public interface GENgraphPersistenceService {
 
 	NodeWrapper addTopLevelElement(final Object gedcomxElement) throws MissingFieldException;
 
-	void createGraph(Map<String, String> metadata, Object[] gedcomxElements) throws MissingFieldException;
+	void createGraphByGedcomX(Map<String, String> metadata, Collection<Object> gedcomxElements);
 
 	List<Object> getGedcomXFromGraph();
 
