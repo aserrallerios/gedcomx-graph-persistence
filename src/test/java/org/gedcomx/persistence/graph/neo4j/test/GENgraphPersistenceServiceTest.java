@@ -16,6 +16,7 @@ import org.apache.logging.log4j.Logger;
 import org.gedcomx.fileformat.GedcomxFile;
 import org.gedcomx.fileformat.GedcomxFileEntry;
 import org.gedcomx.persistence.graph.neo4j.service.GENgraphPersistenceServiceUtil;
+import org.junit.Assert;
 import org.junit.Test;
 
 public class GENgraphPersistenceServiceTest {
@@ -53,6 +54,7 @@ public class GENgraphPersistenceServiceTest {
 		} catch (final Exception e) {
 			GENgraphPersistenceServiceTest.logger.info("Uncatched error during createGraphByGedcomX test");
 			e.printStackTrace();
+			Assert.fail();
 		}
 	}
 

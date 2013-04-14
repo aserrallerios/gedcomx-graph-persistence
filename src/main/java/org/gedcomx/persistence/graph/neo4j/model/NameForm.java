@@ -82,8 +82,10 @@ public class NameForm extends NodeWrapper {
 	protected void setGedcomXRelations(final Object gedcomXObject) throws MissingFieldException {
 		final org.gedcomx.conclusion.NameForm gedcomXNameForm = (org.gedcomx.conclusion.NameForm) gedcomXObject;
 
-		for (final org.gedcomx.conclusion.NamePart namePart : gedcomXNameForm.getParts()) {
-			this.addNameParts(new NamePart(namePart));
+		if (gedcomXNameForm.getParts() != null) {
+			for (final org.gedcomx.conclusion.NamePart namePart : gedcomXNameForm.getParts()) {
+				this.addNameParts(new NamePart(namePart));
+			}
 		}
 	}
 

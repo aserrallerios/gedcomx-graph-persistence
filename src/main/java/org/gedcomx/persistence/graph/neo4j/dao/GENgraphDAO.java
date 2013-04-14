@@ -32,8 +32,6 @@ public interface GENgraphDAO {
 
 	Node getNode(Long id);
 
-	Node getNodeFromIndex(String indexName, String property, String value);
-
 	Object getNodeProperty(Node node, String property);
 
 	Iterable<Node> getNodesByRelationship(Node node, RelationshipType relation, Direction dir, boolean ordered, String index);
@@ -50,21 +48,19 @@ public interface GENgraphDAO {
 
 	Node getSingleNodeByRelationship(Node node, RelationshipType relation, Direction dir);
 
+	Node getSingleNodeFromIndex(String indexName, String property, String value);
+
 	Relationship getSingleRelationship(Node node, RelationshipType rel, Direction dir);
 
 	boolean hasRelationship(Node node, RelationshipType relType, Direction dir);
 
 	boolean hasSingleRelationship(Node node, RelationshipType relType, Direction dir);
 
-	void removeNodeFromIndex(String indexName, Node node, String property);
-
 	void removeNodeProperty(Node node, String property);
 
 	Node setNodeProperties(Node node, Map<String, ?> metadata);
 
-	Node setNodeProperty(Node node, String property, Object value);
-
-	void setNodeToIndex(String indexName, Node node, String property, Object value);
+	Node setNodeProperty(Node node, String property, Object value, boolean indexed, boolean unique, String indexName);
 
 	Relationship setRelationshipProperties(Relationship rel, Map<String, ?> properties);
 

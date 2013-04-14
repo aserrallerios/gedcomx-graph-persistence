@@ -140,17 +140,25 @@ public class Agent extends NodeWrapper {
 	protected void setGedcomXRelations(final Object gedcomXObject) throws MissingFieldException {
 		final org.gedcomx.agent.Agent gedcomXAgent = (org.gedcomx.agent.Agent) gedcomXObject;
 
-		for (final org.gedcomx.agent.Address gedcomXAddress : gedcomXAgent.getAddresses()) {
-			this.addAddress(new Address(gedcomXAddress));
+		if (gedcomXAgent.getAddresses() != null) {
+			for (final org.gedcomx.agent.Address gedcomXAddress : gedcomXAgent.getAddresses()) {
+				this.addAddress(new Address(gedcomXAddress));
+			}
 		}
-		for (final org.gedcomx.agent.OnlineAccount gedcomXOnlineAccount : gedcomXAgent.getAccounts()) {
-			this.addOnlineAccount(new OnlineAccount(gedcomXOnlineAccount));
+		if (gedcomXAgent.getAccounts() != null) {
+			for (final org.gedcomx.agent.OnlineAccount gedcomXOnlineAccount : gedcomXAgent.getAccounts()) {
+				this.addOnlineAccount(new OnlineAccount(gedcomXOnlineAccount));
+			}
 		}
-		for (final org.gedcomx.conclusion.Identifier gedcomXIdentifier : gedcomXAgent.getIdentifiers()) {
-			this.addIdentifier(new Identifier(gedcomXIdentifier));
+		if (gedcomXAgent.getIdentifiers() != null) {
+			for (final org.gedcomx.conclusion.Identifier gedcomXIdentifier : gedcomXAgent.getIdentifiers()) {
+				this.addIdentifier(new Identifier(gedcomXIdentifier));
+			}
 		}
-		for (final org.gedcomx.common.TextValue gedcomXName : gedcomXAgent.getNames()) {
-			this.addName(new TextValue(gedcomXName));
+		if (gedcomXAgent.getNames() != null) {
+			for (final org.gedcomx.common.TextValue gedcomXName : gedcomXAgent.getNames()) {
+				this.addName(new TextValue(gedcomXName));
+			}
 		}
 	}
 

@@ -109,11 +109,15 @@ public class Relationship extends Conclusion {
 	protected void setGedcomXConcreteRelations(final Object gedcomXObject) throws MissingFieldException {
 		final org.gedcomx.conclusion.Relationship gedcomXRelationship = (org.gedcomx.conclusion.Relationship) gedcomXObject;
 
-		for (final org.gedcomx.conclusion.Fact fact : gedcomXRelationship.getFacts()) {
-			this.addFact(new Fact(fact));
+		if (gedcomXRelationship.getFacts() != null) {
+			for (final org.gedcomx.conclusion.Fact fact : gedcomXRelationship.getFacts()) {
+				this.addFact(new Fact(fact));
+			}
 		}
-		for (final org.gedcomx.conclusion.Identifier identifier : gedcomXRelationship.getIdentifiers()) {
-			this.addIdentifier(new Identifier(identifier));
+		if (gedcomXRelationship.getIdentifiers() != null) {
+			for (final org.gedcomx.conclusion.Identifier identifier : gedcomXRelationship.getIdentifiers()) {
+				this.addIdentifier(new Identifier(identifier));
+			}
 		}
 
 		this.setProperty(ConclusionProperties.PERSON1_REFERENCE, gedcomXRelationship.getPerson1());
@@ -148,7 +152,7 @@ public class Relationship extends Conclusion {
 		if (ValidationTools.nullOrEmpty(this.getPerson1())) {
 			throw new MissingRequiredRelationshipException(this.getAnnotatedNodeType(), this.getId(), RelationshipTypes.PERSON1.toString());
 		}
-		if (ValidationTools.nullOrEmpty(this.getPerson1())) {
+		if (ValidationTools.nullOrEmpty(this.getPerson2())) {
 			throw new MissingRequiredRelationshipException(this.getAnnotatedNodeType(), this.getId(), RelationshipTypes.PERSON2.toString());
 		}
 	}

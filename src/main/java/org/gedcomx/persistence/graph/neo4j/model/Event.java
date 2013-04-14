@@ -115,8 +115,10 @@ public class Event extends Conclusion {
 		if (gedcomXEvent.getPlace() != null) {
 			this.setPlaceReference(new PlaceReference(gedcomXEvent.getPlace()));
 		}
-		for (final org.gedcomx.conclusion.EventRole role : gedcomXEvent.getRoles()) {
-			this.addRole(new EventRole(role));
+		if (gedcomXEvent.getRoles() != null) {
+			for (final org.gedcomx.conclusion.EventRole role : gedcomXEvent.getRoles()) {
+				this.addRole(new EventRole(role));
+			}
 		}
 	}
 

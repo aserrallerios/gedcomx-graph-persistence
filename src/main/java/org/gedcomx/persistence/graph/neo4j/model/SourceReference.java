@@ -76,7 +76,9 @@ public class SourceReference extends NodeWrapper {
 	protected void setGedcomXRelations(final Object gedcomXObject) throws MissingFieldException {
 		final org.gedcomx.source.SourceReference gedcomXSourceReference = (org.gedcomx.source.SourceReference) gedcomXObject;
 
-		this.setAttribution(new Attribution(gedcomXSourceReference.getAttribution()));
+		if (gedcomXSourceReference.getAttribution() != null) {
+			this.setAttribution(new Attribution(gedcomXSourceReference.getAttribution()));
+		}
 
 		this.setProperty(SourceProperties.SOURCE_DESCRIPTION_REFERENCE, gedcomXSourceReference.getDescriptionRef());
 	}

@@ -13,7 +13,6 @@ public class GENgraphPersistenceServiceUtil {
 
 	public static void createGraphByGedcomX(final Map<String, String> metadata, final Collection<Object> gedcomxElements) {
 		GENgraphPersistenceServiceUtil.getService().createGraphByGedcomX(metadata, gedcomxElements);
-
 	}
 
 	private static GENgraphPersistenceService getService() {

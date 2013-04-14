@@ -89,7 +89,9 @@ public class Note extends NodeWrapper {
 	protected void setGedcomXRelations(final Object gedcomXObject) throws MissingFieldException {
 		final org.gedcomx.common.Note gedcomXNote = (org.gedcomx.common.Note) gedcomXObject;
 
-		this.setAttribution(new Attribution(gedcomXNote.getAttribution()));
+		if (gedcomXNote.getAttribution() != null) {
+			this.setAttribution(new Attribution(gedcomXNote.getAttribution()));
+		}
 	}
 
 	public void setId(final String id) {

@@ -6,6 +6,8 @@ public interface NodeProperties {
 
 	public boolean isIndexed();
 
+	public boolean isUnique();
+
 	public String name();
 
 }

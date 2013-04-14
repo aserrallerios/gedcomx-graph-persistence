@@ -100,7 +100,10 @@ public abstract class Conclusion extends NodeWrapper {
 
 	@Override
 	public void resolveReferences() {
-		this.getAttribution().resolveReferences();
+		final Attribution a = this.getAttribution();
+		if (a != null) {
+			this.getAttribution().resolveReferences();
+		}
 		for (final SourceReference s : this.getSourceReferences()) {
 			s.resolveReferences();
 		}
@@ -134,14 +137,21 @@ public abstract class Conclusion extends NodeWrapper {
 	protected void setGedcomXRelations(final Object gedcomXObject) throws MissingFieldException {
 		final org.gedcomx.conclusion.Conclusion gedcomXConclusion = (org.gedcomx.conclusion.Conclusion) gedcomXObject;
 
-		for (final org.gedcomx.common.Note gedcomXNote : gedcomXConclusion.getNotes()) {
-			this.addNote(new Note(gedcomXNote));
+		if (gedcomXConclusion.getNotes() != null) {
+			for (final org.gedcomx.common.Note gedcomXNote : gedcomXConclusion.getNotes()) {
+				this.addNote(new Note(gedcomXNote));
+			}
 		}
-		for (final org.gedcomx.source.SourceReference gedcomXSourceReference : gedcomXConclusion.getSources()) {
-			this.addSourceReference(new SourceReference(gedcomXSourceReference));
+		if (gedcomXConclusion.getSources() != null) {
+			for (final org.gedcomx.source.SourceReference gedcomXSourceReference : gedcomXConclusion.getSources()) {
+				this.addSourceReference(new SourceReference(gedcomXSourceReference));
+			}
 		}
 
-		this.setAttribution(new Attribution(gedcomXConclusion.getAttribution()));
+		if (gedcomXConclusion.getAttribution() != null) {
+			this.setAttribution(new Attribution(gedcomXConclusion.getAttribution()));
+		}
+
 		this.setGedcomXConcreteRelations(gedcomXObject);
 	}
 

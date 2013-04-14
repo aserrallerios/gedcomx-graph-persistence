@@ -183,17 +183,23 @@ public class SourceDescription extends NodeWrapper {
 		this.setComponentOf(new SourceReference(gedcomXSourceDescription.getComponentOf()));
 		this.setAttribution(new Attribution(gedcomXSourceDescription.getAttribution()));
 
-		for (final org.gedcomx.common.Note note : gedcomXSourceDescription.getNotes()) {
-			this.addNote(new Note(note));
+		if (gedcomXSourceDescription.getNotes() != null) {
+			for (final org.gedcomx.common.Note note : gedcomXSourceDescription.getNotes()) {
+				this.addNote(new Note(note));
+			}
 		}
-		for (final org.gedcomx.common.TextValue title : gedcomXSourceDescription.getTitles()) {
-			this.addTitle(new TextValue(title));
+		if (gedcomXSourceDescription.getTitles() != null) {
+			for (final org.gedcomx.common.TextValue title : gedcomXSourceDescription.getTitles()) {
+				this.addTitle(new TextValue(title));
+			}
+		}
+		if (gedcomXSourceDescription.getSources() != null) {
+			for (final org.gedcomx.source.SourceReference source : gedcomXSourceDescription.getSources()) {
+				this.addSource(new SourceReference(source));
+			}
 		}
 		for (final org.gedcomx.source.SourceCitation sourceCitation : gedcomXSourceDescription.getCitations()) {
 			this.addCitation(new SourceCitation(sourceCitation));
-		}
-		for (final org.gedcomx.source.SourceReference source : gedcomXSourceDescription.getSources()) {
-			this.addSource(new SourceReference(source));
 		}
 
 		if (gedcomXSourceDescription.getMediator() != null) {

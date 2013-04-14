@@ -138,8 +138,10 @@ public class PlaceDescription extends Conclusion {
 		for (final org.gedcomx.common.TextValue gedcomXName : gedcomXPlaceDescription.getNames()) {
 			this.addName(new TextValue(gedcomXName));
 		}
-		for (final org.gedcomx.conclusion.Identifier gedcomXIdentifier : gedcomXPlaceDescription.getIdentifiers()) {
-			this.addIdentifier(new Identifier(gedcomXIdentifier));
+		if (gedcomXPlaceDescription.getIdentifiers() != null) {
+			for (final org.gedcomx.conclusion.Identifier gedcomXIdentifier : gedcomXPlaceDescription.getIdentifiers()) {
+				this.addIdentifier(new Identifier(gedcomXIdentifier));
+			}
 		}
 	}
 

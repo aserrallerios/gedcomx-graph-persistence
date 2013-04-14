@@ -99,16 +99,24 @@ public class Person extends Conclusion {
 	protected void setGedcomXConcreteRelations(final Object gedcomXObject) throws MissingFieldException {
 		final org.gedcomx.conclusion.Person gedcomXPerson = (org.gedcomx.conclusion.Person) gedcomXObject;
 
-		this.setGender(new Gender(gedcomXPerson.getGender()));
+		if (gedcomXPerson.getGender() != null) {
+			this.setGender(new Gender(gedcomXPerson.getGender()));
+		}
 
-		for (final org.gedcomx.conclusion.Identifier identifier : gedcomXPerson.getIdentifiers()) {
-			this.addIdentifier(new Identifier(identifier));
+		if (gedcomXPerson.getIdentifiers() != null) {
+			for (final org.gedcomx.conclusion.Identifier identifier : gedcomXPerson.getIdentifiers()) {
+				this.addIdentifier(new Identifier(identifier));
+			}
 		}
-		for (final org.gedcomx.conclusion.Name name : gedcomXPerson.getNames()) {
-			this.addName(new Name(name));
+		if (gedcomXPerson.getNames() != null) {
+			for (final org.gedcomx.conclusion.Name name : gedcomXPerson.getNames()) {
+				this.addName(new Name(name));
+			}
 		}
-		for (final org.gedcomx.conclusion.Fact fact : gedcomXPerson.getFacts()) {
-			this.addFact(new Fact(fact));
+		if (gedcomXPerson.getFacts() != null) {
+			for (final org.gedcomx.conclusion.Fact fact : gedcomXPerson.getFacts()) {
+				this.addFact(new Fact(fact));
+			}
 		}
 	}
 

@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
-import org.gedcomx.persistence.graph.neo4j.dao.GENgraphDAO;
 import org.gedcomx.persistence.graph.neo4j.exception.GenericError;
 import org.neo4j.graphdb.Node;
 import org.reflections.Reflections;
@@ -30,7 +29,7 @@ public class NodeTypeMapper {
 		Constructor<T> constructor;
 		T wrapper = null;
 		try {
-			constructor = type.getConstructor(GENgraphDAO.class, Node.class);
+			constructor = type.getDeclaredConstructor(Node.class);
 			wrapper = constructor.newInstance(node);
 		} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException
 				| InvocationTargetException e) {

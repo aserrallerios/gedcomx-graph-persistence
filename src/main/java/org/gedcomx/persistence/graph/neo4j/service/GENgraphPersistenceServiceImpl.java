@@ -12,6 +12,7 @@ import org.gedcomx.persistence.graph.neo4j.dao.GENgraphDAOUtil;
 import org.gedcomx.persistence.graph.neo4j.exception.GenericError;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.messages.ErrorMessages;
+import org.gedcomx.persistence.graph.neo4j.messages.InfoMessages;
 import org.gedcomx.persistence.graph.neo4j.model.Agent;
 import org.gedcomx.persistence.graph.neo4j.model.Conclusion;
 import org.gedcomx.persistence.graph.neo4j.model.Document;
@@ -77,6 +78,7 @@ public class GENgraphPersistenceServiceImpl implements GENgraphPersistenceServic
 		} else {
 			throw new GenericError(ErrorMessages.GEDCOMX_UNKNOWN_TYPE);
 		}
+		GENgraphPersistenceServiceImpl.logger.info(InfoMessages.GEDCOMX_NODE_CREATED);
 		return n;
 	}
 
@@ -144,7 +146,7 @@ public class GENgraphPersistenceServiceImpl implements GENgraphPersistenceServic
 
 	@Override
 	public NodeWrapper getNodeByGedcomXId(final String id) {
-		final Node node = GENgraphDAOUtil.getNodeFromIndex(IndexNames.IDS.toString(), GenericProperties.ID.toString(), id);
+		final Node node = GENgraphDAOUtil.getSingleNodeFromIndex(IndexNames.IDS.toString(), GenericProperties.ID.toString(), id);
 
 		return this.getWrapperByNode(node);
 

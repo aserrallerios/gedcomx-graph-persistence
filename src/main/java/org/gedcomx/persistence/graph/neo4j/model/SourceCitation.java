@@ -92,8 +92,10 @@ public class SourceCitation extends NodeWrapper {
 	protected void setGedcomXRelations(final Object gedcomXObject) throws MissingFieldException {
 		final org.gedcomx.source.SourceCitation gedcomXSourceCitation = (org.gedcomx.source.SourceCitation) gedcomXObject;
 
-		for (final org.gedcomx.source.CitationField field : gedcomXSourceCitation.getFields()) {
-			this.addField(new CitationField(field));
+		if (gedcomXSourceCitation.getFields() != null) {
+			for (final org.gedcomx.source.CitationField field : gedcomXSourceCitation.getFields()) {
+				this.addField(new CitationField(field));
+			}
 		}
 	}
 

@@ -34,8 +34,8 @@ public abstract class NodeWrapper {
 			if (!this.getNodeType().equals(this.getClass().getAnnotation(NodeType.class).value())) {
 				throw new UnknownNodeType();
 			}
-			this.validateUnderlyingNode();
 			this.resolveReferences();
+			this.validateUnderlyingNode();
 			GENgraphDAOUtil.commitTransaction(t);
 		} finally {
 			GENgraphDAOUtil.endTransaction(t);
@@ -50,8 +50,8 @@ public abstract class NodeWrapper {
 			if ((properties != null) && (properties.length > 0)) {
 				this.setRequiredProperties(properties);
 			}
-			this.validateUnderlyingNode();
 			this.resolveReferences();
+			this.validateUnderlyingNode();
 			GENgraphDAOUtil.commitTransaction(t);
 		} finally {
 			GENgraphDAOUtil.endTransaction(t);
@@ -65,8 +65,8 @@ public abstract class NodeWrapper {
 			this.setNodeType(this.getClass().getAnnotation(NodeType.class).value());
 			this.setGedcomXProperties(gedcomXObject);
 			this.setGedcomXRelations(gedcomXObject);
-			this.validateUnderlyingNode();
 			this.resolveReferences();
+			this.validateUnderlyingNode();
 			GENgraphDAOUtil.commitTransaction(t);
 		} finally {
 			GENgraphDAOUtil.endTransaction(t);
@@ -78,9 +78,9 @@ public abstract class NodeWrapper {
 			final Transaction t = GENgraphDAOUtil.beginTransaction();
 			try {
 				final int index = this.getMaxRelationshipIndex(relType);
-				final Map<RelationshipProperties, Integer> properties = new HashMap<>();
-				properties.put(RelationshipProperties.INDEX, Integer.valueOf(index + 1));
-				GENgraphDAOUtil.createRelationship(this.getUnderlyingNode(), relType, node.getUnderlyingNode());
+				final Map<String, Integer> properties = new HashMap<>();
+				properties.put(RelationshipProperties.INDEX.name(), Integer.valueOf(index + 1));
+				GENgraphDAOUtil.createRelationship(this.getUnderlyingNode(), relType, node.getUnderlyingNode(), properties);
 				GENgraphDAOUtil.commitTransaction(t);
 			} finally {
 				GENgraphDAOUtil.endTransaction(t);
@@ -228,10 +228,11 @@ public abstract class NodeWrapper {
 
 		NodeWrapper wrapper = null;
 		if (!uri.toURI().isAbsolute()) {
-			Node node = GENgraphDAOUtil.getNodeFromIndex(IndexNames.IDS.toString(), GenericProperties.ID.toString(), uri.toURI()
+			Node node = GENgraphDAOUtil.getSingleNodeFromIndex(IndexNames.IDS.toString(), GenericProperties.ID.toString(), uri.toURI()
 					.getFragment());
 			if (node == null) {
-				node = GENgraphDAOUtil.getNodeFromIndex(IndexNames.IDS.toString(), GenericProperties.ID.toString(), uri.toURI().getPath());
+				node = GENgraphDAOUtil.getSingleNodeFromIndex(IndexNames.IDS.toString(), GenericProperties.ID.toString(), uri.toURI()
+						.getPath());
 			}
 			if (node != null) {
 				final String type = (String) GENgraphDAOUtil.getNodeProperty(node, GenericProperties.NODE_TYPE.toString());
@@ -365,13 +366,8 @@ public abstract class NodeWrapper {
 	protected void setProperty(final NodeProperties property, final Object value) {
 		final Transaction t = GENgraphDAOUtil.beginTransaction();
 		try {
-			if (value == null) {
-				GENgraphDAOUtil.removeNodeProperty(this.getUnderlyingNode(), property.name());
-				if (property.isIndexed()) {
-					GENgraphDAOUtil.removeNodeFromIndex(property.getIndexName().name(), this.getUnderlyingNode(), property.name());
-				}
-			} else {
-				Object supportedValue = value;
+			Object supportedValue = value;
+			if (supportedValue != null) {
 				if (value instanceof ResourceReference) {
 					supportedValue = ((ResourceReference) value).getResource().toURI().toString();
 				} else if (value instanceof URI) {
@@ -383,14 +379,10 @@ public abstract class NodeWrapper {
 					}
 					supportedValue = array;
 				}
-
-				GENgraphDAOUtil.setNodeProperty(this.getUnderlyingNode(), property.name(), supportedValue);
-				if (property.isIndexed()) {
-					GENgraphDAOUtil.removeNodeFromIndex(property.getIndexName().name(), this.getUnderlyingNode(), property.name());
-					GENgraphDAOUtil.setNodeToIndex(property.getIndexName().name(), this.getUnderlyingNode(), property.name(),
-							supportedValue);
-				}
 			}
+			final IndexNames indexName = property.getIndexName();
+			GENgraphDAOUtil.setNodeProperty(this.getUnderlyingNode(), property.name(), supportedValue, property.isIndexed(),
+					property.isUnique(), indexName != null ? indexName.name() : null);
 			GENgraphDAOUtil.commitTransaction(t);
 		} finally {
 			GENgraphDAOUtil.endTransaction(t);
@@ -405,7 +397,7 @@ public abstract class NodeWrapper {
 		for (final ResourceReference resource : resourceList) {
 			values[i++] = resource.getResource().toString();
 		}
-		GENgraphDAOUtil.setNodeProperty(this.getUnderlyingNode(), property.name(), values);
+		GENgraphDAOUtil.setNodeProperty(this.getUnderlyingNode(), property.name(), values, false, false, null);
 	}
 
 	@Override

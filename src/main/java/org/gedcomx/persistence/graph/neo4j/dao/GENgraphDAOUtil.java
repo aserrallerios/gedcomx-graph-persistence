@@ -75,10 +75,6 @@ public class GENgraphDAOUtil {
 		return GENgraphDAOUtil.getDao().getNode(id);
 	}
 
-	public static Node getNodeFromIndex(final String indexName, final String property, final String value) {
-		return GENgraphDAOUtil.getDao().getNodeFromIndex(indexName, property, value);
-	}
-
 	public static Object getNodeProperty(final Node node, final String property) {
 		return GENgraphDAOUtil.getDao().getNodeProperty(node, property);
 	}
@@ -112,6 +108,10 @@ public class GENgraphDAOUtil {
 		return GENgraphDAOUtil.getDao().getSingleNodeByRelationship(node, relation, dir);
 	}
 
+	public static Node getSingleNodeFromIndex(final String indexName, final String property, final String value) {
+		return GENgraphDAOUtil.getDao().getSingleNodeFromIndex(indexName, property, value);
+	}
+
 	public static Relationship getSingleRelationship(final Node node, final RelationshipType rel, final Direction dir) {
 		return GENgraphDAOUtil.getDao().getSingleRelationship(node, rel, dir);
 	}
@@ -124,10 +124,6 @@ public class GENgraphDAOUtil {
 		return GENgraphDAOUtil.getDao().hasSingleRelationship(node, relType, dir);
 	}
 
-	public static void removeNodeFromIndex(final String indexName, final Node node, final String property) {
-		GENgraphDAOUtil.getDao().removeNodeFromIndex(indexName, node, property);
-	}
-
 	public static void removeNodeProperty(final Node node, final String property) {
 		GENgraphDAOUtil.getDao().removeNodeProperty(node, property);
 	}
@@ -137,11 +133,12 @@ public class GENgraphDAOUtil {
 	}
 
 	public static Node setNodeProperty(final Node node, final String property, final Object value) {
-		return GENgraphDAOUtil.getDao().setNodeProperty(node, property, value);
+		return GENgraphDAOUtil.getDao().setNodeProperty(node, property, value, false, false, null);
 	}
 
-	public static void setNodeToIndex(final String indexName, final Node node, final String property, final Object value) {
-		GENgraphDAOUtil.getDao().setNodeToIndex(indexName, node, property, value);
+	public static Node setNodeProperty(final Node node, final String property, final Object value, final boolean indexed,
+			final boolean unique, final String indexName) {
+		return GENgraphDAOUtil.getDao().setNodeProperty(node, property, value, indexed, unique, indexName);
 	}
 
 	public static Relationship setRelationshipProperties(final Relationship rel, final Map<String, ?> properties) {

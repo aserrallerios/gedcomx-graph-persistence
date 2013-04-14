@@ -5,6 +5,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.NavigableMap;
+import java.util.TreeMap;
 
 import org.neo4j.cypher.javacompat.ExecutionEngine;
 import org.neo4j.cypher.javacompat.ExecutionResult;
@@ -121,15 +123,8 @@ public class GENgraphDAOImpl implements GENgraphDAO {
 	}
 
 	@Override
-	public Node getNodeFromIndex(final String indexName, final String property, final String value) {
-		final Index<Node> index = this.graphDb.index().forNodes(indexName);
-		final IndexHits<Node> hits = index.get(property, value);
-		return hits.getSingle();
-	}
-
-	@Override
 	public Object getNodeProperty(final Node node, final String property) {
-		return node.getProperty(property);
+		return node.getProperty(property, null);
 	}
 
 	@Override
@@ -138,15 +133,15 @@ public class GENgraphDAOImpl implements GENgraphDAO {
 		final Iterable<Relationship> rels = node.getRelationships(relation, dir);
 
 		if (ordered) {
-			final List<Relationship> sortedRels = new ArrayList<>();
+			final NavigableMap<Integer, Relationship> sortedRels = new TreeMap<>();
 			int i;
 			for (final Relationship rel : rels) {
 				i = (Integer) rel.getProperty(index);
-				sortedRels.add(i, rel);
+				sortedRels.put(i, rel);
 			}
 			final List<Node> nodes = new ArrayList<>();
-			for (final Relationship rel : sortedRels) {
-				nodes.add(rel.getOtherNode(node));
+			for (final Integer order : sortedRels.keySet()) {
+				nodes.add(sortedRels.get(order).getOtherNode(node));
 			}
 			return nodes;
 		} else {
@@ -188,7 +183,17 @@ public class GENgraphDAOImpl implements GENgraphDAO {
 	@Override
 	public Node getSingleNodeByRelationship(final Node node, final RelationshipType relation, final Direction dir) {
 		final Relationship rel = node.getSingleRelationship(relation, dir);
-		return rel.getOtherNode(node);
+		if (rel != null) {
+			return rel.getOtherNode(node);
+		}
+		return null;
+	}
+
+	@Override
+	public Node getSingleNodeFromIndex(final String indexName, final String property, final String value) {
+		final Index<Node> index = this.graphDb.index().forNodes(indexName);
+		final IndexHits<Node> hits = index.get(property, value);
+		return hits.getSingle();
 	}
 
 	@Override
@@ -199,7 +204,6 @@ public class GENgraphDAOImpl implements GENgraphDAO {
 	@Override
 	public boolean hasRelationship(final Node node, final RelationshipType relType, final Direction dir) {
 		final Iterable<Relationship> rels = node.getRelationships(relType, dir);
-
 		return rels.iterator().hasNext();
 	}
 
@@ -218,10 +222,15 @@ public class GENgraphDAOImpl implements GENgraphDAO {
 		});
 	}
 
-	@Override
-	public void removeNodeFromIndex(final String indexName, final Node node, final String property) {
+	private void removeNodeFromIndex(final String indexName, final Node node, final String property) {
 		final Index<Node> index = this.graphDb.index().forNodes(indexName);
-		index.remove(node, property);
+		final Transaction tx = this.graphDb.beginTx();
+		try {
+			index.remove(node, property);
+			tx.success();
+		} finally {
+			tx.finish();
+		}
 	}
 
 	@Override
@@ -250,10 +259,21 @@ public class GENgraphDAOImpl implements GENgraphDAO {
 	}
 
 	@Override
-	public Node setNodeProperty(final Node node, final String property, final Object value) {
+	public Node setNodeProperty(final Node node, final String property, final Object value, final boolean indexed, final boolean unique,
+			final String indexName) {
 		final Transaction tx = node.getGraphDatabase().beginTx();
 		try {
-			node.setProperty(property, value);
+			if (value == null) {
+				this.removeNodeProperty(node, property);
+			} else {
+				node.setProperty(property, value);
+			}
+			if (indexed) {
+				this.removeNodeFromIndex(indexName, node, property);
+				if (value != null) {
+					this.setNodeToIndex(indexName, node, property, value, unique);
+				}
+			}
 			tx.success();
 		} finally {
 			tx.finish();
@@ -261,10 +281,19 @@ public class GENgraphDAOImpl implements GENgraphDAO {
 		return node;
 	}
 
-	@Override
-	public void setNodeToIndex(final String indexName, final Node node, final String property, final Object value) {
+	private void setNodeToIndex(final String indexName, final Node node, final String property, final Object value, final boolean unique) {
 		final Index<Node> index = this.graphDb.index().forNodes(indexName);
-		index.putIfAbsent(node, property, value);
+		final Transaction tx = this.graphDb.beginTx();
+		try {
+			if (unique) {
+				index.putIfAbsent(node, property, value);
+			} else {
+				index.add(node, property, value);
+			}
+			tx.success();
+		} finally {
+			tx.finish();
+		}
 	}
 
 	@Override
