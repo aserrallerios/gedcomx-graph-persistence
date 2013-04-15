@@ -3,13 +3,14 @@ package org.gedcomx.persistence.graph.neo4j.service;
 import java.util.Collection;
 import java.util.Map;
 
-import org.gedcomx.persistence.graph.neo4j.exception.GenericError;
-import org.gedcomx.persistence.graph.neo4j.messages.ErrorMessages;
-import org.reflections.Reflections;
+import org.gedcomx.persistence.graph.neo4j.GuiceModule;
+
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 
 public class GENgraphPersistenceServiceUtil {
 
-	private static GENgraphPersistenceService service;
+	public static GENgraphPersistenceService service;
 
 	public static void createGraphByGedcomX(final Map<String, String> metadata, final Collection<Object> gedcomxElements) {
 		GENgraphPersistenceServiceUtil.getService().createGraphByGedcomX(metadata, gedcomxElements);
@@ -17,18 +18,8 @@ public class GENgraphPersistenceServiceUtil {
 
 	private static GENgraphPersistenceService getService() {
 		if (GENgraphPersistenceServiceUtil.service == null) {
-			final Reflections reflections = new Reflections(GENgraphPersistenceServiceUtil.class.getPackage().getName());
-
-			for (final Class<? extends GENgraphPersistenceService> subclass : reflections.getSubTypesOf(GENgraphPersistenceService.class)) {
-				if (subclass != null) {
-					try {
-						GENgraphPersistenceServiceUtil.service = subclass.newInstance();
-					} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | SecurityException e) {
-						e.printStackTrace();
-						throw new GenericError(ErrorMessages.SERVICE_CANT_INSTANTIATE);
-					}
-				}
-			}
+			final Injector injector = Guice.createInjector(new GuiceModule());
+			GENgraphPersistenceServiceUtil.service = injector.getInstance(GENgraphPersistenceService.class);
 		}
 		return GENgraphPersistenceServiceUtil.service;
 	}

@@ -13,6 +13,7 @@
 		<neo4j.version>1.9.M05</neo4j.version>
 		<log4j.version>2.0-beta4</log4j.version>
 		<reflections.version>0.9.8</reflections.version>
+		<guice.version>3.0</guice.version>
 	</properties>
 
 	<build>
@@ -66,6 +67,11 @@
 			<groupId>org.reflections</groupId>
 			<artifactId>reflections</artifactId>
 			<version>${reflections.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.inject</groupId>
+			<artifactId>guice</artifactId>
+			<version>${guice.version}</version>
 		</dependency>
 
 		<!--test dependencies -->

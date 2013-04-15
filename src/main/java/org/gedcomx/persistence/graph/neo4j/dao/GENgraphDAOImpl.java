@@ -20,13 +20,19 @@ import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 import org.neo4j.graphdb.index.Index;
 import org.neo4j.graphdb.index.IndexHits;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+import com.google.inject.name.Named;
+
+@Singleton
 public class GENgraphDAOImpl implements GENgraphDAO {
 
 	private final GraphDatabaseService graphDb;
 
-	GENgraphDAOImpl() {
-		this.graphDb = new GraphDatabaseFactory().newEmbeddedDatabaseBuilder(ConfigurationProvider.getDBPath())
-				.loadPropertiesFromFile(ConfigurationProvider.getPropertiesFile()).newGraphDatabase();
+	@Inject
+	GENgraphDAOImpl(final @Named("DefaultConfigurationProvider") ConfigurationProvider configProvider) {
+		this.graphDb = new GraphDatabaseFactory().newEmbeddedDatabaseBuilder(configProvider.getDBPath())
+				.loadPropertiesFromFile(configProvider.getPropertiesFile()).newGraphDatabase();
 		this.registerShutdownHook();
 	}
 

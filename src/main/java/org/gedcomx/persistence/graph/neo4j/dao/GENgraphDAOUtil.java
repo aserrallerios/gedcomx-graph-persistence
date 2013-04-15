@@ -3,13 +3,16 @@ package org.gedcomx.persistence.graph.neo4j.dao;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.gedcomx.persistence.graph.neo4j.GuiceModule;
 import org.neo4j.cypher.javacompat.ExecutionResult;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.Transaction;
-import org.reflections.Reflections;
+
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 
 public class GENgraphDAOUtil {
 
@@ -55,18 +58,8 @@ public class GENgraphDAOUtil {
 
 	private static GENgraphDAO getDao() {
 		if (GENgraphDAOUtil.dao == null) {
-			final Reflections reflections = new Reflections(GENgraphDAOUtil.class.getPackage().getName());
-
-			for (final Class<? extends GENgraphDAO> subclass : reflections.getSubTypesOf(GENgraphDAO.class)) {
-				if (subclass != null) {
-					try {
-						GENgraphDAOUtil.dao = subclass.newInstance();
-					} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | SecurityException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-			}
+			final Injector injector = Guice.createInjector(new GuiceModule());
+			GENgraphDAOUtil.dao = injector.getInstance(GENgraphDAO.class);
 		}
 		return GENgraphDAOUtil.dao;
 	}

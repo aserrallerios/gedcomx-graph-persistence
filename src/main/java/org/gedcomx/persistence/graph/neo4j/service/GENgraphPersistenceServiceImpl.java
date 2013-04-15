@@ -30,6 +30,9 @@ import org.gedcomx.persistence.graph.neo4j.model.constants.NodeTypes;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Transaction;
 
+import com.google.inject.Singleton;
+
+@Singleton
 public class GENgraphPersistenceServiceImpl implements GENgraphPersistenceService {
 
 	private static Logger logger = LogManager.getLogger("GENGraphService");
