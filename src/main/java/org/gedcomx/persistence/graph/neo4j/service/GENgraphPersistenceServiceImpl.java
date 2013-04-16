@@ -45,16 +45,17 @@ public class GENgraphPersistenceServiceImpl implements
     @Inject
     GENgraphPersistenceServiceImpl(final @Named("EmbededDB") GENgraphDAO dao) {
         this.dao = dao;
-        this.dao.beginTransaction();
     }
 
     @Override
+    @CheckForDuplicates
     public Agent addAgent(final org.gedcomx.agent.Agent agent)
             throws MissingFieldException {
         return new Agent(agent);
     }
 
     @Override
+    @CheckForDuplicates
     public Conclusion addConclusion(
             final org.gedcomx.conclusion.Conclusion conclusion)
             throws MissingFieldException {
@@ -78,6 +79,7 @@ public class GENgraphPersistenceServiceImpl implements
     }
 
     @Override
+    @CheckForDuplicates
     public SourceDescription addSource(
             final org.gedcomx.source.SourceDescription sourceDescription)
             throws MissingFieldException {
@@ -85,6 +87,7 @@ public class GENgraphPersistenceServiceImpl implements
     }
 
     @Override
+    @CheckForDuplicates
     public NodeWrapper addTopLevelElement(final Object gedcomxElement)
             throws MissingFieldException {
         NodeWrapper n = null;

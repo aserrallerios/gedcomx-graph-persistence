@@ -31,7 +31,6 @@ public class GENgraphPersistenceServiceTest {
     }
 
     private GENgraphPersistenceService service;
-
     private static Logger logger = LogManager.getLogger("GENGraphServiceTest");
 
     @Test
@@ -72,7 +71,6 @@ public class GENgraphPersistenceServiceTest {
     public void injectServices() {
         this.service = Guice.createInjector(new ServiceInjector()).getInstance(
                 GENgraphPersistenceService.class);
-
     }
 
     private GedcomxData readGedcomXFile() throws URISyntaxException,
