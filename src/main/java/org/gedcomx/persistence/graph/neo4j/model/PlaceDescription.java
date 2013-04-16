@@ -10,179 +10,207 @@ import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredRelationship
 import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
 import org.gedcomx.persistence.graph.neo4j.model.constants.ConclusionProperties;
 import org.gedcomx.persistence.graph.neo4j.model.constants.GenericProperties;
+import org.gedcomx.persistence.graph.neo4j.model.constants.NodeTypes;
 import org.gedcomx.persistence.graph.neo4j.model.constants.RelationshipTypes;
 import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
 import org.neo4j.graphdb.Node;
 
-@NodeType("PLACE_DESCRIPTION")
+@NodeType(NodeTypes.PLACE_DESCRIPTION)
 public class PlaceDescription extends Conclusion {
 
-	protected PlaceDescription(final Node node) throws MissingFieldException, UnknownNodeType {
-		super(node);
-	}
+    protected PlaceDescription(final Node node) throws MissingFieldException,
+            UnknownNodeType {
+        super(node);
+    }
 
-	public PlaceDescription(final org.gedcomx.conclusion.PlaceDescription gedcomXPlaceDescription) throws MissingFieldException {
-		super(gedcomXPlaceDescription);
-	}
+    public PlaceDescription(
+            final org.gedcomx.conclusion.PlaceDescription gedcomXPlaceDescription)
+            throws MissingFieldException {
+        super(gedcomXPlaceDescription);
+    }
 
-	public PlaceDescription(final String nameValue) throws MissingFieldException {
-		super(new Object[] { nameValue });
-	}
+    public PlaceDescription(final String nameValue)
+            throws MissingFieldException {
+        super(new Object[] { nameValue });
+    }
 
-	public void addIdentifier(final Identifier identifier) {
-		this.addRelationship(RelationshipTypes.HAS_IDENTIFIER, identifier);
-	}
+    public void addIdentifier(final Identifier identifier) {
+        this.addRelationship(RelationshipTypes.HAS_IDENTIFIER, identifier);
+    }
 
-	public void addName(final TextValue name) {
-		this.addRelationship(RelationshipTypes.HAS_NAME, name);
-	}
+    public void addName(final TextValue name) {
+        this.addRelationship(RelationshipTypes.HAS_NAME, name);
+    }
 
-	@Override
-	protected void deleteAllConcreteReferences() {
-		this.deleteReferencedNodes(this.getIdentifiers());
-		this.deleteReferencedNodes(this.getNames());
-	}
+    @Override
+    protected void deleteAllConcreteReferences() {
+        this.deleteReferencedNodes(this.getIdentifiers());
+        this.deleteReferencedNodes(this.getNames());
+    }
 
-	public URI getAbout() {
-		return new URI((String) this.getProperty(GenericProperties.ABOUT));
-	}
+    public URI getAbout() {
+        return new URI((String) this.getProperty(GenericProperties.ABOUT));
+    }
 
-	@Override
-	public org.gedcomx.conclusion.PlaceDescription getGedcomX() {
-		final org.gedcomx.conclusion.PlaceDescription gedcomXPlaceDescription = new org.gedcomx.conclusion.PlaceDescription();
+    @Override
+    public org.gedcomx.conclusion.PlaceDescription getGedcomX() {
+        final org.gedcomx.conclusion.PlaceDescription gedcomXPlaceDescription = new org.gedcomx.conclusion.PlaceDescription();
 
-		this.getGedcomXConclusion(gedcomXPlaceDescription);
+        this.getGedcomXConclusion(gedcomXPlaceDescription);
 
-		gedcomXPlaceDescription.setAbout(this.getAbout());
-		gedcomXPlaceDescription.setLatitude(this.getLatitude());
-		gedcomXPlaceDescription.setLongitude(this.getLongitude());
-		gedcomXPlaceDescription.setSpatialDescription(this.getSpatialDescription());
+        gedcomXPlaceDescription.setAbout(this.getAbout());
+        gedcomXPlaceDescription.setLatitude(this.getLatitude());
+        gedcomXPlaceDescription.setLongitude(this.getLongitude());
+        gedcomXPlaceDescription.setSpatialDescription(this
+                .getSpatialDescription());
 
-		final org.gedcomx.conclusion.Date date = new org.gedcomx.conclusion.Date();
-		date.setFormal(this.getTemporalDescriptionFormal());
-		date.setOriginal(this.getTemporalDescriptionOriginal());
-		gedcomXPlaceDescription.setTemporalDescription(date);
+        final org.gedcomx.conclusion.Date date = new org.gedcomx.conclusion.Date();
+        date.setFormal(this.getTemporalDescriptionFormal());
+        date.setOriginal(this.getTemporalDescriptionOriginal());
+        gedcomXPlaceDescription.setTemporalDescription(date);
 
-		gedcomXPlaceDescription.setNames(this.getGedcomXList(org.gedcomx.common.TextValue.class, this.getNames()));
-		gedcomXPlaceDescription.setIdentifiers(this.getGedcomXList(org.gedcomx.conclusion.Identifier.class, this.getIdentifiers()));
+        gedcomXPlaceDescription.setNames(this.getGedcomXList(
+                org.gedcomx.common.TextValue.class, this.getNames()));
+        gedcomXPlaceDescription
+                .setIdentifiers(this.getGedcomXList(
+                        org.gedcomx.conclusion.Identifier.class,
+                        this.getIdentifiers()));
 
-		return gedcomXPlaceDescription;
-	}
+        return gedcomXPlaceDescription;
+    }
 
-	public List<Identifier> getIdentifiers() {
-		return this.getNodesByRelationship(Identifier.class, RelationshipTypes.HAS_IDENTIFIER);
-	}
+    public List<Identifier> getIdentifiers() {
+        return this.getNodesByRelationship(Identifier.class,
+                RelationshipTypes.HAS_IDENTIFIER);
+    }
 
-	public Double getLatitude() {
-		return (Double) this.getProperty(ConclusionProperties.LATITUDE);
+    public Double getLatitude() {
+        return (Double) this.getProperty(ConclusionProperties.LATITUDE);
 
-	}
+    }
 
-	public Double getLongitude() {
-		return (Double) this.getProperty(ConclusionProperties.LONGITUDE);
+    public Double getLongitude() {
+        return (Double) this.getProperty(ConclusionProperties.LONGITUDE);
 
-	}
+    }
 
-	public List<TextValue> getNames() {
-		return this.getNodesByRelationship(TextValue.class, RelationshipTypes.HAS_NAME);
-	}
+    public List<TextValue> getNames() {
+        return this.getNodesByRelationship(TextValue.class,
+                RelationshipTypes.HAS_NAME);
+    }
 
-	public ResourceReference getSpatialDescription() {
-		return new ResourceReference(new URI((String) this.getProperty(ConclusionProperties.SPATIAL_DESCRIPTION)));
-	}
+    public ResourceReference getSpatialDescription() {
+        return new ResourceReference(new URI(
+                (String) this
+                        .getProperty(ConclusionProperties.SPATIAL_DESCRIPTION)));
+    }
 
-	public String getTemporalDescriptionFormal() {
-		return (String) this.getProperty(ConclusionProperties.TEMPORAL_DESCRIPTION_FORMAL);
+    public String getTemporalDescriptionFormal() {
+        return (String) this
+                .getProperty(ConclusionProperties.TEMPORAL_DESCRIPTION_FORMAL);
 
-	}
+    }
 
-	public String getTemporalDescriptionOriginal() {
-		return (String) this.getProperty(ConclusionProperties.TEMPORAL_DESCRIPTION_ORIGINAL);
+    public String getTemporalDescriptionOriginal() {
+        return (String) this
+                .getProperty(ConclusionProperties.TEMPORAL_DESCRIPTION_ORIGINAL);
 
-	}
+    }
 
-	public URI getType() {
-		return new URI((String) this.getProperty(GenericProperties.TYPE));
-	}
+    public URI getType() {
+        return new URI((String) this.getProperty(GenericProperties.TYPE));
+    }
 
-	@Override
-	protected void resolveConcreteReferences() {
-		return;
-	}
+    @Override
+    protected void resolveConcreteReferences() {
+        return;
+    }
 
-	public void setAbout(final URI about) {
-		this.setProperty(GenericProperties.ABOUT, about);
-	}
+    public void setAbout(final URI about) {
+        this.setProperty(GenericProperties.ABOUT, about);
+    }
 
-	@Override
-	protected void setGedcomXConcreteProperties(final Object gedcomXObject) {
-		final org.gedcomx.conclusion.PlaceDescription gedcomXPlaceDescription = (org.gedcomx.conclusion.PlaceDescription) gedcomXObject;
+    @Override
+    protected void setGedcomXConcreteProperties(final Object gedcomXObject) {
+        final org.gedcomx.conclusion.PlaceDescription gedcomXPlaceDescription = (org.gedcomx.conclusion.PlaceDescription) gedcomXObject;
 
-		this.setAbout(gedcomXPlaceDescription.getAbout());
-		this.setType(gedcomXPlaceDescription.getType());
-		this.setLatitude(gedcomXPlaceDescription.getLatitude());
-		this.setLongitude(gedcomXPlaceDescription.getLatitude());
-		this.setSpatialDescription(gedcomXPlaceDescription.getSpatialDescription());
+        this.setAbout(gedcomXPlaceDescription.getAbout());
+        this.setType(gedcomXPlaceDescription.getType());
+        this.setLatitude(gedcomXPlaceDescription.getLatitude());
+        this.setLongitude(gedcomXPlaceDescription.getLatitude());
+        this.setSpatialDescription(gedcomXPlaceDescription
+                .getSpatialDescription());
 
-		if (gedcomXPlaceDescription.getTemporalDescription() != null) {
-			this.setTemporalDescriptionOriginal(gedcomXPlaceDescription.getTemporalDescription().getOriginal());
-			this.setTemporalDescriptionFormal(gedcomXPlaceDescription.getTemporalDescription().getFormal());
-		}
+        if (gedcomXPlaceDescription.getTemporalDescription() != null) {
+            this.setTemporalDescriptionOriginal(gedcomXPlaceDescription
+                    .getTemporalDescription().getOriginal());
+            this.setTemporalDescriptionFormal(gedcomXPlaceDescription
+                    .getTemporalDescription().getFormal());
+        }
 
-	}
+    }
 
-	@Override
-	protected void setGedcomXConcreteRelations(final Object gedcomXObject) throws MissingFieldException {
-		final org.gedcomx.conclusion.PlaceDescription gedcomXPlaceDescription = (org.gedcomx.conclusion.PlaceDescription) gedcomXObject;
+    @Override
+    protected void setGedcomXConcreteRelations(final Object gedcomXObject)
+            throws MissingFieldException {
+        final org.gedcomx.conclusion.PlaceDescription gedcomXPlaceDescription = (org.gedcomx.conclusion.PlaceDescription) gedcomXObject;
 
-		for (final org.gedcomx.common.TextValue gedcomXName : gedcomXPlaceDescription.getNames()) {
-			this.addName(new TextValue(gedcomXName));
-		}
-		if (gedcomXPlaceDescription.getIdentifiers() != null) {
-			for (final org.gedcomx.conclusion.Identifier gedcomXIdentifier : gedcomXPlaceDescription.getIdentifiers()) {
-				this.addIdentifier(new Identifier(gedcomXIdentifier));
-			}
-		}
-	}
+        for (final org.gedcomx.common.TextValue gedcomXName : gedcomXPlaceDescription
+                .getNames()) {
+            this.addName(new TextValue(gedcomXName));
+        }
+        if (gedcomXPlaceDescription.getIdentifiers() != null) {
+            for (final org.gedcomx.conclusion.Identifier gedcomXIdentifier : gedcomXPlaceDescription
+                    .getIdentifiers()) {
+                this.addIdentifier(new Identifier(gedcomXIdentifier));
+            }
+        }
+    }
 
-	public void setLatitude(final Double latitude) {
-		this.setProperty(ConclusionProperties.LATITUDE, latitude);
+    public void setLatitude(final Double latitude) {
+        this.setProperty(ConclusionProperties.LATITUDE, latitude);
 
-	}
+    }
 
-	public void setLongitude(final Double longitude) {
-		this.setProperty(ConclusionProperties.LONGITUDE, longitude);
+    public void setLongitude(final Double longitude) {
+        this.setProperty(ConclusionProperties.LONGITUDE, longitude);
 
-	}
+    }
 
-	@Override
-	protected void setRequiredProperties(final Object... properties) throws MissingFieldException {
-		this.addName(new TextValue((String) properties[0]));
-	}
+    @Override
+    protected void setRequiredProperties(final Object... properties)
+            throws MissingFieldException {
+        this.addName(new TextValue((String) properties[0]));
+    }
 
-	public void setSpatialDescription(final ResourceReference spatialDescription) {
-		this.setProperty(ConclusionProperties.SPATIAL_DESCRIPTION, spatialDescription);
-	}
+    public void setSpatialDescription(final ResourceReference spatialDescription) {
+        this.setProperty(ConclusionProperties.SPATIAL_DESCRIPTION,
+                spatialDescription);
+    }
 
-	public void setTemporalDescriptionFormal(final String formal) {
-		this.setProperty(ConclusionProperties.TEMPORAL_DESCRIPTION_FORMAL, formal);
+    public void setTemporalDescriptionFormal(final String formal) {
+        this.setProperty(ConclusionProperties.TEMPORAL_DESCRIPTION_FORMAL,
+                formal);
 
-	}
+    }
 
-	public void setTemporalDescriptionOriginal(final String original) {
-		this.setProperty(ConclusionProperties.TEMPORAL_DESCRIPTION_ORIGINAL, original);
+    public void setTemporalDescriptionOriginal(final String original) {
+        this.setProperty(ConclusionProperties.TEMPORAL_DESCRIPTION_ORIGINAL,
+                original);
 
-	}
+    }
 
-	public void setType(final URI type) {
-		this.setProperty(GenericProperties.TYPE, type);
-	}
+    public void setType(final URI type) {
+        this.setProperty(GenericProperties.TYPE, type);
+    }
 
-	@Override
-	protected void validateUnderlyingNode() throws MissingFieldException {
-		if (ValidationTools.nullOrEmpty(this.getNames())) {
-			throw new MissingRequiredRelationshipException(this.getAnnotatedNodeType(), this.getId(), RelationshipTypes.HAS_NAME.toString());
-		}
-	}
+    @Override
+    protected void validateUnderlyingNode() throws MissingFieldException {
+        if (ValidationTools.nullOrEmpty(this.getNames())) {
+            throw new MissingRequiredRelationshipException(
+                    this.getAnnotatedNodeType(), this.getId(),
+                    RelationshipTypes.HAS_NAME.toString());
+        }
+    }
 
 }

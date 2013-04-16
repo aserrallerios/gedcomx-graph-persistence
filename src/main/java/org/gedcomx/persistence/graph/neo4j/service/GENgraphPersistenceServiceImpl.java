@@ -8,7 +8,7 @@ import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.gedcomx.persistence.graph.neo4j.dao.GENgraphDAOUtil;
+import org.gedcomx.persistence.graph.neo4j.dao.GENgraphDAO;
 import org.gedcomx.persistence.graph.neo4j.exception.GenericError;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.messages.ErrorMessages;
@@ -30,183 +30,219 @@ import org.gedcomx.persistence.graph.neo4j.model.constants.NodeTypes;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Transaction;
 
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.google.inject.name.Named;
 
 @Singleton
-public class GENgraphPersistenceServiceImpl implements GENgraphPersistenceService {
+public class GENgraphPersistenceServiceImpl implements
+        GENgraphPersistenceService {
 
-	private static Logger logger = LogManager.getLogger("GENGraphService");
+    private static Logger logger = LogManager.getLogger("GENGraphService");
+    private final GENgraphDAO dao;
+    private NodeTypeMapper nodeTypeMapper;
 
-	GENgraphPersistenceServiceImpl() {
-	}
+    @Inject
+    GENgraphPersistenceServiceImpl(final @Named("EmbededDB") GENgraphDAO dao) {
+        this.dao = dao;
+        this.dao.beginTransaction();
+    }
 
-	@Override
-	public Agent addAgent(final org.gedcomx.agent.Agent agent) throws MissingFieldException {
-		return new Agent(agent);
-	}
+    @Override
+    public Agent addAgent(final org.gedcomx.agent.Agent agent)
+            throws MissingFieldException {
+        return new Agent(agent);
+    }
 
-	@Override
-	public Conclusion addConclusion(final org.gedcomx.conclusion.Conclusion conclusion) throws MissingFieldException {
-		Conclusion c = null;
-		if (conclusion instanceof org.gedcomx.conclusion.Person) {
-			c = new Person((org.gedcomx.conclusion.Person) conclusion);
-		} else if (conclusion instanceof org.gedcomx.conclusion.Document) {
-			c = new Document((org.gedcomx.conclusion.Document) conclusion);
-		} else if (conclusion instanceof org.gedcomx.conclusion.Event) {
-			c = new Event((org.gedcomx.conclusion.Event) conclusion);
-		} else if (conclusion instanceof org.gedcomx.conclusion.Relationship) {
-			c = new Relationship((org.gedcomx.conclusion.Relationship) conclusion);
-		} else if (conclusion instanceof org.gedcomx.conclusion.PlaceDescription) {
-			c = new PlaceDescription((org.gedcomx.conclusion.PlaceDescription) conclusion);
-		} else {
-			throw new GenericError(ErrorMessages.GEDCOMX_CONCLUSION_TYPE);
-		}
-		return c;
-	}
+    @Override
+    public Conclusion addConclusion(
+            final org.gedcomx.conclusion.Conclusion conclusion)
+            throws MissingFieldException {
+        Conclusion c = null;
+        if (conclusion instanceof org.gedcomx.conclusion.Person) {
+            c = new Person((org.gedcomx.conclusion.Person) conclusion);
+        } else if (conclusion instanceof org.gedcomx.conclusion.Document) {
+            c = new Document((org.gedcomx.conclusion.Document) conclusion);
+        } else if (conclusion instanceof org.gedcomx.conclusion.Event) {
+            c = new Event((org.gedcomx.conclusion.Event) conclusion);
+        } else if (conclusion instanceof org.gedcomx.conclusion.Relationship) {
+            c = new Relationship(
+                    (org.gedcomx.conclusion.Relationship) conclusion);
+        } else if (conclusion instanceof org.gedcomx.conclusion.PlaceDescription) {
+            c = new PlaceDescription(
+                    (org.gedcomx.conclusion.PlaceDescription) conclusion);
+        } else {
+            throw new GenericError(ErrorMessages.GEDCOMX_CONCLUSION_TYPE);
+        }
+        return c;
+    }
 
-	@Override
-	public SourceDescription addSource(final org.gedcomx.source.SourceDescription sourceDescription) throws MissingFieldException {
-		return new SourceDescription(sourceDescription);
-	}
+    @Override
+    public SourceDescription addSource(
+            final org.gedcomx.source.SourceDescription sourceDescription)
+            throws MissingFieldException {
+        return new SourceDescription(sourceDescription);
+    }
 
-	@Override
-	public NodeWrapper addTopLevelElement(final Object gedcomxElement) throws MissingFieldException {
-		NodeWrapper n = null;
-		if (gedcomxElement instanceof org.gedcomx.agent.Agent) {
-			n = this.addAgent((org.gedcomx.agent.Agent) gedcomxElement);
-		} else if (gedcomxElement instanceof org.gedcomx.conclusion.Conclusion) {
-			n = this.addConclusion((org.gedcomx.conclusion.Conclusion) gedcomxElement);
-		} else if (gedcomxElement instanceof org.gedcomx.source.SourceDescription) {
-			n = this.addSource((org.gedcomx.source.SourceDescription) gedcomxElement);
-		} else {
-			throw new GenericError(ErrorMessages.GEDCOMX_UNKNOWN_TYPE);
-		}
-		GENgraphPersistenceServiceImpl.logger.info(InfoMessages.GEDCOMX_NODE_CREATED);
-		return n;
-	}
+    @Override
+    public NodeWrapper addTopLevelElement(final Object gedcomxElement)
+            throws MissingFieldException {
+        NodeWrapper n = null;
+        if (gedcomxElement instanceof org.gedcomx.agent.Agent) {
+            n = this.addAgent((org.gedcomx.agent.Agent) gedcomxElement);
+        } else if (gedcomxElement instanceof org.gedcomx.conclusion.Conclusion) {
+            n = this.addConclusion((org.gedcomx.conclusion.Conclusion) gedcomxElement);
+        } else if (gedcomxElement instanceof org.gedcomx.source.SourceDescription) {
+            n = this.addSource((org.gedcomx.source.SourceDescription) gedcomxElement);
+        } else {
+            throw new GenericError(ErrorMessages.GEDCOMX_UNKNOWN_TYPE);
+        }
+        GENgraphPersistenceServiceImpl.logger
+                .info(InfoMessages.GEDCOMX_NODE_CREATED);
+        return n;
+    }
 
-	@Override
-	public void createGraphByGedcomX(final Map<String, String> metadata, final Collection<Object> gedcomxElements) {
-		final Node rootNode = this.getInitialGraphNode();
+    @Override
+    public void createGraphByGedcomX(final Map<String, String> metadata,
+            final Collection<Object> gedcomxElements) {
+        final Node rootNode = this.getInitialGraphNode();
 
-		final Transaction t = GENgraphDAOUtil.beginTransaction();
-		try {
-			GENgraphDAOUtil.setNodeProperties(rootNode, metadata);
+        final Transaction t = this.dao.beginTransaction();
+        try {
+            this.dao.setNodeProperties(rootNode, metadata);
 
-			final List<NodeWrapper> wrappers = new ArrayList<>();
+            final List<NodeWrapper> wrappers = new ArrayList<>();
 
-			for (final Object gedcomxElement : gedcomxElements) {
-				try {
-					wrappers.add(this.addTopLevelElement(gedcomxElement));
-				} catch (final MissingFieldException e) {
-					GENgraphPersistenceServiceImpl.logger.warn(ErrorMessages.GEDCOMX_MISSING_FIELD);
-				}
-			}
+            for (final Object gedcomxElement : gedcomxElements) {
+                try {
+                    wrappers.add(this.addTopLevelElement(gedcomxElement));
+                } catch (final MissingFieldException e) {
+                    GENgraphPersistenceServiceImpl.logger
+                            .warn(ErrorMessages.GEDCOMX_MISSING_FIELD);
+                }
+            }
 
-			for (final NodeWrapper wrapper : wrappers) {
-				wrapper.resolveReferences();
-			}
-			GENgraphDAOUtil.commitTransaction(t);
-		} finally {
-			GENgraphDAOUtil.endTransaction(t);
-		}
-	}
+            for (final NodeWrapper wrapper : wrappers) {
+                wrapper.resolveReferences();
+            }
+            this.dao.commitTransaction(t);
+        } finally {
+            this.dao.endTransaction(t);
+        }
+    }
 
-	private List<Object> getGedcomXByType(final String type) {
-		final List<Object> gedcomXObjects = new ArrayList<>();
+    private List<Object> getGedcomXByType(final String type) {
+        final List<Object> gedcomXObjects = new ArrayList<>();
 
-		final List<NodeWrapper> wrappers = this.getNodesByType(type);
+        final List<NodeWrapper> wrappers = this.getNodesByType(type);
 
-		for (final NodeWrapper wrapper : wrappers) {
-			gedcomXObjects.add(wrapper.getGedcomX());
-		}
-		return gedcomXObjects;
-	}
+        for (final NodeWrapper wrapper : wrappers) {
+            gedcomXObjects.add(wrapper.getGedcomX());
+        }
+        return gedcomXObjects;
+    }
 
-	@Override
-	public List<Object> getGedcomXFromGraph() {
-		final List<Object> gedcomXObjects = new ArrayList<>();
+    @Override
+    public List<Object> getGedcomXFromGraph() {
+        final List<Object> gedcomXObjects = new ArrayList<>();
 
-		gedcomXObjects.addAll(this.getGedcomXByType(NodeTypes.AGENT.toString()));
-		gedcomXObjects.addAll(this.getGedcomXByType(NodeTypes.SOURCE_DESCRIPTION.toString()));
-		gedcomXObjects.addAll(this.getGedcomXByType(NodeTypes.PERSON.toString()));
-		gedcomXObjects.addAll(this.getGedcomXByType(NodeTypes.RELATIONSHIP.toString()));
-		gedcomXObjects.addAll(this.getGedcomXByType(NodeTypes.DOCUMENT.toString()));
-		gedcomXObjects.addAll(this.getGedcomXByType(NodeTypes.PLACE_DESCRIPTION.toString()));
-		gedcomXObjects.addAll(this.getGedcomXByType(NodeTypes.EVENT.toString()));
+        gedcomXObjects
+                .addAll(this.getGedcomXByType(NodeTypes.AGENT.toString()));
+        gedcomXObjects.addAll(this
+                .getGedcomXByType(NodeTypes.SOURCE_DESCRIPTION.toString()));
+        gedcomXObjects
+                .addAll(this.getGedcomXByType(NodeTypes.PERSON.toString()));
+        gedcomXObjects.addAll(this.getGedcomXByType(NodeTypes.RELATIONSHIP
+                .toString()));
+        gedcomXObjects.addAll(this.getGedcomXByType(NodeTypes.DOCUMENT
+                .toString()));
+        gedcomXObjects.addAll(this.getGedcomXByType(NodeTypes.PLACE_DESCRIPTION
+                .toString()));
+        gedcomXObjects
+                .addAll(this.getGedcomXByType(NodeTypes.EVENT.toString()));
 
-		return gedcomXObjects;
-	}
+        return gedcomXObjects;
+    }
 
-	@Override
-	public Node[] getGraph() {
-		return null;
-	}
+    @Override
+    public Node[] getGraph() {
+        return null;
+    }
 
-	private Node getInitialGraphNode() {
-		return GENgraphDAOUtil.getReferenceNode();
-	}
+    private Node getInitialGraphNode() {
+        return this.dao.getReferenceNode();
+    }
 
-	@Override
-	public NodeWrapper getNodeByGedcomXId(final String id) {
-		final Node node = GENgraphDAOUtil.getSingleNodeFromIndex(IndexNames.IDS.toString(), GenericProperties.ID.toString(), id);
+    @Override
+    public NodeWrapper getNodeByGedcomXId(final String id) {
+        final Node node = this.dao.getSingleNodeFromIndex(
+                IndexNames.IDS.toString(), GenericProperties.ID.toString(), id);
 
-		return this.getWrapperByNode(node);
+        return this.getWrapperByNode(node);
 
-	}
+    }
 
-	@Override
-	public NodeWrapper getNodeById(final Long id) {
-		return this.getWrapperByNode(GENgraphDAOUtil.getNode(id));
-	}
+    @Override
+    public NodeWrapper getNodeById(final Long id) {
+        return this.getWrapperByNode(this.dao.getNode(id));
+    }
 
-	@Override
-	public List<NodeWrapper> getNodesByFilters(final Map<NodeProperties, Object> filters) {
-		return null;
-	}
+    @Override
+    public List<NodeWrapper> getNodesByFilters(
+            final Map<NodeProperties, Object> filters) {
+        return null;
+    }
 
-	@Override
-	public List<NodeWrapper> getNodesByType(final String type) {
-		final Iterator<Node> nodes = GENgraphDAOUtil.getNodesFromIndex(IndexNames.NODE_TYPES.toString(),
-				GenericProperties.NODE_TYPE.toString(), type);
+    @Override
+    public List<NodeWrapper> getNodesByType(final String type) {
+        final Iterator<Node> nodes = this.dao.getNodesFromIndex(
+                IndexNames.NODE_TYPES.toString(),
+                GenericProperties.NODE_TYPE.toString(), type);
 
-		final List<NodeWrapper> wrappers = new ArrayList<>();
-		while (nodes.hasNext()) {
-			wrappers.add(NodeTypeMapper.createNode(type, nodes.next()));
-		}
-		return wrappers;
-	}
+        final List<NodeWrapper> wrappers = new ArrayList<>();
+        while (nodes.hasNext()) {
+            wrappers.add(this.nodeTypeMapper.createNode(
+                    NodeTypes.valueOf(type), nodes.next()));
+        }
+        return wrappers;
+    }
 
-	private NodeWrapper getWrapperByNode(final Node node) {
-		return this.getWrapperByNode(node, null);
-	}
+    private NodeWrapper getWrapperByNode(final Node node) {
+        return this.getWrapperByNode(node, null);
+    }
 
-	private NodeWrapper getWrapperByNode(final Node node, String type) {
-		if (type == null) {
-			type = (String) GENgraphDAOUtil.getNodeProperty(node, GenericProperties.TYPE.toString());
-		}
-		return NodeTypeMapper.createNode(type, node);
-	}
+    private NodeWrapper getWrapperByNode(final Node node, String type) {
+        if (type == null) {
+            type = (String) this.dao.getNodeProperty(node,
+                    GenericProperties.TYPE.toString());
+        }
+        return this.nodeTypeMapper.createNode(NodeTypes.valueOf(type), node);
+    }
 
-	@Override
-	public Node[] searchAlivePeopleWithoutChildren() {
-		return this.searchNodesByTraversal(new Object());
-	}
+    @Override
+    public Node[] searchAlivePeopleWithoutChildren() {
+        return this.searchNodesByTraversal(new Object());
+    }
 
-	@Override
-	public Node[] searchAllPeopleAndRelationships() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Node[] searchAllPeopleAndRelationships() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public Node[] searchNodesByCypher(final String query) {
-		GENgraphDAOUtil.executeCypherQuery(query);
-		// TODO
-		return null;
-	}
+    @Override
+    public Node[] searchNodesByCypher(final String query) {
+        this.dao.executeCypherQuery(query);
+        // TODO
+        return null;
+    }
 
-	private Node[] searchNodesByTraversal(final Object traversal) {
-		return null;
-	}
+    private Node[] searchNodesByTraversal(final Object traversal) {
+        return null;
+    }
+
+    @Inject
+    public void setNodeTypeMapper(final NodeTypeMapper nodeTypeMapper) {
+        this.nodeTypeMapper = nodeTypeMapper;
+    }
 }

@@ -5,9 +5,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.gedcomx.persistence.graph.neo4j.model.constants.NodeTypes;
+
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface NodeType {
 
-	String value();
+    NodeTypes value();
 }

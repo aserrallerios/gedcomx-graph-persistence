@@ -4,94 +4,109 @@ import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredRelationshipException;
 import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
+import org.gedcomx.persistence.graph.neo4j.model.constants.NodeTypes;
 import org.gedcomx.persistence.graph.neo4j.model.constants.RelationshipTypes;
 import org.gedcomx.persistence.graph.neo4j.model.constants.SourceProperties;
 import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
 import org.neo4j.graphdb.Node;
 
-@NodeType("SOURCE_REFERENCE")
+@NodeType(NodeTypes.SOURCE_REFERENCE)
 public class SourceReference extends NodeWrapper {
 
-	public SourceReference(final Node node) throws MissingFieldException, UnknownNodeType {
-		super(node);
-	}
+    public SourceReference(final Node node) throws MissingFieldException,
+            UnknownNodeType {
+        super(node);
+    }
 
-	public SourceReference(final org.gedcomx.source.SourceReference gedcomXSourceReference) throws MissingFieldException {
-		super(gedcomXSourceReference);
-	}
+    public SourceReference(
+            final org.gedcomx.source.SourceReference gedcomXSourceReference)
+            throws MissingFieldException {
+        super(gedcomXSourceReference);
+    }
 
-	public SourceReference(final SourceDescription description) throws MissingFieldException {
-		super(new Object[] { description });
-	}
+    public SourceReference(final SourceDescription description)
+            throws MissingFieldException {
+        super(new Object[] { description });
+    }
 
-	@Override
-	protected void deleteAllReferences() {
+    @Override
+    protected void deleteAllReferences() {
 
-	}
+    }
 
-	public Attribution getAttribution() {
-		return this.getNodeByRelationship(Attribution.class, RelationshipTypes.ATTRIBUTION);
-	}
+    public Attribution getAttribution() {
+        return this.getNodeByRelationship(Attribution.class,
+                RelationshipTypes.ATTRIBUTION);
+    }
 
-	public SourceDescription getDescription() {
-		return this.getNodeByRelationship(SourceDescription.class, RelationshipTypes.DESCRIPTION);
-	}
+    public SourceDescription getDescription() {
+        return this.getNodeByRelationship(SourceDescription.class,
+                RelationshipTypes.DESCRIPTION);
+    }
 
-	@Override
-	public org.gedcomx.source.SourceReference getGedcomX() {
-		final org.gedcomx.source.SourceReference gedcomXSourceReference = new org.gedcomx.source.SourceReference();
+    @Override
+    public org.gedcomx.source.SourceReference getGedcomX() {
+        final org.gedcomx.source.SourceReference gedcomXSourceReference = new org.gedcomx.source.SourceReference();
 
-		final Attribution attr = this.getAttribution();
-		if (attr != null) {
-			gedcomXSourceReference.setAttribution(attr.getGedcomX());
-		}
-		gedcomXSourceReference.setDescriptionRef(this.getDescription().getURI());
+        final Attribution attr = this.getAttribution();
+        if (attr != null) {
+            gedcomXSourceReference.setAttribution(attr.getGedcomX());
+        }
+        gedcomXSourceReference
+                .setDescriptionRef(this.getDescription().getURI());
 
-		return gedcomXSourceReference;
-	}
+        return gedcomXSourceReference;
+    }
 
-	public NodeWrapper getParentNode() {
-		return this.getParentNode(RelationshipTypes.HAS_SOURCE_REFERENCE);
-	}
+    public NodeWrapper getParentNode() {
+        return this.getParentNode(RelationshipTypes.HAS_SOURCE_REFERENCE);
+    }
 
-	@Override
-	public void resolveReferences() {
-		this.createReferenceRelationship(RelationshipTypes.DESCRIPTION, SourceProperties.SOURCE_DESCRIPTION_REFERENCE);
-	}
+    @Override
+    public void resolveReferences() {
+        this.createReferenceRelationship(RelationshipTypes.DESCRIPTION,
+                SourceProperties.SOURCE_DESCRIPTION_REFERENCE);
+    }
 
-	public void setAttribution(final Attribution attribution) {
-		this.createRelationship(RelationshipTypes.ATTRIBUTION, attribution);
-	}
+    public void setAttribution(final Attribution attribution) {
+        this.createRelationship(RelationshipTypes.ATTRIBUTION, attribution);
+    }
 
-	public void setDescription(final SourceDescription description) {
-		this.createReferenceRelationship(RelationshipTypes.DESCRIPTION, description);
-	}
+    public void setDescription(final SourceDescription description) {
+        this.createReferenceRelationship(RelationshipTypes.DESCRIPTION,
+                description);
+    }
 
-	@Override
-	protected void setGedcomXProperties(final Object gedcomXObject) {
-		return;
-	}
+    @Override
+    protected void setGedcomXProperties(final Object gedcomXObject) {
+        return;
+    }
 
-	@Override
-	protected void setGedcomXRelations(final Object gedcomXObject) throws MissingFieldException {
-		final org.gedcomx.source.SourceReference gedcomXSourceReference = (org.gedcomx.source.SourceReference) gedcomXObject;
+    @Override
+    protected void setGedcomXRelations(final Object gedcomXObject)
+            throws MissingFieldException {
+        final org.gedcomx.source.SourceReference gedcomXSourceReference = (org.gedcomx.source.SourceReference) gedcomXObject;
 
-		if (gedcomXSourceReference.getAttribution() != null) {
-			this.setAttribution(new Attribution(gedcomXSourceReference.getAttribution()));
-		}
+        if (gedcomXSourceReference.getAttribution() != null) {
+            this.setAttribution(new Attribution(gedcomXSourceReference
+                    .getAttribution()));
+        }
 
-		this.setProperty(SourceProperties.SOURCE_DESCRIPTION_REFERENCE, gedcomXSourceReference.getDescriptionRef());
-	}
+        this.setProperty(SourceProperties.SOURCE_DESCRIPTION_REFERENCE,
+                gedcomXSourceReference.getDescriptionRef());
+    }
 
-	@Override
-	protected void setRequiredProperties(final Object... properties) {
-		this.setDescription((SourceDescription) properties[0]);
-	}
+    @Override
+    protected void setRequiredProperties(final Object... properties) {
+        this.setDescription((SourceDescription) properties[0]);
+    }
 
-	@Override
-	protected void validateUnderlyingNode() throws MissingFieldException {
-		if (ValidationTools.nullOrEmpty(this.getDescription())) {
-			throw new MissingRequiredRelationshipException(this.getAnnotatedNodeType(), RelationshipTypes.DESCRIPTION.toString());
-		}
-	}
+    @Override
+    protected void validateUnderlyingNode() throws MissingFieldException {
+        if (ValidationTools.nullOrEmpty(this.getDescription())) {
+            throw new MissingRequiredRelationshipException(
+                    this.getAnnotatedNodeType(),
+                    RelationshipTypes.DESCRIPTION.toString());
+        }
+    }
 }

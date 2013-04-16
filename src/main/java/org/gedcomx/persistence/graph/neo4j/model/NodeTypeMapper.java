@@ -7,47 +7,53 @@ import java.util.Map;
 
 import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
 import org.gedcomx.persistence.graph.neo4j.exception.GenericError;
+import org.gedcomx.persistence.graph.neo4j.model.constants.NodeTypes;
 import org.neo4j.graphdb.Node;
 import org.reflections.Reflections;
 
+import com.google.inject.Inject;
+
 public class NodeTypeMapper {
 
-	private static Map<String, Class<? extends NodeWrapper>> nodesByType = new HashMap<>();
+    private final Map<NodeTypes, Class<? extends NodeWrapper>> nodesByType = new HashMap<>();
 
-	static {
-		final Reflections reflections = new Reflections(NodeWrapper.class.getPackage().getName());
+    @Inject
+    NodeTypeMapper(final Reflections reflections) {
+        for (final Class<? extends NodeWrapper> subclass : reflections
+                .getSubTypesOf(NodeWrapper.class)) {
+            final NodeType nodeType = subclass.getAnnotation(NodeType.class);
+            if (nodeType != null) {
+                this.nodesByType.put(nodeType.value(), subclass);
+            }
+        }
+    }
 
-		for (final Class<? extends NodeWrapper> subclass : reflections.getSubTypesOf(NodeWrapper.class)) {
-			final NodeType nodeType = subclass.getAnnotation(NodeType.class);
-			if (nodeType != null) {
-				NodeTypeMapper.nodesByType.put(nodeType.value(), subclass);
-			}
-		}
-	}
+    public <T extends NodeWrapper> T createNode(final Class<T> type,
+            final Node node) {
+        Constructor<T> constructor;
+        T wrapper = null;
+        try {
+            constructor = type.getDeclaredConstructor(Node.class);
+            wrapper = constructor.newInstance(node);
+        } catch (NoSuchMethodException | SecurityException
+                | InstantiationException | IllegalAccessException
+                | IllegalArgumentException | InvocationTargetException e) {
+            e.printStackTrace();
+            throw new GenericError("Error creating wrapper from node with id "
+                    + node.getId() + " and type " + type);
+        }
+        return wrapper;
+    }
 
-	public static <T extends NodeWrapper> T createNode(final Class<T> type, final Node node) {
-		Constructor<T> constructor;
-		T wrapper = null;
-		try {
-			constructor = type.getDeclaredConstructor(Node.class);
-			wrapper = constructor.newInstance(node);
-		} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException
-				| InvocationTargetException e) {
-			e.printStackTrace();
-			throw new GenericError("Error creating wrapper from node with id " + node.getId() + " and type " + type);
-		}
-		return wrapper;
-	}
+    public NodeWrapper createNode(final NodeTypes type, final Node node) {
+        return this.createNode(this.getWrapperByType(type), node);
+    }
 
-	public static NodeWrapper createNode(final String type, final Node node) {
-		return NodeTypeMapper.createNode(NodeTypeMapper.getWrapperByType(type), node);
-	}
+    public NodeTypes getTypeByWrapper(final Class<? extends NodeWrapper> wrapper) {
+        return wrapper.getAnnotation(NodeType.class).value();
+    }
 
-	public static String getTypeByWrapper(final Class<? extends NodeWrapper> wrapper) {
-		return wrapper.getAnnotation(NodeType.class).value();
-	}
-
-	public static Class<? extends NodeWrapper> getWrapperByType(final String type) {
-		return NodeTypeMapper.nodesByType.get(type);
-	}
+    public Class<? extends NodeWrapper> getWrapperByType(final NodeTypes type) {
+        return this.nodesByType.get(type);
+    }
 }
