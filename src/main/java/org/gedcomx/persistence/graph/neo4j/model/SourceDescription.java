@@ -1,6 +1,5 @@
 package org.gedcomx.persistence.graph.neo4j.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.gedcomx.common.ResourceReference;
@@ -9,6 +8,7 @@ import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredRelationshipException;
 import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
+import org.gedcomx.persistence.graph.neo4j.model.constants.ConclusionProperties;
 import org.gedcomx.persistence.graph.neo4j.model.constants.GenericProperties;
 import org.gedcomx.persistence.graph.neo4j.model.constants.NodeTypes;
 import org.gedcomx.persistence.graph.neo4j.model.constants.RelationshipTypes;
@@ -37,10 +37,6 @@ public class SourceDescription extends NodeWrapper {
 
     public void addCitation(final SourceCitation sourceCitation) {
         this.addRelationship(RelationshipTypes.HAS_CITATION, sourceCitation);
-    }
-
-    public void addExtractedConclusion(final Conclusion conclusion) {
-        this.addRelationship(RelationshipTypes.HAS_CONCLUSION, conclusion);
     }
 
     public void addNote(final Note note) {
@@ -88,17 +84,13 @@ public class SourceDescription extends NodeWrapper {
                 RelationshipTypes.COMPONENT_OF);
     }
 
-    public List<Conclusion> getExtractedConclusions() {
-        return this.getNodesByRelationship(Conclusion.class,
-                RelationshipTypes.HAS_CONCLUSION);
-    }
-
     @Override
     public org.gedcomx.source.SourceDescription getGedcomX() {
         final org.gedcomx.source.SourceDescription gedcomXSourceDescription = new org.gedcomx.source.SourceDescription();
 
         gedcomXSourceDescription.setAbout(this.getAbout());
         gedcomXSourceDescription.setId(this.getId());
+        gedcomXSourceDescription.setMediaType(this.getMediaType());
 
         final Attribution attr = this.getAttribution();
         if (attr != null) {
@@ -124,14 +116,6 @@ public class SourceDescription extends NodeWrapper {
                     .getResourceReference());
         }
 
-        final List<Conclusion> conclusions = this.getExtractedConclusions();
-        if (conclusions != null) {
-            final List<ResourceReference> references = new ArrayList<>();
-            for (final Conclusion conclusion : conclusions) {
-                references.add(conclusion.getResourceReference());
-            }
-            gedcomXSourceDescription.setExtractedConclusions(references);
-        }
         return gedcomXSourceDescription;
     }
 
@@ -142,6 +126,10 @@ public class SourceDescription extends NodeWrapper {
     public Agent getMediator() {
         return this.getNodeByRelationship(Agent.class,
                 RelationshipTypes.MEDIATOR);
+    }
+
+    public String getMediaType() {
+        return (String) this.getProperty(ConclusionProperties.MEDIA_TYPE);
     }
 
     public List<Note> getNotes() {
@@ -195,6 +183,7 @@ public class SourceDescription extends NodeWrapper {
 
         this.setId(gedcomXSourceDescription.getId());
         this.setAbout(gedcomXSourceDescription.getAbout());
+        this.setMediaType(gedcomXSourceDescription.getMediaType());
     }
 
     @Override
@@ -234,11 +223,6 @@ public class SourceDescription extends NodeWrapper {
             this.setProperty(SourceProperties.MEDIATOR_REFERENCE,
                     gedcomXSourceDescription.getMediator());
         }
-        if (gedcomXSourceDescription.getExtractedConclusions() != null) {
-            this.setURIListProperties(
-                    SourceProperties.EXTRACTED_CONCLUSIONS_REFERENCE,
-                    gedcomXSourceDescription.getExtractedConclusions());
-        }
     }
 
     public void setId(final String id) {
@@ -247,6 +231,10 @@ public class SourceDescription extends NodeWrapper {
 
     public void setMediator(final Agent mediator) {
         this.createReferenceRelationship(RelationshipTypes.MEDIATOR, mediator);
+    }
+
+    public void setMediaType(final String mediaType) {
+        this.setProperty(ConclusionProperties.MEDIA_TYPE, mediaType);
     }
 
     @Override

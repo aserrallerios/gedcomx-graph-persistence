@@ -38,6 +38,10 @@ public class PlaceDescription extends Conclusion {
         this.addRelationship(RelationshipTypes.HAS_IDENTIFIER, identifier);
     }
 
+    public void addMedia(final SourceReference media) {
+        this.addRelationship(RelationshipTypes.HAS_MEDIA, media);
+    }
+
     public void addName(final TextValue name) {
         this.addRelationship(RelationshipTypes.HAS_NAME, name);
     }
@@ -46,10 +50,15 @@ public class PlaceDescription extends Conclusion {
     protected void deleteAllConcreteReferences() {
         this.deleteReferencedNodes(this.getIdentifiers());
         this.deleteReferencedNodes(this.getNames());
+        this.deleteReferencedNodes(this.getMedia());
     }
 
     public URI getAbout() {
         return new URI((String) this.getProperty(GenericProperties.ABOUT));
+    }
+
+    public Boolean getExtracted() {
+        return (Boolean) this.getProperty(ConclusionProperties.EXTRACTED);
     }
 
     @Override
@@ -58,7 +67,7 @@ public class PlaceDescription extends Conclusion {
 
         this.getGedcomXConclusion(gedcomXPlaceDescription);
 
-        gedcomXPlaceDescription.setAbout(this.getAbout());
+        gedcomXPlaceDescription.setExtracted(this.getExtracted());
         gedcomXPlaceDescription.setLatitude(this.getLatitude());
         gedcomXPlaceDescription.setLongitude(this.getLongitude());
         gedcomXPlaceDescription.setSpatialDescription(this
@@ -71,6 +80,8 @@ public class PlaceDescription extends Conclusion {
 
         gedcomXPlaceDescription.setNames(this.getGedcomXList(
                 org.gedcomx.common.TextValue.class, this.getNames()));
+        gedcomXPlaceDescription.setMedia(this.getGedcomXList(
+                org.gedcomx.source.SourceReference.class, this.getMedia()));
         gedcomXPlaceDescription
                 .setIdentifiers(this.getGedcomXList(
                         org.gedcomx.conclusion.Identifier.class,
@@ -91,7 +102,11 @@ public class PlaceDescription extends Conclusion {
 
     public Double getLongitude() {
         return (Double) this.getProperty(ConclusionProperties.LONGITUDE);
+    }
 
+    public List<SourceReference> getMedia() {
+        return this.getNodesByRelationship(SourceReference.class,
+                RelationshipTypes.HAS_MEDIA);
     }
 
     public List<TextValue> getNames() {
@@ -130,11 +145,15 @@ public class PlaceDescription extends Conclusion {
         this.setProperty(GenericProperties.ABOUT, about);
     }
 
+    public void setExtracted(final Boolean extracted) {
+        this.setProperty(ConclusionProperties.EXTRACTED, extracted);
+    }
+
     @Override
     protected void setGedcomXConcreteProperties(final Object gedcomXObject) {
         final org.gedcomx.conclusion.PlaceDescription gedcomXPlaceDescription = (org.gedcomx.conclusion.PlaceDescription) gedcomXObject;
 
-        this.setAbout(gedcomXPlaceDescription.getAbout());
+        this.setExtracted(gedcomXPlaceDescription.getExtracted());
         this.setType(gedcomXPlaceDescription.getType());
         this.setLatitude(gedcomXPlaceDescription.getLatitude());
         this.setLongitude(gedcomXPlaceDescription.getLatitude());
@@ -163,6 +182,12 @@ public class PlaceDescription extends Conclusion {
             for (final org.gedcomx.conclusion.Identifier gedcomXIdentifier : gedcomXPlaceDescription
                     .getIdentifiers()) {
                 this.addIdentifier(new Identifier(gedcomXIdentifier));
+            }
+        }
+        if (gedcomXPlaceDescription.getMedia() != null) {
+            for (final org.gedcomx.source.SourceReference gedcomXsourceRef : gedcomXPlaceDescription
+                    .getMedia()) {
+                this.addSourceReference(new SourceReference(gedcomXsourceRef));
             }
         }
     }

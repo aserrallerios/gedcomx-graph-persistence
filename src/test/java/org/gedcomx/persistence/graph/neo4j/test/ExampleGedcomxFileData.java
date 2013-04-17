@@ -196,36 +196,4 @@ public class ExampleGedcomxFileData {
 
     return resources;
   }
-
-  public static void assertContains (Object actualValue, List<Object> expectedValues) {
-    if (actualValue instanceof Person) {
-      Person actual = (Person)actualValue;
-      boolean found = false;
-      for (Object obj : expectedValues) {
-        if (obj instanceof Person) {
-          Person expected = (Person)obj;
-          if (actual.getId().equals(expected.getId())) {
-            found = true;
-            break;
-          }
-        }
-      }
-      assertTrue(found);
-    } else if (actualValue instanceof Relationship) {
-      Relationship actual = (Relationship)actualValue;
-      boolean found = false;
-      for (Object obj : expectedValues) {
-        if (obj instanceof Relationship) {
-          Relationship expected = (Relationship)obj;
-          if (actual.getId().equals(expected.getId())) {
-            found = true;
-            break;
-          }
-        }
-      }
-      assertTrue(found);
-    } else {
-      fail("actualValue was not an expected type; actual type is " + actualValue.getClass().getName());
-    }
-  }
 }

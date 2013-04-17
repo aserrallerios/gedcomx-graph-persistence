@@ -16,6 +16,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.google.inject.matcher.Matchers;
+import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 
 public class ServiceInjector extends AbstractModule {
@@ -49,7 +50,8 @@ public class ServiceInjector extends AbstractModule {
     }
 
     @Provides
-    Reflections provideTransactionLog() {
+    @Named("NodeWrappersPackage")
+    Reflections provideReflectionsInstance() {
         final Reflections reflections = new Reflections(NodeWrapper.class
                 .getPackage().getName());
         return reflections;

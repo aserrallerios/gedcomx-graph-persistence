@@ -12,13 +12,14 @@ import org.neo4j.graphdb.Node;
 import org.reflections.Reflections;
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 
 public class NodeTypeMapper {
 
     private final Map<NodeTypes, Class<? extends NodeWrapper>> nodesByType = new HashMap<>();
 
     @Inject
-    NodeTypeMapper(final Reflections reflections) {
+    NodeTypeMapper(final @Named("NodeWrappersPackage") Reflections reflections) {
         for (final Class<? extends NodeWrapper> subclass : reflections
                 .getSubTypesOf(NodeWrapper.class)) {
             final NodeType nodeType = subclass.getAnnotation(NodeType.class);
