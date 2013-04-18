@@ -8,6 +8,9 @@ import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.gedcomx.persistence.graph.neo4j.annotations.CheckForDuplicates;
+import org.gedcomx.persistence.graph.neo4j.annotations.EmbededDB;
+import org.gedcomx.persistence.graph.neo4j.annotations.Transactional;
 import org.gedcomx.persistence.graph.neo4j.dao.GENgraphDAO;
 import org.gedcomx.persistence.graph.neo4j.exception.GenericError;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
@@ -32,7 +35,6 @@ import org.neo4j.graphdb.Transaction;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.google.inject.name.Named;
 
 @Singleton
 public class GENgraphPersistenceServiceImpl implements
@@ -43,7 +45,7 @@ public class GENgraphPersistenceServiceImpl implements
     private NodeTypeMapper nodeTypeMapper;
 
     @Inject
-    GENgraphPersistenceServiceImpl(final @Named("EmbededDB") GENgraphDAO dao) {
+    GENgraphPersistenceServiceImpl(final @EmbededDB GENgraphDAO dao) {
         this.dao = dao;
     }
 
@@ -106,6 +108,7 @@ public class GENgraphPersistenceServiceImpl implements
     }
 
     @Override
+    @Transactional
     public void createGraphByGedcomX(final Map<String, String> metadata,
             final Collection<Object> gedcomxElements) {
         final Node rootNode = this.getInitialGraphNode();

@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.gedcomx.common.ResourceReference;
 import org.gedcomx.common.URI;
+import org.gedcomx.persistence.graph.neo4j.annotations.EmbededDB;
 import org.gedcomx.persistence.graph.neo4j.dao.GENgraphDAO;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.UninitializedNode;
@@ -23,12 +24,11 @@ import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;
 
 import com.google.inject.Inject;
-import com.google.inject.name.Named;
 
 public abstract class NodeWrapper {
 
     @Inject
-    @Named("EmbededDB")
+    @EmbededDB
     private static GENgraphDAO dao;
     @Inject
     private static NodeTypeMapper mapper;

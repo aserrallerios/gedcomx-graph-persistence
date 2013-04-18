@@ -1,7 +1,8 @@
-package org.gedcomx.persistence.graph.neo4j.service;
+package org.gedcomx.persistence.graph.neo4j.interceptors;
 
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
+import org.gedcomx.persistence.graph.neo4j.annotations.EmbededDB;
 import org.gedcomx.persistence.graph.neo4j.dao.GENgraphDAO;
 import org.gedcomx.persistence.graph.neo4j.exception.NodeIdentifierAlreadyExists;
 import org.gedcomx.persistence.graph.neo4j.model.constants.GenericProperties;
@@ -9,14 +10,13 @@ import org.gedcomx.persistence.graph.neo4j.model.constants.IndexNames;
 import org.neo4j.graphdb.Node;
 
 import com.google.inject.Inject;
-import com.google.inject.name.Named;
 
-public class DuplicatedNodesInterceptor implements MethodInterceptor {
+public class DuplicatedNodesCheck implements MethodInterceptor {
 
     GENgraphDAO dao;
 
     @Inject
-    public DuplicatedNodesInterceptor() {
+    public DuplicatedNodesCheck() {
     }
 
     @Override
@@ -44,7 +44,7 @@ public class DuplicatedNodesInterceptor implements MethodInterceptor {
     }
 
     @Inject
-    public void setDao(final @Named("EmbededDB") GENgraphDAO dao) {
+    public void setDao(final @EmbededDB GENgraphDAO dao) {
         this.dao = dao;
     }
 }

@@ -6,20 +6,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
+import org.gedcomx.persistence.graph.neo4j.annotations.NodeWrapperReflections;
 import org.gedcomx.persistence.graph.neo4j.exception.GenericError;
 import org.gedcomx.persistence.graph.neo4j.model.constants.NodeTypes;
 import org.neo4j.graphdb.Node;
 import org.reflections.Reflections;
 
 import com.google.inject.Inject;
-import com.google.inject.name.Named;
 
 public class NodeTypeMapper {
 
     private final Map<NodeTypes, Class<? extends NodeWrapper>> nodesByType = new HashMap<>();
 
     @Inject
-    NodeTypeMapper(final @Named("NodeWrappersPackage") Reflections reflections) {
+    NodeTypeMapper(final @NodeWrapperReflections Reflections reflections) {
         for (final Class<? extends NodeWrapper> subclass : reflections
                 .getSubTypesOf(NodeWrapper.class)) {
             final NodeType nodeType = subclass.getAnnotation(NodeType.class);

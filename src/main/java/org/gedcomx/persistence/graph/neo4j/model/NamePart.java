@@ -35,6 +35,10 @@ public class NamePart extends NodeWrapper {
         super(value);
     }
 
+    public void addQualifier(final Qualifier qualifier) {
+        this.addRelationship(RelationshipTypes.HAS_QUALIFIER, qualifier);
+    }
+
     @Override
     protected void deleteAllReferences() {
         return;
@@ -47,7 +51,8 @@ public class NamePart extends NodeWrapper {
         gedcomXNamePart.setType(this.getType());
         gedcomXNamePart.setKnownType(this.getKnownType());
         gedcomXNamePart.setValue(this.getValue());
-        gedcomXNamePart.setQualifiers(this.getQualifiers());
+        gedcomXNamePart.setQualifiers(this.getGedcomXList(
+                org.gedcomx.common.Qualifier.class, this.getQualifiers()));
 
         return gedcomXNamePart;
     }
@@ -71,9 +76,9 @@ public class NamePart extends NodeWrapper {
         return (NameForm) this.getParentNode(RelationshipTypes.HAS_NAME_PART);
     }
 
-    @Deprecated
-    public List<ResourceReference> getQualifiers() {
-        return this.getURIListProperties(ConclusionProperties.QUALIFIERS);
+    public List<Qualifier> getQualifiers() {
+        return this.getNodesByRelationship(Qualifier.class,
+                RelationshipTypes.HAS_QUALIFIER);
     }
 
     @Deprecated
@@ -96,12 +101,21 @@ public class NamePart extends NodeWrapper {
 
         this.setType(gedcomXNamePart.getType());
         this.setValue(gedcomXNamePart.getValue());
-        this.setQualifiers(gedcomXNamePart.getQualifiers());
+
     }
 
     @Override
     protected void setGedcomXRelations(final Object gedcomXObject)
             throws MissingFieldException {
+        final org.gedcomx.conclusion.NamePart gedcomXNamePart = (org.gedcomx.conclusion.NamePart) gedcomXObject;
+
+        if (gedcomXNamePart.getQualifiers() != null) {
+            for (final org.gedcomx.common.Qualifier q : gedcomXNamePart
+                    .getQualifiers()) {
+                this.addQualifier(new Qualifier(q));
+            }
+        }
+
         return;
     }
 
@@ -111,11 +125,6 @@ public class NamePart extends NodeWrapper {
 
     public void setKnownType(final NamePartType type) {
         this.setType(type.toQNameURI());
-    }
-
-    @Deprecated
-    public void setQualifiers(final List<ResourceReference> qualifiers) {
-        this.setURIListProperties(ConclusionProperties.QUALIFIERS, qualifiers);
     }
 
     @Override
