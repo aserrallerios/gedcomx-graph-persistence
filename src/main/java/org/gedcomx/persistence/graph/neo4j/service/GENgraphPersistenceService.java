@@ -4,42 +4,43 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.gedcomx.persistence.graph.neo4j.dto.QueryResult;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.model.Agent;
 import org.gedcomx.persistence.graph.neo4j.model.Conclusion;
 import org.gedcomx.persistence.graph.neo4j.model.NodeWrapper;
 import org.gedcomx.persistence.graph.neo4j.model.SourceDescription;
 import org.gedcomx.persistence.graph.neo4j.model.constants.NodeProperties;
-import org.neo4j.graphdb.Node;
 
 public interface GENgraphPersistenceService {
 
-	Agent addAgent(org.gedcomx.agent.Agent agent) throws MissingFieldException;
+    Agent addAgent(org.gedcomx.agent.Agent agent) throws MissingFieldException;
 
-	Conclusion addConclusion(org.gedcomx.conclusion.Conclusion conclusion) throws MissingFieldException;
+    Conclusion addConclusion(org.gedcomx.conclusion.Conclusion conclusion)
+            throws MissingFieldException;
 
-	SourceDescription addSource(org.gedcomx.source.SourceDescription sourceDescription) throws MissingFieldException;
+    SourceDescription addSource(
+            org.gedcomx.source.SourceDescription sourceDescription)
+            throws MissingFieldException;
 
-	NodeWrapper addTopLevelElement(final Object gedcomxElement) throws MissingFieldException;
+    NodeWrapper addTopLevelElement(final Object gedcomxElement)
+            throws MissingFieldException;
 
-	void createGraphByGedcomX(Map<String, String> metadata, Collection<Object> gedcomxElements);
+    void createGraphByGedcomX(Map<String, String> metadata,
+            Collection<Object> gedcomxElements);
 
-	List<Object> getGedcomXFromGraph();
+    List<Object> getGedcomXFromGraph();
 
-	Node[] getGraph();
+    QueryResult getGraph();
 
-	NodeWrapper getNodeByGedcomXId(String id);
+    NodeWrapper getNodeByGedcomXId(String id);
 
-	NodeWrapper getNodeById(Long id);
+    NodeWrapper getNodeById(Long id);
 
-	List<NodeWrapper> getNodesByFilters(Map<NodeProperties, Object> filters);
+    List<NodeWrapper> getNodesByFilters(Map<NodeProperties, Object> filters);
 
-	List<NodeWrapper> getNodesByType(String type);
+    List<NodeWrapper> getNodesByType(String type);
 
-	Node[] searchAlivePeopleWithoutChildren();
-
-	Node[] searchAllPeopleAndRelationships();
-
-	Node[] searchNodesByCypher(String query);
+    QueryResult searchNodesByCypher(String query);
 
 }

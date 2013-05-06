@@ -19,6 +19,7 @@ import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 import org.neo4j.graphdb.index.Index;
 import org.neo4j.graphdb.index.IndexHits;
+import org.neo4j.tooling.GlobalGraphOperations;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -28,6 +29,8 @@ import com.google.inject.name.Named;
 public class GENgraphDAOImpl implements GENgraphDAO {
 
     private final GraphDatabaseService graphDb;
+    private final ExecutionEngine executionEngine;
+    private final GlobalGraphOperations operations;
 
     @Inject
     GENgraphDAOImpl(final @Named("Neo4jDBPath") String bdpath,
@@ -35,6 +38,8 @@ public class GENgraphDAOImpl implements GENgraphDAO {
         this.graphDb = new GraphDatabaseFactory()
                 .newEmbeddedDatabaseBuilder(bdpath)
                 .loadPropertiesFromFile(propsFile).newGraphDatabase();
+        this.executionEngine = new ExecutionEngine(this.graphDb);
+        this.operations = GlobalGraphOperations.at(this.graphDb);
         this.registerShutdownHook();
     }
 
@@ -122,9 +127,18 @@ public class GENgraphDAOImpl implements GENgraphDAO {
 
     @Override
     public ExecutionResult executeCypherQuery(final String query) {
-        final ExecutionEngine engine = new ExecutionEngine(this.graphDb);
-        final ExecutionResult result = engine.execute(query);
+        final ExecutionResult result = this.executionEngine.execute(query);
         return result;
+    }
+
+    @Override
+    public Iterable<Node> getAllNodes() {
+        return this.operations.getAllNodes();
+    }
+
+    @Override
+    public Iterable<Relationship> getAllRelationships() {
+        return this.operations.getAllRelationships();
     }
 
     @Override

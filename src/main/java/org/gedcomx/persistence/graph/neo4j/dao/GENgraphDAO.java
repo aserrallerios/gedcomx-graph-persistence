@@ -12,58 +12,73 @@ import org.neo4j.graphdb.Transaction;
 
 public interface GENgraphDAO {
 
-	Transaction beginTransaction();
+    Transaction beginTransaction();
 
-	void commitTransaction(Transaction transaction);
+    void commitTransaction(Transaction transaction);
 
-	Node createNode();
+    Node createNode();
 
-	Relationship createRelationship(Node node, RelationshipType relType, Node secondNode);
+    Relationship createRelationship(Node node, RelationshipType relType,
+            Node secondNode);
 
-	Relationship createRelationship(Node node, RelationshipType relType, Node secondNode, Map<String, ?> properties);
+    Relationship createRelationship(Node node, RelationshipType relType,
+            Node secondNode, Map<String, ?> properties);
 
-	void delete(Node node);
+    void delete(Node node);
 
-	void delete(Relationship rel);
+    void delete(Relationship rel);
 
-	void endTransaction(Transaction transaction);
+    void endTransaction(Transaction transaction);
 
-	ExecutionResult executeCypherQuery(String query);
+    ExecutionResult executeCypherQuery(String query);
 
-	Node getNode(Long id);
+    Iterable<Node> getAllNodes();
 
-	Object getNodeProperty(Node node, String property);
+    Iterable<Relationship> getAllRelationships();
 
-	Iterable<Node> getNodesByRelationship(Node node, RelationshipType relation, Direction dir, boolean ordered, String index);
+    Node getNode(Long id);
 
-	Iterator<Node> getNodesFromIndex(String indexName, String property, String value);
+    Object getNodeProperty(Node node, String property);
 
-	Node getReferenceNode();
+    Iterable<Node> getNodesByRelationship(Node node, RelationshipType relation,
+            Direction dir, boolean ordered, String index);
 
-	Object getRelationshipProperty(Relationship rel, String property);
+    Iterator<Node> getNodesFromIndex(String indexName, String property,
+            String value);
 
-	Iterable<Relationship> getRelationships(Node node, Direction dir);
+    Node getReferenceNode();
 
-	Iterable<Relationship> getRelationships(Node node, RelationshipType relType, Direction dir);
+    Object getRelationshipProperty(Relationship rel, String property);
 
-	Node getSingleNodeByRelationship(Node node, RelationshipType relation, Direction dir);
+    Iterable<Relationship> getRelationships(Node node, Direction dir);
 
-	Node getSingleNodeFromIndex(String indexName, String property, String value);
+    Iterable<Relationship> getRelationships(Node node,
+            RelationshipType relType, Direction dir);
 
-	Relationship getSingleRelationship(Node node, RelationshipType rel, Direction dir);
+    Node getSingleNodeByRelationship(Node node, RelationshipType relation,
+            Direction dir);
 
-	boolean hasRelationship(Node node, RelationshipType relType, Direction dir);
+    Node getSingleNodeFromIndex(String indexName, String property, String value);
 
-	boolean hasSingleRelationship(Node node, RelationshipType relType, Direction dir);
+    Relationship getSingleRelationship(Node node, RelationshipType rel,
+            Direction dir);
 
-	void removeNodeProperty(Node node, String property);
+    boolean hasRelationship(Node node, RelationshipType relType, Direction dir);
 
-	Node setNodeProperties(Node node, Map<String, ?> metadata);
+    boolean hasSingleRelationship(Node node, RelationshipType relType,
+            Direction dir);
 
-	Node setNodeProperty(Node node, String property, Object value, boolean indexed, boolean unique, String indexName);
+    void removeNodeProperty(Node node, String property);
 
-	Relationship setRelationshipProperties(Relationship rel, Map<String, ?> properties);
+    Node setNodeProperties(Node node, Map<String, ?> metadata);
 
-	Relationship setRelationshipProperty(Relationship rel, String key, Object value);
+    Node setNodeProperty(Node node, String property, Object value,
+            boolean indexed, boolean unique, String indexName);
+
+    Relationship setRelationshipProperties(Relationship rel,
+            Map<String, ?> properties);
+
+    Relationship setRelationshipProperty(Relationship rel, String key,
+            Object value);
 
 }

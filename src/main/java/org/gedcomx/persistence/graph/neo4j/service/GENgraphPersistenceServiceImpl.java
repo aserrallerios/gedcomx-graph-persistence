@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,6 +13,7 @@ import org.gedcomx.persistence.graph.neo4j.annotations.CheckForDuplicates;
 import org.gedcomx.persistence.graph.neo4j.annotations.EmbededDB;
 import org.gedcomx.persistence.graph.neo4j.annotations.Transactional;
 import org.gedcomx.persistence.graph.neo4j.dao.GENgraphDAO;
+import org.gedcomx.persistence.graph.neo4j.dto.QueryResult;
 import org.gedcomx.persistence.graph.neo4j.exception.GenericError;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.messages.ErrorMessages;
@@ -20,7 +22,6 @@ import org.gedcomx.persistence.graph.neo4j.model.Agent;
 import org.gedcomx.persistence.graph.neo4j.model.Conclusion;
 import org.gedcomx.persistence.graph.neo4j.model.Document;
 import org.gedcomx.persistence.graph.neo4j.model.Event;
-import org.gedcomx.persistence.graph.neo4j.model.NodeTypeMapper;
 import org.gedcomx.persistence.graph.neo4j.model.NodeWrapper;
 import org.gedcomx.persistence.graph.neo4j.model.Person;
 import org.gedcomx.persistence.graph.neo4j.model.PlaceDescription;
@@ -30,6 +31,8 @@ import org.gedcomx.persistence.graph.neo4j.model.constants.GenericProperties;
 import org.gedcomx.persistence.graph.neo4j.model.constants.IndexNames;
 import org.gedcomx.persistence.graph.neo4j.model.constants.NodeProperties;
 import org.gedcomx.persistence.graph.neo4j.model.constants.NodeTypes;
+import org.gedcomx.persistence.graph.neo4j.model.utils.NodeTypeMapper;
+import org.neo4j.cypher.javacompat.ExecutionResult;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Transaction;
 
@@ -171,8 +174,17 @@ public class GENgraphPersistenceServiceImpl implements
     }
 
     @Override
-    public Node[] getGraph() {
-        return null;
+    public QueryResult getGraph() {
+        final List<org.neo4j.graphdb.Node> nodes = new ArrayList<>();
+        for (final org.neo4j.graphdb.Node node : this.dao.getAllNodes()) {
+            nodes.add(node);
+        }
+        final List<org.neo4j.graphdb.Relationship> relationships = new ArrayList<>();
+        for (final org.neo4j.graphdb.Relationship relationship : this.dao
+                .getAllRelationships()) {
+            relationships.add(relationship);
+        }
+        return new QueryResult(nodes, relationships);
     }
 
     private Node getInitialGraphNode() {
@@ -226,25 +238,25 @@ public class GENgraphPersistenceServiceImpl implements
     }
 
     @Override
-    public Node[] searchAlivePeopleWithoutChildren() {
-        return this.searchNodesByTraversal(new Object());
-    }
+    public QueryResult searchNodesByCypher(final String query) {
+        final ExecutionResult result = this.dao.executeCypherQuery(query);
 
-    @Override
-    public Node[] searchAllPeopleAndRelationships() {
-        // TODO Auto-generated method stub
-        return null;
-    }
+        final List<org.neo4j.graphdb.Node> nodes = new ArrayList<>();
+        final List<org.neo4j.graphdb.Relationship> relationships = new ArrayList<org.neo4j.graphdb.Relationship>();
 
-    @Override
-    public Node[] searchNodesByCypher(final String query) {
-        this.dao.executeCypherQuery(query);
-        // TODO
-        return null;
-    }
+        for (final Map<String, Object> row : result) {
+            for (final Entry<String, Object> column : row.entrySet()) {
+                if (column.getValue() instanceof org.neo4j.graphdb.Node) {
+                    nodes.add((org.neo4j.graphdb.Node) column.getValue());
+                }
+                if (column.getValue() instanceof org.neo4j.graphdb.Relationship) {
+                    relationships.add((org.neo4j.graphdb.Relationship) column
+                            .getValue());
+                }
+            }
+        }
 
-    private Node[] searchNodesByTraversal(final Object traversal) {
-        return null;
+        return new QueryResult(nodes, relationships);
     }
 
     @Inject

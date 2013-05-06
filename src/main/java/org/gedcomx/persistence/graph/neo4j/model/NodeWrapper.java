@@ -18,6 +18,7 @@ import org.gedcomx.persistence.graph.neo4j.model.constants.NodeProperties;
 import org.gedcomx.persistence.graph.neo4j.model.constants.NodeTypes;
 import org.gedcomx.persistence.graph.neo4j.model.constants.RelationshipProperties;
 import org.gedcomx.persistence.graph.neo4j.model.constants.RelationshipTypes;
+import org.gedcomx.persistence.graph.neo4j.model.utils.NodeTypeMapper;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
