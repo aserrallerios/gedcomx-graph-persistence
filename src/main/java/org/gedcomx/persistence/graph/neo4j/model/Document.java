@@ -2,13 +2,13 @@ package org.gedcomx.persistence.graph.neo4j.model;
 
 import org.gedcomx.common.URI;
 import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
-import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
-import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredPropertyException;
-import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
+import org.gedcomx.persistence.graph.neo4j.exceptions.MissingFieldException;
+import org.gedcomx.persistence.graph.neo4j.exceptions.MissingRequiredPropertyException;
+import org.gedcomx.persistence.graph.neo4j.exceptions.UnknownNodeType;
 import org.gedcomx.persistence.graph.neo4j.model.constants.ConclusionProperties;
 import org.gedcomx.persistence.graph.neo4j.model.constants.GenericProperties;
 import org.gedcomx.persistence.graph.neo4j.model.constants.NodeTypes;
-import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
+import org.gedcomx.persistence.graph.neo4j.utils.Validation;
 import org.gedcomx.types.DocumentType;
 import org.neo4j.graphdb.Node;
 
@@ -97,7 +97,7 @@ public class Document extends Conclusion {
 
     @Override
     protected void validateUnderlyingNode() throws MissingFieldException {
-        if (ValidationTools.nullOrEmpty(this.getText())) {
+        if (Validation.nullOrEmpty(this.getText())) {
             throw new MissingRequiredPropertyException(
                     this.getAnnotatedNodeType(),
                     ConclusionProperties.TEXT.toString());

@@ -23,9 +23,12 @@ public class TransactionWrapper implements MethodInterceptor {
         Object o = null;
         try {
             o = invocation.proceed();
-            t.success();
+            this.dao.commitTransaction(t);
+        } catch (final Throwable error) {
+            this.dao.rollbackTransaction(t);
+            throw error;
         } finally {
-            t.finish();
+            this.dao.endTransaction(t);
         }
         return o;
     }

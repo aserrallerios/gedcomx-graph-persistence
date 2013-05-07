@@ -4,13 +4,13 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.gedcomx.persistence.graph.neo4j.dto.QueryResult;
-import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
+import org.gedcomx.persistence.graph.neo4j.exceptions.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.model.Agent;
 import org.gedcomx.persistence.graph.neo4j.model.Conclusion;
 import org.gedcomx.persistence.graph.neo4j.model.NodeWrapper;
 import org.gedcomx.persistence.graph.neo4j.model.SourceDescription;
 import org.gedcomx.persistence.graph.neo4j.model.constants.NodeProperties;
+import org.gedcomx.persistence.graph.neo4j.service.dto.QueryResult;
 
 public interface GENgraphPersistenceService {
 
@@ -27,7 +27,7 @@ public interface GENgraphPersistenceService {
             throws MissingFieldException;
 
     void createGraphByGedcomX(Map<String, String> metadata,
-            Collection<Object> gedcomxElements);
+            Collection<Object> gedcomxElements) throws MissingFieldException;
 
     List<Object> getGedcomXFromGraph();
 

@@ -5,15 +5,15 @@ import java.util.List;
 import org.gedcomx.common.ResourceReference;
 import org.gedcomx.common.URI;
 import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
-import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
-import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredRelationshipException;
-import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
+import org.gedcomx.persistence.graph.neo4j.exceptions.MissingFieldException;
+import org.gedcomx.persistence.graph.neo4j.exceptions.MissingRequiredRelationshipException;
+import org.gedcomx.persistence.graph.neo4j.exceptions.UnknownNodeType;
 import org.gedcomx.persistence.graph.neo4j.model.constants.ConclusionProperties;
 import org.gedcomx.persistence.graph.neo4j.model.constants.GenericProperties;
 import org.gedcomx.persistence.graph.neo4j.model.constants.NodeTypes;
 import org.gedcomx.persistence.graph.neo4j.model.constants.RelationshipTypes;
 import org.gedcomx.persistence.graph.neo4j.model.constants.SourceProperties;
-import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
+import org.gedcomx.persistence.graph.neo4j.utils.Validation;
 import org.neo4j.graphdb.Node;
 
 @NodeType(NodeTypes.SOURCE_DESCRIPTION)
@@ -247,7 +247,7 @@ public class SourceDescription extends NodeWrapper {
     @Override
     protected void validateUnderlyingNode()
             throws MissingRequiredRelationshipException {
-        if (ValidationTools.nullOrEmpty(this.getCitations())) {
+        if (Validation.nullOrEmpty(this.getCitations())) {
             throw new MissingRequiredRelationshipException(
                     this.getAnnotatedNodeType(), this.getId(),
                     RelationshipTypes.HAS_CITATION.toString());

@@ -51,7 +51,6 @@ public class GENgraphDAOImpl implements GENgraphDAO {
     @Override
     public void commitTransaction(final Transaction transaction) {
         transaction.success();
-
     }
 
     @Override
@@ -122,13 +121,17 @@ public class GENgraphDAOImpl implements GENgraphDAO {
     @Override
     public void endTransaction(final Transaction transaction) {
         transaction.finish();
-
     }
 
     @Override
     public ExecutionResult executeCypherQuery(final String query) {
         final ExecutionResult result = this.executionEngine.execute(query);
         return result;
+    }
+
+    @Override
+    public void rollbackTransaction(final Transaction transaction) {
+        transaction.failure();
     }
 
     @Override

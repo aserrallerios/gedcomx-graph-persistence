@@ -9,12 +9,12 @@ import org.gedcomx.persistence.graph.neo4j.annotations.interceptors.CheckForDupl
 import org.gedcomx.persistence.graph.neo4j.annotations.interceptors.Transactional;
 import org.gedcomx.persistence.graph.neo4j.dao.GENgraphDAO;
 import org.gedcomx.persistence.graph.neo4j.dao.GENgraphDAOImpl;
-import org.gedcomx.persistence.graph.neo4j.exception.GenericError;
+import org.gedcomx.persistence.graph.neo4j.exceptions.GenericError;
 import org.gedcomx.persistence.graph.neo4j.interceptors.DuplicatedNodesCheck;
 import org.gedcomx.persistence.graph.neo4j.interceptors.TransactionWrapper;
-import org.gedcomx.persistence.graph.neo4j.messages.ErrorMessages;
+import org.gedcomx.persistence.graph.neo4j.model.NodeTypeMapper;
 import org.gedcomx.persistence.graph.neo4j.model.NodeWrapper;
-import org.gedcomx.persistence.graph.neo4j.model.utils.NodeTypeMapper;
+import org.gedcomx.persistence.graph.neo4j.properties.Messages;
 import org.gedcomx.persistence.graph.neo4j.service.GENgraphPersistenceService;
 import org.gedcomx.persistence.graph.neo4j.service.GENgraphPersistenceServiceImpl;
 import org.reflections.Reflections;
@@ -38,6 +38,9 @@ public class ServiceInjector extends AbstractModule {
         // Untargetted Binding
         this.bind(NodeTypeMapper.class).in(Singleton.class);
 
+        // Static Binding
+        this.bind(MessageResolver.class).in(Singleton.class);
+
         // Bindings
         this.bind(GENgraphPersistenceService.class)
                 .to(GENgraphPersistenceServiceImpl.class).in(Singleton.class);
@@ -48,10 +51,10 @@ public class ServiceInjector extends AbstractModule {
         final Properties prop = new Properties();
         try {
             prop.load(ServiceInjector.class.getClassLoader()
-                    .getResourceAsStream("config/dao.properties"));
+                    .getResourceAsStream("config/service.properties"));
         } catch (final IOException e) {
             e.printStackTrace();
-            throw new GenericError(ErrorMessages.DAO_CANT_LOAD_PROPERTIES);
+            throw new GenericError(Messages.DAO_CANT_LOAD_PROPERTIES);
         }
         this.bind(String.class).annotatedWith(Names.named("Neo4jDBPath"))
                 .toInstance(prop.getProperty(ServiceInjector.NEO4J_DB_PATH));

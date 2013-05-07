@@ -1,4 +1,4 @@
-package org.gedcomx.persistence.graph.neo4j.dto;
+package org.gedcomx.persistence.graph.neo4j.service.dto;
 
 import java.util.List;
 

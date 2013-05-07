@@ -1,4 +1,4 @@
-package org.gedcomx.persistence.graph.neo4j.model.utils;
+package org.gedcomx.persistence.graph.neo4j.model;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -6,9 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
-import org.gedcomx.persistence.graph.neo4j.annotations.NodeWrapperReflections;
-import org.gedcomx.persistence.graph.neo4j.exception.GenericError;
-import org.gedcomx.persistence.graph.neo4j.model.NodeWrapper;
+import org.gedcomx.persistence.graph.neo4j.annotations.injection.NodeWrapperReflections;
+import org.gedcomx.persistence.graph.neo4j.exceptions.GenericError;
 import org.gedcomx.persistence.graph.neo4j.model.constants.NodeTypes;
 import org.neo4j.graphdb.Node;
 import org.reflections.Reflections;

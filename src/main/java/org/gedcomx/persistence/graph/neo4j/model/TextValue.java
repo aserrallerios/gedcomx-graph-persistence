@@ -1,13 +1,13 @@
 package org.gedcomx.persistence.graph.neo4j.model;
 
 import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
-import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
-import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredPropertyException;
-import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
+import org.gedcomx.persistence.graph.neo4j.exceptions.MissingFieldException;
+import org.gedcomx.persistence.graph.neo4j.exceptions.MissingRequiredPropertyException;
+import org.gedcomx.persistence.graph.neo4j.exceptions.UnknownNodeType;
 import org.gedcomx.persistence.graph.neo4j.model.constants.GenericProperties;
 import org.gedcomx.persistence.graph.neo4j.model.constants.NodeTypes;
 import org.gedcomx.persistence.graph.neo4j.model.constants.RelationshipTypes;
-import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
+import org.gedcomx.persistence.graph.neo4j.utils.Validation;
 import org.neo4j.graphdb.Node;
 
 @NodeType(NodeTypes.TEXT_VALUE)
@@ -87,7 +87,7 @@ public class TextValue extends NodeWrapper {
     @Override
     protected void validateUnderlyingNode()
             throws MissingRequiredPropertyException {
-        if (ValidationTools.nullOrEmpty(this.getValue())) {
+        if (Validation.nullOrEmpty(this.getValue())) {
             throw new MissingRequiredPropertyException(
                     this.getAnnotatedNodeType(),
                     GenericProperties.VALUE.toString());

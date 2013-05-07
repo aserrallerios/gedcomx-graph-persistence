@@ -3,8 +3,8 @@ package org.gedcomx.persistence.graph.neo4j.model;
 import java.util.List;
 
 import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
-import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
-import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
+import org.gedcomx.persistence.graph.neo4j.exceptions.MissingFieldException;
+import org.gedcomx.persistence.graph.neo4j.exceptions.UnknownNodeType;
 import org.gedcomx.persistence.graph.neo4j.model.constants.ConclusionProperties;
 import org.gedcomx.persistence.graph.neo4j.model.constants.GenericProperties;
 import org.gedcomx.persistence.graph.neo4j.model.constants.NodeTypes;

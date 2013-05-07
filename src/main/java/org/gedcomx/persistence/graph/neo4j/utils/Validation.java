@@ -2,11 +2,11 @@ package org.gedcomx.persistence.graph.neo4j.utils;
 
 import java.util.Collection;
 
-public class ValidationTools {
+public class Validation {
 
 	private static boolean nullOrEmpty(final Collection<?> col) {
 		for (final Object ob : col) {
-			if (ValidationTools.nullOrEmpty(ob)) {
+			if (Validation.nullOrEmpty(ob)) {
 				return true;
 			}
 		}
@@ -18,10 +18,10 @@ public class ValidationTools {
 			return true;
 		}
 		if (object instanceof Collection) {
-			return ValidationTools.nullOrEmpty((Collection<?>) object);
+			return Validation.nullOrEmpty((Collection<?>) object);
 		}
 		if (object instanceof String) {
-			return ValidationTools.nullOrEmpty((String) object);
+			return Validation.nullOrEmpty((String) object);
 		}
 		return false;
 	}

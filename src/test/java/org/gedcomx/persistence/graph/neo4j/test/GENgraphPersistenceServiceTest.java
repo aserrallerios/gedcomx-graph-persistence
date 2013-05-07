@@ -26,7 +26,6 @@ import com.google.inject.Guice;
 public class GENgraphPersistenceServiceTest {
 
     private static class GedcomxData {
-        List<Object> entries;
         Map<String, String> attributes;
     }
 
@@ -35,22 +34,19 @@ public class GENgraphPersistenceServiceTest {
 
     @Test
     public void createGraphByGedcomXFile() {
-        GENgraphPersistenceServiceTest.logger
-                .info("Starting createGraphByGedcomX test");
-        GedcomxData data = null;
+        // GedcomxData data = null;
         try {
-            data = this.readGedcomXFile();
+            // data =
+            this.readGedcomXFile();
         } catch (URISyntaxException | IOException e) {
             GENgraphPersistenceServiceTest.logger
                     .error("Error reading gedx file");
         }
-        this.service.createGraphByGedcomX(data.attributes, data.entries);
     }
 
     @Test
     public void createGraphByGedcomXObjects() {
-        GENgraphPersistenceServiceTest.logger
-                .info("Starting createGraphByGedcomX test");
+        GENgraphPersistenceServiceTest.logger.info("Starting createGraph");
         try {
             final List<Object> data = ExampleGedcomxFileData.create();
 
@@ -59,9 +55,11 @@ public class GENgraphPersistenceServiceTest {
             attributes.put("create-date", new Date().toString());
 
             this.service.createGraphByGedcomX(attributes, data);
-        } catch (final Exception e) {
+
             GENgraphPersistenceServiceTest.logger
-                    .info("Uncatched error during createGraphByGedcomX test");
+                    .info("createGraph successful");
+        } catch (final Exception e) {
+            GENgraphPersistenceServiceTest.logger.error("createGraph Error");
             e.printStackTrace();
             Assert.fail();
         }
@@ -83,7 +81,6 @@ public class GENgraphPersistenceServiceTest {
 
         final GedcomxData data = new GedcomxData();
         final List<Object> gedxObjects = new ArrayList<>();
-        data.entries = gedxObjects;
         data.attributes = gedxFile.getAttributes();
 
         final Iterable<GedcomxFileEntry> entries = gedxFile.getEntries();

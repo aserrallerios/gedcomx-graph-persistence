@@ -4,14 +4,14 @@ import java.util.List;
 
 import org.gedcomx.common.URI;
 import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
-import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
-import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredRelationshipException;
-import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
+import org.gedcomx.persistence.graph.neo4j.exceptions.MissingFieldException;
+import org.gedcomx.persistence.graph.neo4j.exceptions.MissingRequiredRelationshipException;
+import org.gedcomx.persistence.graph.neo4j.exceptions.UnknownNodeType;
 import org.gedcomx.persistence.graph.neo4j.model.constants.ConclusionProperties;
 import org.gedcomx.persistence.graph.neo4j.model.constants.GenericProperties;
 import org.gedcomx.persistence.graph.neo4j.model.constants.NodeTypes;
 import org.gedcomx.persistence.graph.neo4j.model.constants.RelationshipTypes;
-import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
+import org.gedcomx.persistence.graph.neo4j.utils.Validation;
 import org.gedcomx.types.NameType;
 import org.neo4j.graphdb.Node;
 
@@ -148,7 +148,7 @@ public class Name extends Conclusion {
 
     @Override
     protected void validateUnderlyingNode() throws MissingFieldException {
-        if (ValidationTools.nullOrEmpty(this.getNameForms())) {
+        if (Validation.nullOrEmpty(this.getNameForms())) {
             throw new MissingRequiredRelationshipException(
                     this.getAnnotatedNodeType(), this.getId(),
                     RelationshipTypes.HAS_NAME_FORM.toString());

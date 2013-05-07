@@ -3,13 +3,13 @@ package org.gedcomx.persistence.graph.neo4j.model;
 import org.gedcomx.common.ResourceReference;
 import org.gedcomx.common.URI;
 import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
-import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
-import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredPropertyException;
-import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
+import org.gedcomx.persistence.graph.neo4j.exceptions.MissingFieldException;
+import org.gedcomx.persistence.graph.neo4j.exceptions.MissingRequiredPropertyException;
+import org.gedcomx.persistence.graph.neo4j.exceptions.UnknownNodeType;
 import org.gedcomx.persistence.graph.neo4j.model.constants.AgentProperties;
 import org.gedcomx.persistence.graph.neo4j.model.constants.NodeTypes;
 import org.gedcomx.persistence.graph.neo4j.model.constants.RelationshipTypes;
-import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
+import org.gedcomx.persistence.graph.neo4j.utils.Validation;
 import org.neo4j.graphdb.Node;
 
 @NodeType(NodeTypes.ACCOUNT)
@@ -95,12 +95,12 @@ public class OnlineAccount extends NodeWrapper {
     @Override
     protected void validateUnderlyingNode()
             throws MissingRequiredPropertyException {
-        if (ValidationTools.nullOrEmpty(this.getAccountName())) {
+        if (Validation.nullOrEmpty(this.getAccountName())) {
             throw new MissingRequiredPropertyException(
                     this.getAnnotatedNodeType(),
                     AgentProperties.ACCOUNT_NAME.toString());
         }
-        if (ValidationTools.nullOrEmpty(this.getServiceHomepage())) {
+        if (Validation.nullOrEmpty(this.getServiceHomepage())) {
             throw new MissingRequiredPropertyException(
                     this.getAnnotatedNodeType(),
                     AgentProperties.SERVICE_HOMEPAGE.toString());

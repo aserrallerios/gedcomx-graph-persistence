@@ -1,13 +1,13 @@
 package org.gedcomx.persistence.graph.neo4j.model;
 
 import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
-import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
-import org.gedcomx.persistence.graph.neo4j.exception.MissingRequiredRelationshipException;
-import org.gedcomx.persistence.graph.neo4j.exception.UnknownNodeType;
+import org.gedcomx.persistence.graph.neo4j.exceptions.MissingFieldException;
+import org.gedcomx.persistence.graph.neo4j.exceptions.MissingRequiredRelationshipException;
+import org.gedcomx.persistence.graph.neo4j.exceptions.UnknownNodeType;
 import org.gedcomx.persistence.graph.neo4j.model.constants.NodeTypes;
 import org.gedcomx.persistence.graph.neo4j.model.constants.RelationshipTypes;
 import org.gedcomx.persistence.graph.neo4j.model.constants.SourceProperties;
-import org.gedcomx.persistence.graph.neo4j.utils.ValidationTools;
+import org.gedcomx.persistence.graph.neo4j.utils.Validation;
 import org.neo4j.graphdb.Node;
 
 @NodeType(NodeTypes.SOURCE_REFERENCE)
@@ -103,7 +103,7 @@ public class SourceReference extends NodeWrapper {
 
     @Override
     protected void validateUnderlyingNode() throws MissingFieldException {
-        if (ValidationTools.nullOrEmpty(this.getDescription())) {
+        if (Validation.nullOrEmpty(this.getDescription())) {
             throw new MissingRequiredRelationshipException(
                     this.getAnnotatedNodeType(),
                     RelationshipTypes.DESCRIPTION.toString());

@@ -32,6 +32,8 @@ public interface GENgraphDAO {
 
     ExecutionResult executeCypherQuery(String query);
 
+    void rollbackTransaction(Transaction transaction);
+
     Iterable<Node> getAllNodes();
 
     Iterable<Relationship> getAllRelationships();
