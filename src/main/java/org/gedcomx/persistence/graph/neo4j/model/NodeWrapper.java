@@ -7,7 +7,7 @@ import java.util.Map;
 
 import org.gedcomx.common.ResourceReference;
 import org.gedcomx.common.URI;
-import org.gedcomx.persistence.graph.neo4j.annotations.EmbededDB;
+import org.gedcomx.persistence.graph.neo4j.annotations.injection.EmbededDB;
 import org.gedcomx.persistence.graph.neo4j.dao.GENgraphDAO;
 import org.gedcomx.persistence.graph.neo4j.exception.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exception.UninitializedNode;

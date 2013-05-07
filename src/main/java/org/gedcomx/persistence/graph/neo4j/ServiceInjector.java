@@ -3,10 +3,10 @@ package org.gedcomx.persistence.graph.neo4j;
 import java.io.IOException;
 import java.util.Properties;
 
-import org.gedcomx.persistence.graph.neo4j.annotations.CheckForDuplicates;
-import org.gedcomx.persistence.graph.neo4j.annotations.EmbededDB;
-import org.gedcomx.persistence.graph.neo4j.annotations.NodeWrapperReflections;
-import org.gedcomx.persistence.graph.neo4j.annotations.Transactional;
+import org.gedcomx.persistence.graph.neo4j.annotations.injection.EmbededDB;
+import org.gedcomx.persistence.graph.neo4j.annotations.injection.NodeWrapperReflections;
+import org.gedcomx.persistence.graph.neo4j.annotations.interceptors.CheckForDuplicates;
+import org.gedcomx.persistence.graph.neo4j.annotations.interceptors.Transactional;
 import org.gedcomx.persistence.graph.neo4j.dao.GENgraphDAO;
 import org.gedcomx.persistence.graph.neo4j.dao.GENgraphDAOImpl;
 import org.gedcomx.persistence.graph.neo4j.exception.GenericError;

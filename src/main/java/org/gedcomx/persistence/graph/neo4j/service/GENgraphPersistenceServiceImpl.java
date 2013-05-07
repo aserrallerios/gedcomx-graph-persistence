@@ -9,9 +9,9 @@ import java.util.Map.Entry;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.gedcomx.persistence.graph.neo4j.annotations.CheckForDuplicates;
-import org.gedcomx.persistence.graph.neo4j.annotations.EmbededDB;
-import org.gedcomx.persistence.graph.neo4j.annotations.Transactional;
+import org.gedcomx.persistence.graph.neo4j.annotations.injection.EmbededDB;
+import org.gedcomx.persistence.graph.neo4j.annotations.interceptors.CheckForDuplicates;
+import org.gedcomx.persistence.graph.neo4j.annotations.interceptors.Transactional;
 import org.gedcomx.persistence.graph.neo4j.dao.GENgraphDAO;
 import org.gedcomx.persistence.graph.neo4j.dto.QueryResult;
 import org.gedcomx.persistence.graph.neo4j.exception.GenericError;
@@ -178,7 +178,7 @@ public class GENgraphPersistenceServiceImpl implements
         final List<org.neo4j.graphdb.Node> nodes = new ArrayList<>();
         for (final org.neo4j.graphdb.Node node : this.dao.getAllNodes()) {
             nodes.add(node);
-        }
+    }
         final List<org.neo4j.graphdb.Relationship> relationships = new ArrayList<>();
         for (final org.neo4j.graphdb.Relationship relationship : this.dao
                 .getAllRelationships()) {
@@ -254,7 +254,7 @@ public class GENgraphPersistenceServiceImpl implements
                             .getValue());
                 }
             }
-        }
+    }
 
         return new QueryResult(nodes, relationships);
     }

@@ -2,7 +2,7 @@ package org.gedcomx.persistence.graph.neo4j.interceptors;
 
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
-import org.gedcomx.persistence.graph.neo4j.annotations.EmbededDB;
+import org.gedcomx.persistence.graph.neo4j.annotations.injection.EmbededDB;
 import org.gedcomx.persistence.graph.neo4j.dao.GENgraphDAO;
 import org.gedcomx.persistence.graph.neo4j.exception.NodeIdentifierAlreadyExists;
 import org.gedcomx.persistence.graph.neo4j.model.constants.GenericProperties;

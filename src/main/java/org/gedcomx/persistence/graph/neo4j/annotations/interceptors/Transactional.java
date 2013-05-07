@@ -1,4 +1,4 @@
-package org.gedcomx.persistence.graph.neo4j.annotations;
+package org.gedcomx.persistence.graph.neo4j.annotations.interceptors;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,5 +7,6 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface CheckForDuplicates {
+public @interface Transactional {
+
 }
