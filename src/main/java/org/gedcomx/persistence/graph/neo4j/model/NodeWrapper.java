@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.gedcomx.common.ResourceReference;
 import org.gedcomx.common.URI;
+import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
 import org.gedcomx.persistence.graph.neo4j.annotations.injection.EmbededDB;
 import org.gedcomx.persistence.graph.neo4j.dao.GENgraphDAO;
 import org.gedcomx.persistence.graph.neo4j.exceptions.MissingFieldException;
@@ -31,7 +32,7 @@ public abstract class NodeWrapper {
     @EmbededDB
     private static GENgraphDAO dao;
     @Inject
-    private static NodeTypeMapper mapper;
+    private static NodeWrapperFactory nodeTypeMapper;
     private final Node underlyingNode;
 
     protected NodeWrapper(final Node underlyingNode)
@@ -278,7 +279,7 @@ public abstract class NodeWrapper {
             if (node != null) {
                 final String type = (String) NodeWrapper.dao.getNodeProperty(
                         node, GenericProperties.NODE_TYPE.toString());
-                wrapper = NodeWrapper.mapper.createNode(
+                wrapper = NodeWrapper.nodeTypeMapper.createNode(
                         NodeTypes.valueOf(type), node);
             }
         }
@@ -286,7 +287,7 @@ public abstract class NodeWrapper {
     }
 
     protected String getAnnotatedNodeType() {
-        return NodeWrapper.mapper.getTypeByWrapper(this.getClass()).name();
+        return this.getClass().getAnnotation(NodeType.class).value().name();
     }
 
     public abstract <T extends Object> T getGedcomX();
@@ -326,7 +327,7 @@ public abstract class NodeWrapper {
         final Node node = NodeWrapper.dao.getSingleNodeByRelationship(
                 this.getUnderlyingNode(), relation, dir);
         if (node != null) {
-            return NodeWrapper.mapper.createNode(type, node);
+            return NodeWrapper.nodeTypeMapper.createNode(type, node);
         }
         return null;
     }
@@ -338,9 +339,9 @@ public abstract class NodeWrapper {
         final String nodeType = (String) NodeWrapper.dao.getNodeProperty(node,
                 GenericProperties.NODE_TYPE.name());
 
-        final Class<? extends NodeWrapper> type = NodeWrapper.mapper
+        final Class<? extends NodeWrapper> type = NodeWrapper.nodeTypeMapper
                 .getWrapperByType(NodeTypes.valueOf(nodeType));
-        return NodeWrapper.mapper.createNode(type, node);
+        return NodeWrapper.nodeTypeMapper.createNode(type, node);
     }
 
     protected <T extends NodeWrapper> List<T> getNodesByRelationship(
@@ -358,7 +359,7 @@ public abstract class NodeWrapper {
 
         final List<T> wrappers = new ArrayList<>();
         for (final Node node : nodes) {
-            wrappers.add(NodeWrapper.mapper.createNode(type, node));
+            wrappers.add(NodeWrapper.nodeTypeMapper.createNode(type, node));
         }
         return wrappers;
     }

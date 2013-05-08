@@ -22,9 +22,8 @@ import org.gedcomx.persistence.graph.neo4j.model.Agent;
 import org.gedcomx.persistence.graph.neo4j.model.Conclusion;
 import org.gedcomx.persistence.graph.neo4j.model.Document;
 import org.gedcomx.persistence.graph.neo4j.model.Event;
-import org.gedcomx.persistence.graph.neo4j.model.NodeTypeMapper;
 import org.gedcomx.persistence.graph.neo4j.model.NodeWrapper;
-import org.gedcomx.persistence.graph.neo4j.model.Person;
+import org.gedcomx.persistence.graph.neo4j.model.NodeWrapperFactory;
 import org.gedcomx.persistence.graph.neo4j.model.PlaceDescription;
 import org.gedcomx.persistence.graph.neo4j.model.Relationship;
 import org.gedcomx.persistence.graph.neo4j.model.SourceDescription;
@@ -46,7 +45,8 @@ public class GENgraphPersistenceServiceImpl implements
 
     private static Logger logger = LogManager.getLogger("GENGraphService");
     private final GENgraphDAO dao;
-    private NodeTypeMapper nodeTypeMapper;
+    @Inject
+    private static NodeWrapperFactory nodeWrapperFactory;
 
     @Inject
     GENgraphPersistenceServiceImpl(final @EmbededDB GENgraphDAO dao) {
@@ -80,7 +80,9 @@ public class GENgraphPersistenceServiceImpl implements
         try {
             NodeTypes type = null;
             if (conclusion instanceof org.gedcomx.conclusion.Person) {
-                c = new Person((org.gedcomx.conclusion.Person) conclusion);
+                // c = new Person((org.gedcomx.conclusion.Person) conclusion);
+                c = GENgraphPersistenceServiceImpl.nodeWrapperFactory
+                        .createPerson((org.gedcomx.conclusion.Person) conclusion);
                 type = NodeTypes.PERSON;
             } else if (conclusion instanceof org.gedcomx.conclusion.Document) {
                 c = new Document((org.gedcomx.conclusion.Document) conclusion);
@@ -102,8 +104,7 @@ public class GENgraphPersistenceServiceImpl implements
                                 .resolve(Messages.GEDCOMX_CONCLUSION_TYPE));
             }
             GENgraphPersistenceServiceImpl.logger.info(MessageResolver.resolve(
-                    Messages.GEDCOMX_NODE_CREATED, conclusion.getId(),
-                    type));
+                    Messages.GEDCOMX_NODE_CREATED, conclusion.getId(), type));
         } catch (final MissingFieldException e) {
             GENgraphPersistenceServiceImpl.logger.error(this
                     .getMissingFieldErrorMessage(e));
@@ -121,8 +122,8 @@ public class GENgraphPersistenceServiceImpl implements
         try {
             s = new SourceDescription(sourceDescription);
             GENgraphPersistenceServiceImpl.logger.info(MessageResolver.resolve(
-                    Messages.GEDCOMX_NODE_CREATED,
-                    sourceDescription.getId(), NodeTypes.SOURCE_DESCRIPTION));
+                    Messages.GEDCOMX_NODE_CREATED, sourceDescription.getId(),
+                    NodeTypes.SOURCE_DESCRIPTION));
         } catch (final MissingFieldException e) {
             GENgraphPersistenceServiceImpl.logger.error(this
                     .getMissingFieldErrorMessage(e));
@@ -144,8 +145,7 @@ public class GENgraphPersistenceServiceImpl implements
             n = this.addSource((org.gedcomx.source.SourceDescription) gedcomxElement);
         } else {
             throw new GenericError(
-                    MessageResolver
-                            .resolve(Messages.GEDCOMX_UNKNOWN_TYPE));
+                    MessageResolver.resolve(Messages.GEDCOMX_UNKNOWN_TYPE));
         }
         return n;
     }
@@ -223,16 +223,14 @@ public class GENgraphPersistenceServiceImpl implements
     private String getMissingFieldErrorMessage(final MissingFieldException e) {
         if (e instanceof MissingRequiredPropertyException) {
             final MissingRequiredPropertyException missingRelationship = (MissingRequiredPropertyException) e;
-            return MessageResolver.resolve(
-                    Messages.GEDCOMX_MISSING_FIELD,
+            return MessageResolver.resolve(Messages.GEDCOMX_MISSING_FIELD,
                     missingRelationship.getId(),
                     missingRelationship.getNodeType(),
                     missingRelationship.getProperty());
         }
         if (e instanceof MissingRequiredRelationshipException) {
             final MissingRequiredRelationshipException missingRelationship = (MissingRequiredRelationshipException) e;
-            return MessageResolver.resolve(
-                    Messages.GEDCOMX_MISSING_FIELD,
+            return MessageResolver.resolve(Messages.GEDCOMX_MISSING_FIELD,
                     missingRelationship.getId(),
                     missingRelationship.getNodeType(),
                     missingRelationship.getRelationship());
@@ -269,8 +267,8 @@ public class GENgraphPersistenceServiceImpl implements
 
         final List<NodeWrapper> wrappers = new ArrayList<>();
         while (nodes.hasNext()) {
-            wrappers.add(this.nodeTypeMapper.createNode(
-                    NodeTypes.valueOf(type), nodes.next()));
+            wrappers.add(GENgraphPersistenceServiceImpl.nodeWrapperFactory
+                    .createNode(NodeTypes.valueOf(type), nodes.next()));
         }
         return wrappers;
     }
@@ -284,7 +282,8 @@ public class GENgraphPersistenceServiceImpl implements
             type = (String) this.dao.getNodeProperty(node,
                     GenericProperties.TYPE.toString());
         }
-        return this.nodeTypeMapper.createNode(NodeTypes.valueOf(type), node);
+        return GENgraphPersistenceServiceImpl.nodeWrapperFactory.createNode(
+                NodeTypes.valueOf(type), node);
     }
 
     @Override
@@ -307,10 +306,5 @@ public class GENgraphPersistenceServiceImpl implements
         }
 
         return new QueryResult(nodes, relationships);
-    }
-
-    @Inject
-    public void setNodeTypeMapper(final NodeTypeMapper nodeTypeMapper) {
-        this.nodeTypeMapper = nodeTypeMapper;
     }
 }

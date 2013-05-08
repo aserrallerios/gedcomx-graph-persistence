@@ -5,6 +5,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.gedcomx.persistence.graph.neo4j.WrapperProvider;
 import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
 import org.gedcomx.persistence.graph.neo4j.annotations.injection.NodeWrapperReflections;
 import org.gedcomx.persistence.graph.neo4j.exceptions.GenericError;
@@ -14,12 +15,14 @@ import org.reflections.Reflections;
 
 import com.google.inject.Inject;
 
-public class NodeTypeMapper {
+public class NodeWrapperFactory {
 
+    @Inject
+    private WrapperProvider wrapperProvider;
     private final Map<NodeTypes, Class<? extends NodeWrapper>> nodesByType = new HashMap<>();
 
     @Inject
-    NodeTypeMapper(final @NodeWrapperReflections Reflections reflections) {
+    NodeWrapperFactory(final @NodeWrapperReflections Reflections reflections) {
         for (final Class<? extends NodeWrapper> subclass : reflections
                 .getSubTypesOf(NodeWrapper.class)) {
             final NodeType nodeType = subclass.getAnnotation(NodeType.class);
@@ -50,8 +53,14 @@ public class NodeTypeMapper {
         return this.createNode(this.getWrapperByType(type), node);
     }
 
-    public NodeTypes getTypeByWrapper(final Class<? extends NodeWrapper> wrapper) {
-        return wrapper.getAnnotation(NodeType.class).value();
+    public NodeWrapper createNode(final NodeTypes type,
+            final Object gedcomxObject) {
+        return this.wrapperProvider
+                .createPerson((org.gedcomx.conclusion.Person) gedcomxObject);
+    }
+
+    public Person createPerson(final org.gedcomx.conclusion.Person gedcomXPerson) {
+        return this.wrapperProvider.createPerson(gedcomXPerson);
     }
 
     public Class<? extends NodeWrapper> getWrapperByType(final NodeTypes type) {

@@ -12,7 +12,7 @@ import org.gedcomx.persistence.graph.neo4j.dao.GENgraphDAOImpl;
 import org.gedcomx.persistence.graph.neo4j.exceptions.GenericError;
 import org.gedcomx.persistence.graph.neo4j.interceptors.DuplicatedNodesCheck;
 import org.gedcomx.persistence.graph.neo4j.interceptors.TransactionWrapper;
-import org.gedcomx.persistence.graph.neo4j.model.NodeTypeMapper;
+import org.gedcomx.persistence.graph.neo4j.model.NodeWrapperFactory;
 import org.gedcomx.persistence.graph.neo4j.model.NodeWrapper;
 import org.gedcomx.persistence.graph.neo4j.properties.Messages;
 import org.gedcomx.persistence.graph.neo4j.service.GENgraphPersistenceService;
@@ -22,6 +22,7 @@ import org.reflections.Reflections;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
+import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.google.inject.matcher.Matchers;
 import com.google.inject.name.Names;
 
@@ -34,12 +35,10 @@ public class ServiceInjector extends AbstractModule {
     protected void configure() {
         // Node wrappers hold a static reference to DAO
         this.requestStaticInjection(NodeWrapper.class);
+        this.requestStaticInjection(GENgraphPersistenceServiceImpl.class);
 
         // Untargetted Binding
-        this.bind(NodeTypeMapper.class).in(Singleton.class);
-
-        // Static Binding
-        this.bind(MessageResolver.class).in(Singleton.class);
+        this.bind(NodeWrapperFactory.class).in(Singleton.class);
 
         // Bindings
         this.bind(GENgraphPersistenceService.class)
@@ -65,6 +64,9 @@ public class ServiceInjector extends AbstractModule {
                 .toInstance(
                         ServiceInjector.class.getClassLoader()
                                 .getResource(fileName).getPath());
+
+        // AssistedInject
+        this.install(new FactoryModuleBuilder().build(WrapperProvider.class));
 
         // Interceptor
         final DuplicatedNodesCheck interceptor = new DuplicatedNodesCheck();

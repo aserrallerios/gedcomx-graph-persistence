@@ -3,6 +3,8 @@ package org.gedcomx.persistence.graph.neo4j.model;
 import java.util.List;
 
 import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
+import org.gedcomx.persistence.graph.neo4j.annotations.injection.EmbededDB;
+import org.gedcomx.persistence.graph.neo4j.dao.GENgraphDAO;
 import org.gedcomx.persistence.graph.neo4j.exceptions.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exceptions.UnknownNodeType;
 import org.gedcomx.persistence.graph.neo4j.model.constants.ConclusionProperties;
@@ -10,11 +12,21 @@ import org.gedcomx.persistence.graph.neo4j.model.constants.NodeTypes;
 import org.gedcomx.persistence.graph.neo4j.model.constants.RelationshipTypes;
 import org.neo4j.graphdb.Node;
 
+import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
+
 @NodeType(NodeTypes.PERSON)
 public class Person extends Conclusion {
 
     protected Person() throws MissingFieldException {
         super();
+    }
+
+    @Inject
+    private Person(final @EmbededDB GENgraphDAO dao,
+            final @Assisted org.gedcomx.conclusion.Person gedcomXPerson)
+            throws MissingFieldException {
+        super(gedcomXPerson);
     }
 
     protected Person(final Node node) throws MissingFieldException,
