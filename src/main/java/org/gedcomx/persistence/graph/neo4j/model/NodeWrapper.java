@@ -32,7 +32,7 @@ public abstract class NodeWrapper {
     @EmbededDB
     private static GENgraphDAO dao;
     @Inject
-    private static NodeWrapperFactory nodeTypeMapper;
+    private static NodeWrapperFactory nodeWrapperFactory;
     private final Node underlyingNode;
 
     protected NodeWrapper(final Node underlyingNode)
@@ -279,7 +279,7 @@ public abstract class NodeWrapper {
             if (node != null) {
                 final String type = (String) NodeWrapper.dao.getNodeProperty(
                         node, GenericProperties.NODE_TYPE.toString());
-                wrapper = NodeWrapper.nodeTypeMapper.wrapNode(
+                wrapper = NodeWrapper.nodeWrapperFactory.wrapNode(
                         NodeTypes.valueOf(type), node);
             }
         }
@@ -327,7 +327,7 @@ public abstract class NodeWrapper {
         final Node node = NodeWrapper.dao.getSingleNodeByRelationship(
                 this.getUnderlyingNode(), relation, dir);
         if (node != null) {
-            return NodeWrapper.nodeTypeMapper.wrapNode(type, node);
+            return NodeWrapper.nodeWrapperFactory.wrapNode(type, node);
         }
         return null;
     }
@@ -339,9 +339,9 @@ public abstract class NodeWrapper {
         final String nodeType = (String) NodeWrapper.dao.getNodeProperty(node,
                 GenericProperties.NODE_TYPE.name());
 
-        final Class<? extends NodeWrapper> type = NodeWrapper.nodeTypeMapper
+        final Class<? extends NodeWrapper> type = NodeWrapper.nodeWrapperFactory
                 .getWrapperByType(NodeTypes.valueOf(nodeType));
-        return NodeWrapper.nodeTypeMapper.wrapNode(type, node);
+        return NodeWrapper.nodeWrapperFactory.wrapNode(type, node);
     }
 
     protected <T extends NodeWrapper> List<T> getNodesByRelationship(
@@ -359,7 +359,7 @@ public abstract class NodeWrapper {
 
         final List<T> wrappers = new ArrayList<>();
         for (final Node node : nodes) {
-            wrappers.add(NodeWrapper.nodeTypeMapper.wrapNode(type, node));
+            wrappers.add(NodeWrapper.nodeWrapperFactory.wrapNode(type, node));
         }
         return wrappers;
     }

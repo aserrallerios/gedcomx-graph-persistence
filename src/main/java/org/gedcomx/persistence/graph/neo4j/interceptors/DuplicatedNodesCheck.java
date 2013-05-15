@@ -13,7 +13,7 @@ import com.google.inject.Inject;
 
 public class DuplicatedNodesCheck implements MethodInterceptor {
 
-    GENgraphDAO dao;
+    private GENgraphDAO dao;
 
     @Inject
     public DuplicatedNodesCheck() {

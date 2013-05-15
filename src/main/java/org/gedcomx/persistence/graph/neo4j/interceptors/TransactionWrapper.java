@@ -10,7 +10,7 @@ import com.google.inject.Inject;
 
 public class TransactionWrapper implements MethodInterceptor {
 
-    GENgraphDAO dao;
+    private GENgraphDAO dao;
 
     @Inject
     public TransactionWrapper() {
