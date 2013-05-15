@@ -20,13 +20,13 @@ public class CitationField extends NodeWrapper {
         super(node);
     }
 
-    public CitationField(
+    protected CitationField(
             final org.gedcomx.source.CitationField gedcomXCitationField)
             throws MissingFieldException {
         super(gedcomXCitationField);
     }
 
-    public CitationField(final URI name, final String value)
+    protected CitationField(final URI name, final String value)
             throws MissingFieldException {
         super(name, value);
     }

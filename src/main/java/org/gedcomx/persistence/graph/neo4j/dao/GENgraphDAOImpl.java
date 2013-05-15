@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 import java.util.NavigableMap;
 import java.util.TreeMap;
 
+import org.gedcomx.persistence.graph.neo4j.annotations.interceptors.Transactional;
 import org.neo4j.cypher.javacompat.ExecutionEngine;
 import org.neo4j.cypher.javacompat.ExecutionResult;
 import org.neo4j.graphdb.Direction;
@@ -54,68 +55,38 @@ public class GENgraphDAOImpl implements GENgraphDAO {
     }
 
     @Override
+    @Transactional
     public Node createNode() {
-        final Transaction tx = this.graphDb.beginTx();
-        Node node = null;
-        try {
-            node = this.graphDb.createNode();
-            tx.success();
-        } finally {
-            tx.finish();
-        }
-        return node;
+        return this.graphDb.createNode();
     }
 
     @Override
+    @Transactional
     public Relationship createRelationship(final Node node,
             final RelationshipType reltype, final Node secondNode) {
-        final Transaction tx = node.getGraphDatabase().beginTx();
-        Relationship rel = null;
-        try {
-            rel = node.createRelationshipTo(secondNode, reltype);
-            tx.success();
-        } finally {
-            tx.finish();
-        }
-        return rel;
+        return node.createRelationshipTo(secondNode, reltype);
     }
 
     @Override
+    @Transactional
     public Relationship createRelationship(final Node node,
             final RelationshipType reltype, final Node secondNode,
             final Map<String, ?> properties) {
-        final Transaction tx = node.getGraphDatabase().beginTx();
-        Relationship rel = null;
-        try {
-            rel = node.createRelationshipTo(secondNode, reltype);
-            this.setRelationshipProperties(rel, properties);
-            tx.success();
-        } finally {
-            tx.finish();
-        }
+        final Relationship rel = node.createRelationshipTo(secondNode, reltype);
+        this.setRelationshipProperties(rel, properties);
         return rel;
     }
 
     @Override
+    @Transactional
     public void delete(final Node node) {
-        final Transaction tx = node.getGraphDatabase().beginTx();
-        try {
-            node.delete();
-            tx.success();
-        } finally {
-            tx.finish();
-        }
+        node.delete();
     }
 
     @Override
+    @Transactional
     public void delete(final Relationship rel) {
-        final Transaction tx = rel.getGraphDatabase().beginTx();
-        try {
-            rel.delete();
-            tx.success();
-        } finally {
-            tx.finish();
-        }
+        rel.delete();
     }
 
     @Override
@@ -127,11 +98,6 @@ public class GENgraphDAOImpl implements GENgraphDAO {
     public ExecutionResult executeCypherQuery(final String query) {
         final ExecutionResult result = this.executionEngine.execute(query);
         return result;
-    }
-
-    @Override
-    public void rollbackTransaction(final Transaction transaction) {
-        transaction.failure();
     }
 
     @Override
@@ -260,101 +226,76 @@ public class GENgraphDAOImpl implements GENgraphDAO {
         });
     }
 
+    @Transactional
     private void removeNodeFromIndex(final String indexName, final Node node,
             final String property) {
         final Index<Node> index = this.graphDb.index().forNodes(indexName);
-        final Transaction tx = this.graphDb.beginTx();
-        try {
-            index.remove(node, property);
-            tx.success();
-        } finally {
-            tx.finish();
-        }
+        index.remove(node, property);
     }
 
     @Override
+    @Transactional
     public void removeNodeProperty(final Node node, final String property) {
-        final Transaction tx = node.getGraphDatabase().beginTx();
-        try {
-            node.removeProperty(property);
-            tx.success();
-        } finally {
-            tx.finish();
-        }
+        node.removeProperty(property);
     }
 
     @Override
+    public void rollbackTransaction(final Transaction transaction) {
+        transaction.failure();
+    }
+
+    @Override
+    @Transactional
     public Node setNodeProperties(final Node node,
             final Map<String, ?> properties) {
-        final Transaction tx = node.getGraphDatabase().beginTx();
-        try {
-            for (final Entry<String, ?> property : properties.entrySet()) {
-                node.setProperty(property.getKey(), property.getValue());
-            }
-            tx.success();
-        } finally {
-            tx.finish();
+        for (final Entry<String, ?> property : properties.entrySet()) {
+            node.setProperty(property.getKey(), property.getValue());
         }
         return node;
     }
 
     @Override
+    @Transactional
     public Node setNodeProperty(final Node node, final String property,
             final Object value, final boolean indexed, final boolean unique,
             final String indexName) {
-        final Transaction tx = node.getGraphDatabase().beginTx();
-        try {
-            if (value == null) {
-                this.removeNodeProperty(node, property);
-            } else {
-                node.setProperty(property, value);
+        if (value == null) {
+            this.removeNodeProperty(node, property);
+        } else {
+            node.setProperty(property, value);
+        }
+        if (indexed) {
+            this.removeNodeFromIndex(indexName, node, property);
+            if (value != null) {
+                this.setNodeToIndex(indexName, node, property, value, unique);
             }
-            if (indexed) {
-                this.removeNodeFromIndex(indexName, node, property);
-                if (value != null) {
-                    this.setNodeToIndex(indexName, node, property, value,
-                            unique);
-                }
-            }
-            tx.success();
-        } finally {
-            tx.finish();
         }
         return node;
     }
 
+    @Transactional
     private void setNodeToIndex(final String indexName, final Node node,
             final String property, final Object value, final boolean unique) {
         final Index<Node> index = this.graphDb.index().forNodes(indexName);
-        final Transaction tx = this.graphDb.beginTx();
-        try {
-            if (unique) {
-                index.putIfAbsent(node, property, value);
-            } else {
-                index.add(node, property, value);
-            }
-            tx.success();
-        } finally {
-            tx.finish();
+        if (unique) {
+            index.putIfAbsent(node, property, value);
+        } else {
+            index.add(node, property, value);
         }
     }
 
     @Override
+    @Transactional
     public Relationship setRelationshipProperties(final Relationship rel,
             final Map<String, ?> properties) {
-        final Transaction tx = rel.getGraphDatabase().beginTx();
-        try {
-            for (final Entry<String, ?> property : properties.entrySet()) {
-                rel.setProperty(property.getKey(), property.getValue());
-            }
-            tx.success();
-        } finally {
-            tx.finish();
+        for (final Entry<String, ?> property : properties.entrySet()) {
+            rel.setProperty(property.getKey(), property.getValue());
         }
         return rel;
     }
 
     @Override
+    @Transactional
     public Relationship setRelationshipProperty(final Relationship rel,
             final String propertyName, final Object propertyValue) {
         final Transaction tx = rel.getGraphDatabase().beginTx();

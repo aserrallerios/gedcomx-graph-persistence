@@ -279,7 +279,7 @@ public abstract class NodeWrapper {
             if (node != null) {
                 final String type = (String) NodeWrapper.dao.getNodeProperty(
                         node, GenericProperties.NODE_TYPE.toString());
-                wrapper = NodeWrapper.nodeTypeMapper.createNode(
+                wrapper = NodeWrapper.nodeTypeMapper.wrapNode(
                         NodeTypes.valueOf(type), node);
             }
         }
@@ -327,7 +327,7 @@ public abstract class NodeWrapper {
         final Node node = NodeWrapper.dao.getSingleNodeByRelationship(
                 this.getUnderlyingNode(), relation, dir);
         if (node != null) {
-            return NodeWrapper.nodeTypeMapper.createNode(type, node);
+            return NodeWrapper.nodeTypeMapper.wrapNode(type, node);
         }
         return null;
     }
@@ -341,7 +341,7 @@ public abstract class NodeWrapper {
 
         final Class<? extends NodeWrapper> type = NodeWrapper.nodeTypeMapper
                 .getWrapperByType(NodeTypes.valueOf(nodeType));
-        return NodeWrapper.nodeTypeMapper.createNode(type, node);
+        return NodeWrapper.nodeTypeMapper.wrapNode(type, node);
     }
 
     protected <T extends NodeWrapper> List<T> getNodesByRelationship(
@@ -359,7 +359,7 @@ public abstract class NodeWrapper {
 
         final List<T> wrappers = new ArrayList<>();
         for (final Node node : nodes) {
-            wrappers.add(NodeWrapper.nodeTypeMapper.createNode(type, node));
+            wrappers.add(NodeWrapper.nodeTypeMapper.wrapNode(type, node));
         }
         return wrappers;
     }

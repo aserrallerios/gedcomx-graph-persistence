@@ -11,7 +11,7 @@ import org.neo4j.graphdb.Node;
 @NodeType(NodeTypes.PLACE_REFERENCE)
 public class PlaceReference extends NodeWrapper {
 
-    public PlaceReference() throws MissingFieldException, UnknownNodeType {
+    protected PlaceReference() throws MissingFieldException, UnknownNodeType {
         super();
     }
 
@@ -20,7 +20,7 @@ public class PlaceReference extends NodeWrapper {
         super(node);
     }
 
-    public PlaceReference(
+    protected PlaceReference(
             final org.gedcomx.conclusion.PlaceReference gedcomXPlaceReference)
             throws MissingFieldException {
         super(gedcomXPlaceReference);

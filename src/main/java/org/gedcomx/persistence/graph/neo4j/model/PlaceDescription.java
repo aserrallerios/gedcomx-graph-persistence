@@ -15,6 +15,9 @@ import org.gedcomx.persistence.graph.neo4j.model.constants.RelationshipTypes;
 import org.gedcomx.persistence.graph.neo4j.utils.Validation;
 import org.neo4j.graphdb.Node;
 
+import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
+
 @NodeType(NodeTypes.PLACE_DESCRIPTION)
 public class PlaceDescription extends Conclusion {
 
@@ -23,13 +26,14 @@ public class PlaceDescription extends Conclusion {
         super(node);
     }
 
-    public PlaceDescription(
-            final org.gedcomx.conclusion.PlaceDescription gedcomXPlaceDescription)
+    @Inject
+    protected PlaceDescription(
+            final @Assisted org.gedcomx.conclusion.PlaceDescription gedcomXPlaceDescription)
             throws MissingFieldException {
         super(gedcomXPlaceDescription);
     }
 
-    public PlaceDescription(final String nameValue)
+    protected PlaceDescription(final String nameValue)
             throws MissingFieldException {
         super(new Object[] { nameValue });
     }

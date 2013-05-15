@@ -13,18 +13,23 @@ import org.gedcomx.persistence.graph.neo4j.model.constants.RelationshipTypes;
 import org.gedcomx.types.EventType;
 import org.neo4j.graphdb.Node;
 
+import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
+
 @NodeType(NodeTypes.EVENT)
 public class Event extends Conclusion {
 
-    public Event() throws MissingFieldException {
+    protected Event() throws MissingFieldException {
         super();
     }
 
-    public Event(final Node node) throws MissingFieldException, UnknownNodeType {
+    protected Event(final Node node) throws MissingFieldException,
+            UnknownNodeType {
         super(node);
     }
 
-    public Event(final org.gedcomx.conclusion.Event gedcomXEvent)
+    @Inject
+    protected Event(final @Assisted org.gedcomx.conclusion.Event gedcomXEvent)
             throws MissingFieldException {
         super(gedcomXEvent);
     }

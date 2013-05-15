@@ -15,7 +15,7 @@ import org.neo4j.graphdb.Node;
 @NodeType(NodeTypes.GENDER)
 public class Gender extends Conclusion {
 
-    public Gender(final GenderType type) throws MissingFieldException {
+    protected Gender(final GenderType type) throws MissingFieldException {
         super(new Object[] { type });
     }
 
@@ -24,7 +24,7 @@ public class Gender extends Conclusion {
         super(node);
     }
 
-    public Gender(final org.gedcomx.conclusion.Gender gedcomXGender)
+    protected Gender(final org.gedcomx.conclusion.Gender gedcomXGender)
             throws MissingFieldException {
         super(gedcomXGender);
     }

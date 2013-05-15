@@ -15,17 +15,18 @@ import org.neo4j.graphdb.Node;
 @NodeType(NodeTypes.IDENTIFIER)
 public class Identifier extends NodeWrapper {
 
-    public Identifier(final Node node) throws UnknownNodeType,
+    protected Identifier(final Node node) throws UnknownNodeType,
             MissingFieldException {
         super(node);
     }
 
-    public Identifier(final org.gedcomx.conclusion.Identifier gedcomXIdentifier)
+    protected Identifier(
+            final org.gedcomx.conclusion.Identifier gedcomXIdentifier)
             throws MissingFieldException {
         super(gedcomXIdentifier);
     }
 
-    public Identifier(final URI value) throws MissingFieldException {
+    protected Identifier(final URI value) throws MissingFieldException {
         super(new Object[] { value });
     }
 

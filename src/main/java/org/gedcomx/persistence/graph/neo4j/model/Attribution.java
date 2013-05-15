@@ -13,7 +13,7 @@ import org.neo4j.graphdb.Node;
 @NodeType(NodeTypes.ATTRIBUTION)
 public class Attribution extends NodeWrapper {
 
-    public Attribution() throws MissingFieldException {
+    protected Attribution() throws MissingFieldException {
         super();
     }
 
@@ -22,7 +22,8 @@ public class Attribution extends NodeWrapper {
         super(node);
     }
 
-    public Attribution(final org.gedcomx.common.Attribution gedcomXAttribution)
+    protected Attribution(
+            final org.gedcomx.common.Attribution gedcomXAttribution)
             throws MissingFieldException {
         super(gedcomXAttribution);
     }

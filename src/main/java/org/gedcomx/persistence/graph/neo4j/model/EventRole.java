@@ -21,12 +21,12 @@ public class EventRole extends Conclusion {
         super(node);
     }
 
-    public EventRole(final org.gedcomx.conclusion.EventRole gedcomXEventRole)
+    protected EventRole(final org.gedcomx.conclusion.EventRole gedcomXEventRole)
             throws MissingFieldException {
         super(gedcomXEventRole);
     }
 
-    public EventRole(final Person person) throws MissingFieldException {
+    protected EventRole(final Person person) throws MissingFieldException {
         super(person);
     }
 

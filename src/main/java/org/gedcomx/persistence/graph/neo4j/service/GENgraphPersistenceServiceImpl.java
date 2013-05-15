@@ -20,12 +20,8 @@ import org.gedcomx.persistence.graph.neo4j.exceptions.MissingRequiredPropertyExc
 import org.gedcomx.persistence.graph.neo4j.exceptions.MissingRequiredRelationshipException;
 import org.gedcomx.persistence.graph.neo4j.model.Agent;
 import org.gedcomx.persistence.graph.neo4j.model.Conclusion;
-import org.gedcomx.persistence.graph.neo4j.model.Document;
-import org.gedcomx.persistence.graph.neo4j.model.Event;
 import org.gedcomx.persistence.graph.neo4j.model.NodeWrapper;
 import org.gedcomx.persistence.graph.neo4j.model.NodeWrapperFactory;
-import org.gedcomx.persistence.graph.neo4j.model.PlaceDescription;
-import org.gedcomx.persistence.graph.neo4j.model.Relationship;
 import org.gedcomx.persistence.graph.neo4j.model.SourceDescription;
 import org.gedcomx.persistence.graph.neo4j.model.constants.GenericProperties;
 import org.gedcomx.persistence.graph.neo4j.model.constants.IndexNames;
@@ -46,7 +42,7 @@ public class GENgraphPersistenceServiceImpl implements
     private static Logger logger = LogManager.getLogger("GENGraphService");
     private final GENgraphDAO dao;
     @Inject
-    private static NodeWrapperFactory nodeWrapperFactory;
+    private NodeWrapperFactory nodeWrapperFactory;
 
     @Inject
     GENgraphPersistenceServiceImpl(final @EmbededDB GENgraphDAO dao) {
@@ -59,7 +55,7 @@ public class GENgraphPersistenceServiceImpl implements
             throws MissingFieldException {
         Agent a = null;
         try {
-            a = new Agent(agent);
+            a = this.nodeWrapperFactory.createAgent(agent);
             GENgraphPersistenceServiceImpl.logger.info(MessageResolver.resolve(
                     Messages.GEDCOMX_NODE_CREATED, agent.getId(),
                     NodeTypes.AGENT));
@@ -81,22 +77,24 @@ public class GENgraphPersistenceServiceImpl implements
             NodeTypes type = null;
             if (conclusion instanceof org.gedcomx.conclusion.Person) {
                 // c = new Person((org.gedcomx.conclusion.Person) conclusion);
-                c = GENgraphPersistenceServiceImpl.nodeWrapperFactory
+                c = this.nodeWrapperFactory
                         .createPerson((org.gedcomx.conclusion.Person) conclusion);
                 type = NodeTypes.PERSON;
             } else if (conclusion instanceof org.gedcomx.conclusion.Document) {
-                c = new Document((org.gedcomx.conclusion.Document) conclusion);
+                c = this.nodeWrapperFactory
+                        .createDocument((org.gedcomx.conclusion.Document) conclusion);
                 type = NodeTypes.DOCUMENT;
             } else if (conclusion instanceof org.gedcomx.conclusion.Event) {
-                c = new Event((org.gedcomx.conclusion.Event) conclusion);
+                c = this.nodeWrapperFactory
+                        .createEvent((org.gedcomx.conclusion.Event) conclusion);
                 type = NodeTypes.EVENT;
             } else if (conclusion instanceof org.gedcomx.conclusion.Relationship) {
-                c = new Relationship(
-                        (org.gedcomx.conclusion.Relationship) conclusion);
+                c = this.nodeWrapperFactory
+                        .createRelationship((org.gedcomx.conclusion.Relationship) conclusion);
                 type = NodeTypes.RELATIONSHIP;
             } else if (conclusion instanceof org.gedcomx.conclusion.PlaceDescription) {
-                c = new PlaceDescription(
-                        (org.gedcomx.conclusion.PlaceDescription) conclusion);
+                c = this.nodeWrapperFactory
+                        .createPlace((org.gedcomx.conclusion.PlaceDescription) conclusion);
                 type = NodeTypes.PLACE_DESCRIPTION;
             } else {
                 throw new GenericError(
@@ -120,7 +118,7 @@ public class GENgraphPersistenceServiceImpl implements
             throws MissingFieldException {
         SourceDescription s = null;
         try {
-            s = new SourceDescription(sourceDescription);
+            s = this.nodeWrapperFactory.createSource(sourceDescription);
             GENgraphPersistenceServiceImpl.logger.info(MessageResolver.resolve(
                     Messages.GEDCOMX_NODE_CREATED, sourceDescription.getId(),
                     NodeTypes.SOURCE_DESCRIPTION));
@@ -267,8 +265,8 @@ public class GENgraphPersistenceServiceImpl implements
 
         final List<NodeWrapper> wrappers = new ArrayList<>();
         while (nodes.hasNext()) {
-            wrappers.add(GENgraphPersistenceServiceImpl.nodeWrapperFactory
-                    .createNode(NodeTypes.valueOf(type), nodes.next()));
+            wrappers.add(this.nodeWrapperFactory.wrapNode(
+                    NodeTypes.valueOf(type), nodes.next()));
         }
         return wrappers;
     }
@@ -282,8 +280,7 @@ public class GENgraphPersistenceServiceImpl implements
             type = (String) this.dao.getNodeProperty(node,
                     GenericProperties.TYPE.toString());
         }
-        return GENgraphPersistenceServiceImpl.nodeWrapperFactory.createNode(
-                NodeTypes.valueOf(type), node);
+        return this.nodeWrapperFactory.wrapNode(NodeTypes.valueOf(type), node);
     }
 
     @Override

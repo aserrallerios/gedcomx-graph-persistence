@@ -16,7 +16,7 @@ import org.neo4j.graphdb.Node;
 @NodeType(NodeTypes.FACT)
 public class Fact extends Conclusion {
 
-    public Fact(final FactType type) throws MissingFieldException {
+    protected Fact(final FactType type) throws MissingFieldException {
         super(new Object[] { type });
     }
 
@@ -25,25 +25,18 @@ public class Fact extends Conclusion {
         super(node);
     }
 
-    public Fact(final org.gedcomx.conclusion.Fact gedcomXFact)
+    protected Fact(final org.gedcomx.conclusion.Fact gedcomXFact)
             throws MissingFieldException {
         super(gedcomXFact);
     }
 
-    public Fact(final URI type) throws MissingFieldException {
+    protected Fact(final URI type) throws MissingFieldException {
         super(new Object[] { type });
     }
 
     @Override
     protected void deleteAllConcreteReferences() {
         this.deleteReferencedNode(this.getPlaceReference());
-    }
-
-    @Override
-    protected void deleteAllReferences() {
-        super.deleteAllReferences();
-
-        this.getPlaceReference().delete();
     }
 
     public String getDateFormal() {

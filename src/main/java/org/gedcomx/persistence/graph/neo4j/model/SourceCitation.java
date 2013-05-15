@@ -29,7 +29,7 @@ public class SourceCitation extends NodeWrapper {
         super(gedcomXSourceCitation);
     }
 
-    public SourceCitation(final String value) throws MissingFieldException {
+    protected SourceCitation(final String value) throws MissingFieldException {
         super(new Object[] { value });
     }
 

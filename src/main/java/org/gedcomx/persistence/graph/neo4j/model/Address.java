@@ -11,7 +11,7 @@ import org.neo4j.graphdb.Node;
 @NodeType(NodeTypes.ACCOUNT)
 public class Address extends NodeWrapper {
 
-    public Address() throws MissingFieldException {
+    protected Address() throws MissingFieldException {
         super();
     }
 
@@ -20,7 +20,7 @@ public class Address extends NodeWrapper {
         super(node);
     }
 
-    public Address(final org.gedcomx.agent.Address gedcomXAddress)
+    protected Address(final org.gedcomx.agent.Address gedcomXAddress)
             throws MissingFieldException {
         super(gedcomXAddress);
     }

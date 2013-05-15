@@ -14,7 +14,7 @@ import org.neo4j.graphdb.Node;
 @NodeType(NodeTypes.NAME_FORM)
 public class NameForm extends NodeWrapper {
 
-    public NameForm() throws MissingFieldException {
+    protected NameForm() throws MissingFieldException {
         super();
     }
 
@@ -23,7 +23,7 @@ public class NameForm extends NodeWrapper {
         super(node);
     }
 
-    public NameForm(final org.gedcomx.conclusion.NameForm gedcomXNameForm)
+    protected NameForm(final org.gedcomx.conclusion.NameForm gedcomXNameForm)
             throws MissingFieldException {
         super(gedcomXNameForm);
     }

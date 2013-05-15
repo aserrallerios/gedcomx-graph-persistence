@@ -12,6 +12,9 @@ import org.gedcomx.persistence.graph.neo4j.utils.Validation;
 import org.gedcomx.types.DocumentType;
 import org.neo4j.graphdb.Node;
 
+import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
+
 @NodeType(NodeTypes.DOCUMENT)
 public class Document extends Conclusion {
 
@@ -20,12 +23,14 @@ public class Document extends Conclusion {
         super(node);
     }
 
-    public Document(final org.gedcomx.conclusion.Document gedcomXDocument)
+    @Inject
+    protected Document(
+            final @Assisted org.gedcomx.conclusion.Document gedcomXDocument)
             throws MissingFieldException {
         super(gedcomXDocument);
     }
 
-    public Document(final String text) throws MissingFieldException {
+    protected Document(final String text) throws MissingFieldException {
         super(text);
     }
 

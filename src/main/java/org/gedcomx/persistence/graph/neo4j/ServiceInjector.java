@@ -14,6 +14,7 @@ import org.gedcomx.persistence.graph.neo4j.interceptors.DuplicatedNodesCheck;
 import org.gedcomx.persistence.graph.neo4j.interceptors.TransactionWrapper;
 import org.gedcomx.persistence.graph.neo4j.model.NodeWrapperFactory;
 import org.gedcomx.persistence.graph.neo4j.model.NodeWrapper;
+import org.gedcomx.persistence.graph.neo4j.model.WrapperProvider;
 import org.gedcomx.persistence.graph.neo4j.properties.Messages;
 import org.gedcomx.persistence.graph.neo4j.service.GENgraphPersistenceService;
 import org.gedcomx.persistence.graph.neo4j.service.GENgraphPersistenceServiceImpl;

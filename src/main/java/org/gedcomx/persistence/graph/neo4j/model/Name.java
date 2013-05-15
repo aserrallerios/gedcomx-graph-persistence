@@ -18,11 +18,12 @@ import org.neo4j.graphdb.Node;
 @NodeType(NodeTypes.NAME)
 public class Name extends Conclusion {
 
-    public Name(final NameForm nameForm) throws MissingFieldException {
+    protected Name(final NameForm nameForm) throws MissingFieldException {
         super(new Object[] { nameForm });
     }
 
-    public Name(final Node node) throws MissingFieldException, UnknownNodeType {
+    protected Name(final Node node) throws MissingFieldException,
+            UnknownNodeType {
         super(node);
     }
 

@@ -15,6 +15,9 @@ import org.gedcomx.persistence.graph.neo4j.utils.Validation;
 import org.gedcomx.types.RelationshipType;
 import org.neo4j.graphdb.Node;
 
+import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
+
 @NodeType(NodeTypes.RELATIONSHIP)
 public class Relationship extends Conclusion {
 
@@ -23,13 +26,14 @@ public class Relationship extends Conclusion {
         super(node);
     }
 
-    public Relationship(
-            final org.gedcomx.conclusion.Relationship gedcomXRelationship)
+    @Inject
+    protected Relationship(
+            final @Assisted org.gedcomx.conclusion.Relationship gedcomXRelationship)
             throws MissingFieldException {
         super(gedcomXRelationship);
     }
 
-    public Relationship(final Person p1, final Person p2)
+    protected Relationship(final Person p1, final Person p2)
             throws MissingFieldException {
         super(p1, p2);
     }

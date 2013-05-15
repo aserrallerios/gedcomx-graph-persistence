@@ -5,10 +5,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.gedcomx.persistence.graph.neo4j.WrapperProvider;
 import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
 import org.gedcomx.persistence.graph.neo4j.annotations.injection.NodeWrapperReflections;
 import org.gedcomx.persistence.graph.neo4j.exceptions.GenericError;
+import org.gedcomx.persistence.graph.neo4j.exceptions.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.model.constants.NodeTypes;
 import org.neo4j.graphdb.Node;
 import org.reflections.Reflections;
@@ -32,7 +32,56 @@ public class NodeWrapperFactory {
         }
     }
 
-    public <T extends NodeWrapper> T createNode(final Class<T> type,
+    public Agent createAgent(final org.gedcomx.agent.Agent gedcomXAgent)
+            throws MissingFieldException {
+        return this.wrapperProvider.createAgent(gedcomXAgent);
+    }
+
+    public Document createDocument(
+            final org.gedcomx.conclusion.Document gedcomXDocument)
+            throws MissingFieldException {
+        return this.wrapperProvider.createDocument(gedcomXDocument);
+    }
+
+    public Event createEvent(final org.gedcomx.conclusion.Event gedcomXEvent)
+            throws MissingFieldException {
+        return this.wrapperProvider.createEvent(gedcomXEvent);
+    }
+
+    public NodeWrapper createNode(final NodeTypes type,
+            final Object gedcomxObject) throws MissingFieldException {
+        return this.wrapperProvider
+                .createPerson((org.gedcomx.conclusion.Person) gedcomxObject);
+    }
+
+    public Person createPerson(final org.gedcomx.conclusion.Person gedcomXPerson)
+            throws MissingFieldException {
+        return this.wrapperProvider.createPerson(gedcomXPerson);
+    }
+
+    public PlaceDescription createPlace(
+            final org.gedcomx.conclusion.PlaceDescription gedcomXPlace)
+            throws MissingFieldException {
+        return this.wrapperProvider.createPlace(gedcomXPlace);
+    }
+
+    public Relationship createRelationship(
+            final org.gedcomx.conclusion.Relationship gedcomXRelationship)
+            throws MissingFieldException {
+        return this.wrapperProvider.createRelationship(gedcomXRelationship);
+    }
+
+    public SourceDescription createSource(
+            final org.gedcomx.source.SourceDescription gedcomXSource)
+            throws MissingFieldException {
+        return this.wrapperProvider.createSource(gedcomXSource);
+    }
+
+    Class<? extends NodeWrapper> getWrapperByType(final NodeTypes type) {
+        return this.nodesByType.get(type);
+    }
+
+    public <T extends NodeWrapper> T wrapNode(final Class<T> type,
             final Node node) {
         Constructor<T> constructor;
         T wrapper = null;
@@ -49,21 +98,7 @@ public class NodeWrapperFactory {
         return wrapper;
     }
 
-    public NodeWrapper createNode(final NodeTypes type, final Node node) {
-        return this.createNode(this.getWrapperByType(type), node);
-    }
-
-    public NodeWrapper createNode(final NodeTypes type,
-            final Object gedcomxObject) {
-        return this.wrapperProvider
-                .createPerson((org.gedcomx.conclusion.Person) gedcomxObject);
-    }
-
-    public Person createPerson(final org.gedcomx.conclusion.Person gedcomXPerson) {
-        return this.wrapperProvider.createPerson(gedcomXPerson);
-    }
-
-    public Class<? extends NodeWrapper> getWrapperByType(final NodeTypes type) {
-        return this.nodesByType.get(type);
+    public NodeWrapper wrapNode(final NodeTypes type, final Node node) {
+        return this.wrapNode(this.getWrapperByType(type), node);
     }
 }

@@ -12,7 +12,7 @@ import org.neo4j.graphdb.Node;
 @NodeType(NodeTypes.QUALIFIER)
 public class Qualifier extends NodeWrapper {
 
-    public Qualifier() throws MissingFieldException, UnknownNodeType {
+    protected Qualifier() throws MissingFieldException, UnknownNodeType {
         super();
     }
 
@@ -21,7 +21,7 @@ public class Qualifier extends NodeWrapper {
         super(node);
     }
 
-    public Qualifier(final org.gedcomx.common.Qualifier gedcomXQualifier)
+    protected Qualifier(final org.gedcomx.common.Qualifier gedcomXQualifier)
             throws MissingFieldException, UnknownNodeType {
         super(gedcomXQualifier);
     }

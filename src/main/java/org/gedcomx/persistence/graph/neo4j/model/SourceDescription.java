@@ -16,21 +16,25 @@ import org.gedcomx.persistence.graph.neo4j.model.constants.SourceProperties;
 import org.gedcomx.persistence.graph.neo4j.utils.Validation;
 import org.neo4j.graphdb.Node;
 
+import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
+
 @NodeType(NodeTypes.SOURCE_DESCRIPTION)
 public class SourceDescription extends NodeWrapper {
 
-    public SourceDescription(final Node node) throws UnknownNodeType,
+    protected SourceDescription(final Node node) throws UnknownNodeType,
             MissingFieldException {
         super(node);
     }
 
-    public SourceDescription(
-            final org.gedcomx.source.SourceDescription gedcomXSourceDescription)
+    @Inject
+    protected SourceDescription(
+            final @Assisted org.gedcomx.source.SourceDescription gedcomXSourceDescription)
             throws MissingFieldException {
         super(gedcomXSourceDescription);
     }
 
-    public SourceDescription(final String citationValue)
+    protected SourceDescription(final String citationValue)
             throws MissingFieldException {
         super(new Object[] { citationValue });
     }

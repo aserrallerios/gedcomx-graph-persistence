@@ -13,17 +13,17 @@ import org.neo4j.graphdb.Node;
 @NodeType(NodeTypes.TEXT_VALUE)
 public class TextValue extends NodeWrapper {
 
-    public TextValue(final Node node) throws UnknownNodeType,
+    protected TextValue(final Node node) throws UnknownNodeType,
             MissingFieldException {
         super(node);
     }
 
-    public TextValue(final org.gedcomx.common.TextValue gedcomXTextValue)
+    protected TextValue(final org.gedcomx.common.TextValue gedcomXTextValue)
             throws MissingFieldException {
         super(gedcomXTextValue);
     }
 
-    public TextValue(final String value) throws MissingFieldException {
+    protected TextValue(final String value) throws MissingFieldException {
         super(new Object[] { value });
     }
 

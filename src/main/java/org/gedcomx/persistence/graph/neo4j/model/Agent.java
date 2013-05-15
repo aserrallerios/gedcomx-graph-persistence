@@ -13,10 +13,13 @@ import org.gedcomx.persistence.graph.neo4j.model.constants.NodeTypes;
 import org.gedcomx.persistence.graph.neo4j.model.constants.RelationshipTypes;
 import org.neo4j.graphdb.Node;
 
+import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
+
 @NodeType(NodeTypes.AGENT)
 public class Agent extends NodeWrapper {
 
-    public Agent() throws MissingFieldException {
+    protected Agent() throws MissingFieldException {
         super();
     }
 
@@ -25,7 +28,8 @@ public class Agent extends NodeWrapper {
         super(node);
     }
 
-    public Agent(final org.gedcomx.agent.Agent gedcomXAgent)
+    @Inject
+    protected Agent(final @Assisted org.gedcomx.agent.Agent gedcomXAgent)
             throws MissingFieldException {
         super(gedcomXAgent);
     }
@@ -47,7 +51,7 @@ public class Agent extends NodeWrapper {
     }
 
     @Override
-    public void deleteAllReferences() {
+    protected void deleteAllReferences() {
         this.deleteReferencedNodes(this.getAddresses());
         this.deleteReferencedNodes(this.getOnlineAccounts());
         this.deleteReferencedNodes(this.getIdentifiers());

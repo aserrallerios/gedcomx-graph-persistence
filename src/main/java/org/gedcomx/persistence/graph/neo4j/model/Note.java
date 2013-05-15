@@ -18,12 +18,12 @@ public class Note extends NodeWrapper {
         super(node);
     }
 
-    public Note(final org.gedcomx.common.Note gedcomXNote)
+    protected Note(final org.gedcomx.common.Note gedcomXNote)
             throws MissingFieldException {
         super(gedcomXNote);
     }
 
-    public Note(final String text) throws MissingFieldException {
+    protected Note(final String text) throws MissingFieldException {
         super(new Object[] { text });
     }
 

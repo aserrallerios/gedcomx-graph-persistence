@@ -13,18 +13,18 @@ import org.neo4j.graphdb.Node;
 @NodeType(NodeTypes.SOURCE_REFERENCE)
 public class SourceReference extends NodeWrapper {
 
-    public SourceReference(final Node node) throws MissingFieldException,
+    protected SourceReference(final Node node) throws MissingFieldException,
             UnknownNodeType {
         super(node);
     }
 
-    public SourceReference(
+    protected SourceReference(
             final org.gedcomx.source.SourceReference gedcomXSourceReference)
             throws MissingFieldException {
         super(gedcomXSourceReference);
     }
 
-    public SourceReference(final SourceDescription description)
+    protected SourceReference(final SourceDescription description)
             throws MissingFieldException {
         super(new Object[] { description });
     }
