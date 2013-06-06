@@ -30,16 +30,18 @@ public class Attribution extends NodeWrapper {
 
     @Override
     protected void deleteAllReferences() {
-        this.deleteReference(RelationshipTypes.CONTRIBUTOR);
+        NodeWrapper.nodeWrapperOperations.deleteReference(this,
+                RelationshipTypes.CONTRIBUTOR);
     }
 
     public String getChangeMessage() {
-        return (String) this.getProperty(GenericProperties.CHANGE_MESSAGE);
+        return (String) NodeWrapper.nodeWrapperOperations.getProperty(this,
+                GenericProperties.CHANGE_MESSAGE);
     }
 
     public Agent getContributor() {
-        return this.getNodeByRelationship(Agent.class,
-                RelationshipTypes.CONTRIBUTOR);
+        return NodeWrapper.nodeWrapperOperations.getNodeByRelationship(this,
+                Agent.class, RelationshipTypes.CONTRIBUTOR);
     }
 
     @Override
@@ -58,25 +60,30 @@ public class Attribution extends NodeWrapper {
     }
 
     public Date getModified() {
-        return new Date((Long) this.getProperty(GenericProperties.MODIFIED));
+        return new Date((Long) NodeWrapper.nodeWrapperOperations.getProperty(
+                this, GenericProperties.MODIFIED));
     }
 
     public NodeWrapper getParentNode() {
-        return super.getParentNode(RelationshipTypes.ATTRIBUTION);
+        return NodeWrapper.nodeWrapperOperations.getParentNode(this,
+                RelationshipTypes.ATTRIBUTION);
     }
 
     @Override
     public void resolveReferences() {
-        this.createReferenceRelationship(RelationshipTypes.CONTRIBUTOR,
+        NodeWrapper.nodeWrapperOperations.createReferenceRelationship(this,
+                RelationshipTypes.CONTRIBUTOR,
                 GenericProperties.CONTRIBUTOR_REFERENCE);
     }
 
     public void setChangeMessage(final String changeMessage) {
-        this.setProperty(GenericProperties.CHANGE_MESSAGE, changeMessage);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                GenericProperties.CHANGE_MESSAGE, changeMessage);
     }
 
     public void setContributor(final Agent agent) {
-        this.createReferenceRelationship(RelationshipTypes.CONTRIBUTOR, agent);
+        NodeWrapper.nodeWrapperOperations.createReferenceRelationship(this,
+                RelationshipTypes.CONTRIBUTOR, agent);
     }
 
     @Override
@@ -92,13 +99,15 @@ public class Attribution extends NodeWrapper {
         final org.gedcomx.common.Attribution gedcomXAttribution = (org.gedcomx.common.Attribution) gedcomXObject;
 
         if (gedcomXAttribution.getContributor() != null) {
-            this.setProperty(GenericProperties.CONTRIBUTOR_REFERENCE,
+            NodeWrapper.nodeWrapperOperations.setProperty(this,
+                    GenericProperties.CONTRIBUTOR_REFERENCE,
                     gedcomXAttribution.getContributor());
         }
     }
 
     public void setModified(final Date modified) {
-        this.setProperty(GenericProperties.MODIFIED, modified.getTime());
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                GenericProperties.MODIFIED, modified.getTime());
     }
 
     @Override

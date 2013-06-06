@@ -50,16 +50,19 @@ public class Identifier extends NodeWrapper {
     }
 
     public NodeWrapper getParentNode() {
-        return super.getParentNode(RelationshipTypes.HAS_IDENTIFIER);
+        return NodeWrapper.nodeWrapperOperations.getParentNode(this,
+                RelationshipTypes.HAS_IDENTIFIER);
     }
 
     @Deprecated
     public URI getType() {
-        return new URI((String) this.getProperty(GenericProperties.TYPE));
+        return new URI((String) NodeWrapper.nodeWrapperOperations.getProperty(
+                this, GenericProperties.TYPE));
     }
 
     public URI getValue() {
-        return new URI((String) this.getProperty(GenericProperties.VALUE));
+        return new URI((String) NodeWrapper.nodeWrapperOperations.getProperty(
+                this, GenericProperties.VALUE));
     }
 
     @Override
@@ -90,11 +93,13 @@ public class Identifier extends NodeWrapper {
 
     @Deprecated
     public void setType(final URI type) {
-        this.setProperty(GenericProperties.TYPE, type);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                GenericProperties.TYPE, type);
     }
 
     public void setValue(final URI value) {
-        this.setProperty(GenericProperties.VALUE, value);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                GenericProperties.VALUE, value);
     }
 
     @Override
@@ -102,7 +107,8 @@ public class Identifier extends NodeWrapper {
             throws MissingRequiredPropertyException {
         if (Validation.nullOrEmpty(this.getValue())) {
             throw new MissingRequiredPropertyException(
-                    this.getAnnotatedNodeType(),
+                    NodeWrapper.nodeWrapperOperations
+                            .getAnnotatedNodeType(this),
                     GenericProperties.VALUE.toString());
         }
     }

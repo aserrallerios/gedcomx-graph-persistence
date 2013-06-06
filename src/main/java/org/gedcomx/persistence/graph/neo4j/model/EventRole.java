@@ -32,16 +32,19 @@ public class EventRole extends Conclusion {
 
     @Override
     protected void deleteAllConcreteReferences() {
-        this.deleteReference(RelationshipTypes.PERSON);
+        NodeWrapper.nodeWrapperOperations.deleteReference(this,
+                RelationshipTypes.PERSON);
 
     }
 
     public String getDetails() {
-        return (String) this.getProperty(ConclusionProperties.DETAILS);
+        return (String) NodeWrapper.nodeWrapperOperations.getProperty(this,
+                ConclusionProperties.DETAILS);
     }
 
     public Event getEvent() {
-        return (Event) super.getParentNode(RelationshipTypes.HAS_ROLE);
+        return (Event) NodeWrapper.nodeWrapperOperations.getParentNode(this,
+                RelationshipTypes.HAS_ROLE);
     }
 
     @Override
@@ -64,23 +67,26 @@ public class EventRole extends Conclusion {
     }
 
     public Person getPerson() {
-        return this.getNodeByRelationship(Person.class,
-                RelationshipTypes.PERSON);
+        return NodeWrapper.nodeWrapperOperations.getNodeByRelationship(this,
+                Person.class, RelationshipTypes.PERSON);
     }
 
     @Deprecated
     public URI getType() {
-        return new URI((String) this.getProperty(GenericProperties.TYPE));
+        return new URI((String) NodeWrapper.nodeWrapperOperations.getProperty(
+                this, GenericProperties.TYPE));
     }
 
     @Override
     protected void resolveConcreteReferences() {
-        this.createReferenceRelationship(RelationshipTypes.PERSON,
-                ConclusionProperties.PERSON_REFERENCE);
+        NodeWrapper.nodeWrapperOperations
+                .createReferenceRelationship(this, RelationshipTypes.PERSON,
+                        ConclusionProperties.PERSON_REFERENCE);
     }
 
     public void setDetails(final String details) {
-        this.setProperty(ConclusionProperties.DETAILS, details);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                ConclusionProperties.DETAILS, details);
     }
 
     @Override
@@ -96,7 +102,8 @@ public class EventRole extends Conclusion {
             throws MissingFieldException {
         final org.gedcomx.conclusion.EventRole gedcomXEventRole = (org.gedcomx.conclusion.EventRole) gedcomXObject;
 
-        this.setProperty(ConclusionProperties.PERSON_REFERENCE,
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                ConclusionProperties.PERSON_REFERENCE,
                 gedcomXEventRole.getPerson());
     }
 
@@ -105,7 +112,8 @@ public class EventRole extends Conclusion {
     }
 
     public void setPerson(final Person person) {
-        this.createReferenceRelationship(RelationshipTypes.PERSON, person);
+        NodeWrapper.nodeWrapperOperations.createReferenceRelationship(this,
+                RelationshipTypes.PERSON, person);
     }
 
     @Override
@@ -116,15 +124,17 @@ public class EventRole extends Conclusion {
 
     @Deprecated
     public void setType(final URI type) {
-        this.setProperty(GenericProperties.TYPE, type);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                GenericProperties.TYPE, type);
     }
 
     @Override
     protected void validateUnderlyingNode() throws MissingFieldException {
         if (Validation.nullOrEmpty(this.getPerson())) {
             throw new MissingRequiredRelationshipException(
-                    this.getAnnotatedNodeType(), this.getId(),
-                    RelationshipTypes.PERSON.toString());
+                    NodeWrapper.nodeWrapperOperations
+                            .getAnnotatedNodeType(this),
+                    this.getId(), RelationshipTypes.PERSON.toString());
         }
     }
 

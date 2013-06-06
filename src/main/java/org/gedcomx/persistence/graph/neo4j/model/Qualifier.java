@@ -41,7 +41,8 @@ public class Qualifier extends NodeWrapper {
     }
 
     public URI getName() {
-        return new URI((String) this.getProperty(GenericProperties.NAME));
+        return new URI((String) NodeWrapper.nodeWrapperOperations.getProperty(
+                this, GenericProperties.NAME));
     }
 
     public <E extends Enum> E getName(final Class<E> vocabulary) {
@@ -51,7 +52,8 @@ public class Qualifier extends NodeWrapper {
     }
 
     public String getValue() {
-        return (String) this.getProperty(GenericProperties.VALUE);
+        return (String) NodeWrapper.nodeWrapperOperations.getProperty(this,
+                GenericProperties.VALUE);
     }
 
     @Override
@@ -74,13 +76,15 @@ public class Qualifier extends NodeWrapper {
     }
 
     public void setName(final Enum<?> element) {
-        this.setProperty(GenericProperties.NAME, element == null ? null
-                : new URI(XmlQNameEnumUtil.toURI(element).toString()));
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                GenericProperties.NAME, element == null ? null : new URI(
+                        XmlQNameEnumUtil.toURI(element).toString()));
     }
 
     @Deprecated
     public void setName(final URI name) {
-        this.setProperty(GenericProperties.NAME, name);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                GenericProperties.NAME, name);
     }
 
     @Override
@@ -90,7 +94,8 @@ public class Qualifier extends NodeWrapper {
     }
 
     public void setValue(final String value) {
-        this.setProperty(GenericProperties.VALUE, value);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                GenericProperties.VALUE, value);
     }
 
     @Override

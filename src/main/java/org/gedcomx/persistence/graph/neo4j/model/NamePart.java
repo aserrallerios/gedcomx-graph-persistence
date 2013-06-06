@@ -36,7 +36,8 @@ public class NamePart extends NodeWrapper {
     }
 
     public void addQualifier(final Qualifier qualifier) {
-        this.addRelationship(RelationshipTypes.HAS_QUALIFIER, qualifier);
+        NodeWrapper.nodeWrapperOperations.addRelationship(this,
+                RelationshipTypes.HAS_QUALIFIER, qualifier);
     }
 
     @Override
@@ -51,15 +52,16 @@ public class NamePart extends NodeWrapper {
         gedcomXNamePart.setType(this.getType());
         gedcomXNamePart.setKnownType(this.getKnownType());
         gedcomXNamePart.setValue(this.getValue());
-        gedcomXNamePart.setQualifiers(this.getGedcomXList(
-                org.gedcomx.common.Qualifier.class, this.getQualifiers()));
+        gedcomXNamePart.setQualifiers(NodeWrapper.nodeWrapperOperations
+                .getGedcomXList(org.gedcomx.common.Qualifier.class,
+                        this.getQualifiers()));
 
         return gedcomXNamePart;
     }
 
     public List<NamePartQualifierType> getKnownQualifiers() {
-        final List<ResourceReference> references = this
-                .getURIListProperties(ConclusionProperties.QUALIFIERS);
+        final List<ResourceReference> references = NodeWrapper.nodeWrapperOperations
+                .getURIListProperties(this, ConclusionProperties.QUALIFIERS);
 
         final List<NamePartQualifierType> result = new ArrayList<NamePartQualifierType>();
         for (final ResourceReference ref : references) {
@@ -73,21 +75,24 @@ public class NamePart extends NodeWrapper {
     }
 
     public NameForm getNameForm() {
-        return (NameForm) this.getParentNode(RelationshipTypes.HAS_NAME_PART);
+        return (NameForm) NodeWrapper.nodeWrapperOperations.getParentNode(this,
+                RelationshipTypes.HAS_NAME_PART);
     }
 
     public List<Qualifier> getQualifiers() {
-        return this.getNodesByRelationship(Qualifier.class,
-                RelationshipTypes.HAS_QUALIFIER);
+        return NodeWrapper.nodeWrapperOperations.getNodesByRelationship(this,
+                Qualifier.class, RelationshipTypes.HAS_QUALIFIER);
     }
 
     @Deprecated
     public URI getType() {
-        return new URI((String) this.getProperty(GenericProperties.TYPE));
+        return new URI((String) NodeWrapper.nodeWrapperOperations.getProperty(
+                this, GenericProperties.TYPE));
     }
 
     public String getValue() {
-        return (String) this.getProperty(GenericProperties.VALUE);
+        return (String) NodeWrapper.nodeWrapperOperations.getProperty(this,
+                GenericProperties.VALUE);
     }
 
     @Override
@@ -120,7 +125,8 @@ public class NamePart extends NodeWrapper {
     }
 
     public void setKnownQualifiers(final List<NamePartQualifierType> qualifiers) {
-        this.setProperty(ConclusionProperties.QUALIFIERS, qualifiers);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                ConclusionProperties.QUALIFIERS, qualifiers);
     }
 
     public void setKnownType(final NamePartType type) {
@@ -135,18 +141,21 @@ public class NamePart extends NodeWrapper {
 
     @Deprecated
     public void setType(final URI type) {
-        this.setProperty(GenericProperties.TYPE, type);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                GenericProperties.TYPE, type);
     }
 
     public void setValue(final String value) {
-        this.setProperty(GenericProperties.VALUE, value);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                GenericProperties.VALUE, value);
     }
 
     @Override
     protected void validateUnderlyingNode() throws MissingFieldException {
         if (Validation.nullOrEmpty(this.getValue())) {
             throw new MissingRequiredPropertyException(
-                    this.getAnnotatedNodeType(),
+                    NodeWrapper.nodeWrapperOperations
+                            .getAnnotatedNodeType(this),
                     GenericProperties.VALUE.toString());
         }
     }

@@ -31,15 +31,18 @@ public class Address extends NodeWrapper {
     }
 
     public Agent getAgent() {
-        return (Agent) this.getParentNode(RelationshipTypes.HAS_ADDRESS);
+        return (Agent) NodeWrapper.nodeWrapperOperations.getParentNode(this,
+                RelationshipTypes.HAS_ADDRESS);
     }
 
     public String getCity() {
-        return (String) this.getProperty(AgentProperties.CITY);
+        return (String) NodeWrapper.nodeWrapperOperations.getProperty(this,
+                AgentProperties.CITY);
     }
 
     public String getCountry() {
-        return (String) this.getProperty(AgentProperties.COUNTRY);
+        return (String) NodeWrapper.nodeWrapperOperations.getProperty(this,
+                AgentProperties.COUNTRY);
     }
 
     @Override
@@ -59,27 +62,33 @@ public class Address extends NodeWrapper {
     }
 
     public String getPostalCode() {
-        return (String) this.getProperty(AgentProperties.POSTAL_CODE);
+        return (String) NodeWrapper.nodeWrapperOperations.getProperty(this,
+                AgentProperties.POSTAL_CODE);
     }
 
     public String getStateOrProvince() {
-        return (String) this.getProperty(AgentProperties.STATE_OR_PROVINCE);
+        return (String) NodeWrapper.nodeWrapperOperations.getProperty(this,
+                AgentProperties.STATE_OR_PROVINCE);
     }
 
     public String getStreet() {
-        return (String) this.getProperty(AgentProperties.STREET);
+        return (String) NodeWrapper.nodeWrapperOperations.getProperty(this,
+                AgentProperties.STREET);
     }
 
     public String getStreet2() {
-        return (String) this.getProperty(AgentProperties.STREET2);
+        return (String) NodeWrapper.nodeWrapperOperations.getProperty(this,
+                AgentProperties.STREET2);
     }
 
     public String getStreet3() {
-        return (String) this.getProperty(AgentProperties.STREET3);
+        return (String) NodeWrapper.nodeWrapperOperations.getProperty(this,
+                AgentProperties.STREET3);
     }
 
     public String getValue() {
-        return (String) this.getProperty(AgentProperties.VALUE);
+        return (String) NodeWrapper.nodeWrapperOperations.getProperty(this,
+                AgentProperties.VALUE);
     }
 
     @Override
@@ -88,11 +97,13 @@ public class Address extends NodeWrapper {
     }
 
     public void setCity(final String city) {
-        this.setProperty(AgentProperties.CITY, city);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                AgentProperties.CITY, city);
     }
 
     public void setCountry(final String country) {
-        this.setProperty(AgentProperties.COUNTRY, country);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                AgentProperties.COUNTRY, country);
     }
 
     @Override
@@ -115,7 +126,8 @@ public class Address extends NodeWrapper {
     }
 
     public void setPostalCode(final String postalCode) {
-        this.setProperty(AgentProperties.POSTAL_CODE, postalCode);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                AgentProperties.POSTAL_CODE, postalCode);
     }
 
     @Override
@@ -124,23 +136,28 @@ public class Address extends NodeWrapper {
     }
 
     public void setStateOrProvince(final String stateOrProvince) {
-        this.setProperty(AgentProperties.STATE_OR_PROVINCE, stateOrProvince);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                AgentProperties.STATE_OR_PROVINCE, stateOrProvince);
     }
 
     public void setStreet(final String street) {
-        this.setProperty(AgentProperties.STREET, street);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                AgentProperties.STREET, street);
     }
 
     public void setStreet2(final String street2) {
-        this.setProperty(AgentProperties.STREET2, street2);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                AgentProperties.STREET2, street2);
     }
 
     public void setStreet3(final String street3) {
-        this.setProperty(AgentProperties.STREET3, street3);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                AgentProperties.STREET3, street3);
     }
 
     public void setValue(final String value) {
-        this.setProperty(AgentProperties.VALUE, value);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                AgentProperties.VALUE, value);
     }
 
     @Override

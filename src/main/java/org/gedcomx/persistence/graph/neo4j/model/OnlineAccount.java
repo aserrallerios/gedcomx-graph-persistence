@@ -38,11 +38,13 @@ public class OnlineAccount extends NodeWrapper {
     }
 
     public String getAccountName() {
-        return (String) this.getProperty(AgentProperties.ACCOUNT_NAME);
+        return (String) NodeWrapper.nodeWrapperOperations.getProperty(this,
+                AgentProperties.ACCOUNT_NAME);
     }
 
     public Agent getAgent() {
-        return (Agent) this.getParentNode(RelationshipTypes.HAS_ACCOUNT);
+        return (Agent) NodeWrapper.nodeWrapperOperations.getParentNode(this,
+                RelationshipTypes.HAS_ACCOUNT);
     }
 
     @Override
@@ -57,7 +59,8 @@ public class OnlineAccount extends NodeWrapper {
 
     public ResourceReference getServiceHomepage() {
         return new ResourceReference(new URI(
-                (String) this.getProperty(AgentProperties.SERVICE_HOMEPAGE)));
+                (String) NodeWrapper.nodeWrapperOperations.getProperty(this,
+                        AgentProperties.SERVICE_HOMEPAGE)));
     }
 
     @Override
@@ -66,7 +69,8 @@ public class OnlineAccount extends NodeWrapper {
     }
 
     public void setAccountName(final String accountName) {
-        this.setProperty(AgentProperties.ACCOUNT_NAME, accountName);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                AgentProperties.ACCOUNT_NAME, accountName);
     }
 
     @Override
@@ -89,7 +93,8 @@ public class OnlineAccount extends NodeWrapper {
     }
 
     public void setServiceHomepage(final ResourceReference serviceHomepage) {
-        this.setProperty(AgentProperties.SERVICE_HOMEPAGE, serviceHomepage);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                AgentProperties.SERVICE_HOMEPAGE, serviceHomepage);
     }
 
     @Override
@@ -97,12 +102,14 @@ public class OnlineAccount extends NodeWrapper {
             throws MissingRequiredPropertyException {
         if (Validation.nullOrEmpty(this.getAccountName())) {
             throw new MissingRequiredPropertyException(
-                    this.getAnnotatedNodeType(),
+                    NodeWrapper.nodeWrapperOperations
+                            .getAnnotatedNodeType(this),
                     AgentProperties.ACCOUNT_NAME.toString());
         }
         if (Validation.nullOrEmpty(this.getServiceHomepage())) {
             throw new MissingRequiredPropertyException(
-                    this.getAnnotatedNodeType(),
+                    NodeWrapper.nodeWrapperOperations
+                            .getAnnotatedNodeType(this),
                     AgentProperties.SERVICE_HOMEPAGE.toString());
         }
     }

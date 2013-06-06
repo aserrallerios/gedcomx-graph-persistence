@@ -35,13 +35,13 @@ public class SourceReference extends NodeWrapper {
     }
 
     public Attribution getAttribution() {
-        return this.getNodeByRelationship(Attribution.class,
-                RelationshipTypes.ATTRIBUTION);
+        return NodeWrapper.nodeWrapperOperations.getNodeByRelationship(this,
+                Attribution.class, RelationshipTypes.ATTRIBUTION);
     }
 
     public SourceDescription getDescription() {
-        return this.getNodeByRelationship(SourceDescription.class,
-                RelationshipTypes.DESCRIPTION);
+        return NodeWrapper.nodeWrapperOperations.getNodeByRelationship(this,
+                SourceDescription.class, RelationshipTypes.DESCRIPTION);
     }
 
     @Override
@@ -59,22 +59,25 @@ public class SourceReference extends NodeWrapper {
     }
 
     public NodeWrapper getParentNode() {
-        return this.getParentNode(RelationshipTypes.HAS_SOURCE_REFERENCE);
+        return NodeWrapper.nodeWrapperOperations.getParentNode(this,
+                RelationshipTypes.HAS_SOURCE_REFERENCE);
     }
 
     @Override
     public void resolveReferences() {
-        this.createReferenceRelationship(RelationshipTypes.DESCRIPTION,
+        NodeWrapper.nodeWrapperOperations.createReferenceRelationship(this,
+                RelationshipTypes.DESCRIPTION,
                 SourceProperties.SOURCE_DESCRIPTION_REFERENCE);
     }
 
     public void setAttribution(final Attribution attribution) {
-        this.createRelationship(RelationshipTypes.ATTRIBUTION, attribution);
+        NodeWrapper.nodeWrapperOperations.createRelationship(this,
+                RelationshipTypes.ATTRIBUTION, attribution);
     }
 
     public void setDescription(final SourceDescription description) {
-        this.createReferenceRelationship(RelationshipTypes.DESCRIPTION,
-                description);
+        NodeWrapper.nodeWrapperOperations.createReferenceRelationship(this,
+                RelationshipTypes.DESCRIPTION, description);
     }
 
     @Override
@@ -92,7 +95,8 @@ public class SourceReference extends NodeWrapper {
                     .getAttribution()));
         }
 
-        this.setProperty(SourceProperties.SOURCE_DESCRIPTION_REFERENCE,
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                SourceProperties.SOURCE_DESCRIPTION_REFERENCE,
                 gedcomXSourceReference.getDescriptionRef());
     }
 
@@ -105,7 +109,8 @@ public class SourceReference extends NodeWrapper {
     protected void validateUnderlyingNode() throws MissingFieldException {
         if (Validation.nullOrEmpty(this.getDescription())) {
             throw new MissingRequiredRelationshipException(
-                    this.getAnnotatedNodeType(),
+                    NodeWrapper.nodeWrapperOperations
+                            .getAnnotatedNodeType(this),
                     RelationshipTypes.DESCRIPTION.toString());
         }
     }

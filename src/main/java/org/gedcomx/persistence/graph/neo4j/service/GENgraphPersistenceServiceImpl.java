@@ -9,7 +9,6 @@ import java.util.Map.Entry;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.gedcomx.persistence.graph.neo4j.MessageResolver;
 import org.gedcomx.persistence.graph.neo4j.annotations.injection.EmbededDB;
 import org.gedcomx.persistence.graph.neo4j.annotations.interceptors.CheckForDuplicates;
 import org.gedcomx.persistence.graph.neo4j.annotations.interceptors.Transactional;
@@ -29,6 +28,8 @@ import org.gedcomx.persistence.graph.neo4j.model.constants.NodeProperties;
 import org.gedcomx.persistence.graph.neo4j.model.constants.NodeTypes;
 import org.gedcomx.persistence.graph.neo4j.properties.Messages;
 import org.gedcomx.persistence.graph.neo4j.service.dto.QueryResult;
+import org.gedcomx.persistence.graph.neo4j.utils.MessageResolver;
+import org.gedcomx.persistence.graph.neo4j.utils.QueryResolver;
 import org.neo4j.cypher.javacompat.ExecutionResult;
 import org.neo4j.graphdb.Node;
 
@@ -285,7 +286,9 @@ public class GENgraphPersistenceServiceImpl implements
 
     @Override
     public QueryResult searchNodesByCypher(final String query) {
-        final ExecutionResult result = this.dao.executeCypherQuery(query);
+        final String finalQuery = QueryResolver.resolve(query);
+
+        final ExecutionResult result = this.dao.executeCypherQuery(finalQuery);
 
         final List<org.neo4j.graphdb.Node> nodes = new ArrayList<>();
         final List<org.neo4j.graphdb.Relationship> relationships = new ArrayList<org.neo4j.graphdb.Relationship>();

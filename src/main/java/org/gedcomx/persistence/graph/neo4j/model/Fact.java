@@ -36,15 +36,18 @@ public class Fact extends Conclusion {
 
     @Override
     protected void deleteAllConcreteReferences() {
-        this.deleteReferencedNode(this.getPlaceReference());
+        NodeWrapper.nodeWrapperOperations.deleteReferencedNode(this
+                .getPlaceReference());
     }
 
     public String getDateFormal() {
-        return (String) this.getProperty(ConclusionProperties.DATE_FORMAL);
+        return (String) NodeWrapper.nodeWrapperOperations.getProperty(this,
+                ConclusionProperties.DATE_FORMAL);
     }
 
     public String getDateOriginal() {
-        return (String) this.getProperty(ConclusionProperties.DATE_ORIGINAL);
+        return (String) NodeWrapper.nodeWrapperOperations.getProperty(this,
+                ConclusionProperties.DATE_ORIGINAL);
     }
 
     @Override
@@ -72,21 +75,24 @@ public class Fact extends Conclusion {
     }
 
     public NodeWrapper getParentNode() {
-        return super.getParentNode(RelationshipTypes.HAS_FACT);
+        return NodeWrapper.nodeWrapperOperations.getParentNode(this,
+                RelationshipTypes.HAS_FACT);
     }
 
     public PlaceReference getPlaceReference() {
-        return this.getNodeByRelationship(PlaceReference.class,
-                RelationshipTypes.PLACE);
+        return NodeWrapper.nodeWrapperOperations.getNodeByRelationship(this,
+                PlaceReference.class, RelationshipTypes.PLACE);
     }
 
     @Deprecated
     public URI getType() {
-        return new URI((String) this.getProperty(GenericProperties.TYPE));
+        return new URI((String) NodeWrapper.nodeWrapperOperations.getProperty(
+                this, GenericProperties.TYPE));
     }
 
     public String getValue() {
-        return (String) this.getProperty(GenericProperties.VALUE);
+        return (String) NodeWrapper.nodeWrapperOperations.getProperty(this,
+                GenericProperties.VALUE);
     }
 
     @Override
@@ -95,11 +101,13 @@ public class Fact extends Conclusion {
     }
 
     public void setDateFormal(final String value) {
-        this.setProperty(ConclusionProperties.DATE_FORMAL, value);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                ConclusionProperties.DATE_FORMAL, value);
     }
 
     public void setDateOriginal(final String value) {
-        this.setProperty(ConclusionProperties.DATE_ORIGINAL, value);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                ConclusionProperties.DATE_ORIGINAL, value);
     }
 
     @Override
@@ -129,7 +137,8 @@ public class Fact extends Conclusion {
     }
 
     public void setPlaceReference(final PlaceReference placeReference) {
-        this.createRelationship(RelationshipTypes.PLACE, placeReference);
+        NodeWrapper.nodeWrapperOperations.createRelationship(this,
+                RelationshipTypes.PLACE, placeReference);
     }
 
     @Override
@@ -144,19 +153,22 @@ public class Fact extends Conclusion {
 
     @Deprecated
     public void setType(final URI type) {
-        this.setProperty(GenericProperties.TYPE, type);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                GenericProperties.TYPE, type);
     }
 
     public void setValue(final String value) {
-        this.setProperty(GenericProperties.VALUE, value);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                GenericProperties.VALUE, value);
     }
 
     @Override
     protected void validateUnderlyingNode() throws MissingFieldException {
         if (Validation.nullOrEmpty(this.getType())) {
             throw new MissingRequiredPropertyException(
-                    this.getAnnotatedNodeType(), this.getId(),
-                    GenericProperties.TYPE.toString());
+                    NodeWrapper.nodeWrapperOperations
+                            .getAnnotatedNodeType(this),
+                    this.getId(), GenericProperties.TYPE.toString());
         }
     }
 

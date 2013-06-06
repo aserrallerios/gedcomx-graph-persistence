@@ -31,33 +31,37 @@ public abstract class Conclusion extends NodeWrapper {
     }
 
     public void addNote(final Note note) {
-        this.addRelationship(RelationshipTypes.HAS_NOTE, note);
+        NodeWrapper.nodeWrapperOperations.addRelationship(this,
+                RelationshipTypes.HAS_NOTE, note);
     }
 
     public void addSourceReference(final SourceReference sourceReference) {
-        this.addRelationship(RelationshipTypes.HAS_SOURCE_REFERENCE,
-                sourceReference);
+        NodeWrapper.nodeWrapperOperations.addRelationship(this,
+                RelationshipTypes.HAS_SOURCE_REFERENCE, sourceReference);
     }
 
     protected abstract void deleteAllConcreteReferences();
 
     @Override
     protected void deleteAllReferences() {
-        this.deleteReferencedNode(this.getAttribution());
-        this.deleteReferencedNodes(this.getNotes());
-        this.deleteReferencedNodes(this.getSourceReferences());
+        NodeWrapper.nodeWrapperOperations.deleteReferencedNode(this
+                .getAttribution());
+        NodeWrapper.nodeWrapperOperations
+                .deleteReferencedNodes(this.getNotes());
+        NodeWrapper.nodeWrapperOperations.deleteReferencedNodes(this
+                .getSourceReferences());
         this.deleteAllConcreteReferences();
     }
 
     public Attribution getAttribution() {
-        return this.getNodeByRelationship(Attribution.class,
-                RelationshipTypes.ATTRIBUTION);
+        return NodeWrapper.nodeWrapperOperations.getNodeByRelationship(this,
+                Attribution.class, RelationshipTypes.ATTRIBUTION);
     }
 
     @Deprecated
     public URI getConfidence() {
-        return new URI(
-                (String) this.getProperty(ConclusionProperties.CONFIDENCE));
+        return new URI((String) NodeWrapper.nodeWrapperOperations.getProperty(
+                this, ConclusionProperties.CONFIDENCE));
     }
 
     protected org.gedcomx.conclusion.Conclusion getGedcomXConclusion(
@@ -69,17 +73,19 @@ public abstract class Conclusion extends NodeWrapper {
                 .getKnownConfidenceLevel());
 
         gedcomXConclusion.setAttribution(this.getAttribution().getGedcomX());
-        gedcomXConclusion.setNotes(this.getGedcomXList(
-                org.gedcomx.common.Note.class, this.getNotes()));
-        gedcomXConclusion.setSources(this.getGedcomXList(
-                org.gedcomx.source.SourceReference.class,
-                this.getSourceReferences()));
+        gedcomXConclusion
+                .setNotes(NodeWrapper.nodeWrapperOperations.getGedcomXList(
+                        org.gedcomx.common.Note.class, this.getNotes()));
+        gedcomXConclusion.setSources(NodeWrapper.nodeWrapperOperations
+                .getGedcomXList(org.gedcomx.source.SourceReference.class,
+                        this.getSourceReferences()));
 
         return gedcomXConclusion;
     }
 
     public String getId() {
-        return (String) this.getProperty(GenericProperties.ID);
+        return (String) NodeWrapper.nodeWrapperOperations.getProperty(this,
+                GenericProperties.ID);
     }
 
     public ConfidenceLevel getKnownConfidenceLevel() {
@@ -87,12 +93,13 @@ public abstract class Conclusion extends NodeWrapper {
     }
 
     public String getLang() {
-        return (String) this.getProperty(GenericProperties.LANG);
+        return (String) NodeWrapper.nodeWrapperOperations.getProperty(this,
+                GenericProperties.LANG);
     }
 
     public List<Note> getNotes() {
-        return this.getNodesByRelationship(Note.class,
-                RelationshipTypes.HAS_NOTE);
+        return NodeWrapper.nodeWrapperOperations.getNodesByRelationship(this,
+                Note.class, RelationshipTypes.HAS_NOTE);
     }
 
     @Override
@@ -101,8 +108,8 @@ public abstract class Conclusion extends NodeWrapper {
     }
 
     public List<SourceReference> getSourceReferences() {
-        return this.getNodesByRelationship(SourceReference.class,
-                RelationshipTypes.HAS_SOURCE_REFERENCE);
+        return NodeWrapper.nodeWrapperOperations.getNodesByRelationship(this,
+                SourceReference.class, RelationshipTypes.HAS_SOURCE_REFERENCE);
     }
 
     @Override
@@ -125,12 +132,14 @@ public abstract class Conclusion extends NodeWrapper {
     }
 
     public void setAttribution(final Attribution attribution) {
-        this.createRelationship(RelationshipTypes.ATTRIBUTION, attribution);
+        NodeWrapper.nodeWrapperOperations.createRelationship(this,
+                RelationshipTypes.ATTRIBUTION, attribution);
     }
 
     @Deprecated
     public void setConfidence(final URI confidence) {
-        this.setProperty(ConclusionProperties.CONFIDENCE, confidence);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                ConclusionProperties.CONFIDENCE, confidence);
     }
 
     protected abstract void setGedcomXConcreteProperties(Object gedcomXObject);
@@ -176,7 +185,8 @@ public abstract class Conclusion extends NodeWrapper {
     }
 
     public void setId(final String id) {
-        this.setProperty(GenericProperties.ID, id);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                GenericProperties.ID, id);
     }
 
     public void setKnownConfidenceLevel(final ConfidenceLevel confidence) {
@@ -184,7 +194,8 @@ public abstract class Conclusion extends NodeWrapper {
     }
 
     public void setLang(final String lang) {
-        this.setProperty(GenericProperties.LANG, lang);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                GenericProperties.LANG, lang);
     }
 
 }

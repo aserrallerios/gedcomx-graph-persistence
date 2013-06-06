@@ -35,21 +35,26 @@ public class Event extends Conclusion {
     }
 
     public void addRole(final EventRole role) {
-        this.addRelationship(RelationshipTypes.HAS_ROLE, role);
+        NodeWrapper.nodeWrapperOperations.addRelationship(this,
+                RelationshipTypes.HAS_ROLE, role);
     }
 
     @Override
     protected void deleteAllConcreteReferences() {
-        this.deleteReferencedNode(this.getPlaceReference());
-        this.deleteReferencedNodes(this.getRoles());
+        NodeWrapper.nodeWrapperOperations.deleteReferencedNode(this
+                .getPlaceReference());
+        NodeWrapper.nodeWrapperOperations
+                .deleteReferencedNodes(this.getRoles());
     }
 
     public String getDateFormal() {
-        return (String) this.getProperty(ConclusionProperties.DATE_FORMAL);
+        return (String) NodeWrapper.nodeWrapperOperations.getProperty(this,
+                ConclusionProperties.DATE_FORMAL);
     }
 
     public String getDateOriginal() {
-        return (String) this.getProperty(ConclusionProperties.DATE_ORIGINAL);
+        return (String) NodeWrapper.nodeWrapperOperations.getProperty(this,
+                ConclusionProperties.DATE_ORIGINAL);
     }
 
     @Override
@@ -65,7 +70,7 @@ public class Event extends Conclusion {
 
         gedcomXEvent.setKnownType(this.getKnownType());
         gedcomXEvent.setPlace(this.getPlaceReference().getGedcomX());
-        gedcomXEvent.setRoles(this.getGedcomXList(
+        gedcomXEvent.setRoles(NodeWrapper.nodeWrapperOperations.getGedcomXList(
                 org.gedcomx.conclusion.EventRole.class, this.getRoles()));
 
         return gedcomXEvent;
@@ -76,18 +81,19 @@ public class Event extends Conclusion {
     }
 
     public PlaceReference getPlaceReference() {
-        return this.getNodeByRelationship(PlaceReference.class,
-                RelationshipTypes.PLACE);
+        return NodeWrapper.nodeWrapperOperations.getNodeByRelationship(this,
+                PlaceReference.class, RelationshipTypes.PLACE);
     }
 
     public List<EventRole> getRoles() {
-        return this.getNodesByRelationship(EventRole.class,
-                RelationshipTypes.HAS_ROLE);
+        return NodeWrapper.nodeWrapperOperations.getNodesByRelationship(this,
+                EventRole.class, RelationshipTypes.HAS_ROLE);
     }
 
     @Deprecated
     public URI getType() {
-        return new URI((String) this.getProperty(GenericProperties.TYPE));
+        return new URI((String) NodeWrapper.nodeWrapperOperations.getProperty(
+                this, GenericProperties.TYPE));
     }
 
     @Override
@@ -99,11 +105,13 @@ public class Event extends Conclusion {
     }
 
     public void setDateFormal(final String value) {
-        this.setProperty(ConclusionProperties.DATE_FORMAL, value);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                ConclusionProperties.DATE_FORMAL, value);
     }
 
     public void setDateOriginal(final String value) {
-        this.setProperty(ConclusionProperties.DATE_ORIGINAL, value);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                ConclusionProperties.DATE_ORIGINAL, value);
     }
 
     @Override
@@ -139,7 +147,8 @@ public class Event extends Conclusion {
     }
 
     public void setPlaceReference(final PlaceReference placeReference) {
-        this.createRelationship(RelationshipTypes.PLACE, placeReference);
+        NodeWrapper.nodeWrapperOperations.createRelationship(this,
+                RelationshipTypes.PLACE, placeReference);
     }
 
     @Override
@@ -150,7 +159,8 @@ public class Event extends Conclusion {
 
     @Deprecated
     public void setType(final URI type) {
-        this.setProperty(GenericProperties.TYPE, type);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                GenericProperties.TYPE, type);
     }
 
     @Override

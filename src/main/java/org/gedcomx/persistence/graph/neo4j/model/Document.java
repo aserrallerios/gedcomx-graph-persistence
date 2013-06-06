@@ -55,12 +55,14 @@ public class Document extends Conclusion {
     }
 
     public String getText() {
-        return (String) this.getProperty(ConclusionProperties.TEXT);
+        return (String) NodeWrapper.nodeWrapperOperations.getProperty(this,
+                ConclusionProperties.TEXT);
     }
 
     @Deprecated
     public URI getType() {
-        return new URI((String) this.getProperty(GenericProperties.TYPE));
+        return new URI((String) NodeWrapper.nodeWrapperOperations.getProperty(
+                this, GenericProperties.TYPE));
     }
 
     @Override
@@ -92,19 +94,22 @@ public class Document extends Conclusion {
     }
 
     public void setText(final String text) {
-        this.setProperty(ConclusionProperties.TEXT, text);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                ConclusionProperties.TEXT, text);
     }
 
     @Deprecated
     public void setType(final URI type) {
-        this.setProperty(GenericProperties.TYPE, type);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                GenericProperties.TYPE, type);
     }
 
     @Override
     protected void validateUnderlyingNode() throws MissingFieldException {
         if (Validation.nullOrEmpty(this.getText())) {
             throw new MissingRequiredPropertyException(
-                    this.getAnnotatedNodeType(),
+                    NodeWrapper.nodeWrapperOperations
+                            .getAnnotatedNodeType(this),
                     ConclusionProperties.TEXT.toString());
         }
     }

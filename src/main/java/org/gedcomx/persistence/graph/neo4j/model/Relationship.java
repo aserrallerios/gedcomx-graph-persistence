@@ -39,25 +39,31 @@ public class Relationship extends Conclusion {
     }
 
     public void addFact(final Fact fact) {
-        this.addRelationship(RelationshipTypes.HAS_FACT, fact);
+        NodeWrapper.nodeWrapperOperations.addRelationship(this,
+                RelationshipTypes.HAS_FACT, fact);
     }
 
     public void addIdentifier(final Identifier identifier) {
-        this.addRelationship(RelationshipTypes.HAS_IDENTIFIER, identifier);
+        NodeWrapper.nodeWrapperOperations.addRelationship(this,
+                RelationshipTypes.HAS_IDENTIFIER, identifier);
     }
 
     @Override
     protected void deleteAllConcreteReferences() {
-        this.deleteReferencedNodes(this.getIdentifiers());
-        this.deleteReferencedNodes(this.getFacts());
+        NodeWrapper.nodeWrapperOperations.deleteReferencedNodes(this
+                .getIdentifiers());
+        NodeWrapper.nodeWrapperOperations
+                .deleteReferencedNodes(this.getFacts());
 
-        this.deleteReference(RelationshipTypes.PERSON1);
-        this.deleteReference(RelationshipTypes.PERSON2);
+        NodeWrapper.nodeWrapperOperations.deleteReference(this,
+                RelationshipTypes.PERSON1);
+        NodeWrapper.nodeWrapperOperations.deleteReference(this,
+                RelationshipTypes.PERSON2);
     }
 
     public List<Fact> getFacts() {
-        return this.getNodesByRelationship(Fact.class,
-                RelationshipTypes.HAS_FACT);
+        return NodeWrapper.nodeWrapperOperations.getNodesByRelationship(this,
+                Fact.class, RelationshipTypes.HAS_FACT);
     }
 
     @Override
@@ -66,11 +72,11 @@ public class Relationship extends Conclusion {
 
         this.getGedcomXConclusion(gedcomXRelationship);
 
-        gedcomXRelationship.setFacts(this.getGedcomXList(
-                org.gedcomx.conclusion.Fact.class, this.getFacts()));
-        gedcomXRelationship
-                .setIdentifiers(this.getGedcomXList(
-                        org.gedcomx.conclusion.Identifier.class,
+        gedcomXRelationship.setFacts(NodeWrapper.nodeWrapperOperations
+                .getGedcomXList(org.gedcomx.conclusion.Fact.class,
+                        this.getFacts()));
+        gedcomXRelationship.setIdentifiers(NodeWrapper.nodeWrapperOperations
+                .getGedcomXList(org.gedcomx.conclusion.Identifier.class,
                         this.getIdentifiers()));
 
         gedcomXRelationship.setKnownType(this.getKnownType());
@@ -85,8 +91,8 @@ public class Relationship extends Conclusion {
     }
 
     public List<Identifier> getIdentifiers() {
-        return this.getNodesByRelationship(Identifier.class,
-                RelationshipTypes.HAS_IDENTIFIER);
+        return NodeWrapper.nodeWrapperOperations.getNodesByRelationship(this,
+                Identifier.class, RelationshipTypes.HAS_IDENTIFIER);
     }
 
     public RelationshipType getKnownType() {
@@ -94,25 +100,28 @@ public class Relationship extends Conclusion {
     }
 
     public Person getPerson1() {
-        return this.getNodeByRelationship(Person.class,
-                RelationshipTypes.PERSON1);
+        return NodeWrapper.nodeWrapperOperations.getNodeByRelationship(this,
+                Person.class, RelationshipTypes.PERSON1);
     }
 
     public Person getPerson2() {
-        return this.getNodeByRelationship(Person.class,
-                RelationshipTypes.PERSON2);
+        return NodeWrapper.nodeWrapperOperations.getNodeByRelationship(this,
+                Person.class, RelationshipTypes.PERSON2);
     }
 
     @Deprecated
     public URI getType() {
-        return new URI((String) this.getProperty(GenericProperties.TYPE));
+        return new URI((String) NodeWrapper.nodeWrapperOperations.getProperty(
+                this, GenericProperties.TYPE));
     }
 
     @Override
     protected void resolveConcreteReferences() {
-        this.createReferenceRelationship(RelationshipTypes.PERSON1,
+        NodeWrapper.nodeWrapperOperations.createReferenceRelationship(this,
+                RelationshipTypes.PERSON1,
                 ConclusionProperties.PERSON1_REFERENCE);
-        this.createReferenceRelationship(RelationshipTypes.PERSON2,
+        NodeWrapper.nodeWrapperOperations.createReferenceRelationship(this,
+                RelationshipTypes.PERSON2,
                 ConclusionProperties.PERSON2_REFERENCE);
         for (final Fact f : this.getFacts()) {
             f.resolveReferences();
@@ -144,9 +153,11 @@ public class Relationship extends Conclusion {
             }
         }
 
-        this.setProperty(ConclusionProperties.PERSON1_REFERENCE,
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                ConclusionProperties.PERSON1_REFERENCE,
                 gedcomXRelationship.getPerson1());
-        this.setProperty(ConclusionProperties.PERSON2_REFERENCE,
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                ConclusionProperties.PERSON2_REFERENCE,
                 gedcomXRelationship.getPerson2());
     }
 
@@ -155,11 +166,13 @@ public class Relationship extends Conclusion {
     }
 
     public void setPerson1(final Person person1) {
-        this.createReferenceRelationship(RelationshipTypes.PERSON1, person1);
+        NodeWrapper.nodeWrapperOperations.createReferenceRelationship(this,
+                RelationshipTypes.PERSON1, person1);
     }
 
     public void setPerson2(final Person person2) {
-        this.createReferenceRelationship(RelationshipTypes.PERSON2, person2);
+        NodeWrapper.nodeWrapperOperations.createReferenceRelationship(this,
+                RelationshipTypes.PERSON2, person2);
     }
 
     @Override
@@ -171,20 +184,23 @@ public class Relationship extends Conclusion {
 
     @Deprecated
     public void setType(final URI type) {
-        this.setProperty(GenericProperties.TYPE, type);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                GenericProperties.TYPE, type);
     }
 
     @Override
     protected void validateUnderlyingNode() throws MissingFieldException {
         if (Validation.nullOrEmpty(this.getPerson1())) {
             throw new MissingRequiredRelationshipException(
-                    this.getAnnotatedNodeType(), this.getId(),
-                    RelationshipTypes.PERSON1.toString());
+                    NodeWrapper.nodeWrapperOperations
+                            .getAnnotatedNodeType(this),
+                    this.getId(), RelationshipTypes.PERSON1.toString());
         }
         if (Validation.nullOrEmpty(this.getPerson2())) {
             throw new MissingRequiredRelationshipException(
-                    this.getAnnotatedNodeType(), this.getId(),
-                    RelationshipTypes.PERSON2.toString());
+                    NodeWrapper.nodeWrapperOperations
+                            .getAnnotatedNodeType(this),
+                    this.getId(), RelationshipTypes.PERSON2.toString());
         }
     }
 

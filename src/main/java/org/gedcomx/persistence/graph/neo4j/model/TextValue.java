@@ -43,15 +43,18 @@ public class TextValue extends NodeWrapper {
     }
 
     public String getLang() {
-        return (String) this.getProperty(GenericProperties.LANG);
+        return (String) NodeWrapper.nodeWrapperOperations.getProperty(this,
+                GenericProperties.LANG);
     }
 
     public NodeWrapper getParentNode() {
-        return super.getParentNode(RelationshipTypes.HAS_NAME);
+        return NodeWrapper.nodeWrapperOperations.getParentNode(this,
+                RelationshipTypes.HAS_NAME);
     }
 
     public String getValue() {
-        return (String) this.getProperty(GenericProperties.VALUE);
+        return (String) NodeWrapper.nodeWrapperOperations.getProperty(this,
+                GenericProperties.VALUE);
     }
 
     @Override
@@ -72,7 +75,8 @@ public class TextValue extends NodeWrapper {
     }
 
     public void setLang(final String lang) {
-        this.setProperty(GenericProperties.LANG, lang);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                GenericProperties.LANG, lang);
     }
 
     @Override
@@ -81,7 +85,8 @@ public class TextValue extends NodeWrapper {
     }
 
     public void setValue(final String value) {
-        this.setProperty(GenericProperties.VALUE, value);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                GenericProperties.VALUE, value);
     }
 
     @Override
@@ -89,7 +94,8 @@ public class TextValue extends NodeWrapper {
             throws MissingRequiredPropertyException {
         if (Validation.nullOrEmpty(this.getValue())) {
             throw new MissingRequiredPropertyException(
-                    this.getAnnotatedNodeType(),
+                    NodeWrapper.nodeWrapperOperations
+                            .getAnnotatedNodeType(this),
                     GenericProperties.VALUE.toString());
         }
     }

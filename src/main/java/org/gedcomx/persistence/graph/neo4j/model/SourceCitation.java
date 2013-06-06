@@ -34,28 +34,30 @@ public class SourceCitation extends NodeWrapper {
     }
 
     public void addField(final CitationField citationField) {
-        this.addRelationship(RelationshipTypes.HAS_CITATION_FIELD,
-                citationField);
+        NodeWrapper.nodeWrapperOperations.addRelationship(this,
+                RelationshipTypes.HAS_CITATION_FIELD, citationField);
     }
 
     @Override
     protected void deleteAllReferences() {
-        this.deleteReferencedNodes(this.getFields());
+        NodeWrapper.nodeWrapperOperations.deleteReferencedNodes(this
+                .getFields());
     }
 
     public ResourceReference getCitationTemplate() {
         return new ResourceReference(new URI(
-                (String) this.getProperty(SourceProperties.CITATION_TEMPLATE)));
+                (String) NodeWrapper.nodeWrapperOperations.getProperty(this,
+                        SourceProperties.CITATION_TEMPLATE)));
     }
 
     public SourceDescription getDescription() {
-        return (SourceDescription) this
-                .getParentNode(RelationshipTypes.HAS_CITATION);
+        return (SourceDescription) NodeWrapper.nodeWrapperOperations
+                .getParentNode(this, RelationshipTypes.HAS_CITATION);
     }
 
     public List<CitationField> getFields() {
-        return this.getNodesByRelationship(CitationField.class,
-                RelationshipTypes.HAS_CITATION_FIELD);
+        return NodeWrapper.nodeWrapperOperations.getNodesByRelationship(this,
+                CitationField.class, RelationshipTypes.HAS_CITATION_FIELD);
     }
 
     @Override
@@ -63,8 +65,9 @@ public class SourceCitation extends NodeWrapper {
         final org.gedcomx.source.SourceCitation gedcomXSourceCitation = new org.gedcomx.source.SourceCitation();
 
         gedcomXSourceCitation.setCitationTemplate(this.getCitationTemplate());
-        gedcomXSourceCitation.setFields(this.getGedcomXList(
-                org.gedcomx.source.CitationField.class, this.getFields()));
+        gedcomXSourceCitation.setFields(NodeWrapper.nodeWrapperOperations
+                .getGedcomXList(org.gedcomx.source.CitationField.class,
+                        this.getFields()));
         gedcomXSourceCitation.setLang(this.getLang());
         gedcomXSourceCitation.setValue(this.getValue());
 
@@ -72,11 +75,13 @@ public class SourceCitation extends NodeWrapper {
     }
 
     public String getLang() {
-        return (String) this.getProperty(GenericProperties.LANG);
+        return (String) NodeWrapper.nodeWrapperOperations.getProperty(this,
+                GenericProperties.LANG);
     }
 
     public String getValue() {
-        return (String) this.getProperty(GenericProperties.VALUE);
+        return (String) NodeWrapper.nodeWrapperOperations.getProperty(this,
+                GenericProperties.VALUE);
     }
 
     @Override
@@ -85,7 +90,8 @@ public class SourceCitation extends NodeWrapper {
     }
 
     public void setCitationTemplate(final ResourceReference citationTemplate) {
-        this.setProperty(SourceProperties.CITATION_TEMPLATE, citationTemplate);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                SourceProperties.CITATION_TEMPLATE, citationTemplate);
     }
 
     @Override
@@ -111,7 +117,8 @@ public class SourceCitation extends NodeWrapper {
     }
 
     public void setLang(final String lang) {
-        this.setProperty(GenericProperties.LANG, lang);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                GenericProperties.LANG, lang);
     }
 
     @Override
@@ -120,7 +127,8 @@ public class SourceCitation extends NodeWrapper {
     }
 
     public void setValue(final String value) {
-        this.setProperty(GenericProperties.VALUE, value);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                GenericProperties.VALUE, value);
     }
 
     @Override
@@ -128,7 +136,8 @@ public class SourceCitation extends NodeWrapper {
             throws MissingRequiredPropertyException {
         if (Validation.nullOrEmpty(this.getValue())) {
             throw new MissingRequiredPropertyException(
-                    this.getAnnotatedNodeType(),
+                    NodeWrapper.nodeWrapperOperations
+                            .getAnnotatedNodeType(this),
                     GenericProperties.VALUE.toString());
         }
     }

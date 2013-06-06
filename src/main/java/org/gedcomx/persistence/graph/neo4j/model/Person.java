@@ -32,28 +32,34 @@ public class Person extends Conclusion {
     }
 
     public void addFact(final Fact fact) {
-        this.addRelationship(RelationshipTypes.HAS_FACT, fact);
+        NodeWrapper.nodeWrapperOperations.addRelationship(this,
+                RelationshipTypes.HAS_FACT, fact);
     }
 
     public void addIdentifier(final Identifier identifier) {
-        this.addRelationship(RelationshipTypes.HAS_IDENTIFIER, identifier);
+        NodeWrapper.nodeWrapperOperations.addRelationship(this,
+                RelationshipTypes.HAS_IDENTIFIER, identifier);
     }
 
     public void addName(final Name name) {
-        this.addRelationship(RelationshipTypes.HAS_NAME, name);
+        NodeWrapper.nodeWrapperOperations.addRelationship(this,
+                RelationshipTypes.HAS_NAME, name);
     }
 
     @Override
     protected void deleteAllConcreteReferences() {
-        this.deleteReferencedNode(this.getGender());
+        NodeWrapper.nodeWrapperOperations
+                .deleteReferencedNode(this.getGender());
 
-        this.deleteReferencedNodes(this.getNames());
-        this.deleteReferencedNodes(this.getFacts());
+        NodeWrapper.nodeWrapperOperations
+                .deleteReferencedNodes(this.getNames());
+        NodeWrapper.nodeWrapperOperations
+                .deleteReferencedNodes(this.getFacts());
     }
 
     public List<Fact> getFacts() {
-        return this.getNodesByRelationship(Fact.class,
-                RelationshipTypes.HAS_FACT);
+        return NodeWrapper.nodeWrapperOperations.getNodesByRelationship(this,
+                Fact.class, RelationshipTypes.HAS_FACT);
     }
 
     @Override
@@ -66,35 +72,37 @@ public class Person extends Conclusion {
 
         gedcomXPerson.setGender(this.getGender().getGedcomX());
 
-        gedcomXPerson.setFacts(this.getGedcomXList(
-                org.gedcomx.conclusion.Fact.class, this.getFacts()));
-        gedcomXPerson
-                .setIdentifiers(this.getGedcomXList(
-                        org.gedcomx.conclusion.Identifier.class,
+        gedcomXPerson.setFacts(NodeWrapper.nodeWrapperOperations
+                .getGedcomXList(org.gedcomx.conclusion.Fact.class,
+                        this.getFacts()));
+        gedcomXPerson.setIdentifiers(NodeWrapper.nodeWrapperOperations
+                .getGedcomXList(org.gedcomx.conclusion.Identifier.class,
                         this.getIdentifiers()));
-        gedcomXPerson.setNames(this.getGedcomXList(
-                org.gedcomx.conclusion.Name.class, this.getNames()));
+        gedcomXPerson.setNames(NodeWrapper.nodeWrapperOperations
+                .getGedcomXList(org.gedcomx.conclusion.Name.class,
+                        this.getNames()));
 
         return gedcomXPerson;
     }
 
     public Gender getGender() {
-        return this.getNodeByRelationship(Gender.class,
-                RelationshipTypes.GENDER);
+        return NodeWrapper.nodeWrapperOperations.getNodeByRelationship(this,
+                Gender.class, RelationshipTypes.GENDER);
     }
 
     public List<Identifier> getIdentifiers() {
-        return this.getNodesByRelationship(Identifier.class,
-                RelationshipTypes.HAS_IDENTIFIER);
+        return NodeWrapper.nodeWrapperOperations.getNodesByRelationship(this,
+                Identifier.class, RelationshipTypes.HAS_IDENTIFIER);
     }
 
     public Boolean getLiving() {
-        return (Boolean) this.getProperty(ConclusionProperties.LIVING);
+        return (Boolean) NodeWrapper.nodeWrapperOperations.getProperty(this,
+                ConclusionProperties.LIVING);
     }
 
     public List<Name> getNames() {
-        return this.getNodesByRelationship(Name.class,
-                RelationshipTypes.HAS_NAME);
+        return NodeWrapper.nodeWrapperOperations.getNodesByRelationship(this,
+                Name.class, RelationshipTypes.HAS_NAME);
     }
 
     @Override
@@ -141,11 +149,13 @@ public class Person extends Conclusion {
     }
 
     public void setGender(final Gender gender) {
-        this.createRelationship(RelationshipTypes.GENDER, gender);
+        NodeWrapper.nodeWrapperOperations.createRelationship(this,
+                RelationshipTypes.GENDER, gender);
     }
 
     public void setLiving(final Boolean living) {
-        this.setProperty(ConclusionProperties.LIVING, living);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                ConclusionProperties.LIVING, living);
     }
 
     @Override

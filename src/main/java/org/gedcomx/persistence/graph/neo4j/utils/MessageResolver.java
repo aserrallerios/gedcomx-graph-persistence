@@ -1,22 +1,21 @@
-package org.gedcomx.persistence.graph.neo4j;
+package org.gedcomx.persistence.graph.neo4j.utils;
 
 import java.io.IOException;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
-
 public class MessageResolver {
 
-    public static ResourceBundle resource;
-    public static final String MESSAGES_LOCALE_PROPERTY = "messages.locale";
+    private static ResourceBundle resource;
+    private static final String MESSAGES_LOCALE_PROPERTY = "messages.locale";
 
     static {
         Locale locale;
 
         final Properties prop = new Properties();
         try {
-            prop.load(ServiceInjector.class.getClassLoader()
+            prop.load(MessageResolver.class.getClassLoader()
                     .getResourceAsStream("config/service.properties"));
             locale = Locale.forLanguageTag(prop
                     .getProperty(MessageResolver.MESSAGES_LOCALE_PROPERTY));

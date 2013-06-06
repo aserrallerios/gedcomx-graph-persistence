@@ -29,16 +29,19 @@ public class NameForm extends NodeWrapper {
     }
 
     public void addNameParts(final NamePart namePart) {
-        this.addRelationship(RelationshipTypes.HAS_NAME_PART, namePart);
+        NodeWrapper.nodeWrapperOperations.addRelationship(this,
+                RelationshipTypes.HAS_NAME_PART, namePart);
     }
 
     @Override
     protected void deleteAllReferences() {
-        this.deleteReferencedNodes(this.getNameParts());
+        NodeWrapper.nodeWrapperOperations.deleteReferencedNodes(this
+                .getNameParts());
     }
 
     public String getFullText() {
-        return (String) this.getProperty(ConclusionProperties.FULL_TEXT);
+        return (String) NodeWrapper.nodeWrapperOperations.getProperty(this,
+                ConclusionProperties.FULL_TEXT);
     }
 
     @Override
@@ -47,23 +50,26 @@ public class NameForm extends NodeWrapper {
 
         gedcomXNameForm.setFullText(this.getFullText());
         gedcomXNameForm.setLang(this.getLang());
-        gedcomXNameForm.setParts(this.getGedcomXList(
-                org.gedcomx.conclusion.NamePart.class, this.getNameParts()));
+        gedcomXNameForm.setParts(NodeWrapper.nodeWrapperOperations
+                .getGedcomXList(org.gedcomx.conclusion.NamePart.class,
+                        this.getNameParts()));
 
         return gedcomXNameForm;
     }
 
     public String getLang() {
-        return (String) this.getProperty(GenericProperties.LANG);
+        return (String) NodeWrapper.nodeWrapperOperations.getProperty(this,
+                GenericProperties.LANG);
     }
 
     public Name getName() {
-        return (Name) this.getParentNode(RelationshipTypes.HAS_NAME_FORM);
+        return (Name) NodeWrapper.nodeWrapperOperations.getParentNode(this,
+                RelationshipTypes.HAS_NAME_FORM);
     }
 
     public List<NamePart> getNameParts() {
-        return this.getNodesByRelationship(NamePart.class,
-                RelationshipTypes.HAS_NAME_PART);
+        return NodeWrapper.nodeWrapperOperations.getNodesByRelationship(this,
+                NamePart.class, RelationshipTypes.HAS_NAME_PART);
     }
 
     @Override
@@ -72,7 +78,8 @@ public class NameForm extends NodeWrapper {
     }
 
     public void setFullText(final String fullText) {
-        this.setProperty(ConclusionProperties.FULL_TEXT, fullText);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                ConclusionProperties.FULL_TEXT, fullText);
     }
 
     @Override
@@ -97,7 +104,8 @@ public class NameForm extends NodeWrapper {
     }
 
     public void setLang(final String lang) {
-        this.setProperty(GenericProperties.LANG, lang);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                GenericProperties.LANG, lang);
     }
 
     @Override

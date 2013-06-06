@@ -33,20 +33,24 @@ public class Name extends Conclusion {
     }
 
     public void addNameForms(final NameForm nameForm) {
-        this.addRelationship(RelationshipTypes.HAS_NAME_FORM, nameForm);
+        NodeWrapper.nodeWrapperOperations.addRelationship(this,
+                RelationshipTypes.HAS_NAME_FORM, nameForm);
     }
 
     @Override
     protected void deleteAllConcreteReferences() {
-        this.deleteReferencedNodes(this.getNameForms());
+        NodeWrapper.nodeWrapperOperations.deleteReferencedNodes(this
+                .getNameForms());
     }
 
     public String getDateFormal() {
-        return (String) this.getProperty(ConclusionProperties.DATE_FORMAL);
+        return (String) NodeWrapper.nodeWrapperOperations.getProperty(this,
+                ConclusionProperties.DATE_FORMAL);
     }
 
     public String getDateOriginal() {
-        return (String) this.getProperty(ConclusionProperties.DATE_ORIGINAL);
+        return (String) NodeWrapper.nodeWrapperOperations.getProperty(this,
+                ConclusionProperties.DATE_ORIGINAL);
     }
 
     @Override
@@ -64,8 +68,9 @@ public class Name extends Conclusion {
         gedcomXName.setType(this.getType());
         gedcomXName.setPreferred(this.getPreferred());
 
-        gedcomXName.setNameForms(this.getGedcomXList(
-                org.gedcomx.conclusion.NameForm.class, this.getNameForms()));
+        gedcomXName.setNameForms(NodeWrapper.nodeWrapperOperations
+                .getGedcomXList(org.gedcomx.conclusion.NameForm.class,
+                        this.getNameForms()));
 
         return gedcomXName;
     }
@@ -75,21 +80,24 @@ public class Name extends Conclusion {
     }
 
     public List<NameForm> getNameForms() {
-        return this.getNodesByRelationship(NameForm.class,
-                RelationshipTypes.HAS_NAME_FORM);
+        return NodeWrapper.nodeWrapperOperations.getNodesByRelationship(this,
+                NameForm.class, RelationshipTypes.HAS_NAME_FORM);
     }
 
     public Person getPerson() {
-        return (Person) this.getParentNode(RelationshipTypes.HAS_NAME);
+        return (Person) NodeWrapper.nodeWrapperOperations.getParentNode(this,
+                RelationshipTypes.HAS_NAME);
     }
 
     public Boolean getPreferred() {
-        return (Boolean) this.getProperty(ConclusionProperties.PREFERRED);
+        return (Boolean) NodeWrapper.nodeWrapperOperations.getProperty(this,
+                ConclusionProperties.PREFERRED);
     }
 
     @Deprecated
     public URI getType() {
-        return new URI((String) this.getProperty(GenericProperties.TYPE));
+        return new URI((String) NodeWrapper.nodeWrapperOperations.getProperty(
+                this, GenericProperties.TYPE));
     }
 
     @Override
@@ -98,11 +106,13 @@ public class Name extends Conclusion {
     }
 
     public void setDateFormal(final String value) {
-        this.setProperty(ConclusionProperties.DATE_FORMAL, value);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                ConclusionProperties.DATE_FORMAL, value);
     }
 
     public void setDateOriginal(final String value) {
-        this.setProperty(ConclusionProperties.DATE_ORIGINAL, value);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                ConclusionProperties.DATE_ORIGINAL, value);
     }
 
     @Override
@@ -133,7 +143,8 @@ public class Name extends Conclusion {
     }
 
     public void setPreferred(final Boolean preferred) {
-        this.setProperty(ConclusionProperties.PREFERRED, preferred);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                ConclusionProperties.PREFERRED, preferred);
     }
 
     @Override
@@ -144,15 +155,17 @@ public class Name extends Conclusion {
 
     @Deprecated
     public void setType(final URI type) {
-        this.setProperty(GenericProperties.TYPE, type);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                GenericProperties.TYPE, type);
     }
 
     @Override
     protected void validateUnderlyingNode() throws MissingFieldException {
         if (Validation.nullOrEmpty(this.getNameForms())) {
             throw new MissingRequiredRelationshipException(
-                    this.getAnnotatedNodeType(), this.getId(),
-                    RelationshipTypes.HAS_NAME_FORM.toString());
+                    NodeWrapper.nodeWrapperOperations
+                            .getAnnotatedNodeType(this),
+                    this.getId(), RelationshipTypes.HAS_NAME_FORM.toString());
         }
     }
 }

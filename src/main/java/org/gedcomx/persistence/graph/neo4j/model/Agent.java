@@ -35,36 +35,45 @@ public class Agent extends NodeWrapper {
     }
 
     public void addAddress(final Address address) {
-        this.addRelationship(RelationshipTypes.HAS_ADDRESS, address);
+        NodeWrapper.nodeWrapperOperations.addRelationship(this,
+                RelationshipTypes.HAS_ADDRESS, address);
     }
 
     public void addIdentifier(final Identifier identifier) {
-        this.addRelationship(RelationshipTypes.HAS_IDENTIFIER, identifier);
+        NodeWrapper.nodeWrapperOperations.addRelationship(this,
+                RelationshipTypes.HAS_IDENTIFIER, identifier);
     }
 
     public void addName(final TextValue name) {
-        this.addRelationship(RelationshipTypes.HAS_NAME, name);
+        NodeWrapper.nodeWrapperOperations.addRelationship(this,
+                RelationshipTypes.HAS_NAME, name);
     }
 
     public void addOnlineAccount(final OnlineAccount onlineAccount) {
-        this.addRelationship(RelationshipTypes.HAS_ACCOUNT, onlineAccount);
+        NodeWrapper.nodeWrapperOperations.addRelationship(this,
+                RelationshipTypes.HAS_ACCOUNT, onlineAccount);
     }
 
     @Override
     protected void deleteAllReferences() {
-        this.deleteReferencedNodes(this.getAddresses());
-        this.deleteReferencedNodes(this.getOnlineAccounts());
-        this.deleteReferencedNodes(this.getIdentifiers());
-        this.deleteReferencedNodes(this.getNames());
+        NodeWrapper.nodeWrapperOperations.deleteReferencedNodes(this
+                .getAddresses());
+        NodeWrapper.nodeWrapperOperations.deleteReferencedNodes(this
+                .getOnlineAccounts());
+        NodeWrapper.nodeWrapperOperations.deleteReferencedNodes(this
+                .getIdentifiers());
+        NodeWrapper.nodeWrapperOperations
+                .deleteReferencedNodes(this.getNames());
     }
 
     public List<Address> getAddresses() {
-        return this.getNodesByRelationship(Address.class,
-                RelationshipTypes.HAS_ADDRESS);
+        return NodeWrapper.nodeWrapperOperations.getNodesByRelationship(this,
+                Address.class, RelationshipTypes.HAS_ADDRESS);
     }
 
     public List<ResourceReference> getEmails() {
-        return this.getURIListProperties(AgentProperties.EMAILS);
+        return NodeWrapper.nodeWrapperOperations.getURIListProperties(this,
+                AgentProperties.EMAILS);
     }
 
     @Override
@@ -77,54 +86,56 @@ public class Agent extends NodeWrapper {
         gedcomXAgent.setOpenid(this.getOpenid());
         gedcomXAgent.setPhones(this.getPhones());
 
-        gedcomXAgent.setAddresses(this.getGedcomXList(
-                org.gedcomx.agent.Address.class, this.getAddresses()));
-        gedcomXAgent
-                .setAccounts(this.getGedcomXList(
-                        org.gedcomx.agent.OnlineAccount.class,
+        gedcomXAgent.setAddresses(NodeWrapper.nodeWrapperOperations
+                .getGedcomXList(org.gedcomx.agent.Address.class,
+                        this.getAddresses()));
+        gedcomXAgent.setAccounts(NodeWrapper.nodeWrapperOperations
+                .getGedcomXList(org.gedcomx.agent.OnlineAccount.class,
                         this.getOnlineAccounts()));
-        gedcomXAgent.setNames(this.getGedcomXList(
+        gedcomXAgent.setNames(NodeWrapper.nodeWrapperOperations.getGedcomXList(
                 org.gedcomx.common.TextValue.class, this.getNames()));
-        gedcomXAgent
-                .setIdentifiers(this.getGedcomXList(
-                        org.gedcomx.conclusion.Identifier.class,
+        gedcomXAgent.setIdentifiers(NodeWrapper.nodeWrapperOperations
+                .getGedcomXList(org.gedcomx.conclusion.Identifier.class,
                         this.getIdentifiers()));
 
         return gedcomXAgent;
     }
 
     public ResourceReference getHomepage() {
-        final String homepage = (String) this
-                .getProperty(AgentProperties.HOMEPAGE);
+        final String homepage = (String) NodeWrapper.nodeWrapperOperations
+                .getProperty(this, AgentProperties.HOMEPAGE);
         return new ResourceReference(new URI(homepage));
     }
 
     public String getId() {
-        return (String) this.getProperty(GenericProperties.ID);
+        return (String) NodeWrapper.nodeWrapperOperations.getProperty(this,
+                GenericProperties.ID);
     }
 
     public List<Identifier> getIdentifiers() {
-        return this.getNodesByRelationship(Identifier.class,
-                RelationshipTypes.HAS_IDENTIFIER);
+        return NodeWrapper.nodeWrapperOperations.getNodesByRelationship(this,
+                Identifier.class, RelationshipTypes.HAS_IDENTIFIER);
     }
 
     public List<TextValue> getNames() {
-        return this.getNodesByRelationship(TextValue.class,
-                RelationshipTypes.HAS_NAME);
+        return NodeWrapper.nodeWrapperOperations.getNodesByRelationship(this,
+                TextValue.class, RelationshipTypes.HAS_NAME);
     }
 
     public List<OnlineAccount> getOnlineAccounts() {
-        return this.getNodesByRelationship(OnlineAccount.class,
-                RelationshipTypes.HAS_ACCOUNT);
+        return NodeWrapper.nodeWrapperOperations.getNodesByRelationship(this,
+                OnlineAccount.class, RelationshipTypes.HAS_ACCOUNT);
     }
 
     public ResourceReference getOpenid() {
         return new ResourceReference(new URI(
-                (String) this.getProperty(AgentProperties.OPENID)));
+                (String) NodeWrapper.nodeWrapperOperations.getProperty(this,
+                        AgentProperties.OPENID)));
     }
 
     public List<ResourceReference> getPhones() {
-        return this.getURIListProperties(AgentProperties.PHONES);
+        return NodeWrapper.nodeWrapperOperations.getURIListProperties(this,
+                AgentProperties.PHONES);
     }
 
     @Override
@@ -143,7 +154,8 @@ public class Agent extends NodeWrapper {
     }
 
     public void setEmails(final List<ResourceReference> emails) {
-        this.setURIListProperties(AgentProperties.EMAILS, emails);
+        NodeWrapper.nodeWrapperOperations.setURIListProperties(this,
+                AgentProperties.EMAILS, emails);
     }
 
     @Override
@@ -189,19 +201,23 @@ public class Agent extends NodeWrapper {
     }
 
     public void setHomepage(final ResourceReference homepage) {
-        this.setProperty(AgentProperties.HOMEPAGE, homepage);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                AgentProperties.HOMEPAGE, homepage);
     }
 
     public void setId(final String id) {
-        this.setProperty(GenericProperties.ID, id);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                GenericProperties.ID, id);
     }
 
     public void setOpenid(final ResourceReference openid) {
-        this.setProperty(AgentProperties.HOMEPAGE, openid);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                AgentProperties.HOMEPAGE, openid);
     }
 
     public void setPhones(final List<ResourceReference> phones) {
-        this.setURIListProperties(AgentProperties.PHONES, phones);
+        NodeWrapper.nodeWrapperOperations.setURIListProperties(this,
+                AgentProperties.PHONES, phones);
     }
 
     @Override

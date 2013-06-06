@@ -55,12 +55,14 @@ public class Gender extends Conclusion {
     }
 
     public Person getPerson() {
-        return (Person) this.getParentNode(RelationshipTypes.GENDER);
+        return (Person) NodeWrapper.nodeWrapperOperations.getParentNode(this,
+                RelationshipTypes.GENDER);
     }
 
     @Deprecated
     public URI getType() {
-        return new URI((String) this.getProperty(GenericProperties.TYPE));
+        return new URI((String) NodeWrapper.nodeWrapperOperations.getProperty(
+                this, GenericProperties.TYPE));
     }
 
     @Override
@@ -95,14 +97,16 @@ public class Gender extends Conclusion {
 
     @Deprecated
     public void setType(final URI type) {
-        this.setProperty(GenericProperties.TYPE, type);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                GenericProperties.TYPE, type);
     }
 
     @Override
     protected void validateUnderlyingNode() throws MissingFieldException {
         if (Validation.nullOrEmpty(this.getType())) {
             throw new MissingRequiredPropertyException(
-                    this.getAnnotatedNodeType(),
+                    NodeWrapper.nodeWrapperOperations
+                            .getAnnotatedNodeType(this),
                     GenericProperties.TYPE.toString());
         }
     }

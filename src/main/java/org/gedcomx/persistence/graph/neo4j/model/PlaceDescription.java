@@ -39,30 +39,38 @@ public class PlaceDescription extends Conclusion {
     }
 
     public void addIdentifier(final Identifier identifier) {
-        this.addRelationship(RelationshipTypes.HAS_IDENTIFIER, identifier);
+        NodeWrapper.nodeWrapperOperations.addRelationship(this,
+                RelationshipTypes.HAS_IDENTIFIER, identifier);
     }
 
     public void addMedia(final SourceReference media) {
-        this.addRelationship(RelationshipTypes.HAS_MEDIA, media);
+        NodeWrapper.nodeWrapperOperations.addRelationship(this,
+                RelationshipTypes.HAS_MEDIA, media);
     }
 
     public void addName(final TextValue name) {
-        this.addRelationship(RelationshipTypes.HAS_NAME, name);
+        NodeWrapper.nodeWrapperOperations.addRelationship(this,
+                RelationshipTypes.HAS_NAME, name);
     }
 
     @Override
     protected void deleteAllConcreteReferences() {
-        this.deleteReferencedNodes(this.getIdentifiers());
-        this.deleteReferencedNodes(this.getNames());
-        this.deleteReferencedNodes(this.getMedia());
+        NodeWrapper.nodeWrapperOperations.deleteReferencedNodes(this
+                .getIdentifiers());
+        NodeWrapper.nodeWrapperOperations
+                .deleteReferencedNodes(this.getNames());
+        NodeWrapper.nodeWrapperOperations
+                .deleteReferencedNodes(this.getMedia());
     }
 
     public URI getAbout() {
-        return new URI((String) this.getProperty(GenericProperties.ABOUT));
+        return new URI((String) NodeWrapper.nodeWrapperOperations.getProperty(
+                this, GenericProperties.ABOUT));
     }
 
     public Boolean getExtracted() {
-        return (Boolean) this.getProperty(ConclusionProperties.EXTRACTED);
+        return (Boolean) NodeWrapper.nodeWrapperOperations.getProperty(this,
+                ConclusionProperties.EXTRACTED);
     }
 
     @Override
@@ -82,62 +90,68 @@ public class PlaceDescription extends Conclusion {
         date.setOriginal(this.getTemporalDescriptionOriginal());
         gedcomXPlaceDescription.setTemporalDescription(date);
 
-        gedcomXPlaceDescription.setNames(this.getGedcomXList(
-                org.gedcomx.common.TextValue.class, this.getNames()));
-        gedcomXPlaceDescription.setMedia(this.getGedcomXList(
-                org.gedcomx.source.SourceReference.class, this.getMedia()));
+        gedcomXPlaceDescription.setNames(NodeWrapper.nodeWrapperOperations
+                .getGedcomXList(org.gedcomx.common.TextValue.class,
+                        this.getNames()));
+        gedcomXPlaceDescription.setMedia(NodeWrapper.nodeWrapperOperations
+                .getGedcomXList(org.gedcomx.source.SourceReference.class,
+                        this.getMedia()));
         gedcomXPlaceDescription
-                .setIdentifiers(this.getGedcomXList(
-                        org.gedcomx.conclusion.Identifier.class,
-                        this.getIdentifiers()));
+                .setIdentifiers(NodeWrapper.nodeWrapperOperations
+                        .getGedcomXList(
+                                org.gedcomx.conclusion.Identifier.class,
+                                this.getIdentifiers()));
 
         return gedcomXPlaceDescription;
     }
 
     public List<Identifier> getIdentifiers() {
-        return this.getNodesByRelationship(Identifier.class,
-                RelationshipTypes.HAS_IDENTIFIER);
+        return NodeWrapper.nodeWrapperOperations.getNodesByRelationship(this,
+                Identifier.class, RelationshipTypes.HAS_IDENTIFIER);
     }
 
     public Double getLatitude() {
-        return (Double) this.getProperty(ConclusionProperties.LATITUDE);
+        return (Double) NodeWrapper.nodeWrapperOperations.getProperty(this,
+                ConclusionProperties.LATITUDE);
 
     }
 
     public Double getLongitude() {
-        return (Double) this.getProperty(ConclusionProperties.LONGITUDE);
+        return (Double) NodeWrapper.nodeWrapperOperations.getProperty(this,
+                ConclusionProperties.LONGITUDE);
     }
 
     public List<SourceReference> getMedia() {
-        return this.getNodesByRelationship(SourceReference.class,
-                RelationshipTypes.HAS_MEDIA);
+        return NodeWrapper.nodeWrapperOperations.getNodesByRelationship(this,
+                SourceReference.class, RelationshipTypes.HAS_MEDIA);
     }
 
     public List<TextValue> getNames() {
-        return this.getNodesByRelationship(TextValue.class,
-                RelationshipTypes.HAS_NAME);
+        return NodeWrapper.nodeWrapperOperations.getNodesByRelationship(this,
+                TextValue.class, RelationshipTypes.HAS_NAME);
     }
 
     public ResourceReference getSpatialDescription() {
         return new ResourceReference(new URI(
-                (String) this
-                        .getProperty(ConclusionProperties.SPATIAL_DESCRIPTION)));
+                (String) NodeWrapper.nodeWrapperOperations.getProperty(this,
+                        ConclusionProperties.SPATIAL_DESCRIPTION)));
     }
 
     public String getTemporalDescriptionFormal() {
-        return (String) this
-                .getProperty(ConclusionProperties.TEMPORAL_DESCRIPTION_FORMAL);
+        return (String) NodeWrapper.nodeWrapperOperations.getProperty(this,
+                ConclusionProperties.TEMPORAL_DESCRIPTION_FORMAL);
 
     }
 
     public String getTemporalDescriptionOriginal() {
-        return (String) this
-                .getProperty(ConclusionProperties.TEMPORAL_DESCRIPTION_ORIGINAL);
+        return (String) NodeWrapper.nodeWrapperOperations.getProperty(this,
+                ConclusionProperties.TEMPORAL_DESCRIPTION_ORIGINAL);
 
     }
 
     public URI getType() {
-        return new URI((String) this.getProperty(GenericProperties.TYPE));
+        return new URI((String) NodeWrapper.nodeWrapperOperations.getProperty(
+                this, GenericProperties.TYPE));
     }
 
     @Override
@@ -146,11 +160,13 @@ public class PlaceDescription extends Conclusion {
     }
 
     public void setAbout(final URI about) {
-        this.setProperty(GenericProperties.ABOUT, about);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                GenericProperties.ABOUT, about);
     }
 
     public void setExtracted(final Boolean extracted) {
-        this.setProperty(ConclusionProperties.EXTRACTED, extracted);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                ConclusionProperties.EXTRACTED, extracted);
     }
 
     @Override
@@ -197,12 +213,14 @@ public class PlaceDescription extends Conclusion {
     }
 
     public void setLatitude(final Double latitude) {
-        this.setProperty(ConclusionProperties.LATITUDE, latitude);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                ConclusionProperties.LATITUDE, latitude);
 
     }
 
     public void setLongitude(final Double longitude) {
-        this.setProperty(ConclusionProperties.LONGITUDE, longitude);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                ConclusionProperties.LONGITUDE, longitude);
 
     }
 
@@ -213,32 +231,34 @@ public class PlaceDescription extends Conclusion {
     }
 
     public void setSpatialDescription(final ResourceReference spatialDescription) {
-        this.setProperty(ConclusionProperties.SPATIAL_DESCRIPTION,
-                spatialDescription);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                ConclusionProperties.SPATIAL_DESCRIPTION, spatialDescription);
     }
 
     public void setTemporalDescriptionFormal(final String formal) {
-        this.setProperty(ConclusionProperties.TEMPORAL_DESCRIPTION_FORMAL,
-                formal);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                ConclusionProperties.TEMPORAL_DESCRIPTION_FORMAL, formal);
 
     }
 
     public void setTemporalDescriptionOriginal(final String original) {
-        this.setProperty(ConclusionProperties.TEMPORAL_DESCRIPTION_ORIGINAL,
-                original);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                ConclusionProperties.TEMPORAL_DESCRIPTION_ORIGINAL, original);
 
     }
 
     public void setType(final URI type) {
-        this.setProperty(GenericProperties.TYPE, type);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                GenericProperties.TYPE, type);
     }
 
     @Override
     protected void validateUnderlyingNode() throws MissingFieldException {
         if (Validation.nullOrEmpty(this.getNames())) {
             throw new MissingRequiredRelationshipException(
-                    this.getAnnotatedNodeType(), this.getId(),
-                    RelationshipTypes.HAS_NAME.toString());
+                    NodeWrapper.nodeWrapperOperations
+                            .getAnnotatedNodeType(this),
+                    this.getId(), RelationshipTypes.HAS_NAME.toString());
         }
     }
 

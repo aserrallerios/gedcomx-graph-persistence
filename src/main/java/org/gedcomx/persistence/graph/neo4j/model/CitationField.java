@@ -37,8 +37,8 @@ public class CitationField extends NodeWrapper {
     }
 
     public SourceCitation getCitation() {
-        return (SourceCitation) this
-                .getParentNode(RelationshipTypes.HAS_CITATION_FIELD);
+        return (SourceCitation) NodeWrapper.nodeWrapperOperations
+                .getParentNode(this, RelationshipTypes.HAS_CITATION_FIELD);
     }
 
     @Override
@@ -52,11 +52,13 @@ public class CitationField extends NodeWrapper {
     }
 
     public URI getName() {
-        return new URI((String) this.getProperty(SourceProperties.NAME));
+        return new URI((String) NodeWrapper.nodeWrapperOperations.getProperty(
+                this, SourceProperties.NAME));
     }
 
     public String getValue() {
-        return (String) this.getProperty(GenericProperties.VALUE);
+        return (String) NodeWrapper.nodeWrapperOperations.getProperty(this,
+                GenericProperties.VALUE);
     }
 
     @Override
@@ -78,7 +80,8 @@ public class CitationField extends NodeWrapper {
     }
 
     public void setName(final URI name) {
-        this.setProperty(SourceProperties.NAME, name);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                SourceProperties.NAME, name);
     }
 
     @Override
@@ -88,7 +91,8 @@ public class CitationField extends NodeWrapper {
     }
 
     public void setValue(final String value) {
-        this.setProperty(GenericProperties.VALUE, value);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                GenericProperties.VALUE, value);
     }
 
     @Override
@@ -96,12 +100,14 @@ public class CitationField extends NodeWrapper {
             throws MissingRequiredPropertyException {
         if (Validation.nullOrEmpty(this.getName())) {
             throw new MissingRequiredPropertyException(
-                    this.getAnnotatedNodeType(),
+                    NodeWrapper.nodeWrapperOperations
+                            .getAnnotatedNodeType(this),
                     GenericProperties.VALUE.toString());
         }
         if (Validation.nullOrEmpty(this.getValue())) {
             throw new MissingRequiredPropertyException(
-                    this.getAnnotatedNodeType(),
+                    NodeWrapper.nodeWrapperOperations
+                            .getAnnotatedNodeType(this),
                     SourceProperties.NAME.toString());
         }
     }

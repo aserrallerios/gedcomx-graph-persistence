@@ -14,6 +14,7 @@ import org.gedcomx.persistence.graph.neo4j.interceptors.DuplicatedNodesCheck;
 import org.gedcomx.persistence.graph.neo4j.interceptors.TransactionWrapper;
 import org.gedcomx.persistence.graph.neo4j.model.NodeWrapper;
 import org.gedcomx.persistence.graph.neo4j.model.NodeWrapperFactory;
+import org.gedcomx.persistence.graph.neo4j.model.NodeWrapperOperations;
 import org.gedcomx.persistence.graph.neo4j.model.WrapperProvider;
 import org.gedcomx.persistence.graph.neo4j.properties.Messages;
 import org.gedcomx.persistence.graph.neo4j.service.GENgraphPersistenceService;
@@ -36,10 +37,10 @@ public class ServiceInjector extends AbstractModule {
     protected void configure() {
         // Node wrappers hold a static reference to DAO
         this.requestStaticInjection(NodeWrapper.class);
-        this.requestStaticInjection(GENgraphPersistenceServiceImpl.class);
 
         // Untargetted Binding
         this.bind(NodeWrapperFactory.class).in(Singleton.class);
+        this.bind(NodeWrapperOperations.class).in(Singleton.class);
 
         // Bindings
         this.bind(GENgraphPersistenceService.class)

@@ -28,7 +28,8 @@ public class PlaceReference extends NodeWrapper {
 
     @Override
     protected void deleteAllReferences() {
-        this.deleteReference(RelationshipTypes.PLACE_DESCRIPTION);
+        NodeWrapper.nodeWrapperOperations.deleteReference(this,
+                RelationshipTypes.PLACE_DESCRIPTION);
     }
 
     @Override
@@ -45,21 +46,24 @@ public class PlaceReference extends NodeWrapper {
     }
 
     public String getOriginal() {
-        return (String) this.getProperty(ConclusionProperties.ORIGINAL);
+        return (String) NodeWrapper.nodeWrapperOperations.getProperty(this,
+                ConclusionProperties.ORIGINAL);
     }
 
     public NodeWrapper getParentNode() {
-        return super.getParentNode(RelationshipTypes.PLACE);
+        return NodeWrapper.nodeWrapperOperations.getParentNode(this,
+                RelationshipTypes.PLACE);
     }
 
     public PlaceDescription getPlaceDescription() {
-        return this.getNodeByRelationship(PlaceDescription.class,
-                RelationshipTypes.PLACE);
+        return NodeWrapper.nodeWrapperOperations.getNodeByRelationship(this,
+                PlaceDescription.class, RelationshipTypes.PLACE);
     }
 
     @Override
     public void resolveReferences() {
-        this.createReferenceRelationship(RelationshipTypes.PLACE,
+        NodeWrapper.nodeWrapperOperations.createReferenceRelationship(this,
+                RelationshipTypes.PLACE,
                 ConclusionProperties.PLACE_DESC_REFERENCE);
     }
 
@@ -75,18 +79,20 @@ public class PlaceReference extends NodeWrapper {
         final org.gedcomx.conclusion.PlaceReference gedcomXPlaceReference = (org.gedcomx.conclusion.PlaceReference) gedcomXObject;
 
         if (gedcomXPlaceReference.getDescriptionRef() != null) {
-            this.setProperty(ConclusionProperties.PLACE_DESC_REFERENCE,
+            NodeWrapper.nodeWrapperOperations.setProperty(this,
+                    ConclusionProperties.PLACE_DESC_REFERENCE,
                     gedcomXPlaceReference.getDescriptionRef());
         }
     }
 
     public void setOriginal(final String original) {
-        this.setProperty(ConclusionProperties.ORIGINAL, original);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                ConclusionProperties.ORIGINAL, original);
     }
 
     public void setPlaceDescription(final PlaceDescription placeDescription) {
-        this.createReferenceRelationship(RelationshipTypes.PLACE_DESCRIPTION,
-                placeDescription);
+        NodeWrapper.nodeWrapperOperations.createReferenceRelationship(this,
+                RelationshipTypes.PLACE_DESCRIPTION, placeDescription);
     }
 
     @Override

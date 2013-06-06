@@ -40,52 +40,64 @@ public class SourceDescription extends NodeWrapper {
     }
 
     public void addCitation(final SourceCitation sourceCitation) {
-        this.addRelationship(RelationshipTypes.HAS_CITATION, sourceCitation);
+        NodeWrapper.nodeWrapperOperations.addRelationship(this,
+                RelationshipTypes.HAS_CITATION, sourceCitation);
     }
 
     public void addNote(final Note note) {
-        this.addRelationship(RelationshipTypes.HAS_NOTE, note);
+        NodeWrapper.nodeWrapperOperations.addRelationship(this,
+                RelationshipTypes.HAS_NOTE, note);
     }
 
     public void addSource(final SourceReference sourceReference) {
-        this.addRelationship(RelationshipTypes.HAS_SOURCE_REFERENCE,
-                sourceReference);
+        NodeWrapper.nodeWrapperOperations.addRelationship(this,
+                RelationshipTypes.HAS_SOURCE_REFERENCE, sourceReference);
     }
 
     public void addTitle(final TextValue textValue) {
-        this.addRelationship(RelationshipTypes.HAS_TITLE, textValue);
+        NodeWrapper.nodeWrapperOperations.addRelationship(this,
+                RelationshipTypes.HAS_TITLE, textValue);
     }
 
     @Override
     protected void deleteAllReferences() {
-        this.deleteReferencedNodes(this.getNotes());
-        this.deleteReferencedNodes(this.getTitles());
-        this.deleteReferencedNodes(this.getCitations());
-        this.deleteReferencedNodes(this.getSources());
-        this.deleteReferencedNode(this.getAttribution());
-        this.deleteReferencedNode(this.getComponentOf());
+        NodeWrapper.nodeWrapperOperations
+                .deleteReferencedNodes(this.getNotes());
+        NodeWrapper.nodeWrapperOperations.deleteReferencedNodes(this
+                .getTitles());
+        NodeWrapper.nodeWrapperOperations.deleteReferencedNodes(this
+                .getCitations());
+        NodeWrapper.nodeWrapperOperations.deleteReferencedNodes(this
+                .getSources());
+        NodeWrapper.nodeWrapperOperations.deleteReferencedNode(this
+                .getAttribution());
+        NodeWrapper.nodeWrapperOperations.deleteReferencedNode(this
+                .getComponentOf());
 
-        this.deleteReferences(RelationshipTypes.HAS_CONCLUSION);
-        this.deleteReference(RelationshipTypes.MEDIATOR);
+        NodeWrapper.nodeWrapperOperations.deleteReferences(this,
+                RelationshipTypes.HAS_CONCLUSION);
+        NodeWrapper.nodeWrapperOperations.deleteReference(this,
+                RelationshipTypes.MEDIATOR);
     }
 
     public URI getAbout() {
-        return new URI((String) this.getProperty(GenericProperties.ABOUT));
+        return new URI((String) NodeWrapper.nodeWrapperOperations.getProperty(
+                this, GenericProperties.ABOUT));
     }
 
     public Attribution getAttribution() {
-        return this.getNodeByRelationship(Attribution.class,
-                RelationshipTypes.ATTRIBUTION);
+        return NodeWrapper.nodeWrapperOperations.getNodeByRelationship(this,
+                Attribution.class, RelationshipTypes.ATTRIBUTION);
     }
 
     public List<SourceCitation> getCitations() {
-        return this.getNodesByRelationship(SourceCitation.class,
-                RelationshipTypes.HAS_CITATION);
+        return NodeWrapper.nodeWrapperOperations.getNodesByRelationship(this,
+                SourceCitation.class, RelationshipTypes.HAS_CITATION);
     }
 
     public SourceReference getComponentOf() {
-        return this.getNodeByRelationship(SourceReference.class,
-                RelationshipTypes.COMPONENT_OF);
+        return NodeWrapper.nodeWrapperOperations.getNodeByRelationship(this,
+                SourceReference.class, RelationshipTypes.COMPONENT_OF);
     }
 
     @Override
@@ -105,14 +117,18 @@ public class SourceDescription extends NodeWrapper {
             gedcomXSourceDescription.setComponentOf(src.getGedcomX());
         }
 
-        gedcomXSourceDescription.setCitations(this.getGedcomXList(
-                org.gedcomx.source.SourceCitation.class, this.getCitations()));
-        gedcomXSourceDescription.setNotes(this.getGedcomXList(
-                org.gedcomx.common.Note.class, this.getNotes()));
-        gedcomXSourceDescription.setSources(this.getGedcomXList(
-                org.gedcomx.source.SourceReference.class, this.getSources()));
-        gedcomXSourceDescription.setTitles(this.getGedcomXList(
-                org.gedcomx.common.TextValue.class, this.getTitles()));
+        gedcomXSourceDescription.setCitations(NodeWrapper.nodeWrapperOperations
+                .getGedcomXList(org.gedcomx.source.SourceCitation.class,
+                        this.getCitations()));
+        gedcomXSourceDescription
+                .setNotes(NodeWrapper.nodeWrapperOperations.getGedcomXList(
+                        org.gedcomx.common.Note.class, this.getNotes()));
+        gedcomXSourceDescription.setSources(NodeWrapper.nodeWrapperOperations
+                .getGedcomXList(org.gedcomx.source.SourceReference.class,
+                        this.getSources()));
+        gedcomXSourceDescription.setTitles(NodeWrapper.nodeWrapperOperations
+                .getGedcomXList(org.gedcomx.common.TextValue.class,
+                        this.getTitles()));
 
         final Agent mediator = this.getMediator();
         if (mediator != null) {
@@ -124,21 +140,23 @@ public class SourceDescription extends NodeWrapper {
     }
 
     public String getId() {
-        return (String) this.getProperty(GenericProperties.ID);
+        return (String) NodeWrapper.nodeWrapperOperations.getProperty(this,
+                GenericProperties.ID);
     }
 
     public Agent getMediator() {
-        return this.getNodeByRelationship(Agent.class,
-                RelationshipTypes.MEDIATOR);
+        return NodeWrapper.nodeWrapperOperations.getNodeByRelationship(this,
+                Agent.class, RelationshipTypes.MEDIATOR);
     }
 
     public String getMediaType() {
-        return (String) this.getProperty(ConclusionProperties.MEDIA_TYPE);
+        return (String) NodeWrapper.nodeWrapperOperations.getProperty(this,
+                ConclusionProperties.MEDIA_TYPE);
     }
 
     public List<Note> getNotes() {
-        return this.getNodesByRelationship(Note.class,
-                RelationshipTypes.HAS_NOTE);
+        return NodeWrapper.nodeWrapperOperations.getNodesByRelationship(this,
+                Note.class, RelationshipTypes.HAS_NOTE);
     }
 
     @Override
@@ -147,13 +165,13 @@ public class SourceDescription extends NodeWrapper {
     }
 
     public List<SourceReference> getSources() {
-        return this.getNodesByRelationship(SourceReference.class,
-                RelationshipTypes.HAS_SOURCE_REFERENCE);
+        return NodeWrapper.nodeWrapperOperations.getNodesByRelationship(this,
+                SourceReference.class, RelationshipTypes.HAS_SOURCE_REFERENCE);
     }
 
     public List<TextValue> getTitles() {
-        return this.getNodesByRelationship(TextValue.class,
-                RelationshipTypes.HAS_TITLE);
+        return NodeWrapper.nodeWrapperOperations.getNodesByRelationship(this,
+                TextValue.class, RelationshipTypes.HAS_TITLE);
     }
 
     @Override
@@ -163,22 +181,27 @@ public class SourceDescription extends NodeWrapper {
 
     @Override
     public void resolveReferences() {
-        this.createReferenceRelationship(RelationshipTypes.MEDIATOR,
-                SourceProperties.MEDIATOR_REFERENCE);
-        this.createReferenceRelationship(RelationshipTypes.HAS_CONCLUSION,
+        NodeWrapper.nodeWrapperOperations
+                .createReferenceRelationship(this, RelationshipTypes.MEDIATOR,
+                        SourceProperties.MEDIATOR_REFERENCE);
+        NodeWrapper.nodeWrapperOperations.createReferenceRelationship(this,
+                RelationshipTypes.HAS_CONCLUSION,
                 SourceProperties.EXTRACTED_CONCLUSIONS_REFERENCE);
     }
 
     public void setAbout(final URI about) {
-        this.setProperty(GenericProperties.ABOUT, about);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                GenericProperties.ABOUT, about);
     }
 
     public void setAttribution(final Attribution attribution) {
-        this.createRelationship(RelationshipTypes.ATTRIBUTION, attribution);
+        NodeWrapper.nodeWrapperOperations.createRelationship(this,
+                RelationshipTypes.ATTRIBUTION, attribution);
     }
 
     public void setComponentOf(final SourceReference componentOf) {
-        this.createRelationship(RelationshipTypes.COMPONENT_OF, componentOf);
+        NodeWrapper.nodeWrapperOperations.createRelationship(this,
+                RelationshipTypes.COMPONENT_OF, componentOf);
     }
 
     @Override
@@ -224,28 +247,33 @@ public class SourceDescription extends NodeWrapper {
         }
 
         if (gedcomXSourceDescription.getMediator() != null) {
-            this.setProperty(SourceProperties.MEDIATOR_REFERENCE,
+            NodeWrapper.nodeWrapperOperations.setProperty(this,
+                    SourceProperties.MEDIATOR_REFERENCE,
                     gedcomXSourceDescription.getMediator());
         }
     }
 
     public void setId(final String id) {
-        this.setProperty(GenericProperties.ID, id);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                GenericProperties.ID, id);
     }
 
     public void setMediator(final Agent mediator) {
-        this.createReferenceRelationship(RelationshipTypes.MEDIATOR, mediator);
+        NodeWrapper.nodeWrapperOperations.createReferenceRelationship(this,
+                RelationshipTypes.MEDIATOR, mediator);
     }
 
     public void setMediaType(final String mediaType) {
-        this.setProperty(ConclusionProperties.MEDIA_TYPE, mediaType);
+        NodeWrapper.nodeWrapperOperations.setProperty(this,
+                ConclusionProperties.MEDIA_TYPE, mediaType);
     }
 
     @Override
     protected void setRequiredProperties(final Object... properties)
             throws MissingFieldException {
-        this.addRelationship(RelationshipTypes.HAS_CITATION,
-                new SourceCitation((String) properties[0]));
+        NodeWrapper.nodeWrapperOperations.addRelationship(this,
+                RelationshipTypes.HAS_CITATION, new SourceCitation(
+                        (String) properties[0]));
     }
 
     @Override
@@ -253,8 +281,9 @@ public class SourceDescription extends NodeWrapper {
             throws MissingRequiredRelationshipException {
         if (Validation.nullOrEmpty(this.getCitations())) {
             throw new MissingRequiredRelationshipException(
-                    this.getAnnotatedNodeType(), this.getId(),
-                    RelationshipTypes.HAS_CITATION.toString());
+                    NodeWrapper.nodeWrapperOperations
+                            .getAnnotatedNodeType(this),
+                    this.getId(), RelationshipTypes.HAS_CITATION.toString());
         }
     }
 }
