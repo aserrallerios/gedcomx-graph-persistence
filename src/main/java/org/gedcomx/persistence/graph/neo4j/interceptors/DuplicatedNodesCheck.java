@@ -9,6 +9,7 @@ import org.gedcomx.persistence.graph.neo4j.model.constants.GenericProperties;
 import org.gedcomx.persistence.graph.neo4j.model.constants.IndexNames;
 import org.neo4j.graphdb.Node;
 
+import com.google.common.base.Throwables;
 import com.google.inject.Inject;
 
 public class DuplicatedNodesCheck implements MethodInterceptor {
@@ -20,7 +21,7 @@ public class DuplicatedNodesCheck implements MethodInterceptor {
     }
 
     @Override
-    public Object invoke(final MethodInvocation invocation) throws Throwable {
+	public Object invoke(final MethodInvocation invocation) {
         final Object gedcomxElement = invocation.getArguments()[0];
 
         String id = null;
@@ -40,7 +41,11 @@ public class DuplicatedNodesCheck implements MethodInterceptor {
                 throw new NodeIdentifierAlreadyExists(id);
             }
         }
-        return invocation.proceed();
+		try {
+			return invocation.proceed();
+		} catch (Throwable e) {
+			throw Throwables.propagate(e);
+		}
     }
 
     @Inject

@@ -6,9 +6,7 @@ import java.util.List;
 import org.gedcomx.common.ResourceReference;
 import org.gedcomx.common.URI;
 import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
-import org.gedcomx.persistence.graph.neo4j.exceptions.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exceptions.MissingRequiredPropertyException;
-import org.gedcomx.persistence.graph.neo4j.exceptions.UnknownNodeType;
 import org.gedcomx.persistence.graph.neo4j.model.constants.ConclusionProperties;
 import org.gedcomx.persistence.graph.neo4j.model.constants.GenericProperties;
 import org.gedcomx.persistence.graph.neo4j.model.constants.NodeTypes;
@@ -21,143 +19,139 @@ import org.neo4j.graphdb.Node;
 @NodeType(NodeTypes.NAME_PART)
 public class NamePart extends NodeWrapper {
 
-    protected NamePart(final Node node) throws MissingFieldException,
-            UnknownNodeType {
-        super(node);
-    }
+	protected NamePart(final Node node) {
+		super(node);
+	}
 
-    protected NamePart(final org.gedcomx.conclusion.NamePart gedcomXNamePart)
-            throws MissingFieldException {
-        super(gedcomXNamePart);
-    }
+	protected NamePart(final org.gedcomx.conclusion.NamePart gedcomXNamePart) {
+		super(gedcomXNamePart);
+	}
 
-    protected NamePart(final String value) throws MissingFieldException {
-        super(value);
-    }
+	protected NamePart(final String value) {
+		super(value);
+	}
 
-    public void addQualifier(final Qualifier qualifier) {
-        NodeWrapper.nodeWrapperOperations.addRelationship(this,
-                RelationshipTypes.HAS_QUALIFIER, qualifier);
-    }
+	public void addQualifier(final Qualifier qualifier) {
+		NodeWrapper.nodeWrapperOperations.addRelationship(this,
+				RelationshipTypes.HAS_QUALIFIER, qualifier);
+	}
 
-    @Override
-    protected void deleteAllReferences() {
-        return;
-    }
+	@Override
+	protected void deleteAllReferences() {
+		return;
+	}
 
-    @Override
-    public org.gedcomx.conclusion.NamePart getGedcomX() {
-        final org.gedcomx.conclusion.NamePart gedcomXNamePart = new org.gedcomx.conclusion.NamePart();
+	@Override
+	public org.gedcomx.conclusion.NamePart getGedcomX() {
+		final org.gedcomx.conclusion.NamePart gedcomXNamePart = new org.gedcomx.conclusion.NamePart();
 
-        gedcomXNamePart.setType(this.getType());
-        gedcomXNamePart.setKnownType(this.getKnownType());
-        gedcomXNamePart.setValue(this.getValue());
-        gedcomXNamePart.setQualifiers(NodeWrapper.nodeWrapperOperations
-                .getGedcomXList(org.gedcomx.common.Qualifier.class,
-                        this.getQualifiers()));
+		gedcomXNamePart.setType(this.getType());
+		gedcomXNamePart.setKnownType(this.getKnownType());
+		gedcomXNamePart.setValue(this.getValue());
+		gedcomXNamePart.setQualifiers(NodeWrapper.nodeWrapperOperations
+				.getGedcomXList(org.gedcomx.common.Qualifier.class,
+						this.getQualifiers()));
 
-        return gedcomXNamePart;
-    }
+		return gedcomXNamePart;
+	}
 
-    public List<NamePartQualifierType> getKnownQualifiers() {
-        final List<ResourceReference> references = NodeWrapper.nodeWrapperOperations
-                .getURIListProperties(this, ConclusionProperties.QUALIFIERS);
+	public List<NamePartQualifierType> getKnownQualifiers() {
+		final List<ResourceReference> references = NodeWrapper.nodeWrapperOperations
+				.getURIListProperties(this, ConclusionProperties.QUALIFIERS);
 
-        final List<NamePartQualifierType> result = new ArrayList<NamePartQualifierType>();
-        for (final ResourceReference ref : references) {
-            result.add(NamePartQualifierType.fromQNameURI(ref.getResource()));
-        }
-        return result;
-    }
+		final List<NamePartQualifierType> result = new ArrayList<NamePartQualifierType>();
+		for (final ResourceReference ref : references) {
+			result.add(NamePartQualifierType.fromQNameURI(ref.getResource()));
+		}
+		return result;
+	}
 
-    public NamePartType getKnownType() {
-        return NamePartType.fromQNameURI(this.getType());
-    }
+	public NamePartType getKnownType() {
+		return NamePartType.fromQNameURI(this.getType());
+	}
 
-    public NameForm getNameForm() {
-        return (NameForm) NodeWrapper.nodeWrapperOperations.getParentNode(this,
-                RelationshipTypes.HAS_NAME_PART);
-    }
+	public NameForm getNameForm() {
+		return (NameForm) NodeWrapper.nodeWrapperOperations.getParentNode(this,
+				RelationshipTypes.HAS_NAME_PART);
+	}
 
-    public List<Qualifier> getQualifiers() {
-        return NodeWrapper.nodeWrapperOperations.getNodesByRelationship(this,
-                Qualifier.class, RelationshipTypes.HAS_QUALIFIER);
-    }
+	public List<Qualifier> getQualifiers() {
+		return NodeWrapper.nodeWrapperOperations.getNodesByRelationship(this,
+				Qualifier.class, RelationshipTypes.HAS_QUALIFIER);
+	}
 
-    @Deprecated
-    public URI getType() {
-        return new URI((String) NodeWrapper.nodeWrapperOperations.getProperty(
-                this, GenericProperties.TYPE));
-    }
+	@Deprecated
+	public URI getType() {
+		return new URI((String) NodeWrapper.nodeWrapperOperations.getProperty(
+				this, GenericProperties.TYPE));
+	}
 
-    public String getValue() {
-        return (String) NodeWrapper.nodeWrapperOperations.getProperty(this,
-                GenericProperties.VALUE);
-    }
+	public String getValue() {
+		return (String) NodeWrapper.nodeWrapperOperations.getProperty(this,
+				GenericProperties.VALUE);
+	}
 
-    @Override
-    public void resolveReferences() {
-        return;
-    }
+	@Override
+	public void resolveReferences() {
+		return;
+	}
 
-    @Override
-    protected void setGedcomXProperties(final Object gedcomXObject) {
-        final org.gedcomx.conclusion.NamePart gedcomXNamePart = (org.gedcomx.conclusion.NamePart) gedcomXObject;
+	@Override
+	protected void setGedcomXProperties(final Object gedcomXObject) {
+		final org.gedcomx.conclusion.NamePart gedcomXNamePart = (org.gedcomx.conclusion.NamePart) gedcomXObject;
 
-        this.setType(gedcomXNamePart.getType());
-        this.setValue(gedcomXNamePart.getValue());
+		this.setType(gedcomXNamePart.getType());
+		this.setValue(gedcomXNamePart.getValue());
 
-    }
+	}
 
-    @Override
-    protected void setGedcomXRelations(final Object gedcomXObject)
-            throws MissingFieldException {
-        final org.gedcomx.conclusion.NamePart gedcomXNamePart = (org.gedcomx.conclusion.NamePart) gedcomXObject;
+	@Override
+	protected void setGedcomXRelations(final Object gedcomXObject) {
+		final org.gedcomx.conclusion.NamePart gedcomXNamePart = (org.gedcomx.conclusion.NamePart) gedcomXObject;
 
-        if (gedcomXNamePart.getQualifiers() != null) {
-            for (final org.gedcomx.common.Qualifier q : gedcomXNamePart
-                    .getQualifiers()) {
-                this.addQualifier(new Qualifier(q));
-            }
-        }
+		if (gedcomXNamePart.getQualifiers() != null) {
+			for (final org.gedcomx.common.Qualifier q : gedcomXNamePart
+					.getQualifiers()) {
+				this.addQualifier(new Qualifier(q));
+			}
+		}
 
-        return;
-    }
+		return;
+	}
 
-    public void setKnownQualifiers(final List<NamePartQualifierType> qualifiers) {
-        NodeWrapper.nodeWrapperOperations.setProperty(this,
-                ConclusionProperties.QUALIFIERS, qualifiers);
-    }
+	public void setKnownQualifiers(final List<NamePartQualifierType> qualifiers) {
+		NodeWrapper.nodeWrapperOperations.setProperty(this,
+				ConclusionProperties.QUALIFIERS, qualifiers);
+	}
 
-    public void setKnownType(final NamePartType type) {
-        this.setType(type.toQNameURI());
-    }
+	public void setKnownType(final NamePartType type) {
+		this.setType(type.toQNameURI());
+	}
 
-    @Override
-    protected void setRequiredProperties(final Object... properties)
-            throws MissingFieldException {
-        this.setValue((String) properties[0]);
-    }
+	@Override
+	protected void setRequiredProperties(final Object... properties) {
+		this.setValue((String) properties[0]);
+	}
 
-    @Deprecated
-    public void setType(final URI type) {
-        NodeWrapper.nodeWrapperOperations.setProperty(this,
-                GenericProperties.TYPE, type);
-    }
+	@Deprecated
+	public void setType(final URI type) {
+		NodeWrapper.nodeWrapperOperations.setProperty(this,
+				GenericProperties.TYPE, type);
+	}
 
-    public void setValue(final String value) {
-        NodeWrapper.nodeWrapperOperations.setProperty(this,
-                GenericProperties.VALUE, value);
-    }
+	public void setValue(final String value) {
+		NodeWrapper.nodeWrapperOperations.setProperty(this,
+				GenericProperties.VALUE, value);
+	}
 
-    @Override
-    protected void validateUnderlyingNode() throws MissingFieldException {
-        if (Validation.nullOrEmpty(this.getValue())) {
-            throw new MissingRequiredPropertyException(
-                    NodeWrapper.nodeWrapperOperations
-                            .getAnnotatedNodeType(this),
-                    GenericProperties.VALUE.toString());
-        }
-    }
+	@Override
+	protected void validateUnderlyingNode() {
+		if (Validation.nullOrEmpty(this.getValue())) {
+			throw new MissingRequiredPropertyException(
+					NodeWrapper.nodeWrapperOperations
+							.getAnnotatedNodeType(this),
+					GenericProperties.VALUE.toString());
+		}
+	}
 
 }

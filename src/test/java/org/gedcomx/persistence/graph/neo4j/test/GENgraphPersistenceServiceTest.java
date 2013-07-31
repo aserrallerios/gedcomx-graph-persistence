@@ -25,74 +25,74 @@ import com.google.inject.Guice;
 
 public class GENgraphPersistenceServiceTest {
 
-    private static class GedcomxData {
-        Map<String, String> attributes;
-    }
+	private static class GedcomxData {
+		Map<String, String> attributes;
+	}
 
-    private GENgraphPersistenceService service;
-    private static Logger logger = LogManager.getLogger("GENGraphServiceTest");
+	private GENgraphPersistenceService service;
+	private static Logger logger = LogManager.getLogger("GENGraphServiceTest");
 
-    @Test
-    public void createGraphByGedcomXFile() {
-        // GedcomxData data = null;
-        try {
-            // data =
-            this.readGedcomXFile();
-        } catch (URISyntaxException | IOException e) {
-            GENgraphPersistenceServiceTest.logger
-                    .error("Error reading gedx file");
-        }
-    }
+	@Test
+	public void createGraphByGedcomXFile() {
+		// GedcomxData data = null;
+		try {
+			// data =
+			this.readGedcomXFile();
+		} catch (URISyntaxException | IOException e) {
+			GENgraphPersistenceServiceTest.logger
+					.error("Error reading gedx file");
+		}
+	}
 
-    @Test
-    public void createGraphByGedcomXObjects() {
-        GENgraphPersistenceServiceTest.logger.info("Starting createGraph");
-        try {
-            final List<Object> data = ExampleGedcomxFileData.create();
+	@Test
+	public void createGraphByGedcomXObjects() {
+		GENgraphPersistenceServiceTest.logger.info("Starting createGraph");
+		try {
+			final List<Object> data = ExampleGedcomxFileData.create();
 
-            final Map<String, String> attributes = new HashMap<>();
-            attributes.put("autor", "albert");
-            attributes.put("create-date", new Date().toString());
+			final Map<String, String> attributes = new HashMap<>();
+			attributes.put("autor", "albert");
+			attributes.put("create-date", new Date().toString());
 
-            this.service.createGraphByGedcomX(attributes, data);
+			this.service.createGraphByGedcomX(attributes, data);
 
-            GENgraphPersistenceServiceTest.logger
-                    .info("createGraph successful");
-        } catch (final Exception e) {
-            GENgraphPersistenceServiceTest.logger.error("createGraph Error");
-            e.printStackTrace();
-            Assert.fail();
-        }
-    }
+			GENgraphPersistenceServiceTest.logger
+					.info("createGraph successful");
+		} catch (final Exception e) {
+			GENgraphPersistenceServiceTest.logger.error("createGraph Error");
+			e.printStackTrace();
+			Assert.fail();
+		}
+	}
 
-    @Before
-    public void injectServices() {
-        this.service = Guice.createInjector(new ServiceInjector()).getInstance(
-                GENgraphPersistenceService.class);
-    }
+	@Before
+	public void injectServices() {
+		this.service = Guice.createInjector(new ServiceInjector()).getInstance(
+				GENgraphPersistenceService.class);
+	}
 
-    private GedcomxData readGedcomXFile() throws URISyntaxException,
-            IOException {
-        final URL gedcomxUrl = this.getClass().getClassLoader()
-                .getResource("resources/ged55stresstox.jar");
-        final File gedcomxFile = new File(gedcomxUrl.toURI());
-        final JarFile jarFile = new JarFile(gedcomxFile);
-        final GedcomxFile gedxFile = new GedcomxFile(jarFile);
+	private GedcomxData readGedcomXFile() throws URISyntaxException,
+			IOException {
+		final URL gedcomxUrl = this.getClass().getClassLoader()
+				.getResource("resources/ged55stresstox.jar");
+		final File gedcomxFile = new File(gedcomxUrl.toURI());
+		final JarFile jarFile = new JarFile(gedcomxFile);
+		final GedcomxFile gedxFile = new GedcomxFile(jarFile);
 
-        final GedcomxData data = new GedcomxData();
-        final List<Object> gedxObjects = new ArrayList<>();
-        data.attributes = gedxFile.getAttributes();
+		final GedcomxData data = new GedcomxData();
+		final List<Object> gedxObjects = new ArrayList<>();
+		data.attributes = gedxFile.getAttributes();
 
-        final Iterable<GedcomxFileEntry> entries = gedxFile.getEntries();
-        for (final GedcomxFileEntry entry : entries) {
-            final String name = entry.getJarEntry().getName();
-            if ((name != null) && (!"META-INF/MANIFEST.MF".equals(name))) {
-                gedxObjects.add(gedxFile.readResource(entry));
-            }
-        }
-        gedxFile.close();
-        jarFile.close();
+		final Iterable<GedcomxFileEntry> entries = gedxFile.getEntries();
+		for (final GedcomxFileEntry entry : entries) {
+			final String name = entry.getJarEntry().getName();
+			if (name != null && !"META-INF/MANIFEST.MF".equals(name)) {
+				gedxObjects.add(gedxFile.readResource(entry));
+			}
+		}
+		gedxFile.close();
+		jarFile.close();
 
-        return data;
-    }
+		return data;
+	}
 }

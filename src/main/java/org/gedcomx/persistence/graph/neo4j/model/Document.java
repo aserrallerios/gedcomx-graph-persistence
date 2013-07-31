@@ -2,9 +2,7 @@ package org.gedcomx.persistence.graph.neo4j.model;
 
 import org.gedcomx.common.URI;
 import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
-import org.gedcomx.persistence.graph.neo4j.exceptions.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exceptions.MissingRequiredPropertyException;
-import org.gedcomx.persistence.graph.neo4j.exceptions.UnknownNodeType;
 import org.gedcomx.persistence.graph.neo4j.model.constants.ConclusionProperties;
 import org.gedcomx.persistence.graph.neo4j.model.constants.GenericProperties;
 import org.gedcomx.persistence.graph.neo4j.model.constants.NodeTypes;
@@ -18,99 +16,95 @@ import com.google.inject.assistedinject.Assisted;
 @NodeType(NodeTypes.DOCUMENT)
 public class Document extends Conclusion {
 
-    protected Document(final Node node) throws MissingFieldException,
-            UnknownNodeType {
-        super(node);
-    }
+	protected Document(final Node node) {
+		super(node);
+	}
 
-    @Inject
-    protected Document(
-            final @Assisted org.gedcomx.conclusion.Document gedcomXDocument)
-            throws MissingFieldException {
-        super(gedcomXDocument);
-    }
+	@Inject
+	protected Document(
+			final @Assisted org.gedcomx.conclusion.Document gedcomXDocument) {
+		super(gedcomXDocument);
+	}
 
-    protected Document(final String text) throws MissingFieldException {
-        super(text);
-    }
+	protected Document(final String text) {
+		super(text);
+	}
 
-    @Override
-    protected void deleteAllConcreteReferences() {
-        return;
-    }
+	@Override
+	protected void deleteAllConcreteReferences() {
+		return;
+	}
 
-    @Override
-    public org.gedcomx.conclusion.Document getGedcomX() {
-        final org.gedcomx.conclusion.Document gedcomXDocument = new org.gedcomx.conclusion.Document();
+	@Override
+	public org.gedcomx.conclusion.Document getGedcomX() {
+		final org.gedcomx.conclusion.Document gedcomXDocument = new org.gedcomx.conclusion.Document();
 
-        gedcomXDocument.setText(this.getText());
-        gedcomXDocument.setType(this.getType());
-        gedcomXDocument.setKnownType(this.getKnownType());
+		gedcomXDocument.setText(this.getText());
+		gedcomXDocument.setType(this.getType());
+		gedcomXDocument.setKnownType(this.getKnownType());
 
-        return gedcomXDocument;
-    }
+		return gedcomXDocument;
+	}
 
-    public DocumentType getKnownType() {
-        return DocumentType.fromQNameURI(this.getType());
-    }
+	public DocumentType getKnownType() {
+		return DocumentType.fromQNameURI(this.getType());
+	}
 
-    public String getText() {
-        return (String) NodeWrapper.nodeWrapperOperations.getProperty(this,
-                ConclusionProperties.TEXT);
-    }
+	public String getText() {
+		return (String) NodeWrapper.nodeWrapperOperations.getProperty(this,
+				ConclusionProperties.TEXT);
+	}
 
-    @Deprecated
-    public URI getType() {
-        return new URI((String) NodeWrapper.nodeWrapperOperations.getProperty(
-                this, GenericProperties.TYPE));
-    }
+	@Deprecated
+	public URI getType() {
+		return new URI((String) NodeWrapper.nodeWrapperOperations.getProperty(
+				this, GenericProperties.TYPE));
+	}
 
-    @Override
-    protected void resolveConcreteReferences() {
-        return;
-    }
+	@Override
+	protected void resolveConcreteReferences() {
+		return;
+	}
 
-    @Override
-    protected void setGedcomXConcreteProperties(final Object gedcomXObject) {
-        final org.gedcomx.conclusion.Document gedcomXDocument = (org.gedcomx.conclusion.Document) gedcomXObject;
-        this.setType(gedcomXDocument.getType());
-        this.setText(gedcomXDocument.getText());
-    }
+	@Override
+	protected void setGedcomXConcreteProperties(final Object gedcomXObject) {
+		final org.gedcomx.conclusion.Document gedcomXDocument = (org.gedcomx.conclusion.Document) gedcomXObject;
+		this.setType(gedcomXDocument.getType());
+		this.setText(gedcomXDocument.getText());
+	}
 
-    @Override
-    protected void setGedcomXConcreteRelations(final Object gedcomXObject)
-            throws MissingFieldException {
-        return;
-    }
+	@Override
+	protected void setGedcomXConcreteRelations(final Object gedcomXObject) {
+		return;
+	}
 
-    public void setKnownType(final DocumentType type) {
-        this.setType(type.toQNameURI());
-    }
+	public void setKnownType(final DocumentType type) {
+		this.setType(type.toQNameURI());
+	}
 
-    @Override
-    protected void setRequiredProperties(final Object... properties)
-            throws MissingFieldException {
-        this.setText((String) properties[0]);
-    }
+	@Override
+	protected void setRequiredProperties(final Object... properties) {
+		this.setText((String) properties[0]);
+	}
 
-    public void setText(final String text) {
-        NodeWrapper.nodeWrapperOperations.setProperty(this,
-                ConclusionProperties.TEXT, text);
-    }
+	public void setText(final String text) {
+		NodeWrapper.nodeWrapperOperations.setProperty(this,
+				ConclusionProperties.TEXT, text);
+	}
 
-    @Deprecated
-    public void setType(final URI type) {
-        NodeWrapper.nodeWrapperOperations.setProperty(this,
-                GenericProperties.TYPE, type);
-    }
+	@Deprecated
+	public void setType(final URI type) {
+		NodeWrapper.nodeWrapperOperations.setProperty(this,
+				GenericProperties.TYPE, type);
+	}
 
-    @Override
-    protected void validateUnderlyingNode() throws MissingFieldException {
-        if (Validation.nullOrEmpty(this.getText())) {
-            throw new MissingRequiredPropertyException(
-                    NodeWrapper.nodeWrapperOperations
-                            .getAnnotatedNodeType(this),
-                    ConclusionProperties.TEXT.toString());
-        }
-    }
+	@Override
+	protected void validateUnderlyingNode() {
+		if (Validation.nullOrEmpty(this.getText())) {
+			throw new MissingRequiredPropertyException(
+					NodeWrapper.nodeWrapperOperations
+							.getAnnotatedNodeType(this),
+					ConclusionProperties.TEXT.toString());
+		}
+	}
 }

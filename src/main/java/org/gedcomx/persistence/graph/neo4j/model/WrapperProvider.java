@@ -1,31 +1,23 @@
 package org.gedcomx.persistence.graph.neo4j.model;
 
-import org.gedcomx.persistence.graph.neo4j.exceptions.MissingFieldException;
 
 public interface WrapperProvider {
 
-    Agent createAgent(org.gedcomx.agent.Agent gedcomXAgent)
-            throws MissingFieldException;
+	Agent createAgent(org.gedcomx.agent.Agent gedcomXAgent);
 
-    Document createDocument(org.gedcomx.conclusion.Document gedcomXDocument)
-            throws MissingFieldException;
+	Document createDocument(org.gedcomx.conclusion.Document gedcomXDocument);
 
-    Event createEvent(org.gedcomx.conclusion.Event gedcomXEvent)
-            throws MissingFieldException;
+	Event createEvent(org.gedcomx.conclusion.Event gedcomXEvent);
 
-    Person createPerson(org.gedcomx.conclusion.Person gedcomXPerson)
-            throws MissingFieldException;
+	Person createPerson(org.gedcomx.conclusion.Person gedcomXPerson);
 
-    PlaceDescription createPlace(
-            org.gedcomx.conclusion.PlaceDescription gedcomXPlace)
-            throws MissingFieldException;
+	PlaceDescription createPlace(
+			org.gedcomx.conclusion.PlaceDescription gedcomXPlace);
 
-    Relationship createRelationship(
-            org.gedcomx.conclusion.Relationship gedcomXRelationship)
-            throws MissingFieldException;
+	Relationship createRelationship(
+			org.gedcomx.conclusion.Relationship gedcomXRelationship);
 
-    SourceDescription createSource(
-            org.gedcomx.source.SourceDescription gedcomXSource)
-            throws MissingFieldException;
+	SourceDescription createSource(
+			org.gedcomx.source.SourceDescription gedcomXSource);
 
 }

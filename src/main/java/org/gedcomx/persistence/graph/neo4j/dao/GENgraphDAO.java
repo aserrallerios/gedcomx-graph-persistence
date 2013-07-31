@@ -10,77 +10,80 @@ import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.Transaction;
 
+import com.google.common.base.Optional;
+
 public interface GENgraphDAO {
 
-    Transaction beginTransaction();
+	Transaction beginTransaction();
 
-    void commitTransaction(Transaction transaction);
+	void commitTransaction(Transaction transaction);
 
-    Node createNode();
+	Node createNode();
 
-    Relationship createRelationship(Node node, RelationshipType relType,
-            Node secondNode);
+	Relationship createRelationship(Node node, RelationshipType relType,
+			Node secondNode);
 
-    Relationship createRelationship(Node node, RelationshipType relType,
-            Node secondNode, Map<String, ?> properties);
+	Relationship createRelationship(Node node, RelationshipType relType,
+			Node secondNode, Map<String, ?> properties);
 
-    void delete(Node node);
+	void delete(Node node);
 
-    void delete(Relationship rel);
+	void delete(Relationship rel);
 
-    void endTransaction(Transaction transaction);
+	void endTransaction(Transaction transaction);
 
-    ExecutionResult executeCypherQuery(String query);
+	ExecutionResult executeCypherQuery(String query);
 
-    void rollbackTransaction(Transaction transaction);
+	Iterable<Node> getAllNodes();
 
-    Iterable<Node> getAllNodes();
+	Iterable<Relationship> getAllRelationships();
 
-    Iterable<Relationship> getAllRelationships();
+	Node getNode(Long id);
 
-    Node getNode(Long id);
+	Object getNodeProperty(Node node, String property);
 
-    Object getNodeProperty(Node node, String property);
+	Iterable<Node> getNodesByRelationship(Node node, RelationshipType relation,
+			Direction dir, boolean ordered, String index);
 
-    Iterable<Node> getNodesByRelationship(Node node, RelationshipType relation,
-            Direction dir, boolean ordered, String index);
+	Iterator<Node> getNodesFromIndex(String indexName, String property,
+			String value);
 
-    Iterator<Node> getNodesFromIndex(String indexName, String property,
-            String value);
+	Node getReferenceNode();
 
-    Node getReferenceNode();
+	Object getRelationshipProperty(Relationship rel, String property);
 
-    Object getRelationshipProperty(Relationship rel, String property);
+	Iterable<Relationship> getRelationships(Node node, Direction dir);
 
-    Iterable<Relationship> getRelationships(Node node, Direction dir);
+	Iterable<Relationship> getRelationships(Node node,
+			RelationshipType relType, Direction dir);
 
-    Iterable<Relationship> getRelationships(Node node,
-            RelationshipType relType, Direction dir);
+	Node getSingleNodeByRelationship(Node node, RelationshipType relation,
+			Direction dir);
 
-    Node getSingleNodeByRelationship(Node node, RelationshipType relation,
-            Direction dir);
+	Node getSingleNodeFromIndex(String indexName, String property, String value);
 
-    Node getSingleNodeFromIndex(String indexName, String property, String value);
+	Relationship getSingleRelationship(Node node, RelationshipType rel,
+			Direction dir);
 
-    Relationship getSingleRelationship(Node node, RelationshipType rel,
-            Direction dir);
+	boolean hasRelationship(Node node, RelationshipType relType, Direction dir);
 
-    boolean hasRelationship(Node node, RelationshipType relType, Direction dir);
+	boolean hasSingleRelationship(Node node, RelationshipType relType,
+			Direction dir);
 
-    boolean hasSingleRelationship(Node node, RelationshipType relType,
-            Direction dir);
+	void removeNodeProperty(Node node, String property);
 
-    void removeNodeProperty(Node node, String property);
+	void removeRelationshipProperty(Relationship rel, String property);
 
-    Node setNodeProperties(Node node, Map<String, ?> metadata);
+	void rollbackTransaction(Transaction transaction);
 
-    Node setNodeProperty(Node node, String property, Object value,
-            boolean indexed, boolean unique, String indexName);
+	Node setNodeProperties(Node node, Map<String, ?> metadata);
 
-    Relationship setRelationshipProperties(Relationship rel,
-            Map<String, ?> properties);
+	Node setNodeProperty(Node node, String property, Optional<Object> value,
+			boolean indexed, boolean unique, String indexName);
 
-    Relationship setRelationshipProperty(Relationship rel, String key,
-            Object value);
+	Relationship setRelationshipProperties(Relationship rel,
+			Map<String, ?> properties);
 
+	Relationship setRelationshipProperty(Relationship rel, String key,
+			Optional<Object> value);
 }

@@ -1,8 +1,6 @@
 package org.gedcomx.persistence.graph.neo4j.model;
 
 import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
-import org.gedcomx.persistence.graph.neo4j.exceptions.MissingFieldException;
-import org.gedcomx.persistence.graph.neo4j.exceptions.UnknownNodeType;
 import org.gedcomx.persistence.graph.neo4j.model.constants.AgentProperties;
 import org.gedcomx.persistence.graph.neo4j.model.constants.NodeTypes;
 import org.gedcomx.persistence.graph.neo4j.model.constants.RelationshipTypes;
@@ -11,17 +9,15 @@ import org.neo4j.graphdb.Node;
 @NodeType(NodeTypes.ACCOUNT)
 public class Address extends NodeWrapper {
 
-    protected Address() throws MissingFieldException {
+	protected Address() {
         super();
     }
 
-    protected Address(final Node node) throws UnknownNodeType,
-            MissingFieldException {
+	protected Address(final Node node) {
         super(node);
     }
 
-    protected Address(final org.gedcomx.agent.Address gedcomXAddress)
-            throws MissingFieldException {
+	protected Address(final org.gedcomx.agent.Address gedcomXAddress) {
         super(gedcomXAddress);
     }
 

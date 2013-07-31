@@ -3,8 +3,6 @@ package org.gedcomx.persistence.graph.neo4j.model;
 import org.codehaus.enunciate.XmlQNameEnumUtil;
 import org.gedcomx.common.URI;
 import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
-import org.gedcomx.persistence.graph.neo4j.exceptions.MissingFieldException;
-import org.gedcomx.persistence.graph.neo4j.exceptions.UnknownNodeType;
 import org.gedcomx.persistence.graph.neo4j.model.constants.GenericProperties;
 import org.gedcomx.persistence.graph.neo4j.model.constants.NodeTypes;
 import org.neo4j.graphdb.Node;
@@ -12,95 +10,91 @@ import org.neo4j.graphdb.Node;
 @NodeType(NodeTypes.QUALIFIER)
 public class Qualifier extends NodeWrapper {
 
-    protected Qualifier() throws MissingFieldException, UnknownNodeType {
-        super();
-    }
+	protected Qualifier() {
+		super();
+	}
 
-    protected Qualifier(final Node node) throws MissingFieldException,
-            UnknownNodeType {
-        super(node);
-    }
+	protected Qualifier(final Node node) {
+		super(node);
+	}
 
-    protected Qualifier(final org.gedcomx.common.Qualifier gedcomXQualifier)
-            throws MissingFieldException, UnknownNodeType {
-        super(gedcomXQualifier);
-    }
+	protected Qualifier(final org.gedcomx.common.Qualifier gedcomXQualifier) {
+		super(gedcomXQualifier);
+	}
 
-    @Override
-    protected void deleteAllReferences() {
-        return;
-    }
+	@Override
+	protected void deleteAllReferences() {
+		return;
+	}
 
-    @Override
-    public org.gedcomx.common.Qualifier getGedcomX() {
-        final org.gedcomx.common.Qualifier gedcomXQualifier = new org.gedcomx.common.Qualifier();
-        gedcomXQualifier.setName(this.getName());
-        gedcomXQualifier.setValue(this.getValue());
+	@Override
+	public org.gedcomx.common.Qualifier getGedcomX() {
+		final org.gedcomx.common.Qualifier gedcomXQualifier = new org.gedcomx.common.Qualifier();
+		gedcomXQualifier.setName(this.getName());
+		gedcomXQualifier.setValue(this.getValue());
 
-        return gedcomXQualifier;
-    }
+		return gedcomXQualifier;
+	}
 
-    public URI getName() {
-        return new URI((String) NodeWrapper.nodeWrapperOperations.getProperty(
-                this, GenericProperties.NAME));
-    }
+	public URI getName() {
+		return new URI((String) NodeWrapper.nodeWrapperOperations.getProperty(
+				this, GenericProperties.NAME));
+	}
 
-    public <E extends Enum> E getName(final Class<E> vocabulary) {
-        final URI name = this.getName();
-        return name == null ? null : (E) XmlQNameEnumUtil.fromURI(name.toURI(),
-                vocabulary);
-    }
+	public <E extends Enum> E getName(final Class<E> vocabulary) {
+		final URI name = this.getName();
+		return name == null ? null : (E) XmlQNameEnumUtil.fromURI(name.toURI(),
+				vocabulary);
+	}
 
-    public String getValue() {
-        return (String) NodeWrapper.nodeWrapperOperations.getProperty(this,
-                GenericProperties.VALUE);
-    }
+	public String getValue() {
+		return (String) NodeWrapper.nodeWrapperOperations.getProperty(this,
+				GenericProperties.VALUE);
+	}
 
-    @Override
-    public void resolveReferences() {
-        return;
-    }
+	@Override
+	public void resolveReferences() {
+		return;
+	}
 
-    @Override
-    protected void setGedcomXProperties(final Object gedcomXObject) {
-        final org.gedcomx.common.Qualifier gedcomXQualifier = (org.gedcomx.common.Qualifier) gedcomXObject;
+	@Override
+	protected void setGedcomXProperties(final Object gedcomXObject) {
+		final org.gedcomx.common.Qualifier gedcomXQualifier = (org.gedcomx.common.Qualifier) gedcomXObject;
 
-        this.setName(gedcomXQualifier.getName());
-        this.setValue(gedcomXQualifier.getValue());
-    }
+		this.setName(gedcomXQualifier.getName());
+		this.setValue(gedcomXQualifier.getValue());
+	}
 
-    @Override
-    protected void setGedcomXRelations(final Object gedcomXObject)
-            throws MissingFieldException {
-        return;
-    }
+	@Override
+	protected void setGedcomXRelations(final Object gedcomXObject) {
+		return;
+	}
 
-    public void setName(final Enum<?> element) {
-        NodeWrapper.nodeWrapperOperations.setProperty(this,
-                GenericProperties.NAME, element == null ? null : new URI(
-                        XmlQNameEnumUtil.toURI(element).toString()));
-    }
+	public void setName(final Enum<?> element) {
+		NodeWrapper.nodeWrapperOperations.setProperty(this,
+				GenericProperties.NAME, element == null ? null : new URI(
+						XmlQNameEnumUtil.toURI(element).toString()));
+	}
 
-    @Deprecated
-    public void setName(final URI name) {
-        NodeWrapper.nodeWrapperOperations.setProperty(this,
-                GenericProperties.NAME, name);
-    }
+	@Deprecated
+	public void setName(final URI name) {
+		NodeWrapper.nodeWrapperOperations.setProperty(this,
+				GenericProperties.NAME, name);
+	}
 
-    @Override
-    protected void setRequiredProperties(final Object... properties)
-            throws MissingFieldException {
-        return;
-    }
+	@Override
+	protected void setRequiredProperties(final Object... properties) {
+		return;
+	}
 
-    public void setValue(final String value) {
-        NodeWrapper.nodeWrapperOperations.setProperty(this,
-                GenericProperties.VALUE, value);
-    }
+	public void setValue(final String value) {
+		NodeWrapper.nodeWrapperOperations.setProperty(this,
+				GenericProperties.VALUE, value);
+	}
 
-    @Override
-    protected void validateUnderlyingNode() throws MissingFieldException {
-        return;
-    }
+	@Override
+	protected void validateUnderlyingNode() {
+		return;
+	}
 
 }

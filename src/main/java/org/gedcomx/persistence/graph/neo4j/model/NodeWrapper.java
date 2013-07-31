@@ -2,86 +2,79 @@ package org.gedcomx.persistence.graph.neo4j.model;
 
 import org.gedcomx.common.ResourceReference;
 import org.gedcomx.common.URI;
-import org.gedcomx.persistence.graph.neo4j.exceptions.MissingFieldException;
 import org.gedcomx.persistence.graph.neo4j.exceptions.UninitializedNode;
-import org.gedcomx.persistence.graph.neo4j.exceptions.UnknownNodeType;
 import org.neo4j.graphdb.Node;
 
 import com.google.inject.Inject;
 
 public abstract class NodeWrapper {
 
-    @Inject
-    protected static NodeWrapperOperations nodeWrapperOperations;
-    private Node underlyingNode;
+	@Inject
+	protected static NodeWrapperOperations nodeWrapperOperations;
+	private Node underlyingNode;
 
-    protected NodeWrapper(final Node underlyingNode)
-            throws MissingFieldException, UnknownNodeType {
-        this.underlyingNode = underlyingNode;
-        NodeWrapper.nodeWrapperOperations.initialize(this);
-    }
+	protected NodeWrapper(final Node underlyingNode) {
+		this.underlyingNode = underlyingNode;
+		NodeWrapper.nodeWrapperOperations.initialize(this);
+	}
 
-    protected NodeWrapper(final Object... properties)
-            throws MissingFieldException {
-        NodeWrapper.nodeWrapperOperations.initialize(this, properties);
-    }
+	protected NodeWrapper(final Object... properties) {
+		NodeWrapper.nodeWrapperOperations.initialize(this, properties);
+	}
 
-    protected NodeWrapper(final Object gedcomXObject)
-            throws MissingFieldException {
-        NodeWrapper.nodeWrapperOperations.initialize(this, gedcomXObject);
-    }
+	protected NodeWrapper(final Object gedcomXObject) {
+		NodeWrapper.nodeWrapperOperations.initialize(this, gedcomXObject);
+	}
 
-    public void delete() {
-        NodeWrapper.nodeWrapperOperations.delete(this);
-    }
+	public void delete() {
+		NodeWrapper.nodeWrapperOperations.delete(this);
+	}
 
-    protected abstract void deleteAllReferences();
+	protected abstract void deleteAllReferences();
 
-    @Override
-    public boolean equals(final Object object) {
-        return this.getUnderlyingNode().equals(object);
-    }
+	@Override
+	public boolean equals(final Object object) {
+		return this.getUnderlyingNode().equals(object);
+	}
 
-    public abstract <T extends Object> T getGedcomX();
+	public abstract <T extends Object> T getGedcomX();
 
-    ResourceReference getResourceReference() {
-        return null;
-    }
+	ResourceReference getResourceReference() {
+		return null;
+	}
 
-    Node getUnderlyingNode() {
-        if (this.underlyingNode == null) {
-            throw new UninitializedNode();
-        }
-        return this.underlyingNode;
-    }
+	Node getUnderlyingNode() {
+		if (this.underlyingNode == null) {
+			throw new UninitializedNode();
+		}
+		return this.underlyingNode;
+	}
 
-    URI getURI() {
-        return null;
-    }
+	URI getURI() {
+		return null;
+	}
 
-    @Override
-    public int hashCode() {
-        return this.getUnderlyingNode().hashCode();
-    }
+	@Override
+	public int hashCode() {
+		return this.getUnderlyingNode().hashCode();
+	}
 
-    public abstract void resolveReferences();
+	public abstract void resolveReferences();
 
-    protected abstract void setGedcomXProperties(final Object gedcomXObject);
+	protected abstract void setGedcomXProperties(final Object gedcomXObject);
 
-    protected abstract void setGedcomXRelations(final Object gedcomXObject)
-            throws MissingFieldException;
+	protected abstract void setGedcomXRelations(final Object gedcomXObject);
 
-    protected abstract void setRequiredProperties(final Object... properties)
-            throws MissingFieldException;
+	protected abstract void setRequiredProperties(final Object... properties);
 
-    void setUnderlyingNode(final Node node) {
-        this.underlyingNode = node;
-    }
+	void setUnderlyingNode(final Node node) {
+		this.underlyingNode = node;
+	}
 
-    @Override
-    public String toString() {
-        return this.getUnderlyingNode().toString();
-    }
+	@Override
+	public String toString() {
+		return this.getUnderlyingNode().toString();
+	}
 
-    abstract void validateUnderlyingNode() throws MissingFieldException;
+	abstract void validateUnderlyingNode();
 }

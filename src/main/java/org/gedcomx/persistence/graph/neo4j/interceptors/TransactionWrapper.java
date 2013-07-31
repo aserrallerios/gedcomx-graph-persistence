@@ -6,6 +6,7 @@ import org.gedcomx.persistence.graph.neo4j.annotations.injection.EmbededDB;
 import org.gedcomx.persistence.graph.neo4j.dao.GENgraphDAO;
 import org.neo4j.graphdb.Transaction;
 
+import com.google.common.base.Throwables;
 import com.google.inject.Inject;
 
 public class TransactionWrapper implements MethodInterceptor {
@@ -17,16 +18,16 @@ public class TransactionWrapper implements MethodInterceptor {
     }
 
     @Override
-    public Object invoke(final MethodInvocation invocation) throws Throwable {
+	public Object invoke(final MethodInvocation invocation) {
 
         final Transaction t = this.dao.beginTransaction();
         Object o = null;
         try {
             o = invocation.proceed();
             this.dao.commitTransaction(t);
-        } catch (final Throwable error) {
+		} catch (final Throwable e) {
             this.dao.rollbackTransaction(t);
-            throw error;
+			throw Throwables.propagate(e);
         } finally {
             this.dao.endTransaction(t);
         }

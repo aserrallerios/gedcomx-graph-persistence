@@ -1,6 +1,6 @@
 package org.gedcomx.persistence.graph.neo4j.exceptions;
 
-public class NodeIdentifierAlreadyExists extends Exception {
+public class NodeIdentifierAlreadyExists extends RuntimeException {
 
     final String id;
 
