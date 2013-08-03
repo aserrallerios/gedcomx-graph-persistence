@@ -14,8 +14,9 @@ import org.gedcomx.persistence.graph.neo4j.interceptors.DuplicatedNodesCheck;
 import org.gedcomx.persistence.graph.neo4j.interceptors.TransactionWrapper;
 import org.gedcomx.persistence.graph.neo4j.model.NodeWrapper;
 import org.gedcomx.persistence.graph.neo4j.model.NodeWrapperFactory;
+import org.gedcomx.persistence.graph.neo4j.model.NodeWrapperFactoryImpl;
 import org.gedcomx.persistence.graph.neo4j.model.NodeWrapperOperations;
-import org.gedcomx.persistence.graph.neo4j.model.WrapperProvider;
+import org.gedcomx.persistence.graph.neo4j.properties.Config;
 import org.gedcomx.persistence.graph.neo4j.properties.Messages;
 import org.gedcomx.persistence.graph.neo4j.service.GENgraphPersistenceService;
 import org.gedcomx.persistence.graph.neo4j.service.GENgraphPersistenceServiceImpl;
@@ -24,14 +25,12 @@ import org.reflections.Reflections;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
-import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.google.inject.matcher.Matchers;
 import com.google.inject.name.Names;
 
 public class ServiceInjector extends AbstractModule {
 
-	private static final String NEO4J_PROPERTIES_FILE = "neo4j.properties.file";
-	private static final String NEO4J_DB_PATH = "neo4j.db.path";
+	private static final String CONFIG_FILE = "config/service.properties";
 
 	@Override
 	protected void configure() {
@@ -39,12 +38,14 @@ public class ServiceInjector extends AbstractModule {
 		this.requestStaticInjection(NodeWrapper.class);
 
 		// Untargetted Binding
-		this.bind(NodeWrapperFactory.class).in(Singleton.class);
+		this.bind(NodeWrapperFactoryImpl.class).in(Singleton.class);
 		this.bind(NodeWrapperOperations.class).in(Singleton.class);
 
 		// Bindings
 		this.bind(GENgraphPersistenceService.class)
 				.to(GENgraphPersistenceServiceImpl.class).in(Singleton.class);
+		this.bind(NodeWrapperFactory.class).to(NodeWrapperFactoryImpl.class)
+				.in(Singleton.class);
 		this.bind(GENgraphDAO.class).annotatedWith(EmbededDB.class)
 				.to(GENgraphDAOImpl.class).in(Singleton.class);
 
@@ -52,15 +53,14 @@ public class ServiceInjector extends AbstractModule {
 		final Properties prop = new Properties();
 		try {
 			prop.load(ServiceInjector.class.getClassLoader()
-					.getResourceAsStream("config/service.properties"));
+					.getResourceAsStream(CONFIG_FILE));
 		} catch (final IOException e) {
 			e.printStackTrace();
 			throw new GenericError(Messages.DAO_CANT_LOAD_PROPERTIES);
 		}
 		this.bind(String.class).annotatedWith(Names.named("Neo4jDBPath"))
-				.toInstance(prop.getProperty(ServiceInjector.NEO4J_DB_PATH));
-		final String fileName = prop
-				.getProperty(ServiceInjector.NEO4J_PROPERTIES_FILE);
+				.toInstance(prop.getProperty(Config.NEO4J_DB_PATH_PROPERTY));
+		final String fileName = prop.getProperty(Config.NEO4J_FILE_PROPERTIY);
 		this.bind(String.class)
 				.annotatedWith(Names.named("Neo4jPropFile"))
 				.toInstance(
@@ -68,7 +68,8 @@ public class ServiceInjector extends AbstractModule {
 								.getResource(fileName).getPath());
 
 		// AssistedInject
-		this.install(new FactoryModuleBuilder().build(WrapperProvider.class));
+		// this.install(new
+		// FactoryModuleBuilder().build(WrapperProvider.class));
 
 		// Interceptor
 		final DuplicatedNodesCheck interceptor = new DuplicatedNodesCheck();

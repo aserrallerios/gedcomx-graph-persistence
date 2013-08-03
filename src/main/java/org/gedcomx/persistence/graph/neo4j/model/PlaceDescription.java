@@ -30,22 +30,37 @@ public class PlaceDescription extends Conclusion {
 	}
 
 	protected PlaceDescription(final String nameValue) {
-		super(new Object[] { nameValue });
+		super(nameValue);
 	}
 
-	public void addIdentifier(final Identifier identifier) {
+	private Identifier addIdentifier(final Identifier identifier) {
 		NodeWrapper.nodeWrapperOperations.addRelationship(this,
 				RelationshipTypes.HAS_IDENTIFIER, identifier);
+		return identifier;
 	}
 
-	public void addMedia(final SourceReference media) {
+	public Identifier addIdentifier(final URI value) {
+		return this.addIdentifier(new Identifier(value));
+	}
+
+	private SourceReference addMedia(final SourceReference media) {
 		NodeWrapper.nodeWrapperOperations.addRelationship(this,
 				RelationshipTypes.HAS_MEDIA, media);
+		return media;
 	}
 
-	public void addName(final TextValue name) {
+	public SourceReference addMedia(final String citation) {
+		return this.addMedia(new SourceReference(citation));
+	}
+
+	public TextValue addName(final String value) {
+		return this.addName(new TextValue(value));
+	}
+
+	private TextValue addName(final TextValue name) {
 		NodeWrapper.nodeWrapperOperations.addRelationship(this,
 				RelationshipTypes.HAS_NAME, name);
+		return name;
 	}
 
 	@Override
@@ -196,12 +211,6 @@ public class PlaceDescription extends Conclusion {
 			for (final org.gedcomx.conclusion.Identifier gedcomXIdentifier : gedcomXPlaceDescription
 					.getIdentifiers()) {
 				this.addIdentifier(new Identifier(gedcomXIdentifier));
-			}
-		}
-		if (gedcomXPlaceDescription.getMedia() != null) {
-			for (final org.gedcomx.source.SourceReference gedcomXsourceRef : gedcomXPlaceDescription
-					.getMedia()) {
-				this.addSourceReference(new SourceReference(gedcomXsourceRef));
 			}
 		}
 	}

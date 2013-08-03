@@ -20,8 +20,8 @@ public class SourceReference extends NodeWrapper {
 		super(gedcomXSourceReference);
 	}
 
-	protected SourceReference(final SourceDescription description) {
-		super(new Object[] { description });
+	protected SourceReference(final String citation) {
+		super(new Object[] { citation });
 	}
 
 	@Override
@@ -65,9 +65,14 @@ public class SourceReference extends NodeWrapper {
 				SourceProperties.SOURCE_DESCRIPTION_REFERENCE);
 	}
 
-	public void setAttribution(final Attribution attribution) {
+	public Attribution setAttribution() {
+		return this.setAttribution(new Attribution());
+	}
+
+	private Attribution setAttribution(final Attribution attribution) {
 		NodeWrapper.nodeWrapperOperations.createRelationship(this,
 				RelationshipTypes.ATTRIBUTION, attribution);
+		return attribution;
 	}
 
 	public void setDescription(final SourceDescription description) {
@@ -96,7 +101,7 @@ public class SourceReference extends NodeWrapper {
 
 	@Override
 	protected void setRequiredProperties(final Object... properties) {
-		this.setDescription((SourceDescription) properties[0]);
+		this.setDescription(new SourceDescription((String) properties[0]));
 	}
 
 	@Override

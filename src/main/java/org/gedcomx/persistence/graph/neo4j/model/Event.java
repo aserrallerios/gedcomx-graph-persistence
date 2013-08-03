@@ -30,9 +30,14 @@ public class Event extends Conclusion {
 		super(gedcomXEvent);
 	}
 
-	public void addRole(final EventRole role) {
+	private EventRole addRole(final EventRole role) {
 		NodeWrapper.nodeWrapperOperations.addRelationship(this,
 				RelationshipTypes.HAS_ROLE, role);
+		return role;
+	}
+
+	public EventRole addRole(final Person person) {
+		return this.addRole(new EventRole(person));
 	}
 
 	@Override

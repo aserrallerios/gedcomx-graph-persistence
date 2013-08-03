@@ -16,8 +16,8 @@ import org.neo4j.graphdb.Node;
 @NodeType(NodeTypes.NAME)
 public class Name extends Conclusion {
 
-	protected Name(final NameForm nameForm) {
-		super(new Object[] { nameForm });
+	protected Name() {
+		super();
 	}
 
 	protected Name(final Node node) {
@@ -28,9 +28,14 @@ public class Name extends Conclusion {
 		super(gedcomXName);
 	}
 
-	public void addNameForms(final NameForm nameForm) {
+	public NameForm addNameForm() {
+		return this.addNameForm(new NameForm());
+	}
+
+	private NameForm addNameForm(final NameForm nameForm) {
 		NodeWrapper.nodeWrapperOperations.addRelationship(this,
 				RelationshipTypes.HAS_NAME_FORM, nameForm);
+		return nameForm;
 	}
 
 	@Override
@@ -129,7 +134,7 @@ public class Name extends Conclusion {
 
 		for (final org.gedcomx.conclusion.NameForm nameForm : gedcomXName
 				.getNameForms()) {
-			this.addNameForms(new NameForm(nameForm));
+			this.addNameForm(new NameForm(nameForm));
 		}
 	}
 
@@ -144,7 +149,7 @@ public class Name extends Conclusion {
 
 	@Override
 	protected void setRequiredProperties(final Object... properties) {
-		this.addNameForms((NameForm) properties[0]);
+		this.addNameForm();
 	}
 
 	@Deprecated

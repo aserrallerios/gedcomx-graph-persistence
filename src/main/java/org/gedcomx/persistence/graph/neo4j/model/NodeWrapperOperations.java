@@ -22,6 +22,7 @@ import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
+import com.google.common.base.Optional;
 import com.google.inject.Inject;
 
 public class NodeWrapperOperations {
@@ -242,9 +243,8 @@ public class NodeWrapperOperations {
 		final String nodeType = (String) this.dao.getNodeProperty(node,
 				GenericProperties.NODE_TYPE.name());
 
-		final Class<? extends NodeWrapper> type = this.nodeWrapperFactory
-				.getWrapperByType(NodeTypes.valueOf(nodeType));
-		return this.nodeWrapperFactory.wrapNode(type, node);
+		return this.nodeWrapperFactory.wrapNode(NodeTypes.valueOf(nodeType),
+				node);
 	}
 
 	<T extends NodeWrapper> List<T> getNodesByRelationship(
@@ -347,10 +347,11 @@ public class NodeWrapperOperations {
 				supportedValue = array;
 			}
 		}
-		final IndexNames indexName = property.getIndexName();
+		final IndexNames indexNames = property.getIndexName();
 		this.dao.setNodeProperty(self.getUnderlyingNode(), property.name(),
-				supportedValue, property.isIndexed(), property.isUnique(),
-				indexName != null ? indexName.name() : null);
+				Optional.<Object> fromNullable(supportedValue), property
+						.isIndexed(), property.isUnique(),
+				indexNames != null ? indexNames.name() : null);
 	}
 
 	void setURIListProperties(final NodeWrapper self,
@@ -362,6 +363,6 @@ public class NodeWrapperOperations {
 			values[i++] = resource.getResource().toString();
 		}
 		this.dao.setNodeProperty(self.getUnderlyingNode(), property.name(),
-				values, false, false, null);
+				Optional.<Object> fromNullable(values), false, false, null);
 	}
 }

@@ -34,24 +34,44 @@ public class SourceDescription extends NodeWrapper {
 		super(new Object[] { citationValue });
 	}
 
-	public void addCitation(final SourceCitation sourceCitation) {
+	private SourceCitation addCitation(final SourceCitation sourceCitation) {
 		NodeWrapper.nodeWrapperOperations.addRelationship(this,
 				RelationshipTypes.HAS_CITATION, sourceCitation);
+		return sourceCitation;
 	}
 
-	public void addNote(final Note note) {
+	public SourceCitation addCitation(final String value) {
+		return this.addCitation(new SourceCitation(value));
+	}
+
+	private Note addNote(final Note note) {
 		NodeWrapper.nodeWrapperOperations.addRelationship(this,
 				RelationshipTypes.HAS_NOTE, note);
+		return note;
 	}
 
-	public void addSource(final SourceReference sourceReference) {
+	public Note addNote(final String text) {
+		return this.addNote(new Note(text));
+	}
+
+	private SourceReference addSource(final SourceReference sourceReference) {
 		NodeWrapper.nodeWrapperOperations.addRelationship(this,
 				RelationshipTypes.HAS_SOURCE_REFERENCE, sourceReference);
+		return sourceReference;
 	}
 
-	public void addTitle(final TextValue textValue) {
+	public SourceReference addSource(final String citation) {
+		return this.addSource(new SourceReference(citation));
+	}
+
+	public TextValue addTitle(final String value) {
+		return this.addTitle(new TextValue(value));
+	}
+
+	private TextValue addTitle(final TextValue textValue) {
 		NodeWrapper.nodeWrapperOperations.addRelationship(this,
 				RelationshipTypes.HAS_TITLE, textValue);
+		return textValue;
 	}
 
 	@Override
@@ -189,14 +209,24 @@ public class SourceDescription extends NodeWrapper {
 				GenericProperties.ABOUT, about);
 	}
 
-	public void setAttribution(final Attribution attribution) {
-		NodeWrapper.nodeWrapperOperations.createRelationship(this,
-				RelationshipTypes.ATTRIBUTION, attribution);
+	public Attribution setAttribution() {
+		return this.setAttribution(new Attribution());
 	}
 
-	public void setComponentOf(final SourceReference componentOf) {
+	private Attribution setAttribution(final Attribution attribution) {
+		NodeWrapper.nodeWrapperOperations.createRelationship(this,
+				RelationshipTypes.ATTRIBUTION, attribution);
+		return attribution;
+	}
+
+	private SourceReference setComponentOf(final SourceReference componentOf) {
 		NodeWrapper.nodeWrapperOperations.createRelationship(this,
 				RelationshipTypes.COMPONENT_OF, componentOf);
+		return componentOf;
+	}
+
+	public SourceReference setComponentOf(final String citation) {
+		return this.setComponentOf(new SourceReference(citation));
 	}
 
 	@Override

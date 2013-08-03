@@ -9,7 +9,7 @@ public class MessageResolver {
 
 	private static ResourceBundle resource;
 	private static final String MESSAGES_LOCALE_PROPERTY = "messages.locale";
-	private static final String MESSAGES_RESOURCE = "messages.locale";
+	private static final String MESSAGES_RESOURCE = "properties.messages";
 	private static final String CONFIG_RESOURCE = "config/service.properties";
 
 	static {

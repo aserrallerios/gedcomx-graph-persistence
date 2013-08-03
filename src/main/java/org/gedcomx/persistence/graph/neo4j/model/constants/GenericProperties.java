@@ -5,25 +5,25 @@ public enum GenericProperties implements NodeProperties {
             IndexNames.NODE_TYPES), TYPE(true, false, IndexNames.TYPES), VALUE, LANG, MODIFIED, CHANGE_MESSAGE, SUBJECT, TEXT, CONTRIBUTOR_REFERENCE, NAME;
 
     private final boolean indexed;
-    private final IndexNames indexName;
+    private final IndexNames indexNames;
     private final boolean unique;
 
     private GenericProperties() {
         this.indexed = false;
         this.unique = false;
-        this.indexName = null;
+        this.indexNames = null;
     }
 
     private GenericProperties(final boolean indexed, final boolean unique,
-            final IndexNames indexName) {
+            final IndexNames indexNames) {
         this.indexed = indexed;
         this.unique = unique;
-        this.indexName = indexName;
+        this.indexNames = indexNames;
     }
 
     @Override
     public IndexNames getIndexName() {
-        return this.indexName;
+        return this.indexNames;
     }
 
     @Override

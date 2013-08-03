@@ -10,6 +10,7 @@ import org.gedcomx.persistence.graph.neo4j.model.constants.GenericProperties;
 import org.gedcomx.persistence.graph.neo4j.model.constants.NodeTypes;
 import org.gedcomx.persistence.graph.neo4j.model.constants.RelationshipTypes;
 import org.gedcomx.persistence.graph.neo4j.utils.Validation;
+import org.gedcomx.types.FactType;
 import org.gedcomx.types.RelationshipType;
 import org.neo4j.graphdb.Node;
 
@@ -33,14 +34,28 @@ public class Relationship extends Conclusion {
 		super(p1, p2);
 	}
 
-	public void addFact(final Fact fact) {
+	private Fact addFact(final Fact fact) {
 		NodeWrapper.nodeWrapperOperations.addRelationship(this,
 				RelationshipTypes.HAS_FACT, fact);
+		return fact;
 	}
 
-	public void addIdentifier(final Identifier identifier) {
+	public Fact addFact(final FactType type) {
+		return this.addFact(new Fact(type));
+	}
+
+	public Fact addFact(final URI type) {
+		return this.addFact(new Fact(type));
+	}
+
+	private Identifier addIdentifier(final Identifier identifier) {
 		NodeWrapper.nodeWrapperOperations.addRelationship(this,
 				RelationshipTypes.HAS_IDENTIFIER, identifier);
+		return identifier;
+	}
+
+	public Identifier addIdentifier(final URI value) {
+		return this.addIdentifier(new Identifier(value));
 	}
 
 	@Override

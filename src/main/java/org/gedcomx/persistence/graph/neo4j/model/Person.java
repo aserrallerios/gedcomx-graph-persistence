@@ -2,10 +2,13 @@ package org.gedcomx.persistence.graph.neo4j.model;
 
 import java.util.List;
 
+import org.gedcomx.common.URI;
 import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
 import org.gedcomx.persistence.graph.neo4j.model.constants.ConclusionProperties;
 import org.gedcomx.persistence.graph.neo4j.model.constants.NodeTypes;
 import org.gedcomx.persistence.graph.neo4j.model.constants.RelationshipTypes;
+import org.gedcomx.types.FactType;
+import org.gedcomx.types.GenderType;
 import org.neo4j.graphdb.Node;
 
 import com.google.inject.Inject;
@@ -27,19 +30,38 @@ public class Person extends Conclusion {
 		super(gedcomXPerson);
 	}
 
-	public void addFact(final Fact fact) {
+	private Fact addFact(final Fact fact) {
 		NodeWrapper.nodeWrapperOperations.addRelationship(this,
 				RelationshipTypes.HAS_FACT, fact);
+		return fact;
 	}
 
-	public void addIdentifier(final Identifier identifier) {
+	public Fact addFact(final FactType type) {
+		return this.addFact(new Fact(type));
+	}
+
+	public Fact addFact(final URI type) {
+		return this.addFact(new Fact(type));
+	}
+
+	private Identifier addIdentifier(final Identifier identifier) {
 		NodeWrapper.nodeWrapperOperations.addRelationship(this,
 				RelationshipTypes.HAS_IDENTIFIER, identifier);
+		return identifier;
 	}
 
-	public void addName(final Name name) {
+	public Identifier addIdentifier(final URI value) {
+		return this.addIdentifier(new Identifier(value));
+	}
+
+	public Name addName() {
+		return this.addName(new Name());
+	}
+
+	private Name addName(final Name name) {
 		NodeWrapper.nodeWrapperOperations.addRelationship(this,
 				RelationshipTypes.HAS_NAME, name);
+		return name;
 	}
 
 	@Override
@@ -143,9 +165,18 @@ public class Person extends Conclusion {
 		}
 	}
 
-	public void setGender(final Gender gender) {
+	private Gender setGender(final Gender gender) {
 		NodeWrapper.nodeWrapperOperations.createRelationship(this,
 				RelationshipTypes.GENDER, gender);
+		return gender;
+	}
+
+	public Gender setGender(final GenderType type) {
+		return this.setGender(new Gender(type));
+	}
+
+	public Gender setGender(final URI type) {
+		return this.setGender(new Gender(type));
 	}
 
 	public void setLiving(final Boolean living) {

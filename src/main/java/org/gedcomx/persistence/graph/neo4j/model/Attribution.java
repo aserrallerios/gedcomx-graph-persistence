@@ -12,108 +12,108 @@ import org.neo4j.graphdb.Node;
 public class Attribution extends NodeWrapper {
 
 	protected Attribution() {
-        super();
-    }
+		super();
+	}
 
 	protected Attribution(final Node node) {
-        super(node);
-    }
+		super(node);
+	}
 
-    protected Attribution(
+	protected Attribution(
 			final org.gedcomx.common.Attribution gedcomXAttribution) {
-        super(gedcomXAttribution);
-    }
+		super(gedcomXAttribution);
+	}
 
-    @Override
-    protected void deleteAllReferences() {
-        NodeWrapper.nodeWrapperOperations.deleteReference(this,
-                RelationshipTypes.CONTRIBUTOR);
-    }
+	@Override
+	protected void deleteAllReferences() {
+		NodeWrapper.nodeWrapperOperations.deleteReference(this,
+				RelationshipTypes.CONTRIBUTOR);
+	}
 
-    public String getChangeMessage() {
-        return (String) NodeWrapper.nodeWrapperOperations.getProperty(this,
-                GenericProperties.CHANGE_MESSAGE);
-    }
+	public String getChangeMessage() {
+		return (String) NodeWrapper.nodeWrapperOperations.getProperty(this,
+				GenericProperties.CHANGE_MESSAGE);
+	}
 
-    public Agent getContributor() {
-        return NodeWrapper.nodeWrapperOperations.getNodeByRelationship(this,
-                Agent.class, RelationshipTypes.CONTRIBUTOR);
-    }
+	public Agent getContributor() {
+		return NodeWrapper.nodeWrapperOperations.getNodeByRelationship(this,
+				Agent.class, RelationshipTypes.CONTRIBUTOR);
+	}
 
-    @Override
-    public org.gedcomx.common.Attribution getGedcomX() {
-        final org.gedcomx.common.Attribution gedcomXAttribution = new org.gedcomx.common.Attribution();
+	@Override
+	public org.gedcomx.common.Attribution getGedcomX() {
+		final org.gedcomx.common.Attribution gedcomXAttribution = new org.gedcomx.common.Attribution();
 
-        gedcomXAttribution.setChangeMessage(this.getChangeMessage());
-        gedcomXAttribution.setModified(this.getModified());
+		gedcomXAttribution.setChangeMessage(this.getChangeMessage());
+		gedcomXAttribution.setModified(this.getModified());
 
-        final Agent agent = this.getContributor();
-        if (agent != null) {
-            gedcomXAttribution.setContributor(agent.getResourceReference());
-        }
+		final Agent agent = this.getContributor();
+		if (agent != null) {
+			gedcomXAttribution.setContributor(agent.getResourceReference());
+		}
 
-        return gedcomXAttribution;
-    }
+		return gedcomXAttribution;
+	}
 
-    public Date getModified() {
-        return new Date((Long) NodeWrapper.nodeWrapperOperations.getProperty(
-                this, GenericProperties.MODIFIED));
-    }
+	public Date getModified() {
+		return new Date((Long) NodeWrapper.nodeWrapperOperations.getProperty(
+				this, GenericProperties.MODIFIED));
+	}
 
-    public NodeWrapper getParentNode() {
-        return NodeWrapper.nodeWrapperOperations.getParentNode(this,
-                RelationshipTypes.ATTRIBUTION);
-    }
+	public NodeWrapper getParentNode() {
+		return NodeWrapper.nodeWrapperOperations.getParentNode(this,
+				RelationshipTypes.ATTRIBUTION);
+	}
 
-    @Override
-    public void resolveReferences() {
-        NodeWrapper.nodeWrapperOperations.createReferenceRelationship(this,
-                RelationshipTypes.CONTRIBUTOR,
-                GenericProperties.CONTRIBUTOR_REFERENCE);
-    }
+	@Override
+	public void resolveReferences() {
+		NodeWrapper.nodeWrapperOperations.createReferenceRelationship(this,
+				RelationshipTypes.CONTRIBUTOR,
+				GenericProperties.CONTRIBUTOR_REFERENCE);
+	}
 
-    public void setChangeMessage(final String changeMessage) {
-        NodeWrapper.nodeWrapperOperations.setProperty(this,
-                GenericProperties.CHANGE_MESSAGE, changeMessage);
-    }
+	public void setChangeMessage(final String changeMessage) {
+		NodeWrapper.nodeWrapperOperations.setProperty(this,
+				GenericProperties.CHANGE_MESSAGE, changeMessage);
+	}
 
-    public void setContributor(final Agent agent) {
-        NodeWrapper.nodeWrapperOperations.createReferenceRelationship(this,
-                RelationshipTypes.CONTRIBUTOR, agent);
-    }
+	public void setContributor(final Agent agent) {
+		NodeWrapper.nodeWrapperOperations.createReferenceRelationship(this,
+				RelationshipTypes.CONTRIBUTOR, agent);
+	}
 
-    @Override
-    protected void setGedcomXProperties(final Object gedcomXObject) {
-        final org.gedcomx.common.Attribution gedcomXAttribution = (org.gedcomx.common.Attribution) gedcomXObject;
+	@Override
+	protected void setGedcomXProperties(final Object gedcomXObject) {
+		final org.gedcomx.common.Attribution gedcomXAttribution = (org.gedcomx.common.Attribution) gedcomXObject;
 
-        this.setModified(gedcomXAttribution.getModified());
-        this.setChangeMessage(gedcomXAttribution.getChangeMessage());
-    }
+		this.setModified(gedcomXAttribution.getModified());
+		this.setChangeMessage(gedcomXAttribution.getChangeMessage());
+	}
 
-    @Override
-    protected void setGedcomXRelations(final Object gedcomXObject) {
-        final org.gedcomx.common.Attribution gedcomXAttribution = (org.gedcomx.common.Attribution) gedcomXObject;
+	@Override
+	protected void setGedcomXRelations(final Object gedcomXObject) {
+		final org.gedcomx.common.Attribution gedcomXAttribution = (org.gedcomx.common.Attribution) gedcomXObject;
 
-        if (gedcomXAttribution.getContributor() != null) {
-            NodeWrapper.nodeWrapperOperations.setProperty(this,
-                    GenericProperties.CONTRIBUTOR_REFERENCE,
-                    gedcomXAttribution.getContributor());
-        }
-    }
+		if (gedcomXAttribution.getContributor() != null) {
+			NodeWrapper.nodeWrapperOperations.setProperty(this,
+					GenericProperties.CONTRIBUTOR_REFERENCE,
+					gedcomXAttribution.getContributor());
+		}
+	}
 
-    public void setModified(final Date modified) {
-        NodeWrapper.nodeWrapperOperations.setProperty(this,
-                GenericProperties.MODIFIED, modified.getTime());
-    }
+	public void setModified(final Date modified) {
+		NodeWrapper.nodeWrapperOperations.setProperty(this,
+				GenericProperties.MODIFIED, modified.getTime());
+	}
 
-    @Override
-    protected void setRequiredProperties(final Object... properties) {
-        return;
-    }
+	@Override
+	protected void setRequiredProperties(final Object... properties) {
+		return;
+	}
 
-    @Override
-    protected void validateUnderlyingNode() {
-        return;
-    }
+	@Override
+	protected void validateUnderlyingNode() {
+		return;
+	}
 
 }

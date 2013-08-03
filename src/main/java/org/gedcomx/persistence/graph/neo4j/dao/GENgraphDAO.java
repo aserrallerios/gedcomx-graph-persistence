@@ -70,9 +70,9 @@ public interface GENgraphDAO {
 	boolean hasSingleRelationship(Node node, RelationshipType relType,
 			Direction dir);
 
-	void removeNodeProperty(Node node, String property);
+	Node removeNodeProperty(Node node, String property);
 
-	void removeRelationshipProperty(Relationship rel, String property);
+	Relationship removeRelationshipProperty(Relationship rel, String property);
 
 	void rollbackTransaction(Transaction transaction);
 

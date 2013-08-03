@@ -15,7 +15,7 @@ import org.neo4j.graphdb.Node;
 public class Fact extends Conclusion {
 
 	protected Fact(final FactType type) {
-		super(new Object[] { type });
+		super(type);
 	}
 
 	protected Fact(final Node node) {
@@ -131,9 +131,14 @@ public class Fact extends Conclusion {
 		this.setType(type.toQNameURI());
 	}
 
-	public void setPlaceReference(final PlaceReference placeReference) {
+	public PlaceReference setPlaceReference() {
+		return this.setPlaceReference(new PlaceReference());
+	}
+
+	private PlaceReference setPlaceReference(final PlaceReference placeReference) {
 		NodeWrapper.nodeWrapperOperations.createRelationship(this,
 				RelationshipTypes.PLACE, placeReference);
+		return placeReference;
 	}
 
 	@Override

@@ -19,8 +19,13 @@ import org.gedcomx.persistence.graph.neo4j.exceptions.MissingRequiredPropertyExc
 import org.gedcomx.persistence.graph.neo4j.exceptions.MissingRequiredRelationshipException;
 import org.gedcomx.persistence.graph.neo4j.model.Agent;
 import org.gedcomx.persistence.graph.neo4j.model.Conclusion;
+import org.gedcomx.persistence.graph.neo4j.model.Document;
+import org.gedcomx.persistence.graph.neo4j.model.Event;
 import org.gedcomx.persistence.graph.neo4j.model.NodeWrapper;
 import org.gedcomx.persistence.graph.neo4j.model.NodeWrapperFactory;
+import org.gedcomx.persistence.graph.neo4j.model.Person;
+import org.gedcomx.persistence.graph.neo4j.model.PlaceDescription;
+import org.gedcomx.persistence.graph.neo4j.model.Relationship;
 import org.gedcomx.persistence.graph.neo4j.model.SourceDescription;
 import org.gedcomx.persistence.graph.neo4j.model.constants.GenericProperties;
 import org.gedcomx.persistence.graph.neo4j.model.constants.IndexNames;
@@ -50,6 +55,11 @@ public class GENgraphPersistenceServiceImpl implements
 
 	@Inject
 	GENgraphPersistenceServiceImpl() {
+	}
+
+	@Override
+	public Agent addAgent() {
+		return this.nodeWrapperFactory.createAgent();
 	}
 
 	@Override
@@ -113,6 +123,31 @@ public class GENgraphPersistenceServiceImpl implements
 	}
 
 	@Override
+	public Document addDocument(final String text) {
+		return this.nodeWrapperFactory.createDocument(text);
+	}
+
+	@Override
+	public Event addEvent() {
+		return this.nodeWrapperFactory.createEvent();
+	}
+
+	@Override
+	public Person addPerson() {
+		return this.nodeWrapperFactory.createPerson();
+	}
+
+	@Override
+	public PlaceDescription addPlace(final String name) {
+		return this.nodeWrapperFactory.createPlace(name);
+	}
+
+	@Override
+	public Relationship addRelationship(final Person p1, final Person p2) {
+		return this.nodeWrapperFactory.createRelationship(p1, p2);
+	}
+
+	@Override
 	@CheckForDuplicates
 	public SourceDescription addSource(
 			final org.gedcomx.source.SourceDescription sourceDescription) {
@@ -128,6 +163,11 @@ public class GENgraphPersistenceServiceImpl implements
 			throw e;
 		}
 		return s;
+	}
+
+	@Override
+	public SourceDescription addSource(final String citation) {
+		return this.nodeWrapperFactory.createSource(citation);
 	}
 
 	@Override

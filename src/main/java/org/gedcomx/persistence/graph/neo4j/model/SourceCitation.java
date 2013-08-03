@@ -29,9 +29,14 @@ public class SourceCitation extends NodeWrapper {
 		super(new Object[] { value });
 	}
 
-	public void addField(final CitationField citationField) {
+	private CitationField addField(final CitationField citationField) {
 		NodeWrapper.nodeWrapperOperations.addRelationship(this,
 				RelationshipTypes.HAS_CITATION_FIELD, citationField);
+		return citationField;
+	}
+
+	public CitationField addField(final URI name, final String value) {
+		return this.addField(new CitationField(name, value));
 	}
 
 	@Override

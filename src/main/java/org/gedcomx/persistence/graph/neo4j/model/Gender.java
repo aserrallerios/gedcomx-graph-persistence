@@ -14,7 +14,7 @@ import org.neo4j.graphdb.Node;
 public class Gender extends Conclusion {
 
 	protected Gender(final GenderType type) {
-		super(new Object[] { type });
+		super(type);
 	}
 
 	protected Gender(final Node node) {

@@ -30,24 +30,46 @@ public class Agent extends NodeWrapper {
 		super(gedcomXAgent);
 	}
 
-	public void addAddress(final Address address) {
+	public Address addAddress() {
+		return this.addAddress(new Address());
+	}
+
+	private Address addAddress(final Address address) {
 		NodeWrapper.nodeWrapperOperations.addRelationship(this,
 				RelationshipTypes.HAS_ADDRESS, address);
+		return address;
 	}
 
-	public void addIdentifier(final Identifier identifier) {
+	private Identifier addIdentifier(final Identifier identifier) {
 		NodeWrapper.nodeWrapperOperations.addRelationship(this,
 				RelationshipTypes.HAS_IDENTIFIER, identifier);
+		return identifier;
 	}
 
-	public void addName(final TextValue name) {
+	public Identifier addIdentifier(final URI uri) {
+		return this.addIdentifier(new Identifier(uri));
+	}
+
+	public TextValue addName(final String name) {
+		return this.addName(new TextValue(name));
+	}
+
+	private TextValue addName(final TextValue name) {
 		NodeWrapper.nodeWrapperOperations.addRelationship(this,
 				RelationshipTypes.HAS_NAME, name);
+		return name;
 	}
 
-	public void addOnlineAccount(final OnlineAccount onlineAccount) {
+	private OnlineAccount addOnlineAccount(final OnlineAccount onlineAccount) {
 		NodeWrapper.nodeWrapperOperations.addRelationship(this,
 				RelationshipTypes.HAS_ACCOUNT, onlineAccount);
+		return onlineAccount;
+	}
+
+	public OnlineAccount addOnlineAccount(final String accountName,
+			final ResourceReference serviceHomepage) {
+		return this.addOnlineAccount(new OnlineAccount(accountName,
+				serviceHomepage));
 	}
 
 	@Override

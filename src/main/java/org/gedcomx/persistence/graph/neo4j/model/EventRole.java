@@ -75,9 +75,8 @@ public class EventRole extends Conclusion {
 
 	@Override
 	protected void resolveConcreteReferences() {
-		NodeWrapper.nodeWrapperOperations
-				.createReferenceRelationship(this, RelationshipTypes.PERSON,
-						ConclusionProperties.PERSON_REFERENCE);
+		NodeWrapper.nodeWrapperOperations.createReferenceRelationship(this,
+				RelationshipTypes.PERSON, ConclusionProperties.PERSON_REFERENCE);
 	}
 
 	public void setDetails(final String details) {

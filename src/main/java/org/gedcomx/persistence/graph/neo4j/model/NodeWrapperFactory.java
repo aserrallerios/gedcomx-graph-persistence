@@ -1,96 +1,42 @@
 package org.gedcomx.persistence.graph.neo4j.model;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
-import org.gedcomx.persistence.graph.neo4j.annotations.injection.NodeWrapperReflections;
-import org.gedcomx.persistence.graph.neo4j.exceptions.GenericError;
 import org.gedcomx.persistence.graph.neo4j.model.constants.NodeTypes;
 import org.neo4j.graphdb.Node;
-import org.reflections.Reflections;
 
-import com.google.inject.Inject;
+public interface NodeWrapperFactory {
 
-public class NodeWrapperFactory {
+	Agent createAgent();
 
-	@Inject
-	private WrapperProvider wrapperProvider;
-	private final Map<NodeTypes, Class<? extends NodeWrapper>> nodesByType = new HashMap<>();
+	Agent createAgent(org.gedcomx.agent.Agent gedcomXAgent);
 
-	@Inject
-	NodeWrapperFactory(final @NodeWrapperReflections Reflections reflections) {
-		for (final Class<? extends NodeWrapper> subclass : reflections
-				.getSubTypesOf(NodeWrapper.class)) {
-			final NodeType nodeType = subclass.getAnnotation(NodeType.class);
-			if (nodeType != null) {
-				this.nodesByType.put(nodeType.value(), subclass);
-			}
-		}
-	}
+	Document createDocument(org.gedcomx.conclusion.Document gedcomXDocument);
 
-	public Agent createAgent(final org.gedcomx.agent.Agent gedcomXAgent) {
-		return this.wrapperProvider.createAgent(gedcomXAgent);
-	}
+	Document createDocument(String text);
 
-	public Document createDocument(
-			final org.gedcomx.conclusion.Document gedcomXDocument) {
-		return this.wrapperProvider.createDocument(gedcomXDocument);
-	}
+	Event createEvent();
 
-	public Event createEvent(final org.gedcomx.conclusion.Event gedcomXEvent) {
-		return this.wrapperProvider.createEvent(gedcomXEvent);
-	}
+	Event createEvent(org.gedcomx.conclusion.Event gedcomXEvent);
 
-	public NodeWrapper createNode(final NodeTypes type,
-			final Object gedcomxObject) {
-		return this.wrapperProvider
-				.createPerson((org.gedcomx.conclusion.Person) gedcomxObject);
-	}
+	Person createPerson();
 
-	public Person createPerson(final org.gedcomx.conclusion.Person gedcomXPerson) {
-		return this.wrapperProvider.createPerson(gedcomXPerson);
-	}
+	Person createPerson(org.gedcomx.conclusion.Person gedcomXPerson);
 
-	public PlaceDescription createPlace(
-			final org.gedcomx.conclusion.PlaceDescription gedcomXPlace) {
-		return this.wrapperProvider.createPlace(gedcomXPlace);
-	}
+	PlaceDescription createPlace(
+			org.gedcomx.conclusion.PlaceDescription gedcomXPlace);
 
-	public Relationship createRelationship(
-			final org.gedcomx.conclusion.Relationship gedcomXRelationship) {
-		return this.wrapperProvider.createRelationship(gedcomXRelationship);
-	}
+	PlaceDescription createPlace(String name);
 
-	public SourceDescription createSource(
-			final org.gedcomx.source.SourceDescription gedcomXSource) {
-		return this.wrapperProvider.createSource(gedcomXSource);
-	}
+	Relationship createRelationship(
+			org.gedcomx.conclusion.Relationship gedcomXRelationship);
 
-	Class<? extends NodeWrapper> getWrapperByType(final NodeTypes type) {
-		return this.nodesByType.get(type);
-	}
+	Relationship createRelationship(Person p1, Person p2);
 
-	public <T extends NodeWrapper> T wrapNode(final Class<T> type,
-			final Node node) {
-		Constructor<T> constructor;
-		T wrapper = null;
-		try {
-			constructor = type.getDeclaredConstructor(Node.class);
-			wrapper = constructor.newInstance(node);
-		} catch (NoSuchMethodException | SecurityException
-				| InstantiationException | IllegalAccessException
-				| IllegalArgumentException | InvocationTargetException e) {
-			e.printStackTrace();
-			throw new GenericError("Error creating wrapper from node with id "
-					+ node.getId() + " and type " + type);
-		}
-		return wrapper;
-	}
+	SourceDescription createSource(
+			org.gedcomx.source.SourceDescription gedcomXSource);
 
-	public NodeWrapper wrapNode(final NodeTypes type, final Node node) {
-		return this.wrapNode(this.getWrapperByType(type), node);
-	}
+	SourceDescription createSource(String citation);
+
+	<T extends NodeWrapper> T wrapNode(Class<T> type, Node node);
+
+	NodeWrapper wrapNode(NodeTypes type, Node node);
 }

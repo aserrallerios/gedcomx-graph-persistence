@@ -76,9 +76,14 @@ public class Note extends NodeWrapper {
 		return;
 	}
 
-	public void setAttribution(final Attribution attribution) {
+	public Attribution setAttribution() {
+		return this.setAttribution(new Attribution());
+	}
+
+	private Attribution setAttribution(final Attribution attribution) {
 		NodeWrapper.nodeWrapperOperations.createRelationship(this,
 				RelationshipTypes.ATTRIBUTION, attribution);
+		return attribution;
 	}
 
 	@Override

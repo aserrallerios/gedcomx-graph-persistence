@@ -25,14 +25,25 @@ public abstract class Conclusion extends NodeWrapper {
 		super(gedcomXConclusion);
 	}
 
-	public void addNote(final Note note) {
+	private Note addNote(final Note note) {
 		NodeWrapper.nodeWrapperOperations.addRelationship(this,
 				RelationshipTypes.HAS_NOTE, note);
+		return note;
 	}
 
-	public void addSourceReference(final SourceReference sourceReference) {
+	public Note addNote(final String text) {
+		return this.addNote(new Note(text));
+	}
+
+	private SourceReference addSourceReference(
+			final SourceReference sourceReference) {
 		NodeWrapper.nodeWrapperOperations.addRelationship(this,
 				RelationshipTypes.HAS_SOURCE_REFERENCE, sourceReference);
+		return sourceReference;
+	}
+
+	public SourceReference addSourceReference(final String citation) {
+		return this.addSourceReference(new SourceReference(citation));
 	}
 
 	protected abstract void deleteAllConcreteReferences();
@@ -126,9 +137,14 @@ public abstract class Conclusion extends NodeWrapper {
 		this.resolveConcreteReferences();
 	}
 
-	public void setAttribution(final Attribution attribution) {
+	public Attribution setAttribution() {
+		return this.setAttribution(new Attribution());
+	}
+
+	private Attribution setAttribution(final Attribution attribution) {
 		NodeWrapper.nodeWrapperOperations.createRelationship(this,
 				RelationshipTypes.ATTRIBUTION, attribution);
+		return attribution;
 	}
 
 	@Deprecated
@@ -166,6 +182,12 @@ public abstract class Conclusion extends NodeWrapper {
 					.getSources()) {
 				this.addSourceReference(new SourceReference(
 						gedcomXSourceReference));
+			}
+		}
+		if (gedcomXPlaceDescription.getMedia() != null) {
+			for (final org.gedcomx.source.SourceReference gedcomXsourceRef : gedcomXPlaceDescription
+					.getMedia()) {
+				this.addSourceReference(new SourceReference(gedcomXsourceRef));
 			}
 		}
 

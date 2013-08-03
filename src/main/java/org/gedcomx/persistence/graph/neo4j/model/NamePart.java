@@ -31,9 +31,14 @@ public class NamePart extends NodeWrapper {
 		super(value);
 	}
 
-	public void addQualifier(final Qualifier qualifier) {
+	public Qualifier addQualifier() {
+		return this.addQualifier(new Qualifier());
+	}
+
+	private Qualifier addQualifier(final Qualifier qualifier) {
 		NodeWrapper.nodeWrapperOperations.addRelationship(this,
 				RelationshipTypes.HAS_QUALIFIER, qualifier);
+		return qualifier;
 	}
 
 	@Override

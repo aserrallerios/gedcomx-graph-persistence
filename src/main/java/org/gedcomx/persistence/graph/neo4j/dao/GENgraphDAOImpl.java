@@ -236,15 +236,17 @@ public class GENgraphDAOImpl implements GENgraphDAO {
 
 	@Override
 	@Transactional
-	public void removeNodeProperty(final Node node, final String property) {
+	public Node removeNodeProperty(final Node node, final String property) {
 		node.removeProperty(property);
+		return node;
 	}
 
 	@Override
 	@Transactional
-	public void removeRelationshipProperty(final Relationship rel,
+	public Relationship removeRelationshipProperty(final Relationship rel,
 			final String property) {
 		rel.removeProperty(property);
+		return rel;
 	}
 
 	@Override

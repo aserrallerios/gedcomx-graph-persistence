@@ -24,9 +24,14 @@ public class NameForm extends NodeWrapper {
 		super(gedcomXNameForm);
 	}
 
-	public void addNameParts(final NamePart namePart) {
+	private NamePart addNameParts(final NamePart namePart) {
 		NodeWrapper.nodeWrapperOperations.addRelationship(this,
 				RelationshipTypes.HAS_NAME_PART, namePart);
+		return namePart;
+	}
+
+	public NamePart addNameParts(final String value) {
+		return this.addNameParts(new NamePart(value));
 	}
 
 	@Override
