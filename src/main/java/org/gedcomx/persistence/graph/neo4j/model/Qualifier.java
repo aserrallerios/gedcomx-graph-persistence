@@ -5,6 +5,7 @@ import org.gedcomx.common.URI;
 import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
 import org.gedcomx.persistence.graph.neo4j.model.constants.GenericProperties;
 import org.gedcomx.persistence.graph.neo4j.model.constants.NodeTypes;
+import org.gedcomx.persistence.graph.neo4j.model.constants.RelationshipTypes;
 import org.neo4j.graphdb.Node;
 
 @NodeType(NodeTypes.QUALIFIER)
@@ -45,6 +46,12 @@ public class Qualifier extends NodeWrapper {
 		final URI name = this.getName();
 		return name == null ? null : (E) XmlQNameEnumUtil.fromURI(name.toURI(),
 				vocabulary);
+	}
+
+	@Override
+	public NodeWrapper getParentNode() {
+		return NodeWrapper.nodeWrapperOperations.getParentNode(this,
+				RelationshipTypes.HAS_QUALIFIER);
 	}
 
 	public String getValue() {

@@ -25,8 +25,7 @@ public class Note extends NodeWrapper {
 
 	@Override
 	protected void deleteAllReferences() {
-		NodeWrapper.nodeWrapperOperations.deleteReferencedNode(this
-				.getAttribution());
+		this.getAttribution().delete();
 	}
 
 	public Attribution getAttribution() {
@@ -56,6 +55,7 @@ public class Note extends NodeWrapper {
 				GenericProperties.LANG);
 	}
 
+	@Override
 	public NodeWrapper getParentNode() {
 		return NodeWrapper.nodeWrapperOperations.getParentNode(this,
 				RelationshipTypes.HAS_NOTE);

@@ -1,5 +1,7 @@
 package org.gedcomx.persistence.graph.neo4j.model;
 
+import java.util.List;
+
 import org.gedcomx.common.URI;
 import org.gedcomx.persistence.graph.neo4j.annotations.NodeType;
 import org.gedcomx.persistence.graph.neo4j.exceptions.MissingRequiredPropertyException;
@@ -30,10 +32,19 @@ public class Fact extends Conclusion {
 		super(new Object[] { type });
 	}
 
+	public Qualifier addQualifier() {
+		return this.addQualifier(new Qualifier());
+	}
+
+	private Qualifier addQualifier(final Qualifier qualifier) {
+		NodeWrapper.nodeWrapperOperations.addRelationship(this,
+				RelationshipTypes.HAS_QUALIFIER, qualifier);
+		return qualifier;
+	}
+
 	@Override
 	protected void deleteAllConcreteReferences() {
-		NodeWrapper.nodeWrapperOperations.deleteReferencedNode(this
-				.getPlaceReference());
+		this.getPlaceReference().delete();
 	}
 
 	public String getDateFormal() {
@@ -63,6 +74,10 @@ public class Fact extends Conclusion {
 
 		gedcomXFact.setPlace(this.getPlaceReference().getGedcomX());
 
+		gedcomXFact.setQualifiers(NodeWrapper.nodeWrapperOperations
+				.getGedcomXList(org.gedcomx.common.Qualifier.class,
+						this.getQualifiers()));
+
 		return gedcomXFact;
 	}
 
@@ -70,6 +85,7 @@ public class Fact extends Conclusion {
 		return FactType.fromQNameURI(this.getType());
 	}
 
+	@Override
 	public NodeWrapper getParentNode() {
 		return NodeWrapper.nodeWrapperOperations.getParentNode(this,
 				RelationshipTypes.HAS_FACT);
@@ -78,6 +94,11 @@ public class Fact extends Conclusion {
 	public PlaceReference getPlaceReference() {
 		return NodeWrapper.nodeWrapperOperations.getNodeByRelationship(this,
 				PlaceReference.class, RelationshipTypes.PLACE);
+	}
+
+	public List<Qualifier> getQualifiers() {
+		return NodeWrapper.nodeWrapperOperations.getNodesByRelationship(this,
+				Qualifier.class, RelationshipTypes.HAS_QUALIFIER);
 	}
 
 	@Deprecated
@@ -124,6 +145,12 @@ public class Fact extends Conclusion {
 
 		if (gedcomXFact.getPlace() != null) {
 			this.setPlaceReference(new PlaceReference(gedcomXFact.getPlace()));
+		}
+		if (gedcomXFact.getQualifiers() != null) {
+			for (final org.gedcomx.common.Qualifier q : gedcomXFact
+					.getQualifiers()) {
+				this.addQualifier(new Qualifier(q));
+			}
 		}
 	}
 

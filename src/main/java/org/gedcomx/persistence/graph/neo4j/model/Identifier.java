@@ -45,6 +45,7 @@ public class Identifier extends NodeWrapper {
 		return IdentifierType.fromQNameURI(this.getType());
 	}
 
+	@Override
 	public NodeWrapper getParentNode() {
 		return NodeWrapper.nodeWrapperOperations.getParentNode(this,
 				RelationshipTypes.HAS_IDENTIFIER);

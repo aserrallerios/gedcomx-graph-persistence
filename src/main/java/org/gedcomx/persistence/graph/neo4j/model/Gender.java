@@ -50,6 +50,11 @@ public class Gender extends Conclusion {
 		return GenderType.fromQNameURI(this.getType());
 	}
 
+	@Override
+	public Person getParentNode() {
+		return this.getPerson();
+	}
+
 	public Person getPerson() {
 		return (Person) NodeWrapper.nodeWrapperOperations.getParentNode(this,
 				RelationshipTypes.GENDER);

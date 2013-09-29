@@ -15,7 +15,7 @@ import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 
 @NodeType(NodeTypes.PERSON)
-public class Person extends Conclusion {
+public class Person extends Subject {
 
 	protected Person() {
 		super();
@@ -50,6 +50,7 @@ public class Person extends Conclusion {
 		return identifier;
 	}
 
+	@Override
 	public Identifier addIdentifier(final URI value) {
 		return this.addIdentifier(new Identifier(value));
 	}
@@ -66,8 +67,7 @@ public class Person extends Conclusion {
 
 	@Override
 	protected void deleteAllConcreteReferences() {
-		NodeWrapper.nodeWrapperOperations
-				.deleteReferencedNode(this.getGender());
+		this.getGender().delete();
 
 		NodeWrapper.nodeWrapperOperations
 				.deleteReferencedNodes(this.getNames());
@@ -108,6 +108,7 @@ public class Person extends Conclusion {
 				Gender.class, RelationshipTypes.GENDER);
 	}
 
+	@Override
 	public List<Identifier> getIdentifiers() {
 		return NodeWrapper.nodeWrapperOperations.getNodesByRelationship(this,
 				Identifier.class, RelationshipTypes.HAS_IDENTIFIER);
@@ -121,6 +122,11 @@ public class Person extends Conclusion {
 	public List<Name> getNames() {
 		return NodeWrapper.nodeWrapperOperations.getNodesByRelationship(this,
 				Name.class, RelationshipTypes.HAS_NAME);
+	}
+
+	@Override
+	public NodeWrapper getParentNode() {
+		return null;
 	}
 
 	@Override

@@ -51,6 +51,11 @@ public class CitationField extends NodeWrapper {
 				this, SourceProperties.NAME));
 	}
 
+	@Override
+	public SourceCitation getParentNode() {
+		return this.getCitation();
+	}
+
 	public String getValue() {
 		return (String) NodeWrapper.nodeWrapperOperations.getProperty(this,
 				GenericProperties.VALUE);

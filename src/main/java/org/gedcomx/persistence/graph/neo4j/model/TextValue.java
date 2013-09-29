@@ -43,6 +43,7 @@ public class TextValue extends NodeWrapper {
 				GenericProperties.LANG);
 	}
 
+	@Override
 	public NodeWrapper getParentNode() {
 		return NodeWrapper.nodeWrapperOperations.getParentNode(this,
 				RelationshipTypes.HAS_NAME);

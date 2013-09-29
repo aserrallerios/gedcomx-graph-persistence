@@ -17,7 +17,7 @@ import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 
 @NodeType(NodeTypes.PLACE_DESCRIPTION)
-public class PlaceDescription extends Conclusion {
+public class PlaceDescription extends Subject {
 
 	protected PlaceDescription(final Node node) {
 		super(node);
@@ -39,18 +39,9 @@ public class PlaceDescription extends Conclusion {
 		return identifier;
 	}
 
+	@Override
 	public Identifier addIdentifier(final URI value) {
 		return this.addIdentifier(new Identifier(value));
-	}
-
-	private SourceReference addMedia(final SourceReference media) {
-		NodeWrapper.nodeWrapperOperations.addRelationship(this,
-				RelationshipTypes.HAS_MEDIA, media);
-		return media;
-	}
-
-	public SourceReference addMedia(final String citation) {
-		return this.addMedia(new SourceReference(citation));
 	}
 
 	public TextValue addName(final String value) {
@@ -69,18 +60,11 @@ public class PlaceDescription extends Conclusion {
 				.getIdentifiers());
 		NodeWrapper.nodeWrapperOperations
 				.deleteReferencedNodes(this.getNames());
-		NodeWrapper.nodeWrapperOperations
-				.deleteReferencedNodes(this.getMedia());
 	}
 
 	public URI getAbout() {
 		return new URI((String) NodeWrapper.nodeWrapperOperations.getProperty(
 				this, GenericProperties.ABOUT));
-	}
-
-	public Boolean getExtracted() {
-		return (Boolean) NodeWrapper.nodeWrapperOperations.getProperty(this,
-				ConclusionProperties.EXTRACTED);
 	}
 
 	@Override
@@ -89,7 +73,6 @@ public class PlaceDescription extends Conclusion {
 
 		this.getGedcomXConclusion(gedcomXPlaceDescription);
 
-		gedcomXPlaceDescription.setExtracted(this.getExtracted());
 		gedcomXPlaceDescription.setLatitude(this.getLatitude());
 		gedcomXPlaceDescription.setLongitude(this.getLongitude());
 		gedcomXPlaceDescription.setSpatialDescription(this
@@ -103,9 +86,6 @@ public class PlaceDescription extends Conclusion {
 		gedcomXPlaceDescription.setNames(NodeWrapper.nodeWrapperOperations
 				.getGedcomXList(org.gedcomx.common.TextValue.class,
 						this.getNames()));
-		gedcomXPlaceDescription.setMedia(NodeWrapper.nodeWrapperOperations
-				.getGedcomXList(org.gedcomx.source.SourceReference.class,
-						this.getMedia()));
 		gedcomXPlaceDescription
 				.setIdentifiers(NodeWrapper.nodeWrapperOperations
 						.getGedcomXList(
@@ -115,6 +95,7 @@ public class PlaceDescription extends Conclusion {
 		return gedcomXPlaceDescription;
 	}
 
+	@Override
 	public List<Identifier> getIdentifiers() {
 		return NodeWrapper.nodeWrapperOperations.getNodesByRelationship(this,
 				Identifier.class, RelationshipTypes.HAS_IDENTIFIER);
@@ -131,14 +112,14 @@ public class PlaceDescription extends Conclusion {
 				ConclusionProperties.LONGITUDE);
 	}
 
-	public List<SourceReference> getMedia() {
-		return NodeWrapper.nodeWrapperOperations.getNodesByRelationship(this,
-				SourceReference.class, RelationshipTypes.HAS_MEDIA);
-	}
-
 	public List<TextValue> getNames() {
 		return NodeWrapper.nodeWrapperOperations.getNodesByRelationship(this,
 				TextValue.class, RelationshipTypes.HAS_NAME);
+	}
+
+	@Override
+	public NodeWrapper getParentNode() {
+		return null;
 	}
 
 	public ResourceReference getSpatialDescription() {
@@ -174,16 +155,10 @@ public class PlaceDescription extends Conclusion {
 				GenericProperties.ABOUT, about);
 	}
 
-	public void setExtracted(final Boolean extracted) {
-		NodeWrapper.nodeWrapperOperations.setProperty(this,
-				ConclusionProperties.EXTRACTED, extracted);
-	}
-
 	@Override
 	protected void setGedcomXConcreteProperties(final Object gedcomXObject) {
 		final org.gedcomx.conclusion.PlaceDescription gedcomXPlaceDescription = (org.gedcomx.conclusion.PlaceDescription) gedcomXObject;
 
-		this.setExtracted(gedcomXPlaceDescription.getExtracted());
 		this.setType(gedcomXPlaceDescription.getType());
 		this.setLatitude(gedcomXPlaceDescription.getLatitude());
 		this.setLongitude(gedcomXPlaceDescription.getLatitude());

@@ -46,6 +46,7 @@ public class PlaceReference extends NodeWrapper {
 				ConclusionProperties.ORIGINAL);
 	}
 
+	@Override
 	public NodeWrapper getParentNode() {
 		return NodeWrapper.nodeWrapperOperations.getParentNode(this,
 				RelationshipTypes.PLACE);

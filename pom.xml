@@ -7,10 +7,10 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<gedcomx.version>0.38.0-SNAPSHOT</gedcomx.version>
-		<gedcomx.fileformat.version>0.10.0-SNAPSHOT</gedcomx.fileformat.version>
+		<gedcomx.version>1.0.6.M1</gedcomx.version>
+		<gedcomx.fileformat.version>1.0.0.M1</gedcomx.fileformat.version>
 		<testng.version>6.5.2</testng.version>
-		<neo4j.version>2.0.0-M03</neo4j.version>
+		<neo4j.version>2.0.0-M05</neo4j.version>
 		<log4j.version>2.0-beta4</log4j.version>
 		<reflections.version>0.9.8</reflections.version>
 		<guice.version>3.0</guice.version>

@@ -57,6 +57,11 @@ public class Address extends NodeWrapper {
 		return gedcomXAddress;
 	}
 
+	@Override
+	public Agent getParentNode() {
+		return this.getAgent();
+	}
+
 	public String getPostalCode() {
 		return (String) NodeWrapper.nodeWrapperOperations.getProperty(this,
 				AgentProperties.POSTAL_CODE);
@@ -93,8 +98,8 @@ public class Address extends NodeWrapper {
 	}
 
 	public void setCity(final String city) {
-		NodeWrapper.nodeWrapperOperations.setProperty(this, AgentProperties.CITY,
-				city);
+		NodeWrapper.nodeWrapperOperations.setProperty(this,
+				AgentProperties.CITY, city);
 	}
 
 	public void setCountry(final String country) {

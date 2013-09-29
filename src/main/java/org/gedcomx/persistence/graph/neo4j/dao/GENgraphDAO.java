@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.neo4j.cypher.javacompat.ExecutionResult;
 import org.neo4j.graphdb.Direction;
+import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
@@ -20,6 +21,8 @@ public interface GENgraphDAO {
 
 	Node createNode();
 
+	Node createNode(Label... labels);
+
 	Relationship createRelationship(Node node, RelationshipType relType,
 			Node secondNode);
 
@@ -30,9 +33,10 @@ public interface GENgraphDAO {
 
 	void delete(Relationship rel);
 
+	@Deprecated
 	void endTransaction(Transaction transaction);
 
-	ExecutionResult executeCypherQuery(String query);
+	ExecutionResult executeCypherQuery(String query, Map<String, Object> params);
 
 	Iterable<Node> getAllNodes();
 
@@ -48,6 +52,7 @@ public interface GENgraphDAO {
 	Iterator<Node> getNodesFromIndex(String indexName, String property,
 			String value);
 
+	@Deprecated
 	Node getReferenceNode();
 
 	Object getRelationshipProperty(Relationship rel, String property);

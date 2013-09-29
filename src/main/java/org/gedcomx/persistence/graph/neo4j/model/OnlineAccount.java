@@ -52,6 +52,11 @@ public class OnlineAccount extends NodeWrapper {
 		return gedcomXOnlineAccount;
 	}
 
+	@Override
+	public Agent getParentNode() {
+		return this.getAgent();
+	}
+
 	public ResourceReference getServiceHomepage() {
 		return new ResourceReference(new URI(
 				(String) NodeWrapper.nodeWrapperOperations.getProperty(this,

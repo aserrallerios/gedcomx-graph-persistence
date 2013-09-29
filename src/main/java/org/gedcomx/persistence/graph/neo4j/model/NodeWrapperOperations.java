@@ -23,13 +23,50 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
 import com.google.common.base.Optional;
+import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 
 public class NodeWrapperOperations {
 
+	@Transactional
+	static <T extends NodeWrapper> void deleteReferencedNodes(final List<T> type) {
+		for (final T wrapper : type) {
+			wrapper.delete();
+		}
+	}
+
+	static NodeTypes getAnnotatedLabel(final NodeWrapper self) {
+		return self.getClass().getAnnotation(NodeType.class).value();
+	}
+
+	static String getAnnotatedNodeType(final NodeWrapper self) {
+		return self.getClass().getAnnotation(NodeType.class).value().name();
+	}
+
+	static <T> List<T> getGedcomXList(final Class<T> type,
+			final List<? extends NodeWrapper> nodes) {
+		final List<T> list = new ArrayList<>();
+		for (final NodeWrapper a : nodes) {
+			list.add(type.cast(a.getGedcomX()));
+		}
+		return list;
+	}
+
+	static private NodeTypes[] getOwnAndParentalLabels(final NodeWrapper self) {
+		final NodeWrapper parentNode = self.getParentNode();
+		if (parentNode == null) {
+			return new NodeTypes[] { getAnnotatedLabel(self) };
+		} else {
+			return Lists.asList(getAnnotatedLabel(self),
+					getOwnAndParentalLabels(parentNode)).toArray(
+					new NodeTypes[0]);
+		}
+	}
+
 	@Inject
 	@EmbededDB
 	private GENgraphDAO dao;
+
 	@Inject
 	private NodeWrapperFactory nodeWrapperFactory;
 
@@ -145,18 +182,7 @@ public class NodeWrapperOperations {
 				self.getUnderlyingNode(), rel, Direction.OUTGOING));
 	}
 
-	<T extends NodeWrapper> void deleteReferencedNode(final T wrapper) {
-		if (wrapper != null) {
-			wrapper.delete();
-		}
-	}
-
-	<T extends NodeWrapper> void deleteReferencedNodes(final List<T> type) {
-		for (final T wrapper : type) {
-			wrapper.delete();
-		}
-	}
-
+	@Transactional
 	void deleteReferences(final NodeWrapper self, final RelationshipTypes rel) {
 		for (final Relationship relationship : this.dao.getRelationships(
 				self.getUnderlyingNode(), rel, Direction.OUTGOING)) {
@@ -189,19 +215,6 @@ public class NodeWrapperOperations {
 			}
 		}
 		return wrapper;
-	}
-
-	String getAnnotatedNodeType(final NodeWrapper self) {
-		return self.getClass().getAnnotation(NodeType.class).value().name();
-	}
-
-	<T> List<T> getGedcomXList(final Class<T> type,
-			final List<? extends NodeWrapper> nodes) {
-		final List<T> list = new ArrayList<>();
-		for (final NodeWrapper a : nodes) {
-			list.add(type.cast(a.getGedcomX()));
-		}
-		return list;
 	}
 
 	private int getMaxRelationshipIndex(final NodeWrapper self,
@@ -297,7 +310,7 @@ public class NodeWrapperOperations {
 
 	@Transactional
 	void initialize(final NodeWrapper self) {
-		if (!this.getNodeType(self).equals(this.getAnnotatedNodeType(self))) {
+		if (!this.getNodeType(self).equals(getAnnotatedNodeType(self))) {
 			throw new UnknownNodeType();
 		}
 		self.resolveReferences();
@@ -306,8 +319,9 @@ public class NodeWrapperOperations {
 
 	@Transactional
 	void initialize(final NodeWrapper self, final Object... properties) {
-		self.setUnderlyingNode(this.dao.createNode());
-		this.setNodeType(self, this.getAnnotatedNodeType(self));
+		self.setUnderlyingNode(this.dao
+				.createNode(getOwnAndParentalLabels(self)));
+		this.setNodeType(self, getAnnotatedNodeType(self));
 		if (properties != null && properties.length > 0) {
 			self.setRequiredProperties(properties);
 		}
@@ -317,8 +331,9 @@ public class NodeWrapperOperations {
 
 	@Transactional
 	void initialize(final NodeWrapper self, final Object gedcomXObject) {
-		self.setUnderlyingNode(this.dao.createNode());
-		this.setNodeType(self, this.getAnnotatedNodeType(self));
+		self.setUnderlyingNode(this.dao
+				.createNode(getOwnAndParentalLabels(self)));
+		this.setNodeType(self, getAnnotatedNodeType(self));
 		self.setGedcomXProperties(gedcomXObject);
 		self.setGedcomXRelations(gedcomXObject);
 		self.resolveReferences();
@@ -354,6 +369,7 @@ public class NodeWrapperOperations {
 				indexNames != null ? indexNames.name() : null);
 	}
 
+	@Transactional
 	void setURIListProperties(final NodeWrapper self,
 			final NodeProperties property,
 			final List<ResourceReference> resourceList) {

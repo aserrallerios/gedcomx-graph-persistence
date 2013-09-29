@@ -80,6 +80,11 @@ public class SourceCitation extends NodeWrapper {
 				GenericProperties.LANG);
 	}
 
+	@Override
+	public SourceDescription getParentNode() {
+		return this.getDescription();
+	}
+
 	public String getValue() {
 		return (String) NodeWrapper.nodeWrapperOperations.getProperty(this,
 				GenericProperties.VALUE);

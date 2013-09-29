@@ -60,6 +60,7 @@ public class Attribution extends NodeWrapper {
 				this, GenericProperties.MODIFIED));
 	}
 
+	@Override
 	public NodeWrapper getParentNode() {
 		return NodeWrapper.nodeWrapperOperations.getParentNode(this,
 				RelationshipTypes.ATTRIBUTION);

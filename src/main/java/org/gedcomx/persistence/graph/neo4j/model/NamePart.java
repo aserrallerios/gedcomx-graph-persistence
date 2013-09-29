@@ -80,6 +80,11 @@ public class NamePart extends NodeWrapper {
 				RelationshipTypes.HAS_NAME_PART);
 	}
 
+	@Override
+	public NameForm getParentNode() {
+		return this.getNameForm();
+	}
+
 	public List<Qualifier> getQualifiers() {
 		return NodeWrapper.nodeWrapperOperations.getNodesByRelationship(this,
 				Qualifier.class, RelationshipTypes.HAS_QUALIFIER);

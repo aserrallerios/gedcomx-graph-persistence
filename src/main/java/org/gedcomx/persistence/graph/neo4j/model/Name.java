@@ -85,6 +85,11 @@ public class Name extends Conclusion {
 				NameForm.class, RelationshipTypes.HAS_NAME_FORM);
 	}
 
+	@Override
+	public Person getParentNode() {
+		return this.getPerson();
+	}
+
 	public Person getPerson() {
 		return (Person) NodeWrapper.nodeWrapperOperations.getParentNode(this,
 				RelationshipTypes.HAS_NAME);

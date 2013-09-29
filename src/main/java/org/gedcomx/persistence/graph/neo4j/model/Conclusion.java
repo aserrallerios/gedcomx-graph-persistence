@@ -50,8 +50,7 @@ public abstract class Conclusion extends NodeWrapper {
 
 	@Override
 	protected void deleteAllReferences() {
-		NodeWrapper.nodeWrapperOperations.deleteReferencedNode(this
-				.getAttribution());
+		this.getAttribution().delete();
 		NodeWrapper.nodeWrapperOperations
 				.deleteReferencedNodes(this.getNotes());
 		NodeWrapper.nodeWrapperOperations.deleteReferencedNodes(this
@@ -184,13 +183,6 @@ public abstract class Conclusion extends NodeWrapper {
 						gedcomXSourceReference));
 			}
 		}
-		if (gedcomXPlaceDescription.getMedia() != null) {
-			for (final org.gedcomx.source.SourceReference gedcomXsourceRef : gedcomXPlaceDescription
-					.getMedia()) {
-				this.addSourceReference(new SourceReference(gedcomXsourceRef));
-			}
-		}
-
 		if (gedcomXConclusion.getAttribution() != null) {
 			this.setAttribution(new Attribution(gedcomXConclusion
 					.getAttribution()));

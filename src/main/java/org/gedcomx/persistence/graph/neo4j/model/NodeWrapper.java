@@ -37,7 +37,9 @@ public abstract class NodeWrapper {
 		return this.getUnderlyingNode().equals(object);
 	}
 
-	public abstract <T extends Object> T getGedcomX();
+	public abstract Object getGedcomX();
+
+	public abstract NodeWrapper getParentNode();
 
 	ResourceReference getResourceReference() {
 		return null;

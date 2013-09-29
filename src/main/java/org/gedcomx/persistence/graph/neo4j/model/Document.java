@@ -50,6 +50,11 @@ public class Document extends Conclusion {
 		return DocumentType.fromQNameURI(this.getType());
 	}
 
+	@Override
+	public NodeWrapper getParentNode() {
+		return null;
+	}
+
 	public String getText() {
 		return (String) NodeWrapper.nodeWrapperOperations.getProperty(this,
 				ConclusionProperties.TEXT);

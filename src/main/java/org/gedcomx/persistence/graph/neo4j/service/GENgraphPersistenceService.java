@@ -56,6 +56,6 @@ public interface GENgraphPersistenceService {
 
 	List<NodeWrapper> getNodesByType(String type);
 
-	QueryResult searchNodesByCypher(String query);
+	QueryResult searchNodesByCypher(String query, Map<String, Object> params);
 
 }

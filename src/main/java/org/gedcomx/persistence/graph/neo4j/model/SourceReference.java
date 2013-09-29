@@ -53,6 +53,7 @@ public class SourceReference extends NodeWrapper {
 		return gedcomXSourceReference;
 	}
 
+	@Override
 	public NodeWrapper getParentNode() {
 		return NodeWrapper.nodeWrapperOperations.getParentNode(this,
 				RelationshipTypes.HAS_SOURCE_REFERENCE);

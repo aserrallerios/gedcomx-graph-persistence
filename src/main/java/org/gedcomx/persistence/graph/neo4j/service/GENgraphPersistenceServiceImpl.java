@@ -322,10 +322,13 @@ public class GENgraphPersistenceServiceImpl implements
 	}
 
 	@Override
-	public QueryResult searchNodesByCypher(final String query) {
+	@Transactional
+	public QueryResult searchNodesByCypher(final String query,
+			final Map<String, Object> params) {
 		final String finalQuery = QueryResolver.resolve(query);
 
-		final ExecutionResult result = this.dao.executeCypherQuery(finalQuery);
+		final ExecutionResult result = this.dao.executeCypherQuery(finalQuery,
+				params);
 
 		final List<org.neo4j.graphdb.Node> nodes = new ArrayList<>();
 		final List<org.neo4j.graphdb.Relationship> relationships = new ArrayList<org.neo4j.graphdb.Relationship>();

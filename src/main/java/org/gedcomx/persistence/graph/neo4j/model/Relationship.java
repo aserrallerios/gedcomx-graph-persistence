@@ -18,7 +18,7 @@ import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 
 @NodeType(NodeTypes.RELATIONSHIP)
-public class Relationship extends Conclusion {
+public class Relationship extends Subject {
 
 	protected Relationship(final Node node) {
 		super(node);
@@ -54,6 +54,7 @@ public class Relationship extends Conclusion {
 		return identifier;
 	}
 
+	@Override
 	public Identifier addIdentifier(final URI value) {
 		return this.addIdentifier(new Identifier(value));
 	}
@@ -100,6 +101,7 @@ public class Relationship extends Conclusion {
 		return gedcomXRelationship;
 	}
 
+	@Override
 	public List<Identifier> getIdentifiers() {
 		return NodeWrapper.nodeWrapperOperations.getNodesByRelationship(this,
 				Identifier.class, RelationshipTypes.HAS_IDENTIFIER);
@@ -107,6 +109,11 @@ public class Relationship extends Conclusion {
 
 	public RelationshipType getKnownType() {
 		return RelationshipType.fromQNameURI(this.getType());
+	}
+
+	@Override
+	public NodeWrapper getParentNode() {
+		return null;
 	}
 
 	public Person getPerson1() {

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 import org.gedcomx.persistence.graph.neo4j.annotations.injection.EmbededDB;
+import org.gedcomx.persistence.graph.neo4j.annotations.injection.IndexedProperties;
 import org.gedcomx.persistence.graph.neo4j.annotations.injection.NodeWrapperReflections;
 import org.gedcomx.persistence.graph.neo4j.annotations.interceptors.CheckForDuplicates;
 import org.gedcomx.persistence.graph.neo4j.annotations.interceptors.Transactional;
@@ -20,8 +21,11 @@ import org.gedcomx.persistence.graph.neo4j.properties.Config;
 import org.gedcomx.persistence.graph.neo4j.properties.Messages;
 import org.gedcomx.persistence.graph.neo4j.service.GENgraphPersistenceService;
 import org.gedcomx.persistence.graph.neo4j.service.GENgraphPersistenceServiceImpl;
+import org.neo4j.graphdb.Label;
 import org.reflections.Reflections;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
@@ -82,6 +86,14 @@ public class ServiceInjector extends AbstractModule {
 		this.bindInterceptor(Matchers.any(),
 				Matchers.annotatedWith(Transactional.class),
 				transactionInterceptor);
+	}
+
+	@Provides
+	@IndexedProperties
+	Multimap<Label, String> provideIndexedProperties() {
+		final Multimap<Label, String> indexedProperties = ArrayListMultimap
+				.create();
+		return indexedProperties;
 	}
 
 	@Provides

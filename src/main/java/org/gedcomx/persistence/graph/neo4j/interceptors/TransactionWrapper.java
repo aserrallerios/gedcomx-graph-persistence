@@ -11,31 +11,26 @@ import com.google.inject.Inject;
 
 public class TransactionWrapper implements MethodInterceptor {
 
-    private GENgraphDAO dao;
+	private GENgraphDAO dao;
 
-    @Inject
-    public TransactionWrapper() {
-    }
+	@Inject
+	public TransactionWrapper() {
+	}
 
-    @Override
+	@Override
 	public Object invoke(final MethodInvocation invocation) {
-
-        final Transaction t = this.dao.beginTransaction();
-        Object o = null;
-        try {
-            o = invocation.proceed();
-            this.dao.commitTransaction(t);
+		Object o = null;
+		try (final Transaction t = this.dao.beginTransaction()) {
+			o = invocation.proceed();
+			this.dao.commitTransaction(t);
 		} catch (final Throwable e) {
-            this.dao.rollbackTransaction(t);
 			throw Throwables.propagate(e);
-        } finally {
-            this.dao.endTransaction(t);
-        }
-        return o;
-    }
+		}
+		return o;
+	}
 
-    @Inject
-    public void setDao(final @EmbededDB GENgraphDAO dao) {
-        this.dao = dao;
-    }
+	@Inject
+	public void setDao(final @EmbededDB GENgraphDAO dao) {
+		this.dao = dao;
+	}
 }

@@ -84,10 +84,8 @@ public class SourceDescription extends NodeWrapper {
 				.getCitations());
 		NodeWrapper.nodeWrapperOperations.deleteReferencedNodes(this
 				.getSources());
-		NodeWrapper.nodeWrapperOperations.deleteReferencedNode(this
-				.getAttribution());
-		NodeWrapper.nodeWrapperOperations.deleteReferencedNode(this
-				.getComponentOf());
+		this.getAttribution().delete();
+		this.getComponentOf().delete();
 
 		NodeWrapper.nodeWrapperOperations.deleteReferences(this,
 				RelationshipTypes.HAS_CONCLUSION);
@@ -172,6 +170,11 @@ public class SourceDescription extends NodeWrapper {
 	public List<Note> getNotes() {
 		return NodeWrapper.nodeWrapperOperations.getNodesByRelationship(this,
 				Note.class, RelationshipTypes.HAS_NOTE);
+	}
+
+	@Override
+	public NodeWrapper getParentNode() {
+		return null;
 	}
 
 	@Override

@@ -74,6 +74,11 @@ public class NameForm extends NodeWrapper {
 	}
 
 	@Override
+	public Name getParentNode() {
+		return this.getName();
+	}
+
+	@Override
 	public void resolveReferences() {
 		return;
 	}

@@ -151,6 +151,11 @@ public class Agent extends NodeWrapper {
 						AgentProperties.OPENID)));
 	}
 
+	@Override
+	public NodeWrapper getParentNode() {
+		return null;
+	}
+
 	public List<ResourceReference> getPhones() {
 		return NodeWrapper.nodeWrapperOperations.getURIListProperties(this,
 				AgentProperties.PHONES);

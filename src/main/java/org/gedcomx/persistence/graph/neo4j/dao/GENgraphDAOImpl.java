@@ -13,6 +13,7 @@ import org.neo4j.cypher.javacompat.ExecutionEngine;
 import org.neo4j.cypher.javacompat.ExecutionResult;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
@@ -20,9 +21,14 @@ import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 import org.neo4j.graphdb.index.Index;
 import org.neo4j.graphdb.index.IndexHits;
+import org.neo4j.graphdb.schema.IndexCreator;
+import org.neo4j.graphdb.schema.IndexDefinition;
+import org.neo4j.graphdb.schema.Schema;
 import org.neo4j.tooling.GlobalGraphOperations;
+import org.testng.collections.Maps;
 
 import com.google.common.base.Optional;
+import com.google.common.collect.Multimap;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
@@ -33,16 +39,21 @@ public class GENgraphDAOImpl implements GENgraphDAO {
 	private final GraphDatabaseService graphDb;
 	private final ExecutionEngine executionEngine;
 	private final GlobalGraphOperations operations;
+	private final Schema schema;
+	private final Map<String, IndexDefinition> indexes = Maps.newHashMap();
 
 	@Inject
 	GENgraphDAOImpl(final @Named("Neo4jDBPath") String bdpath,
-			final @Named("Neo4jPropFile") String propsFile) {
+			final @Named("Neo4jPropFile") String propsFile,
+			final Multimap<Label, String> indexedProperties) {
 		this.graphDb = new GraphDatabaseFactory()
 				.newEmbeddedDatabaseBuilder(bdpath)
 				.loadPropertiesFromFile(propsFile).newGraphDatabase();
+		this.schema = this.graphDb.schema();
 		this.executionEngine = new ExecutionEngine(this.graphDb);
 		this.operations = GlobalGraphOperations.at(this.graphDb);
 		this.registerShutdownHook();
+		this.initializeIndexes(indexedProperties);
 	}
 
 	@Override
@@ -59,6 +70,12 @@ public class GENgraphDAOImpl implements GENgraphDAO {
 	@Transactional
 	public Node createNode() {
 		return this.graphDb.createNode();
+	}
+
+	@Override
+	@Transactional
+	public Node createNode(final Label... labels) {
+		return this.graphDb.createNode(labels);
 	}
 
 	@Override
@@ -91,13 +108,17 @@ public class GENgraphDAOImpl implements GENgraphDAO {
 	}
 
 	@Override
+	@Deprecated
 	public void endTransaction(final Transaction transaction) {
 		transaction.finish();
 	}
 
 	@Override
-	public ExecutionResult executeCypherQuery(final String query) {
-		final ExecutionResult result = this.executionEngine.execute(query);
+	@Transactional
+	public ExecutionResult executeCypherQuery(final String query,
+			final Map<String, Object> params) {
+		final ExecutionResult result = this.executionEngine.execute(query,
+				params);
 		return result;
 	}
 
@@ -158,6 +179,7 @@ public class GENgraphDAOImpl implements GENgraphDAO {
 	}
 
 	@Override
+	@Deprecated
 	public Node getReferenceNode() {
 		return this.graphDb.getReferenceNode();
 	}
@@ -216,6 +238,18 @@ public class GENgraphDAOImpl implements GENgraphDAO {
 			final RelationshipType relType, final Direction dir) {
 		final Relationship rel = node.getSingleRelationship(relType, dir);
 		return rel == null ? false : true;
+	}
+
+	@Transactional
+	private void initializeIndexes(
+			final Multimap<Label, String> indexedProperties) {
+		for (final Label label : indexedProperties.keySet()) {
+			final IndexCreator indexCreator = this.schema.indexFor(label);
+			for (final String property : indexedProperties.get(label)) {
+				indexCreator.on(property);
+			}
+			this.indexes.put(label.name(), indexCreator.create());
+		}
 	}
 
 	private void registerShutdownHook() {

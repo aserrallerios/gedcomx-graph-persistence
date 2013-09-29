@@ -15,7 +15,7 @@ import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 
 @NodeType(NodeTypes.EVENT)
-public class Event extends Conclusion {
+public class Event extends Subject {
 
 	protected Event() {
 		super();
@@ -42,8 +42,7 @@ public class Event extends Conclusion {
 
 	@Override
 	protected void deleteAllConcreteReferences() {
-		NodeWrapper.nodeWrapperOperations.deleteReferencedNode(this
-				.getPlaceReference());
+		this.getPlaceReference().delete();
 		NodeWrapper.nodeWrapperOperations
 				.deleteReferencedNodes(this.getRoles());
 	}
@@ -79,6 +78,11 @@ public class Event extends Conclusion {
 
 	public EventType getKnownType() {
 		return EventType.fromQNameURI(this.getType());
+	}
+
+	@Override
+	public NodeWrapper getParentNode() {
+		return null;
 	}
 
 	public PlaceReference getPlaceReference() {
